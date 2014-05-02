@@ -1,0 +1,2369 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+ABS	HHEd.c	5315;"	d	file:
+ABS	HMMIRest.c	63;"	d	file:
+ADJ_OFS	HSLab.c	1149;"	d	file:
+AEntry	HLStats.c	/^} AEntry;$/;"	t	typeref:struct:aentry	file:
+AMPL_RANGE	HSLab.c	88;"	d	file:
+APPSIL	HDMan.c	/^              TCTXT, APPSIL, REMSTRESS, REPLACEW, RAWMODE, $/;"	e	enum:__anon5	file:
+ASIZE	HLStats.c	324;"	d	file:
+AT	HHEd.c	/^typedef enum           { AT=1, RT , SS , CL , CO , JO , MU , TI , UF , NC ,$/;"	e	enum:__anon13	file:
+AU	HHEd.c	/^                         LS , QS , TB , TR , AU , GQ , MD , ST , LT ,$/;"	e	enum:__anon13	file:
+AUDIO_BSIZE	HList.c	335;"	d	file:
+AccGenUtt	HCompV.c	/^SpkrAcc *AccGenUtt(char *SpkrPattern, char *UttFileName, SpkrAcc *sa)$/;"	f
+AccSum	HHEd.c	/^} AccSum;$/;"	t	typeref:struct:_AccSum	file:
+AccSumProb	HHEd.c	/^float AccSumProb(AccSum *acc)$/;"	f
+AccVar	HCompV.c	/^void AccVar(Observation obs)$/;"	f
+AddBinEntries	HQuant.c	/^VQNode AddBinEntries(ClusterSet *cs, short nid, int s)$/;"	f
+AddEquiv	HResults.c	/^void AddEquiv(char * cl, char * eq)$/;"	f
+AddJMix	HHEd.c	/^void AddJMix(MixtureElem *me)$/;"	f
+AddLinEntries	HQuant.c	/^VQNode  AddLinEntries(ClusterSet *cs, int s)$/;"	f
+AddPriorsFromPriorHMM	HMMIRest.c	/^void AddPriorsFromPriorHMM(int dst_index, float Tau, float K, Boolean IsMMI, float ISmoothTau){$/;"	f
+AddSpot	HResults.c	/^void AddSpot(LabId key, Boolean hit, float score)$/;"	f
+AddTLoopBeginEnd	HParse.c	/^int AddTLoopBeginEnd(int numElements, SplitName* trilist, Link a, Link b)$/;"	f
+AddUnseenCommand	HHEd.c	/^void AddUnseenCommand(void)$/;"	f
+AddWordExtern	HParse.c	/^void AddWordExtern(Vocab *voc, Link p)$/;"	f
+AddWordModel	HParse.c	/^void AddWordModel(Vocab *voc, Link p, Link history)$/;"	f
+AdjustBounds	HSLab.c	/^void AdjustBounds(RectWin *win)$/;"	f
+AnswerQuestion	HHEd.c	/^void AnswerQuestion(CLink clist,QLink q)$/;"	f
+AppendCell	HResults.c	/^void AppendCell(int i, int j, char *tb, char *rb)$/;"	f
+AppendItem	HResults.c	/^void AppendItem(char *s, char *item, int len, int width)$/;"	f
+AppendLabs	HCopy.c	/^void AppendLabs(Transcription *t, HTime len)$/;"	f
+AppendPair	HResults.c	/^void AppendPair(char *linea, char *a, char *lineb, char *b)$/;"	f
+AppendParm	HCopy.c	/^HTime AppendParm(char *src)$/;"	f
+AppendPhone	HDMan.c	/^void AppendPhone(Pronunciation *p, LabId id)$/;"	f
+AppendSilenceOp	HDMan.c	/^void AppendSilenceOp(WordBuf *wb, LabId *args)$/;"	f
+AppendSpeechFile	HCopy.c	/^void AppendSpeechFile(char *s)$/;"	f
+AppendSpkrAccList	HCompV.c	/^SpkrAccListItem *AppendSpkrAccList(SpkrAccListItem *sal, SpkrAcc *sa)$/;"	f
+AppendTrace	HCopy.c	/^void AppendTrace(char *str)$/;"	f
+AppendWave	HCopy.c	/^HTime AppendWave(char *src)$/;"	f
+AppendWordBuf	HDMan.c	/^void AppendWordBuf(DBuffer *s, DBuffer *t)$/;"	f
+ApplyTie	HHEd.c	/^void ApplyTie(ILink ilist, char *macName, char type)$/;"	f
+AssignStructure	HHEd.c	/^Ptr AssignStructure(LabId id, int state)$/;"	f
+AttachNodeInfos	HParse.c	/^void AttachNodeInfos(HPNetwork *theNet)$/;"	f
+AttachWtAccLists	HSmooth.c	/^void AttachWtAccLists()$/;"	f
+BARSYM	HParse.c	/^             LTRISYM,RTRISYM,EQSYM, SEMISYM, BARSYM, PERCENTSYM, $/;"	e	enum:_Symbol	file:
+BAR_BORDER	HSLab.c	334;"	d	file:
+BAR_HEIGHT	HSLab.c	333;"	d	file:
+BAR_WIDTH	HSLab.c	332;"	d	file:
+BIG_FLOAT	HHEd.c	60;"	d	file:
+BTN_AREA_H	HSLab.c	92;"	d	file:
+BTN_AREA_W	HSLab.c	91;"	d	file:
+BTN_AREA_X	HSLab.c	93;"	d	file:
+BTN_AREA_Y	HSLab.c	94;"	d	file:
+BTN_H_SPC	HSLab.c	97;"	d	file:
+BTN_PER_COL	HSLab.c	96;"	d	file:
+BTN_PER_ROW	HSLab.c	95;"	d	file:
+BTN_V_SPC	HSLab.c	98;"	d	file:
+BT_ABOUT	HSLab.c	/^   BT_LEDIT, BT_LSELECT, BT_ABOUT, BT_ADJUST, $/;"	e	enum:__anon22	file:
+BT_ADJUST	HSLab.c	/^   BT_LEDIT, BT_LSELECT, BT_ABOUT, BT_ADJUST, $/;"	e	enum:__anon22	file:
+BT_LABEL	HSLab.c	/^   BT_LABSTR, BT_LABEL, BT_LABELAS, BT_LDELETE, $/;"	e	enum:__anon22	file:
+BT_LABELAS	HSLab.c	/^   BT_LABSTR, BT_LABEL, BT_LABELAS, BT_LDELETE, $/;"	e	enum:__anon22	file:
+BT_LABSET	HSLab.c	/^   BT_LABSET, BT_NEWSET,$/;"	e	enum:__anon22	file:
+BT_LABSTR	HSLab.c	/^   BT_LABSTR, BT_LABEL, BT_LABELAS, BT_LDELETE, $/;"	e	enum:__anon22	file:
+BT_LDELETE	HSLab.c	/^   BT_LABSTR, BT_LABEL, BT_LABELAS, BT_LDELETE, $/;"	e	enum:__anon22	file:
+BT_LEDIT	HSLab.c	/^   BT_LEDIT, BT_LSELECT, BT_ABOUT, BT_ADJUST, $/;"	e	enum:__anon22	file:
+BT_LOAD	HSLab.c	/^   BT_NONE, BT_LOAD, BT_SAVE, BT_SCRLL, BT_SCRLR, $/;"	e	enum:__anon22	file:
+BT_LSELECT	HSLab.c	/^   BT_LEDIT, BT_LSELECT, BT_ABOUT, BT_ADJUST, $/;"	e	enum:__anon22	file:
+BT_MARK	HSLab.c	/^   BT_PLAY_VOL, BT_SCALE, BT_MARK, BT_UNMARK, $/;"	e	enum:__anon22	file:
+BT_NEWSET	HSLab.c	/^   BT_LABSET, BT_NEWSET,$/;"	e	enum:__anon22	file:
+BT_NONE	HSLab.c	/^   BT_NONE, BT_LOAD, BT_SAVE, BT_SCRLL, BT_SCRLR, $/;"	e	enum:__anon22	file:
+BT_PAUSE	HSLab.c	/^   BT_UNDO, BT_SPCL, BT_REC, BT_PAUSE, BT_STOP, BT_QUIT$/;"	e	enum:__anon22	file:
+BT_PLAY	HSLab.c	/^   BT_ZOOM_IN, BT_ZOOM_OUT, BT_RESTORE, BT_PLAY, $/;"	e	enum:__anon22	file:
+BT_PLAY_VOL	HSLab.c	/^   BT_PLAY_VOL, BT_SCALE, BT_MARK, BT_UNMARK, $/;"	e	enum:__anon22	file:
+BT_QUIT	HSLab.c	/^   BT_UNDO, BT_SPCL, BT_REC, BT_PAUSE, BT_STOP, BT_QUIT$/;"	e	enum:__anon22	file:
+BT_REC	HSLab.c	/^   BT_UNDO, BT_SPCL, BT_REC, BT_PAUSE, BT_STOP, BT_QUIT$/;"	e	enum:__anon22	file:
+BT_RESTORE	HSLab.c	/^   BT_ZOOM_IN, BT_ZOOM_OUT, BT_RESTORE, BT_PLAY, $/;"	e	enum:__anon22	file:
+BT_SAVE	HSLab.c	/^   BT_NONE, BT_LOAD, BT_SAVE, BT_SCRLL, BT_SCRLR, $/;"	e	enum:__anon22	file:
+BT_SCALE	HSLab.c	/^   BT_PLAY_VOL, BT_SCALE, BT_MARK, BT_UNMARK, $/;"	e	enum:__anon22	file:
+BT_SCRLL	HSLab.c	/^   BT_NONE, BT_LOAD, BT_SAVE, BT_SCRLL, BT_SCRLR, $/;"	e	enum:__anon22	file:
+BT_SCRLR	HSLab.c	/^   BT_NONE, BT_LOAD, BT_SAVE, BT_SCRLL, BT_SCRLR, $/;"	e	enum:__anon22	file:
+BT_SPCL	HSLab.c	/^   BT_UNDO, BT_SPCL, BT_REC, BT_PAUSE, BT_STOP, BT_QUIT$/;"	e	enum:__anon22	file:
+BT_STOP	HSLab.c	/^   BT_UNDO, BT_SPCL, BT_REC, BT_PAUSE, BT_STOP, BT_QUIT$/;"	e	enum:__anon22	file:
+BT_UNDO	HSLab.c	/^   BT_UNDO, BT_SPCL, BT_REC, BT_PAUSE, BT_STOP, BT_QUIT$/;"	e	enum:__anon22	file:
+BT_UNMARK	HSLab.c	/^   BT_PLAY_VOL, BT_SCALE, BT_MARK, BT_UNMARK, $/;"	e	enum:__anon22	file:
+BT_ZOOM_IN	HSLab.c	/^   BT_ZOOM_IN, BT_ZOOM_OUT, BT_RESTORE, BT_PLAY, $/;"	e	enum:__anon22	file:
+BT_ZOOM_OUT	HSLab.c	/^   BT_ZOOM_IN, BT_ZOOM_OUT, BT_RESTORE, BT_PLAY, $/;"	e	enum:__anon22	file:
+BarType	HSLab.c	/^} BarType;$/;"	t	typeref:struct:__anon27	file:
+BtnId	HSLab.c	/^} BtnId;$/;"	t	typeref:enum:__anon22	file:
+BuildCVec	HHEd.c	/^CLink *BuildCVec(int numClust, ILink ilist)$/;"	f
+BuildNEntry	HLStats.c	/^static float BuildNEntry(NEntry *ne,Vector boff,float bent)$/;"	f	file:
+BuildRegClusters	HHEd.c	/^int BuildRegClusters(RegNode *rtree, int vSize, int nTerminals, $/;"	f
+BuildTree	HHEd.c	/^void BuildTree(ILink ilist,float threshold, char *macRoot)$/;"	f
+BuildType	HBuild.c	/^typedef enum {unknown, wordLoop, boBiGram, matBiGram, multiLat, wordPair} BuildType;$/;"	t	typeref:enum:__anon1	file:
+CC	Makefile	/^CC      = 	g++$/;"	m
+CFLAGS	Makefile	/^CFLAGS  = 	-m32 -ansi -D_SVID_SOURCE -DOSS_AUDIO -D'ARCH="x86_64"' -w -I$(inc) -DPHNALG$/;"	m
+CHANGE	HLEd.c	/^   REPLACE, CHANGE, FIND,   MERGE,  EDOP_DELETE, DEFCON, TRIST,  $/;"	e	enum:__anon14	file:
+CHANGE_OP	HSLab.c	/^   CREATE_OP, DELETE_OP, CHANGE_OP$/;"	e	enum:__anon24	file:
+CL	HHEd.c	/^typedef enum           { AT=1, RT , SS , CL , CO , JO , MU , TI , UF , NC ,$/;"	e	enum:__anon13	file:
+CLink	HHEd.c	/^typedef struct _CRec *CLink;$/;"	t	typeref:struct:_CRec	file:
+CO	HHEd.c	/^typedef enum           { AT=1, RT , SS , CL , CO , JO , MU , TI , UF , NC ,$/;"	e	enum:__anon13	file:
+CONREPLACE	HDMan.c	/^              REPLACEP, CONREPLACE, MERGEP, SPLITP, DELETEP, DELSOURCE, $/;"	e	enum:__anon5	file:
+CREATE_OP	HSLab.c	/^   CREATE_OP, DELETE_OP, CHANGE_OP$/;"	e	enum:__anon24	file:
+CRec	HHEd.c	/^}CRec;$/;"	t	typeref:struct:_CRec	file:
+CTrans	HMMIRest.c	/^static float CTrans = 1.0;$/;"	v	file:
+CWeights	HMMIRest.c	/^static float CWeights = 1.0;$/;"	v	file:
+CalcClusterDistribution	HHEd.c	/^void CalcClusterDistribution(RNode *n, int vSize) $/;"	f
+CalcCovs	HCompV.c	/^void CalcCovs(void)$/;"	f
+CalcDistance	HHEd.c	/^void CalcDistance(CoList *list, RNode *ch1, RNode *ch2, int vSize)$/;"	f
+CalcEnergy	HSLab.c	/^float CalcEnergy(int st,int en)$/;"	f
+CalcGlobalFOM	HResults.c	/^void CalcGlobalFOM(void)$/;"	f
+CalcKeyFOM	HResults.c	/^void CalcKeyFOM(int idx)$/;"	f
+CalcMeanCov	HQuant.c	/^void CalcMeanCov(Sequence seq[], int s)$/;"	f
+CalcNodeScore	HHEd.c	/^float CalcNodeScore(RNode *n, int vSize) $/;"	f
+CalcTMWeights	HHEd.c	/^Vector CalcTMWeights(int s, StreamElem *ste, double tFloor)$/;"	f
+CalcWBar	HSmooth.c	/^void CalcWBar(Vector wb, int dBlk, int M)$/;"	f
+CalcWCd	HSmooth.c	/^void CalcWCd(Vector wc, int dBlk, StreamElem *ste, int M)$/;"	f
+CanCompact	HParse.c	/^static Boolean CanCompact(Link p)$/;"	f	file:
+Cell	HResults.c	/^} Cell;$/;"	t	typeref:struct:_Cell	file:
+CellPtr	HResults.c	/^typedef struct _Cell *CellPtr;$/;"	t	typeref:struct:_Cell	file:
+ChWtAcc	HSmooth.c	/^} ChWtAcc;$/;"	t	typeref:struct:_ChWtAcc	file:
+ChangeOp	HLEd.c	/^int ChangeOp(LabList *ll,LabId *args)$/;"	f
+CheckData	HCompV.c	/^void CheckData(char *fn, BufferInfo info) $/;"	f
+CheckData	HInit.c	/^void CheckData(char *fn, BufferInfo info) $/;"	f
+CheckData	HQuant.c	/^void CheckData(char *fn, BufferInfo newInfo) $/;"	f
+CheckData	HRest.c	/^void CheckData(char *fn, BufferInfo info) $/;"	f
+CheckForSave	HSLab.c	/^void CheckForSave(void)$/;"	f
+CheckStreamWidths	HQuant.c	/^void CheckStreamWidths(BufferInfo info)$/;"	f
+CheckUpdateSetUp	HERest.c	/^void CheckUpdateSetUp()$/;"	f
+CheckVarianceKind	HCompV.c	/^void CheckVarianceKind(void)$/;"	f
+ChkTreeObject	HHEd.c	/^void ChkTreeObject(ILink obj)$/;"	f
+ChkedAlpha	HHEd.c	/^char *ChkedAlpha(char *what,char *buf)$/;"	f
+ChkedFloat	HHEd.c	/^float ChkedFloat(char *what,float min,float max)$/;"	f
+ChkedInt	HHEd.c	/^int ChkedInt(char *what,int min,int max)$/;"	f
+ChopLabs	HCopy.c	/^void ChopLabs(Transcription *t, HTime start, HTime end)$/;"	f
+ChopParm	HCopy.c	/^ParmBuf ChopParm(ParmBuf b, HTime start, HTime end, HTime sampRate)$/;"	f
+ChopTriMat	HHEd.c	/^TriMat ChopTriMat(TriMat mat, int i, int j, int k)$/;"	f
+ChopVector	HHEd.c	/^Vector ChopVector(Vector vec, int i, int j, int k)$/;"	f
+ChopWave	HCopy.c	/^Wave ChopWave(Wave srcW, HTime start, HTime end, HTime sampRate)$/;"	f
+ClampStEn	HCopy.c	/^void ClampStEn(HTime length, HTime *st, HTime *en)$/;"	f
+ClearJMat	HParse.c	/^static void ClearJMat(void)$/;"	f	file:
+ClipSample	HSLab.c	/^short ClipSample(short sample, float sampleScale)$/;"	f
+CloneCommand	HHEd.c	/^void CloneCommand(void)$/;"	f
+CloneNetwork	HParse.c	/^HPNetwork CloneNetwork(HPNetwork prototype)$/;"	f
+ClrSpkrAcc	HCompV.c	/^void ClrSpkrAcc(SpkrAcc *sa)$/;"	f
+ClusterChildren	HHEd.c	/^void ClusterChildren(RNode *parent, RNode *ch1, RNode *ch2, int vSize) $/;"	f
+ClusterCommand	HHEd.c	/^void ClusterCommand(Boolean nCluster)$/;"	f
+ClusterLogL	HHEd.c	/^float ClusterLogL(CLink clist,AccSum *no,AccSum *yes,float *occs)$/;"	f
+ClusterVecs	HQuant.c	/^void ClusterVecs(Sequence *seq, int s)$/;"	f
+Clustering	HHEd.c	/^void Clustering(ILink ilist, int *numReq, float threshold,$/;"	f
+CmdIndex	HHEd.c	/^int CmdIndex(char *s)$/;"	f
+CmdIndex	HLEd.c	/^int CmdIndex(char *s)$/;"	f
+CmpCntr	HLStats.c	/^int CmpCntr(const void *p1, const void *p2)$/;"	f
+CmpWord	HDMan.c	/^static int CmpWord(const void *p1, const void *p2)$/;"	f	file:
+CmpWordInfo	HLStats.c	/^int CmpWordInfo(const void *p1, const void *p2)$/;"	f
+Cntr	HLStats.c	/^} Cntr;$/;"	t	typeref:struct:cntr	file:
+CoList	HHEd.c	/^} CoList;$/;"	t	typeref:struct:_CoList	file:
+CollectStats	HResults.c	/^void CollectStats(int i,int j)$/;"	f
+CommandSet	HSLab.c	/^Boolean CommandSet(HSlabCmdType hcmd, char *s)$/;"	f
+CompactCommand	HHEd.c	/^void CompactCommand(void)$/;"	f
+CompactGlueNode	HParse.c	/^static void CompactGlueNode(Link p)$/;"	f	file:
+ComputeVSize	HSGen.c	/^void ComputeVSize(void)$/;"	f
+Context	HLEd.c	/^} Context;$/;"	t	typeref:struct:_Context	file:
+ContextRep	HDMan.c	/^void ContextRep(Pronunciation *p, LabId *args, DBuffer *db)$/;"	f
+ContextReplaceOp	HDMan.c	/^void ContextReplaceOp(WordBuf *wb, LabId *args, DBuffer *db)$/;"	f
+ConvertCont2Tied	HHEd.c	/^void ConvertCont2Tied(void)$/;"	f
+ConvertHParseNetwork	HParse.c	/^static void ConvertHParseNetwork(HPNetwork *theNet, char *latFn, char *dictFn)$/;"	f	file:
+CopyWordBuf	HDMan.c	/^void CopyWordBuf(DBuffer *s, DBuffer *t)$/;"	f
+CountDefunctMix	HHEd.c	/^int CountDefunctMix(StreamElem *ste)$/;"	f
+CountHits	HResults.c	/^void CountHits(int idx, int *nh, int *nf)$/;"	f
+CovAcc	HCompV.c	/^} CovAcc;$/;"	t	typeref:struct:__anon3	file:
+CreateBuffer	HDMan.c	/^void CreateBuffer(char *dName, Boolean isInput)$/;"	f
+CreateButtons	HSLab.c	/^void CreateButtons(void)$/;"	f
+CreateChWtAcc	HSmooth.c	/^WALink CreateChWtAcc(MemHeap *x, int M)$/;"	f
+CreateChildNodes	HHEd.c	/^void CreateChildNodes(CoList *list, RNode *ch1, RNode *ch2, int vSize) $/;"	f
+CreateClusterLink	HHEd.c	/^CoList *CreateClusterLink(char *s, int state, int stream, int mix, $/;"	f
+CreateFOMTab	HResults.c	/^void CreateFOMTab(void)$/;"	f
+CreateGrid	HResults.c	/^void CreateGrid(void)$/;"	f
+CreateHParseNetwork	HParse.c	/^static HPNetwork CreateHParseNetwork(char *fname)$/;"	f	file:
+CreateJMacros	HHEd.c	/^void CreateJMacros(LabId rootMacId)$/;"	f
+CreateJMat	HParse.c	/^static void CreateJMat(void)$/;"	f	file:
+CreateJMixSet	HHEd.c	/^MixtureElem * CreateJMixSet(void)$/;"	f
+CreateLabObj	HSLab.c	/^Label *CreateLabObj(LabList *ll, LabId labid, long st, long en)$/;"	f
+CreateLinkSet	HParse.c	/^LinkSet *CreateLinkSet(int size)$/;"	f
+CreateMixes	HInit.c	/^IntVec *CreateMixes(MemHeap *x,int segLen)$/;"	f
+CreateMonoList	HSmooth.c	/^void CreateMonoList(void)$/;"	f
+CreateNode	HParse.c	/^Link CreateNode(LabId name, Link *chain, int maxSucc, int maxPred)$/;"	f
+CreatePlotBuf	HSLab.c	/^void CreatePlotBuf(int size)$/;"	f
+CreateRegTreeNode	HHEd.c	/^RNode *CreateRegTreeNode(CoList *list, int vSize) $/;"	f
+CreateSeqMat	HInit.c	/^Sequence ** CreateSeqMat(void)$/;"	f
+CreateSubWindows	HSLab.c	/^void CreateSubWindows(void)$/;"	f
+CreateTMRecs	HHEd.c	/^void CreateTMRecs(void)$/;"	f
+CreateTree	HHEd.c	/^Tree *CreateTree(ILink ilist,LabId baseId,int state)$/;"	f
+CreateTreeNode	HHEd.c	/^Node *CreateTreeNode(CLink clist, Node *parent)$/;"	f
+CreateWStore	HSmooth.c	/^void CreateWStore(void)$/;"	f
+CreateWtStore	HSmooth.c	/^void CreateWtStore(MemHeap *x)$/;"	f
+D	HSmooth.c	/^float D(float l, WALink wa, int M)$/;"	f
+DBuffer	HDMan.c	/^}DBuffer;$/;"	t	typeref:struct:__anon9	file:
+DDistance	HHEd.c	/^float DDistance(StreamElem *s1, StreamElem *s2)$/;"	f
+DEFCON	HDMan.c	/^typedef enum {UCWORD, UCPHONE, LCWORD, LCPHONE, DELETEW, DELDEF, FUNCW, DEFCON,$/;"	e	enum:__anon5	file:
+DEFCON	HLEd.c	/^   REPLACE, CHANGE, FIND,   MERGE,  EDOP_DELETE, DEFCON, TRIST,  $/;"	e	enum:__anon14	file:
+DEF_NCLUST	HQuant.c	57;"	d	file:
+DELDEF	HDMan.c	/^typedef enum {UCWORD, UCPHONE, LCWORD, LCPHONE, DELETEW, DELDEF, FUNCW, DEFCON,$/;"	e	enum:__anon5	file:
+DELETEP	HDMan.c	/^              REPLACEP, CONREPLACE, MERGEP, SPLITP, DELETEP, DELSOURCE, $/;"	e	enum:__anon5	file:
+DELETEW	HDMan.c	/^typedef enum {UCWORD, UCPHONE, LCWORD, LCPHONE, DELETEW, DELDEF, FUNCW, DEFCON,$/;"	e	enum:__anon5	file:
+DELETE_OP	HSLab.c	/^   CREATE_OP, DELETE_OP, CHANGE_OP$/;"	e	enum:__anon24	file:
+DELLEV	HLEd.c	/^   RCTXT,   TCTXT,  SETLEV, DELLEV, SPLLEV, ISIL,$/;"	e	enum:__anon14	file:
+DELSOURCE	HDMan.c	/^              REPLACEP, CONREPLACE, MERGEP, SPLITP, DELETEP, DELSOURCE, $/;"	e	enum:__anon5	file:
+DFACTOR	HMMIRest.c	/^static float DFACTOR = 2.0;         \/* not a config, a constant used in estimating$/;"	v	file:
+DIAG	HResults.c	/^enum _Direction{DIAG,VERT,HOR,NIL};$/;"	e	enum:_Direction	file:
+DP	HHEd.c	/^                         MM , DP , HK , FC , FA , FV, XF, PS, PR }$/;"	e	enum:__anon13	file:
+DecodeCommands	HSLab.c	/^void DecodeCommands(void)$/;"	f
+DefineContext	HLEd.c	/^void DefineContext(LabId name, LabId *def, int nDefs)$/;"	f
+DefineSubNet	HParse.c	/^static void DefineSubNet(LabId name, Link entryNode, Link exitNode, Link chain)$/;"	f	file:
+DelDefOp	HDMan.c	/^void DelDefOp(WordBuf *wb, LabId *args)$/;"	f
+DeleteLabObj	HSLab.c	/^void DeleteLabObj(LabList *ll, LLink q)$/;"	f
+DeleteLevel	HLEd.c	/^void DeleteLevel(Transcription *ltr,int lev)$/;"	f
+DeleteLink	HParse.c	/^static void DeleteLink(Link x, LinkSet *ls)$/;"	f	file:
+DeleteOp	HLEd.c	/^int DeleteOp(LabList *ll,LabId *args)$/;"	f
+DeletePhoneOp	HDMan.c	/^void DeletePhoneOp(WordBuf *wb, LabId *args)$/;"	f
+DeleteSourceOp	HDMan.c	/^int DeleteSourceOp(WordBuf *wb, LabId *args)$/;"	f
+DeleteWordOp	HDMan.c	/^void DeleteWordOp(WordBuf *wb, LabId *args)$/;"	f
+Direction	HResults.c	/^typedef enum _Direction Direction;$/;"	t	typeref:enum:_Direction	file:
+DisconNode	HParse.c	/^static Boolean DisconNode(Link p)$/;"	f	file:
+Distance	HHEd.c	/^float Distance(Vector v1, Vector v2) $/;"	f
+Divergence	HHEd.c	/^float Divergence(StreamElem *s1, StreamElem *s2)$/;"	f
+DoAbout	HSLab.c	/^void DoAbout(void)$/;"	f
+DoAdjustLabel	HSLab.c	/^Boolean DoAdjustLabel(void)$/;"	f
+DoAlignment	HVite.c	/^void DoAlignment(void)$/;"	f
+DoCMV	HCompV.c	/^static Boolean DoCMV = FALSE;            \/* switch from old HCompV to CMV *\/$/;"	v	file:
+DoChangeLabStr	HSLab.c	/^void DoChangeLabStr(void)$/;"	f
+DoCompare	HResults.c	/^void DoCompare(void)$/;"	f
+DoCompareNIST	HResults.c	/^void DoCompareNIST(void)$/;"	f
+DoDelLab	HSLab.c	/^Boolean DoDelLab(void)$/;"	f
+DoEdit	HHEd.c	/^void DoEdit(char * editFn)$/;"	f
+DoEditLabel	HSLab.c	/^Boolean DoEditLabel(void)$/;"	f
+DoForwardBackward	HERest.c	/^void DoForwardBackward(FBInfo *fbInfo, UttInfo *utt, char * datafn, char * datafn2)$/;"	f
+DoIncLabSet	HSLab.c	/^void DoIncLabSet(void)$/;"	f
+DoIncScale	HSLab.c	/^void DoIncScale(void)$/;"	f
+DoIncVolume	HSLab.c	/^void DoIncVolume(void)$/;"	f
+DoLCtxt	HLEd.c	/^int DoLCtxt(LabList *ll,int nArgs,LabId *args)$/;"	f
+DoLabel	HSLab.c	/^Boolean DoLabel(Boolean useLabStr)$/;"	f
+DoLoad	HSLab.c	/^Boolean DoLoad(void)$/;"	f
+DoMark	HSLab.c	/^Boolean DoMark(int *markA, int *markB)$/;"	f
+DoNewLabSet	HSLab.c	/^void DoNewLabSet(void)$/;"	f
+DoOnlineAdaptation	HVite.c	/^int DoOnlineAdaptation(Lattice *lat, ParmBuf pbuf, int nFrames)$/;"	f
+DoPause	HSLab.c	/^BtnId DoPause(void)$/;"	f
+DoPlay	HSLab.c	/^void DoPlay(void)$/;"	f
+DoRCtxt	HLEd.c	/^int DoRCtxt(LabList *ll,int nArgs,LabId *args)$/;"	f
+DoRecognition	HVite.c	/^void DoRecognition(void)$/;"	f
+DoRecord	HSLab.c	/^void DoRecord(short *data)$/;"	f
+DoRestore	HSLab.c	/^void DoRestore(void)$/;"	f
+DoSave	HSLab.c	/^void DoSave(void)$/;"	f
+DoScrollLeft	HSLab.c	/^void DoScrollLeft(void)$/;"	f
+DoScrollRight	HSLab.c	/^void DoScrollRight(void)$/;"	f
+DoSelectLabel	HSLab.c	/^Boolean DoSelectLabel(void)$/;"	f
+DoSpecial	HSLab.c	/^void DoSpecial(void)$/;"	f
+DoTCtxt	HLEd.c	/^int DoTCtxt(LabList *ll,int nArgs,LabId *args)$/;"	f
+DoTraceBack	HInit.c	/^void DoTraceBack(int segLen, IntVec states, int thisState)$/;"	f
+DoUnMark	HSLab.c	/^void DoUnMark(int markA, int markB)$/;"	f
+DoZoomIn	HSLab.c	/^Boolean DoZoomIn(void)$/;"	f
+DoZoomOut	HSLab.c	/^Boolean DoZoomOut(void)$/;"	f
+DoesMatch	HParse.c	/^static int DoesMatch(LabId s, LabId snet)$/;"	f	file:
+DownMix	HHEd.c	/^void DownMix(char *hname, StreamElem *ste, int maxMix, Boolean inPlace)$/;"	f
+DownMixSingle	HHEd.c	/^void DownMixSingle(StreamElem *ste,Boolean inPlace)$/;"	f
+DownTree	HHEd.c	/^void DownTree(Node *node,Node **array) $/;"	f
+Drag	HSLab.c	/^void Drag(void)$/;"	f
+DrawRectWin	HSLab.c	/^void DrawRectWin(RectWin *win)$/;"	f
+DumpGrid	HResults.c	/^void DumpGrid(void)$/;"	f
+DupHMM	HHEd.c	/^HMMDef *DupHMM(HMMDef *src)$/;"	f
+DupMacro	HHEd.c	/^void DupMacro(MLink ml,LabId labid)$/;"	f
+DupMixPDF	HHEd.c	/^MixPDF *DupMixPDF(MixPDF *s, Boolean frc)$/;"	f
+DupSMatrix	HHEd.c	/^SMatrix DupSMatrix(SMatrix m)$/;"	f
+DupSTriMat	HHEd.c	/^STriMat DupSTriMat(STriMat m)$/;"	f
+DupSVector	HHEd.c	/^SVector DupSVector(SVector v)$/;"	f
+DupState	HHEd.c	/^StateInfo *DupState(StateInfo *si, Boolean frc)$/;"	f
+DupStream	HHEd.c	/^MixtureElem *DupStream(StreamElem *ste)$/;"	f
+DuplicateCommand	HHEd.c	/^void DuplicateCommand(void)$/;"	f
+DuplicatePron	HDMan.c	/^void DuplicatePron(WordBuf *wb, int i)$/;"	f
+E	HMMIRest.c	/^static float E = 2.0;               \/* constant used in BW updatel *\/$/;"	v	file:
+EDOP_DELETE	HLEd.c	/^   REPLACE, CHANGE, FIND,   MERGE,  EDOP_DELETE, DEFCON, TRIST,  $/;"	e	enum:__anon14	file:
+EOFSYM	HParse.c	/^             EOFSYM};$/;"	e	enum:_Symbol	file:
+EQSYM	HParse.c	/^             LTRISYM,RTRISYM,EQSYM, SEMISYM, BARSYM, PERCENTSYM, $/;"	e	enum:_Symbol	file:
+ESCAPE	HParse.c	1297;"	d	file:
+EXITSTATUS	HMMIRest.c	31;"	d	file:
+EXPAND	HLEd.c	/^   SBDEF,   EXPAND, IFILL,  SORT,   WBDEF,  VBDEF,  LCTXT,  $/;"	e	enum:__anon14	file:
+EdOp	HDMan.c	/^              NOCMD} EdOp;$/;"	t	typeref:enum:__anon5	file:
+EdOp	HLEd.c	/^} EdOp;$/;"	t	typeref:enum:__anon14	file:
+EditAndMerge	HDMan.c	/^void EditAndMerge(void)$/;"	f
+EditCmd	HDMan.c	/^}EditCmd;$/;"	t	typeref:struct:__anon6	file:
+EditCmd	HLEd.c	/^}EditCmd;$/;"	t	typeref:struct:__anon15	file:
+EditFile	HLEd.c	/^void EditFile(char *labfn)$/;"	f
+EditTransMat	HHEd.c	/^void EditTransMat(Boolean adding)$/;"	f
+EditWordBuf	HDMan.c	/^void EditWordBuf(DBuffer *db)$/;"	f
+Equiv	HResults.c	/^typedef struct _Equiv Equiv;          \/* list of equivalent labels *\/$/;"	t	typeref:struct:_Equiv	file:
+EquivHMM	HHEd.c	/^Boolean EquivHMM(HMMDef *a, HMMDef *b)$/;"	f
+EquivMix	HHEd.c	/^Boolean EquivMix(MixPDF *a, MixPDF *b)$/;"	f
+EquivState	HHEd.c	/^Boolean EquivState(StateInfo *a, StateInfo *b, int S)$/;"	f
+EquivStream	HHEd.c	/^Boolean EquivStream(StreamElem *a, StreamElem *b)$/;"	f
+EstimateModel	HInit.c	/^void EstimateModel(void)$/;"	f
+ExpandOp	HLEd.c	/^int ExpandOp(LabList *ll)$/;"	f
+ExpandSubNetDefs	HParse.c	/^static void ExpandSubNetDefs(Link *chain)$/;"	f	file:
+ExpandWordModel	HParse.c	/^void ExpandWordModel(Vocab *voc, Link p, Link history)$/;"	f
+ExportNMV	HCompV.c	/^void ExportNMV(SpkrAccListItem *sal, char *OutDirName, char *tgtPKStr) $/;"	f
+FA	HHEd.c	/^                         MM , DP , HK , FC , FA , FV, XF, PS, PR }$/;"	e	enum:__anon13	file:
+FAVec	HResults.c	/^typedef int FAVec[10];$/;"	t	file:
+FC	HHEd.c	/^                         MM , DP , HK , FC , FA , FV, XF, PS, PR }$/;"	e	enum:__anon13	file:
+FIND	HLEd.c	/^   REPLACE, CHANGE, FIND,   MERGE,  EDOP_DELETE, DEFCON, TRIST,  $/;"	e	enum:__anon14	file:
+FINITE	HMMIRest.c	64;"	d	file:
+FIXLABSTR	HSLab.c	1338;"	d	file:
+FLOAT_MAX	HHEd.c	59;"	d	file:
+FUNCW	HDMan.c	/^typedef enum {UCWORD, UCPHONE, LCWORD, LCPHONE, DELETEW, DELDEF, FUNCW, DEFCON,$/;"	e	enum:__anon5	file:
+FV	HHEd.c	/^                         MM , DP , HK , FC , FA , FV, XF, PS, PR }$/;"	e	enum:__anon13	file:
+FileExists	HSLab.c	/^Boolean FileExists(char *fn, char *fmode)$/;"	f
+FillInputs	HDMan.c	/^Boolean FillInputs(Boolean *valid)$/;"	f
+FillPredJM	HParse.c	/^static void FillPredJM(int numElements, SplitName *trilist)$/;"	f	file:
+FillSuccJM	HParse.c	/^static void FillSuccJM(int numElements, SplitName *trilist)$/;"	f	file:
+FindAcc	HLEd.c	/^} FindAcc;$/;"	t	typeref:struct:_FindAcc	file:
+FindBaseModel	HHEd.c	/^HLink FindBaseModel(HMMSet *hset,LabId id,baseType type)$/;"	f
+FindBestMixes	HInit.c	/^void FindBestMixes(int segNum, int segLen, IntVec states, IntVec *mixes)$/;"	f
+FindBestSplit	HHEd.c	/^Node *FindBestSplit(Node *first, float threshold)$/;"	f
+FindBestTerminal	HHEd.c	/^RegNode *FindBestTerminal(RegNode *t, float *score, int vSize, RegNode *best) $/;"	f
+FindLoopBegin	HParse.c	/^Link FindLoopBegin(Link *hd)$/;"	f
+FindLoopEnd	HParse.c	/^Link FindLoopEnd(Link *tl)$/;"	f
+FindNodeTypes	HParse.c	/^void FindNodeTypes(HPNetwork *theNet)$/;"	f
+FindOp	HLEd.c	/^void FindOp(LabList *ll,LabId *args)$/;"	f
+FindProtoModel	HHEd.c	/^HLink FindProtoModel(LabId model)$/;"	f
+FixDefunctMix	HHEd.c	/^void FixDefunctMix(char *hname,StreamElem *ste, int n)$/;"	f
+FixHMMForICrit	HMMIRest.c	/^static void FixHMMForICrit(){$/;"	f	file:
+FixLabIdxs	HCopy.c	/^void FixLabIdxs(int nlabs)$/;"	f
+FixOptions	HCopy.c	/^void FixOptions(void)$/;"	f
+FixTLoopEnds	HParse.c	/^static void FixTLoopEnds(int numElements, Link *hd, Link *tl, Link a, Link b)                 $/;"	f	file:
+FixTransForICrit	HMMIRest.c	/^static void FixTransForICrit(float Tau, Boolean THREEACCS){$/;"	f	file:
+FixWeights	HHEd.c	/^void FixWeights(MixtureElem *me, HMMDef *owner, StreamElem *ste)$/;"	f
+FixWeightsForICrit	HMMIRest.c	/^static void FixWeightsForICrit(float Tau, Boolean THREEACCS){$/;"	f	file:
+FloorAverageCommand	HHEd.c	/^void FloorAverageCommand(void)$/;"	f
+FloorDProbs	HERest.c	/^void FloorDProbs(ShortVec mixes, int M, float floor)$/;"	f
+FloorDProbs	HMMIRest.c	/^void FloorDProbs(ShortVec mixes, int M, float floor)$/;"	f
+FloorDProbs	HRest.c	/^void FloorDProbs(ShortVec mixes, int M, float floor)$/;"	f
+FloorDProbs	HSmooth.c	/^void FloorDProbs(ShortVec mixes, int M, float floor)$/;"	f
+FloorMixes	HERest.c	/^void FloorMixes(HMMSet *hset, MixtureElem *mixes, int M, float floor)$/;"	f
+FloorMixes	HMMIRest.c	/^void FloorMixes(MixtureElem *mixes, int M, float floor)$/;"	f
+FloorMixes	HRest.c	/^void FloorMixes(MixtureElem *mixes, int M, float floor)$/;"	f
+FloorTMMixes	HERest.c	/^void FloorTMMixes(Vector mixes, int M, float floor)$/;"	f
+FloorTMMixes	HMMIRest.c	/^void FloorTMMixes(Vector mixes, int M, float floor)$/;"	f
+FloorTMMixes	HRest.c	/^void FloorTMMixes(Vector mixes, int M, float floor)$/;"	f
+FloorTMMixes	HSmooth.c	/^void FloorTMMixes(Vector mixes, int M,float floor)$/;"	f
+FloorVars	HERest.c	/^void FloorVars(HMMSet *hset1, int s){$/;"	f
+FloorVars	HMMIRest.c	/^void FloorVars(HMMSet *hset1, int s){$/;"	f
+FloorVectorCommand	HHEd.c	/^void FloorVectorCommand(void)$/;"	f
+FreeGrid	HResults.c	/^void FreeGrid(void)$/;"	f
+FreeJMat	HParse.c	/^static void FreeJMat(void)$/;"	f	file:
+FreeLinkSet	HParse.c	/^static void FreeLinkSet(LinkSet *p)$/;"	f	file:
+FreeNetwork	HParse.c	/^void FreeNetwork(HPNetwork *network)$/;"	f
+FreeNode	HParse.c	/^static void FreeNode(Link p)$/;"	f	file:
+FreeSubNetDefs	HParse.c	/^static void FreeSubNetDefs(void)$/;"	f	file:
+FullCovarCommand	HHEd.c	/^void FullCovarCommand(void)$/;"	f
+FunctionWordOp	HDMan.c	/^void FunctionWordOp(WordBuf *wb, LabId *args)$/;"	f
+GDistance	HHEd.c	/^float GDistance(int s, StreamElem *s1, StreamElem *s2)$/;"	f
+GQ	HHEd.c	/^                         LS , QS , TB , TR , AU , GQ , MD , ST , LT ,$/;"	e	enum:__anon13	file:
+GatherStats	HLStats.c	/^void GatherStats(Transcription *t)$/;"	f
+GenSent	HSGen.c	/^int GenSent(int snum)$/;"	f
+GenSentences	HSGen.c	/^void  GenSentences(char * latfn, char * dicfn)$/;"	f
+GenerateDict	HParse.c	/^void GenerateDict(HPNetwork *theNet,Vocab *voc) $/;"	f
+GenerateLattice	HParse.c	/^static Lattice* GenerateLattice(HPNetwork *theNet, Vocab *voc)$/;"	f	file:
+GetAEntry	HLStats.c	/^AEntry *GetAEntry(int in[ASIZE],Boolean create)$/;"	f
+GetContext	HLEd.c	/^LabId *GetContext(LabId name)$/;"	f
+GetContextList	HDMan.c	/^LabId *GetContextList(LabId id, DBuffer *db)$/;"	f
+GetFOM	HResults.c	/^float GetFOM(int idx)$/;"	f
+GetFindAccumulator	HLEd.c	/^int *GetFindAccumulator(LabId *pat)$/;"	f
+GetHitRate	HResults.c	/^float GetHitRate(int idx, int FAperHour)$/;"	f
+GetLabDistance	HSLab.c	/^LLink GetLabDistance(LabList *ll, long t, long st, long en, Boolean *isStart)$/;"	f
+GetLabT	HSLab.c	/^LLink GetLabT(LabList *ll, long t)$/;"	f
+GetMMIAccMix	HMMIRest.c	/^static void GetMMIAccMix(int stream, MixPDF *mp)$/;"	f	file:
+GetNode	HHEd.c	/^static Node *GetNode(Node *node,int n)$/;"	f	file:
+GetPart	HLEd.c	/^LabId GetPart(LabId id, int n)$/;"	f
+GetRNode	HHEd.c	/^static RNode *GetRNode(RegNode *n) $/;"	f	file:
+GetRegionAB	HSLab.c	/^Boolean GetRegionAB(int *pa, int *pb)$/;"	f
+GetSpeaker	HResults.c	/^Spkr *GetSpeaker(void)$/;"	f
+GetString	HSLab.c	/^Boolean GetString(RectWin *win, char *str, short minlen, short maxlen)$/;"	f
+GetTreeVector	HHEd.c	/^static void GetTreeVector(RegNode **nVec, RegNode *t) $/;"	f	file:
+GetWavePtrPos	HSLab.c	/^Boolean GetWavePtrPos(void)$/;"	f
+GetWdBeginNum	HParse.c	/^int GetWdBeginNum(Link p)$/;"	f
+GetWinKind	HSLab.c	/^WinKind GetWinKind(HEventRec hev)$/;"	f
+GiveDimMixD	HMMIRest.c	/^float GiveDimMixD(MixPDF *mp, int k, int priortype){$/;"	f
+GiveMixD	HMMIRest.c	/^float GiveMixD(MixPDF *mp, int stream, int priortype){$/;"	f
+GramEntry	HBuild.c	/^}GramEntry;$/;"	t	typeref:struct:_GramEntry	file:
+HEIGHT	HSLab.c	79;"	d	file:
+HK	HHEd.c	/^                         MM , DP , HK , FC , FA , FV, XF, PS, PR }$/;"	e	enum:__anon13	file:
+HOR	HResults.c	/^enum _Direction{DIAG,VERT,HOR,NIL};$/;"	e	enum:_Direction	file:
+HPNetwork	HParse.c	/^} HPNetwork;$/;"	t	typeref:struct:__anon18	file:
+HSLAB_INFO	HSLab.c	71;"	d	file:
+HSLabCmd	HSLab.c	/^   HSLabCmd, HSLabRun$/;"	e	enum:__anon28	file:
+HSLabRun	HSLab.c	/^   HSLabCmd, HSLabRun$/;"	e	enum:__anon28	file:
+HSlabCmdType	HSLab.c	/^} HSlabCmdType;$/;"	t	typeref:enum:__anon28	file:
+HTKLIB	Makefile	/^HTKLIB = $(inc)\/HTKLib.a $/;"	m
+H_EOF	HParse.c	1299;"	d	file:
+HasDuplicate	HDMan.c	/^Boolean HasDuplicate(DBuffer *db, int pronNum)$/;"	f
+HeadInfo	HList.c	/^}HeadInfo;$/;"	t	typeref:struct:__anon16	file:
+HeadMerge	HParse.c	/^void HeadMerge(Link a, Link b)$/;"	f
+HeaviestMix	HHEd.c	/^int HeaviestMix(char *hname, MixtureElem *me, int M)$/;"	f
+HighestInput	HDMan.c	/^LabId HighestInput(void)$/;"	f
+IFILL	HLEd.c	/^   SBDEF,   EXPAND, IFILL,  SORT,   WBDEF,  VBDEF,  LCTXT,  $/;"	e	enum:__anon14	file:
+IFillOp	HLEd.c	/^int IFillOp(LabList *ll,LabId *args)$/;"	f
+INIT_XPOS	HSLab.c	76;"	d	file:
+INIT_YPOS	HSLab.c	77;"	d	file:
+INSTALL	Makefile	/^INSTALL = 	\/usr\/bin\/install -c$/;"	m
+IO_WIN	HSLab.c	/^   WAVE_WIN, LAB_WIN, IO_WIN, NO_WIN $/;"	e	enum:__anon21	file:
+IPat	HHEd.c	/^}IPat;$/;"	t	typeref:struct:_IPat	file:
+ISIL	HLEd.c	/^   RCTXT,   TCTXT,  SETLEV, DELLEV, SPLLEV, ISIL,$/;"	e	enum:__anon14	file:
+ISilOp	HLEd.c	/^int ISilOp(LabList *ll,LabId *args)$/;"	f
+ISmoothTau	HMMIRest.c	/^static float ISmoothTau = 0.0;        \/* I-smoothing: a h-crit-like thing.  Set to 100 for MMI or 50 for MPE, or 25 for MWE. *\/$/;"	v	file:
+ISmoothTauTrans	HMMIRest.c	/^static float ISmoothTauTrans = 0.0;$/;"	v	file:
+ISmoothTauTransSet	HMMIRest.c	/^static Boolean ISmoothTauTransSet=FALSE;$/;"	v	file:
+ISmoothTauWeights	HMMIRest.c	/^static float ISmoothTauWeights = 0.0;$/;"	v	file:
+ISmoothTauWeightsSet	HMMIRest.c	/^static Boolean ISmoothTauWeightsSet=FALSE;$/;"	v	file:
+Ident	HParse.c	/^typedef char Ident[MAXIDENT+1];$/;"	t	file:
+InContext	HLEd.c	/^Boolean InContext(LLink l, LabId *lc, LabId *rc, LabId item)$/;"	f
+IncLabStr	HSLab.c	/^void IncLabStr(void)$/;"	f
+IncSumSqr	HHEd.c	/^void IncSumSqr(StateInfo *si, Boolean ans, AccSum *no, AccSum *yes, int l)$/;"	f
+Index	HResults.c	/^int Index(LabId labid)$/;"	f
+InitBar	HSLab.c	/^static void InitBar(BarType *bar, int x_ofs, HColour fg, int range, char *str)$/;"	f	file:
+InitConMat	HResults.c	/^void InitConMat(void)$/;"	f
+InitRectWin	HSLab.c	/^void InitRectWin(RectWin *win, float x, float y, float w, float h, $/;"	f
+InitRegTree	HHEd.c	/^RegTree *InitRegTree(HMMSet *hset, int *vSize, ILink ilist) $/;"	f
+InitScan	HParse.c	/^static void InitScan(char *fname)$/;"	f	file:
+InitSegStore	HInit.c	/^void InitSegStore(BufferInfo *info)$/;"	f
+InitSegStore	HRest.c	/^void InitSegStore(BufferInfo *info)$/;"	f
+InitSpkrAcc	HCompV.c	/^SpkrAcc *InitSpkrAcc(void)$/;"	f
+InitSpotLists	HResults.c	/^void InitSpotLists(void)$/;"	f
+InitStats	HLStats.c	/^void InitStats(char *listFn)$/;"	f
+InitStreamVars	HQuant.c	/^void InitStreamVars(void)$/;"	f
+InitSubNetDefs	HParse.c	/^static void InitSubNetDefs(void)$/;"	f	file:
+InitTreeAccs	HHEd.c	/^void InitTreeAccs(StateElem *se, int l)$/;"	f
+InitWordInfo	HLStats.c	/^void InitWordInfo(WordInfo *w, LabId id, Cntr *pCntr)$/;"	f
+Initialise	HCompV.c	/^void Initialise(void)$/;"	f
+Initialise	HDMan.c	/^void Initialise(void)$/;"	f
+Initialise	HERest.c	/^void Initialise(FBInfo *fbInfo, MemHeap *x, HMMSet *hset, char *hmmListFn)$/;"	f
+Initialise	HHEd.c	/^void Initialise(char *hmmListFn)$/;"	f
+Initialise	HInit.c	/^void Initialise(void)$/;"	f
+Initialise	HLEd.c	/^void Initialise(void)$/;"	f
+Initialise	HMMIRest.c	/^void Initialise(char *hmmListFn)$/;"	f
+Initialise	HQuant.c	/^void Initialise(char *datafn)$/;"	f
+Initialise	HResults.c	/^void Initialise(char * listfn)$/;"	f
+Initialise	HSLab.c	/^void Initialise(void)$/;"	f
+Initialise	HSmooth.c	/^void Initialise(char *hmmListFn)$/;"	f
+Initialise	HVite.c	/^void Initialise(void)$/;"	f
+Initialise1	HRest.c	/^void Initialise1(void)$/;"	f
+Initialise2	HRest.c	/^void Initialise2(void)$/;"	f
+InputXFormCommand	HHEd.c	/^void InputXFormCommand()$/;"	f
+Interpolate	HSmooth.c	/^void Interpolate(void)$/;"	f
+Intersect	HSLab.c	/^Boolean Intersect(long a, long b, long a1, long b1)$/;"	f
+InvertRegion	HSLab.c	/^void InvertRegion(RectWin *win, int a, int b)$/;"	f
+IsCommentChar	HDMan.c	/^Boolean IsCommentChar(int c)$/;"	f
+IsHit	HResults.c	/^Boolean IsHit(LLink t)$/;"	f
+IsInIdList	HDMan.c	/^Boolean IsInIdList(LabId id, LabId *idlist)$/;"	f
+IsInIdList	HLEd.c	/^Boolean IsInIdList(LabId id, LabId *idlist)$/;"	f
+IsInRectWin	HSLab.c	/^Boolean IsInRectWin(RectWin *w, int x, int y)$/;"	f
+IsInWin	HSLab.c	/^Boolean IsInWin(RectWin *w, int x, int y)$/;"	f
+IsJoined	HParse.c	/^static Boolean IsJoined(int a, int b)$/;"	f	file:
+IsSame	HLEd.c	/^Boolean IsSame(LabId a, LabId b)$/;"	f
+IsVBnd	HLEd.c	/^Boolean IsVBnd(LabId id)$/;"	f
+IsWBnd	HLEd.c	/^Boolean IsWBnd(LabId id)$/;"	f
+IsWave	HCopy.c	/^Boolean IsWave(char *srcFile)$/;"	f
+IsWave	HList.c	/^Boolean IsWave(char *srcFile)$/;"	f
+JO	HHEd.c	/^typedef enum           { AT=1, RT , SS , CL , CO , JO , MU , TI , UF , NC ,$/;"	e	enum:__anon13	file:
+JoinMatrix	HParse.c	/^typedef unsigned char **JoinMatrix; $/;"	t	file:
+JoinNodes	HParse.c	/^void JoinNodes(Link a, Link b)$/;"	f
+JoinSizeCommand	HHEd.c	/^void JoinSizeCommand(void)$/;"	f
+KillTimes	HLEd.c	/^void KillTimes(LabList *ll)$/;"	f
+L	HMMIRest.c	/^static int L;                        \/* number of logical HMM's *\/$/;"	v	file:
+LAB_BUF_LEN	HSLab.c	82;"	d	file:
+LAB_WIN	HSLab.c	/^   WAVE_WIN, LAB_WIN, IO_WIN, NO_WIN $/;"	e	enum:__anon21	file:
+LANGSYM	HParse.c	/^             RBRACESYM, LANGSYM, RANGSYM, LBRAKSYM, RBRAKSYM, $/;"	e	enum:_Symbol	file:
+LASTCMD	HLEd.c	/^   LASTCMD$/;"	e	enum:__anon14	file:
+LBRACESYM	HParse.c	/^enum _Symbol{NAMESYM, VARSYM, VARATSYM, LPARSYM, RPARSYM, LBRACESYM, $/;"	e	enum:_Symbol	file:
+LBRAKSYM	HParse.c	/^             RBRACESYM, LANGSYM, RANGSYM, LBRAKSYM, RBRAKSYM, $/;"	e	enum:_Symbol	file:
+LCPHONE	HDMan.c	/^typedef enum {UCWORD, UCPHONE, LCWORD, LCPHONE, DELETEW, DELDEF, FUNCW, DEFCON,$/;"	e	enum:__anon5	file:
+LCPhoneOp	HDMan.c	/^void LCPhoneOp(WordBuf *wb)$/;"	f
+LCTXT	HDMan.c	/^              LCTXT, RCTXT,$/;"	e	enum:__anon5	file:
+LCTXT	HLEd.c	/^   SBDEF,   EXPAND, IFILL,  SORT,   WBDEF,  VBDEF,  LCTXT,  $/;"	e	enum:__anon14	file:
+LCWORD	HDMan.c	/^typedef enum {UCWORD, UCPHONE, LCWORD, LCPHONE, DELETEW, DELDEF, FUNCW, DEFCON,$/;"	e	enum:__anon5	file:
+LCase	HDMan.c	/^LabId LCase(LabId id)$/;"	f
+LCtxtOp	HDMan.c	/^void LCtxtOp(WordBuf *wb, int nArgs,LabId *args)$/;"	f
+LDFLAGS	Makefile	/^LDFLAGS = 	-L\/usr\/X11R6\/lib  -lm$/;"	m
+LINKCHUNKSIZE	HParse.c	274;"	d	file:
+LINKEXTENTFACTOR	HParse.c	275;"	d	file:
+LPARSYM	HParse.c	/^enum _Symbol{NAMESYM, VARSYM, VARATSYM, LPARSYM, RPARSYM, LBRACESYM, $/;"	e	enum:_Symbol	file:
+LS	HHEd.c	/^                         LS , QS , TB , TR , AU , GQ , MD , ST , LT ,$/;"	e	enum:__anon13	file:
+LSBLOCK	HParse.c	280;"	d	file:
+LT	HHEd.c	/^                         LS , QS , TB , TR , AU , GQ , MD , ST , LT ,$/;"	e	enum:__anon13	file:
+LTRISYM	HParse.c	/^             LTRISYM,RTRISYM,EQSYM, SEMISYM, BARSYM, PERCENTSYM, $/;"	e	enum:_Symbol	file:
+LabelInternal	HParse.c	/^void LabelInternal(Link p)$/;"	f
+LambdaOpt	HSmooth.c	/^float LambdaOpt(StreamElem *ste, int M)$/;"	f
+LatMask_Denominator	HMMIRest.c	/^static char *LatMask_Denominator = NULL;$/;"	v	file:
+LatMask_Numerator	HMMIRest.c	/^static char *LatMask_Numerator   = NULL;$/;"	v	file:
+LeftTriCxt	HLEd.c	/^LabId LeftTriCxt(LLink l)$/;"	f
+Link	HParse.c	/^typedef struct _Node *Link;$/;"	t	typeref:struct:_Node	file:
+LinkSet	HParse.c	/^} LinkSet;$/;"	t	typeref:struct:__anon17	file:
+ListFinds	HLEd.c	/^void ListFinds(void)$/;"	f
+ListNewPhones	HDMan.c	/^void ListNewPhones(void)$/;"	f
+ListParms	HList.c	/^void ListParms(char *src)$/;"	f
+ListSpeech	HList.c	/^void ListSpeech(char *src)$/;"	f
+ListWavefromAudio	HList.c	/^void ListWavefromAudio(void)$/;"	f
+ListWavefromFile	HList.c	/^void ListWavefromFile(char *src)$/;"	f
+LoadASet	HSmooth.c	/^int LoadASet(LabId x)$/;"	f
+LoadData	HSLab.c	/^void LoadData(void)$/;"	f
+LoadFile	HCompV.c	/^void LoadFile(char *fn)$/;"	f
+LoadFile	HInit.c	/^void LoadFile(char *fn)$/;"	f
+LoadFile	HQuant.c	/^void LoadFile(char *fn)$/;"	f
+LoadFile	HRest.c	/^void LoadFile(char *fn)$/;"	f
+LoadFiles	HSLab.c	/^void LoadFiles(void)$/;"	f
+LoadLabs	HSLab.c	/^void LoadLabs(void)$/;"	f
+LoadLattice	HBuild.c	/^Lattice *LoadLattice(MemHeap *latHeap, char *latFn, Vocab *voc,$/;"	f
+LoadPhoneList	HDMan.c	/^void LoadPhoneList(void)$/;"	f
+LoadQuestion	HHEd.c	/^void LoadQuestion(char *qName, ILink ilist, char *pattern)$/;"	f
+LoadSSet	HSmooth.c	/^void LoadSSet(int i, int s)$/;"	f
+LoadStatsCommand	HHEd.c	/^void LoadStatsCommand(void)$/;"	f
+LoadTransLabs	HCopy.c	/^Transcription *LoadTransLabs(char *src)$/;"	f
+LoadTree	HHEd.c	/^Tree *LoadTree(char *name,Source *src)$/;"	f
+LoadTreesCommand	HHEd.c	/^void LoadTreesCommand(void)$/;"	f
+LoadWordList	HDMan.c	/^void LoadWordList(void)$/;"	f
+MAX	HHEd.c	5313;"	d	file:
+MAX	HMMIRest.c	61;"	d	file:
+MAXARGS	HDMan.c	61;"	d	file:
+MAXARGS	HLEd.c	60;"	d	file:
+MAXCONMATSIZE	HResults.c	1165;"	d	file:
+MAXCONS	HDMan.c	65;"	d	file:
+MAXDICTS	HDMan.c	64;"	d	file:
+MAXIDENT	HParse.c	276;"	d	file:
+MAXIV	HLEd.c	62;"	d	file:
+MAXIW	HLEd.c	61;"	d	file:
+MAXMONOPHONES	HSmooth.c	39;"	d	file:
+MAXPRONS	HDMan.c	63;"	d	file:
+MAXPVOC	HDMan.c	66;"	d	file:
+MAXTIME	HCopy.c	107;"	d	file:
+MAX_AMPL	HSLab.c	87;"	d	file:
+MAX_ITER	HHEd.c	61;"	d	file:
+MAX_LAB_LEN	HSLab.c	81;"	d	file:
+MAX_ZOOM	HSLab.c	74;"	d	file:
+MD	HHEd.c	/^                         LS , QS , TB , TR , AU , GQ , MD , ST , LT ,$/;"	e	enum:__anon13	file:
+MERGE	HLEd.c	/^   REPLACE, CHANGE, FIND,   MERGE,  EDOP_DELETE, DEFCON, TRIST,  $/;"	e	enum:__anon14	file:
+MERGEP	HDMan.c	/^              REPLACEP, CONREPLACE, MERGEP, SPLITP, DELETEP, DELSOURCE, $/;"	e	enum:__anon5	file:
+MIN	HHEd.c	5314;"	d	file:
+MIN	HMMIRest.c	62;"	d	file:
+MIN_AMPL	HSLab.c	86;"	d	file:
+MLUpdateModels	HERest.c	/^void MLUpdateModels(HMMSet *hset, UPDSet uFlags)$/;"	f
+ML_MODE	HMMIRest.c	/^static Boolean ML_MODE = FALSE;     \/* when only one set of accs are supplied. *\/$/;"	v	file:
+MM	HHEd.c	/^                         MM , DP , HK , FC , FA , FV, XF, PS, PR }$/;"	e	enum:__anon13	file:
+MMIPrior	HMMIRest.c	/^static Boolean MMIPrior = FALSE;    \/* use MMI prior as I-smoothing prior *\/$/;"	v	file:
+MMITauI	HMMIRest.c	/^static float MMITauI = 0.0;        \/* I-smoothing tau for MMI prior in MPE training *\/$/;"	v	file:
+MPE	HMMIRest.c	/^static Boolean MPE = FALSE;         \/* when we are doing MPE\/MWE. *\/$/;"	v	file:
+MPEStoreML	HMMIRest.c	/^static Boolean MPEStoreML=FALSE;   \/*  Set TRUE if we need to accumulate ML stats while doing MPE. *\/$/;"	v	file:
+MT	HHEd.c	/^                         TC , UT , MT , SH , SU , SW , SK ,$/;"	e	enum:__anon13	file:
+MU	HHEd.c	/^typedef enum           { AT=1, RT , SS , CL , CO , JO , MU , TI , UF , NC ,$/;"	e	enum:__anon13	file:
+MakeFindAccumulator	HLEd.c	/^void MakeFindAccumulator(LabId *pat)$/;"	f
+MakeIntoMacrosCommand	HHEd.c	/^void MakeIntoMacrosCommand(void)$/;"	f
+MakePredLinks	HParse.c	/^static void MakePredLinks(int numElements, LinkSet *asucc)$/;"	f	file:
+MakeSuccLinks	HParse.c	/^static void MakeSuccLinks(int numElements, LinkSet *asucc)$/;"	f	file:
+MakeTraceBack	HInit.c	/^void MakeTraceBack(int segLen)$/;"	f
+MakeTriCommand	HHEd.c	/^void MakeTriCommand(void)$/;"	f
+MakeTriId	HDMan.c	/^LabId MakeTriId(LabId l, LabId c, LabId r)$/;"	f
+MakeTriId	HLEd.c	/^LabId MakeTriId(LabId l, LabId c, LabId r)$/;"	f
+MakeTriList	HParse.c	/^static SplitName* MakeTriList(int numElements, LinkSet *asucc)$/;"	f	file:
+MakeTriLoop	HParse.c	/^static void MakeTriLoop(Link *hd, Link *tl)$/;"	f	file:
+MakeTriSubNets	HParse.c	/^static void MakeTriSubNets(LinkSet *asucc, int numElements, $/;"	f	file:
+MakeWtAccLists	HSmooth.c	/^void MakeWtAccLists()$/;"	f
+MapTreeName	HHEd.c	/^void MapTreeName(char *buf) {$/;"	f
+MatchFiles	HResults.c	/^void MatchFiles(void)$/;"	f
+MatchRecFiles	HResults.c	/^void MatchRecFiles(void)$/;"	f
+MatchSpotFiles	HResults.c	/^void MatchSpotFiles(void)$/;"	f
+MaxTimesLabelled	HSLab.c	/^int MaxTimesLabelled(LabList *ll, long st, long en)$/;"	f
+MergeCost	HHEd.c	/^float MergeCost(Node *a, Node *b, CLink atail)$/;"	f
+MergeGroups	HHEd.c	/^void MergeGroups(int i, int j, CLink *cvec, int N)$/;"	f
+MergeLeaves	HHEd.c	/^void MergeLeaves(Tree *tree, float threshold)$/;"	f
+MergeLevels	HLEd.c	/^LabList *MergeLevels(Transcription *ltr)$/;"	f
+MergeLinks	HParse.c	/^static LinkSet*  MergeLinks(LinkSet *from, LinkSet *to)$/;"	f	file:
+MergeMix	HHEd.c	/^void MergeMix(StreamElem *ste,int p,int q, Boolean inPlace)$/;"	f
+MergeNode	HHEd.c	/^Boolean MergeNode(Node *node, float threshold)$/;"	f
+MergeOp	HLEd.c	/^int MergeOp(LabList *ll,int nArgs, LabId *args)$/;"	f
+MergePhon	HDMan.c	/^void MergePhon(Pronunciation *p, int nArgs, LabId *args)$/;"	f
+MergePhoneOp	HDMan.c	/^void MergePhoneOp(WordBuf *wb, int nArgs, LabId *args)$/;"	f
+MinGDist	HHEd.c	/^float MinGDist(Matrix g, int *ix, int *jx, int N)$/;"	f
+MinOcc	HMMIRest.c	/^static float MinOcc = 10;              \/* Minimum numerator (ML) occupancy for a Gaussian to be updated *\/$/;"	v	file:
+MinOccSum	HHEd.c	/^int MinOccSum(Vector occSum, int N)$/;"	f
+MinOccTrans	HMMIRest.c	/^static float MinOccTrans = 10;         \/* Minimum numerator (ML) occupancy for a transition row *\/$/;"	v	file:
+MinOccWeights	HMMIRest.c	/^static float MinOccWeights = 10;       \/* Minimum numerator (ML) occupancy for a set of weights. *\/$/;"	v	file:
+MixDownCommand	HHEd.c	/^void MixDownCommand(void)$/;"	f
+MixMergeCost	HHEd.c	/^float MixMergeCost(MixtureElem *me1,MixtureElem *me2)$/;"	f
+MixUpCommand	HHEd.c	/^void MixUpCommand(void)$/;"	f
+MouseMark	HSLab.c	/^void MouseMark(int x, int *markA, int *markB)$/;"	f
+NAMESYM	HParse.c	/^enum _Symbol{NAMESYM, VARSYM, VARATSYM, LPARSYM, RPARSYM, LBRACESYM, $/;"	e	enum:_Symbol	file:
+NC	HHEd.c	/^typedef enum           { AT=1, RT , SS , CL , CO , JO , MU , TI , UF , NC ,$/;"	e	enum:__anon13	file:
+NIL	HResults.c	/^enum _Direction{DIAG,VERT,HOR,NIL};$/;"	e	enum:_Direction	file:
+NOCMD	HDMan.c	/^              NOCMD} EdOp;$/;"	e	enum:__anon5	file:
+NOCMD	HLEd.c	/^   NOCMD=0, $/;"	e	enum:__anon14	file:
+NODEBLOCK	HParse.c	279;"	d	file:
+NO_WIN	HSLab.c	/^   WAVE_WIN, LAB_WIN, IO_WIN, NO_WIN $/;"	e	enum:__anon21	file:
+NUM_OF_SCALES	HSLab.c	101;"	d	file:
+Node	HHEd.c	/^}Node;$/;"	t	typeref:struct:_Node	file:
+Node	HParse.c	/^} Node;$/;"	t	typeref:struct:_Node	file:
+NodeInfo	HParse.c	/^}NodeInfo;$/;"	t	typeref:struct:_NodeInfo	file:
+NodeType	HParse.c	/^typedef enum {unknown, wdInternal, wdExternal, wdBegin, wdEnd, nullNode} NodeType;$/;"	t	typeref:enum:__anon19	file:
+NormaliseName	HResults.c	/^void NormaliseName(LabList *ll,int lev)$/;"	f
+NotLinked	HParse.c	/^static Boolean NotLinked(LinkSet *ls, Link x)$/;"	f	file:
+NumAccs	HMMIRest.c	/^static int NumAccs;                \/*  Set in Initialise() to  1 or 2 or 3. *\/$/;"	v	file:
+NumFrame	HCompV.c	/^   int NumFrame;                         \/* number of frames for speaker *\/$/;"	m	struct:__anon4	file:
+NumJPreds	HParse.c	/^static int NumJPreds(int a)$/;"	f	file:
+NumJSuccs	HParse.c	/^static int NumJSuccs(int a)$/;"	f	file:
+NumParts	HLEd.c	/^int NumParts(LabId id)$/;"	f
+NumberEntries	HBuild.c	/^void NumberEntries(WPGrammar *wpg, Word sentEnd)$/;"	f
+OpType	HSLab.c	/^} OpType;$/;"	t	typeref:enum:__anon24	file:
+OpenParmFile	HCopy.c	/^HTime OpenParmFile(char *src)$/;"	f
+OpenSpeechFile	HCopy.c	/^void OpenSpeechFile(char *s)$/;"	f
+OpenWaveFile	HCopy.c	/^HTime OpenWaveFile(char *src)$/;"	f
+OutConMat	HResults.c	/^void OutConMat(void)$/;"	f
+OutMacro	HHEd.c	/^void OutMacro(char type,Ptr structure)$/;"	f
+OutTrans	HResults.c	/^void OutTrans(void)$/;"	f
+OutputBoBigram	HLStats.c	/^void OutputBoBigram(void)$/;"	f
+OutputCounts	HLStats.c	/^void OutputCounts(void)$/;"	f
+OutputDurs	HLStats.c	/^void OutputDurs(void)$/;"	f
+OutputList	HLStats.c	/^void OutputList(void)$/;"	f
+OutputMatBigram	HLStats.c	/^void OutputMatBigram(void)$/;"	f
+OutputSpotStats	HResults.c	/^void OutputSpotStats(void)$/;"	f
+OutputStats	HLStats.c	/^void OutputStats(void)$/;"	f
+OutputStats	HResults.c	/^void OutputStats(void)$/;"	f
+P	HMMIRest.c	/^static int P;                        \/* number of physical HMM's *\/$/;"	v	file:
+PClip	HResults.c	/^void PClip(char * instr, char *outstr, int max)$/;"	f
+PERCENTSYM	HParse.c	/^             LTRISYM,RTRISYM,EQSYM, SEMISYM, BARSYM, PERCENTSYM, $/;"	e	enum:_Symbol	file:
+PExpr	HParse.c	/^static void PExpr(Link *hd, Link *tl)$/;"	f	file:
+PFactor	HParse.c	/^static void PFactor(Link *hd, Link *tl)$/;"	f	file:
+PGetCh	HParse.c	/^static void PGetCh(void)$/;"	f	file:
+PGetIdent	HParse.c	/^static void PGetIdent(void)$/;"	f	file:
+PGetSym	HParse.c	/^static void PGetSym(void)$/;"	f	file:
+PGroup	HParse.c	/^static void PGroup(Link *hd, Link *tl)$/;"	f	file:
+PModel	HParse.c	/^static void PModel(Link *hd, Link *tl)$/;"	f	file:
+PNetwork	HParse.c	/^static void PNetwork(Link *hd, Link *tl, Boolean netOnly, Boolean skipExpr)$/;"	f	file:
+POption	HParse.c	/^static void POption(Link *hd, Link *tl)$/;"	f	file:
+PR	HHEd.c	/^                         MM , DP , HK , FC , FA , FV, XF, PS, PR }$/;"	e	enum:__anon13	file:
+PROGS	Makefile	/^PROGS   = 	HSLab HBuild HCompV HCopy HDMan \\$/;"	m
+PRepetition0	HParse.c	/^static void PRepetition0(Link *hd, Link *tl)$/;"	f	file:
+PRepetition1	HParse.c	/^static void PRepetition1(Link *hd, Link *tl)$/;"	f	file:
+PS	HHEd.c	/^                         MM , DP , HK , FC , FA , FV, XF, PS, PR }$/;"	e	enum:__anon13	file:
+PSequence	HParse.c	/^static void PSequence(Link *hd, Link *tl)$/;"	f	file:
+PSubNet	HParse.c	/^static void PSubNet(void)$/;"	f	file:
+PTriloop	HParse.c	/^static void PTriloop(Link *hd, Link *tl)$/;"	f	file:
+PVariable	HParse.c	/^static void PVariable(Link *hd, Link *tl)$/;"	f	file:
+ParseAlpha	HHEd.c	/^char *ParseAlpha(char *src, char *s)$/;"	f
+ParseError	HParse.c	/^static void ParseError(int errn)$/;"	f	file:
+PerturbMean	HHEd.c	/^void PerturbMean(Vector mean, Vector covar, float pertDepth) $/;"	f
+PlayLabel	HSLab.c	/^void PlayLabel(int x)$/;"	f
+Playback	HSLab.c	/^void Playback(Wave w, long sampA, long sampB, int vol, int scale, Boolean *newData)$/;"	f
+PlotFileWin	HSLab.c	/^void PlotFileWin(void)$/;"	f
+PlotGStripes	HSLab.c	/^void PlotGStripes(int x, int y, int width, int height)$/;"	f
+PlotLabWin	HSLab.c	/^void PlotLabWin(void)$/;"	f
+PlotLabels	HSLab.c	/^void PlotLabels(RectWin *win, LabList *ll, long sStart, long sEnd)$/;"	f
+PlotWaveForm	HSLab.c	/^void PlotWaveForm(RectWin *win, int st_pt, int en_pt)$/;"	f
+PlotWaveWin	HSLab.c	/^void PlotWaveWin(void)$/;"	f
+PlotWaveWinPtr	HSLab.c	/^void PlotWaveWinPtr(int pos)$/;"	f
+Point2Sample	HSLab.c	/^long Point2Sample(RectWin *win, int pt)$/;"	f
+PowerSizeCommand	HHEd.c	/^void PowerSizeCommand(void)$/;"	f
+PrBar	HList.c	/^void PrBar(char *title)$/;"	f
+PrModelName	HParse.c	/^static void PrModelName(Link p)$/;"	f	file:
+PreparePlot	HSLab.c	/^void PreparePlot(RectWin *win, short *data, int st, int en)$/;"	f
+PrintBar	HResults.c	/^void PrintBar(int offset, int width, char c, char *title)$/;"	f
+PrintBaseClass	HHEd.c	/^void PrintBaseClass(FILE *f, RegTree *t, int nNodes, char *bname) $/;"	f
+PrintChain	HParse.c	/^void PrintChain(Link chain)$/;"	f
+PrintContexts	HLEd.c	/^void PrintContexts(void)$/;"	f
+PrintCriteria	HMMIRest.c	/^void PrintCriteria(){$/;"	f
+PrintDataBar	HList.c	/^void PrintDataBar(long st, long en)$/;"	f
+PrintFileStats	HResults.c	/^void PrintFileStats(char *fn, int h, int d, int s, int i)$/;"	f
+PrintGlobalStats	HResults.c	/^void PrintGlobalStats(void)$/;"	f
+PrintHParseNetwork	HParse.c	/^static void PrintHParseNetwork(HPNetwork *network)$/;"	f	file:
+PrintHeader	HResults.c	/^void PrintHeader(void)$/;"	f
+PrintHeading	HList.c	/^void PrintHeading(HeadInfo h)$/;"	f
+PrintIdList	HDMan.c	/^void PrintIdList(LabId *i)$/;"	f
+PrintIdList	HLEd.c	/^void PrintIdList(LabId *i)$/;"	f
+PrintInitialInfo	HInit.c	/^void PrintInitialInfo(void)$/;"	f
+PrintInitialInfo	HRest.c	/^void PrintInitialInfo(void)$/;"	f
+PrintKeySpots	HResults.c	/^void PrintKeySpots(void)$/;"	f
+PrintLinkSet	HParse.c	/^static void PrintLinkSet(int n, LinkSet *p)$/;"	f	file:
+PrintLog	HDMan.c	/^void PrintLog(void)$/;"	f
+PrintLog	HSmooth.c	/^void PrintLog(LogDouble x)$/;"	f
+PrintMsg	HSLab.c	/^void PrintMsg(RectWin *win, char *msg)$/;"	f
+PrintNBar	HResults.c	/^void PrintNBar(int width, char c, char left, char right)$/;"	f
+PrintNMargin	HResults.c	/^void PrintNMargin(void)$/;"	f
+PrintNode	HParse.c	/^static void PrintNode(Link p)$/;"	f	file:
+PrintNodeInfo	HHEd.c	/^void PrintNodeInfo(RNode *n, int vSize) $/;"	f
+PrintObsFmt	HList.c	/^void PrintObsFmt(Observation *o)$/;"	f
+PrintROCInfo	HResults.c	/^void PrintROCInfo(int kn)$/;"	f
+PrintRawVec	HList.c	/^void PrintRawVec(Vector v)$/;"	f
+PrintRegTree	HHEd.c	/^void PrintRegTree(FILE *f, RegTree *t, int nNodes, char* rname, char* bname) $/;"	f
+PrintScript	HDMan.c	/^void PrintScript(char *name, DBuffer *db)$/;"	f
+PrintScript	HLEd.c	/^void PrintScript(char *scriptFN)$/;"	f
+PrintSettings	HLStats.c	/^void PrintSettings(void)$/;"	f
+PrintSpkrStats	HResults.c	/^void PrintSpkrStats(void)$/;"	f
+PrintSpotList	HResults.c	/^void PrintSpotList(SpotRec *p)$/;"	f
+PrintStats	HERest.c	/^void PrintStats(HMMSet *hset,FILE *f, int n, HLink hmm, int numEgs)$/;"	f
+PrintStats	HMMIRest.c	/^void PrintStats(FILE *f, int n, HLink hmm, int numEgs)$/;"	f
+PrintStats	HParse.c	/^void PrintStats(void)$/;"	f
+PrintStats	HSmooth.c	/^void PrintStats(FILE *f, int n, HLink hmm, int numEgs)$/;"	f
+PrintTrace	HCopy.c	/^void PrintTrace(void)$/;"	f
+PrintUsage	HDMan.c	/^void PrintUsage(DBuffer *db)$/;"	f
+PrintVBounds	HLEd.c	/^void PrintVBounds(void)$/;"	f
+PrintWBounds	HLEd.c	/^void PrintWBounds(void)$/;"	f
+PrintWaveLine	HList.c	/^void PrintWaveLine(short *data, int nItems, long idx)$/;"	f
+PrintWord	HSGen.c	/^void PrintWord(NodeId n)$/;"	f
+PriorK	HMMIRest.c	/^static float PriorK = 0.0;           \/* e.g. use 1 if disc. trained prior model is better than ML trained new model.  *\/$/;"	v	file:
+PriorTau	HMMIRest.c	/^static float PriorTau = 0.0;         \/* tau value [e.g. 10,25] for use in discriminative MAP with -Hprior option. *\/$/;"	v	file:
+PriorTauTrans	HMMIRest.c	/^static float PriorTauTrans = 0.0;$/;"	v	file:
+PriorTauWeights	HMMIRest.c	/^static float PriorTauWeights = 0.0;$/;"	v	file:
+ProcessBiGram	HBuild.c	/^Lattice *ProcessBiGram(MemHeap *latHeap, Vocab *voc, LModel *biLM)$/;"	f
+ProcessBoBiGram	HBuild.c	/^Lattice *ProcessBoBiGram(MemHeap *latHeap, Vocab *voc, NGramLM *nLM)$/;"	f
+ProcessFile	HVite.c	/^Boolean ProcessFile(char *fn, Network *net, int utterNum, LogDouble currGenBeam, Boolean restartable)$/;"	f
+ProcessLabels	HLRescore.c	/^void ProcessLabels (char *labfn)$/;"	f
+ProcessLattice	HLRescore.c	/^void ProcessLattice (char *latfn)$/;"	f
+ProcessMatBiGram	HBuild.c	/^Lattice *ProcessMatBiGram(MemHeap *latHeap, Vocab *voc, MatBiLM *bg)$/;"	f
+ProcessWordLoop	HBuild.c	/^Lattice *ProcessWordLoop(MemHeap *latHeap, Vocab *voc)$/;"	f
+ProcessWordPair	HBuild.c	/^Lattice *ProcessWordPair(MemHeap *latHeap, Vocab *voc, char *gramFn)$/;"	f
+ProjectCommand	HHEd.c	/^void ProjectCommand(void)$/;"	f
+Pronunciation	HDMan.c	/^}Pronunciation;$/;"	t	typeref:struct:__anon7	file:
+PurgeMacros	HHEd.c	/^void PurgeMacros(HMMSet *hset)$/;"	f
+PutLab	HLEd.c	/^void PutLab(LabId id)$/;"	f
+PutPhone	HDMan.c	/^void PutPhone(LabId id)$/;"	f
+PutTargetFile	HCopy.c	/^void PutTargetFile(char *s)$/;"	f
+PutVFloor	HCompV.c	/^void PutVFloor(void)$/;"	f
+QEnt	HHEd.c	/^}QEnt;$/;"	t	typeref:struct:_QEnt	file:
+QLink	HHEd.c	/^typedef struct _QEnt *QLink;   \/* Linked list of Questions *\/$/;"	t	typeref:struct:_QEnt	file:
+QMatch	HHEd.c	/^Boolean QMatch(char *name, QLink q)$/;"	f
+QS	HHEd.c	/^                         LS , QS , TB , TR , AU , GQ , MD , ST , LT ,$/;"	e	enum:__anon13	file:
+QuestionCommand	HHEd.c	/^void QuestionCommand(void)$/;"	f
+RANGSYM	HParse.c	/^             RBRACESYM, LANGSYM, RANGSYM, LBRAKSYM, RBRAKSYM, $/;"	e	enum:_Symbol	file:
+RAWMODE	HDMan.c	/^              TCTXT, APPSIL, REMSTRESS, REPLACEW, RAWMODE, $/;"	e	enum:__anon5	file:
+RBRACESYM	HParse.c	/^             RBRACESYM, LANGSYM, RANGSYM, LBRAKSYM, RBRAKSYM, $/;"	e	enum:_Symbol	file:
+RBRAKSYM	HParse.c	/^             RBRACESYM, LANGSYM, RANGSYM, LBRAKSYM, RBRAKSYM, $/;"	e	enum:_Symbol	file:
+RC	HHEd.c	/^                         RC ,$/;"	e	enum:__anon13	file:
+RCTXT	HDMan.c	/^              LCTXT, RCTXT,$/;"	e	enum:__anon5	file:
+RCTXT	HLEd.c	/^   RCTXT,   TCTXT,  SETLEV, DELLEV, SPLLEV, ISIL,$/;"	e	enum:__anon14	file:
+RCtxtOp	HDMan.c	/^void RCtxtOp(WordBuf *wb, int nArgs,LabId *args)$/;"	f
+REC_BUF_SIZE	HSLab.c	368;"	d	file:
+REMSTRESS	HDMan.c	/^              TCTXT, APPSIL, REMSTRESS, REPLACEW, RAWMODE, $/;"	e	enum:__anon5	file:
+REPLACE	HLEd.c	/^   REPLACE, CHANGE, FIND,   MERGE,  EDOP_DELETE, DEFCON, TRIST,  $/;"	e	enum:__anon14	file:
+REPLACEP	HDMan.c	/^              REPLACEP, CONREPLACE, MERGEP, SPLITP, DELETEP, DELSOURCE, $/;"	e	enum:__anon5	file:
+REPLACEW	HDMan.c	/^              TCTXT, APPSIL, REMSTRESS, REPLACEW, RAWMODE, $/;"	e	enum:__anon5	file:
+RM	HHEd.c	/^                         RO , RM , RN , RP ,$/;"	e	enum:__anon13	file:
+RN	HHEd.c	/^                         RO , RM , RN , RP ,$/;"	e	enum:__anon13	file:
+RNode	HHEd.c	/^} RNode;$/;"	t	typeref:struct:__anon12	file:
+RO	HHEd.c	/^                         RO , RM , RN , RP ,$/;"	e	enum:__anon13	file:
+RP	HHEd.c	/^                         RO , RM , RN , RP ,$/;"	e	enum:__anon13	file:
+RPARSYM	HParse.c	/^enum _Symbol{NAMESYM, VARSYM, VARATSYM, LPARSYM, RPARSYM, LBRACESYM, $/;"	e	enum:_Symbol	file:
+RT	HHEd.c	/^typedef enum           { AT=1, RT , SS , CL , CO , JO , MU , TI , UF , NC ,$/;"	e	enum:__anon13	file:
+RTRISYM	HParse.c	/^             LTRISYM,RTRISYM,EQSYM, SEMISYM, BARSYM, PERCENTSYM, $/;"	e	enum:_Symbol	file:
+RandSucc	HSGen.c	/^NodeId RandSucc(NodeId n)$/;"	f
+ReEstimateModel	HRest.c	/^void ReEstimateModel(void)$/;"	f
+ReOrderFeaturesCommand	HHEd.c	/^void ReOrderFeaturesCommand()$/;"	f
+ReSizeNodes	HParse.c	/^static void ReSizeNodes(HPNetwork *net)$/;"	f	file:
+ReadCmd	HDMan.c	/^EdOp ReadCmd(Source *src)$/;"	f
+ReadCmd	HLEd.c	/^EdOp ReadCmd(Source *src)$/;"	f
+ReadDictProns	HDMan.c	/^Boolean ReadDictProns(DBuffer *db)$/;"	f
+ReadHMMList	HResults.c	/^void ReadHMMList(char *fn)$/;"	f
+ReadIdList	HDMan.c	/^int ReadIdList(Source *src, LabId *argList)$/;"	f
+ReadIdList	HLEd.c	/^int ReadIdList(Source *src,LabId *argList)$/;"	f
+ReadLabId	HLEd.c	/^LabId ReadLabId(Source *src)$/;"	f
+ReadNextWord	HDMan.c	/^Boolean ReadNextWord(DBuffer *db)$/;"	f
+ReadScript	HDMan.c	/^void ReadScript(char *scriptFn, DBuffer *db, Boolean isInput)$/;"	f
+ReadScript	HLEd.c	/^void ReadScript(char *scriptFn)$/;"	f
+ReadWPGrammar	HBuild.c	/^void ReadWPGrammar(WPGrammar *wpg, Vocab * voc, char *gramFn)$/;"	f
+ReadWordFromLine	HResults.c	/^Boolean ReadWordFromLine(Source *src, char *s)$/;"	f
+RebuildAETab	HLStats.c	/^void RebuildAETab(AEntry **aelists)$/;"	f
+Record	HSLab.c	/^Wave Record(long *nSamples, HTime *sampPeriod)$/;"	f
+RecordFileStats	HResults.c	/^Boolean RecordFileStats(CellPtr p)$/;"	f
+RecordOp	HSLab.c	/^void RecordOp(OpType op, LLink p)$/;"	f
+RecordTriphone	HHEd.c	/^void RecordTriphone(HLink left, HLink right, MLink ml)$/;"	f
+RectWin	HSLab.c	/^} RectWin;$/;"	t	typeref:struct:__anon26	file:
+RegClassesCommand	HHEd.c	/^void RegClassesCommand(void) $/;"	f
+RemDuplicates	HDMan.c	/^void RemDuplicates(DBuffer *db)$/;"	f
+RemMean	HHEd.c	/^void RemMean(Vector src, Vector tgt)$/;"	f
+RemMeansCommand	HHEd.c	/^void RemMeansCommand(void)$/;"	f
+RemOutliers	HHEd.c	/^void RemOutliers(CLink *cvec, Matrix idist, Matrix gdist, int *numClust, $/;"	f
+RemOutliersCommand	HHEd.c	/^void RemOutliersCommand(void)$/;"	f
+RemStress	HDMan.c	/^void RemStress(WordBuf *wb, LabId *args)$/;"	f
+RemTop	HHEd.c	/^MixtureElem RemTop(void)$/;"	f
+RemoveDiscon	HParse.c	/^static void RemoveDiscon(HPNetwork *net)$/;"	f	file:
+RemoveGlue	HParse.c	/^static void  RemoveGlue(HPNetwork *network)$/;"	f	file:
+RenameHMMSetIdCommand	HHEd.c	/^void RenameHMMSetIdCommand(void)$/;"	f
+ReplaceOp	HLEd.c	/^int ReplaceOp(LabList *ll,LabId *args)$/;"	f
+ReplacePhoneOp	HDMan.c	/^void ReplacePhoneOp(WordBuf *wb, LabId *args)$/;"	f
+ReplaceWordOp	HDMan.c	/^void ReplaceWordOp(WordBuf *wb, LabId *args)$/;"	f
+ReplayAudio	HVite.c	/^void ReplayAudio(BufferInfo info)$/;"	f
+ReportOutput	HCompV.c	/^void ReportOutput()$/;"	f
+ReportUsage	HBuild.c	/^void ReportUsage(void)$/;"	f
+ReportUsage	HCompV.c	/^void ReportUsage(void)$/;"	f
+ReportUsage	HCopy.c	/^void ReportUsage(void)$/;"	f
+ReportUsage	HDMan.c	/^void ReportUsage(void)$/;"	f
+ReportUsage	HERest.c	/^void ReportUsage(void)$/;"	f
+ReportUsage	HHEd.c	/^void ReportUsage(void)$/;"	f
+ReportUsage	HInit.c	/^void ReportUsage(void)$/;"	f
+ReportUsage	HLEd.c	/^void ReportUsage(void)$/;"	f
+ReportUsage	HLRescore.c	/^void ReportUsage(void)$/;"	f
+ReportUsage	HLStats.c	/^void ReportUsage(void)$/;"	f
+ReportUsage	HList.c	/^void ReportUsage(void)$/;"	f
+ReportUsage	HMMIRest.c	/^void ReportUsage(void)$/;"	f
+ReportUsage	HParse.c	/^void ReportUsage(void)$/;"	f
+ReportUsage	HQuant.c	/^void ReportUsage(void)$/;"	f
+ReportUsage	HRest.c	/^void ReportUsage(void)$/;"	f
+ReportUsage	HResults.c	/^void ReportUsage(void)$/;"	f
+ReportUsage	HSGen.c	/^void ReportUsage(void)$/;"	f
+ReportUsage	HSLab.c	/^void ReportUsage(void)$/;"	f
+ReportUsage	HSmooth.c	/^void ReportUsage(void)$/;"	f
+ReportUsage	HVite.c	/^void ReportUsage(void)$/;"	f
+ResetHeaps	HSmooth.c	/^void ResetHeaps(void)$/;"	f
+ResizeLinkSet	HParse.c	/^static void ResizeLinkSet(LinkSet *ls, int newSize)$/;"	f	file:
+ResizeSTriMat	HHEd.c	/^STriMat ResizeSTriMat(HMMSet *hset,STriMat m, int n, char type, float pad)$/;"	f
+ResizeSVector	HHEd.c	/^SVector ResizeSVector(HMMSet *hset,SVector v, int n, char type, float pad)$/;"	f
+RestCoVar	HRest.c	/^Boolean RestCoVar(MixPDF *mp, int vSize, Vector minV,$/;"	f
+RestMean	HRest.c	/^void RestMean(Vector mean, int vSize)$/;"	f
+RestMixWeights	HRest.c	/^void RestMixWeights(int state, int s, StreamElem *se)$/;"	f
+RestStream	HRest.c	/^void RestStream(int state, int s, StreamElem *se, int vSize)$/;"	f
+RestTransP	HRest.c	/^void RestTransP(void)$/;"	f
+RightTriCxt	HLEd.c	/^LabId RightTriCxt(LLink l)$/;"	f
+S	HMMIRest.c	/^static int S;                    \/* number of data streams *\/   \/*! Equals 1 or error![?] *\/$/;"	v	file:
+SBDEF	HLEd.c	/^   SBDEF,   EXPAND, IFILL,  SORT,   WBDEF,  VBDEF,  LCTXT,  $/;"	e	enum:__anon14	file:
+SCANBUFMAX	HParse.c	1298;"	d	file:
+SCROLL_PT	HSLab.c	100;"	d	file:
+SEMISYM	HParse.c	/^             LTRISYM,RTRISYM,EQSYM, SEMISYM, BARSYM, PERCENTSYM, $/;"	e	enum:_Symbol	file:
+SETLEV	HLEd.c	/^   RCTXT,   TCTXT,  SETLEV, DELLEV, SPLLEV, ISIL,$/;"	e	enum:__anon14	file:
+SH	HHEd.c	/^                         TC , UT , MT , SH , SU , SW , SK ,$/;"	e	enum:__anon13	file:
+SHELL	Makefile	/^SHELL =	\/bin\/sh$/;"	m
+SK	HHEd.c	/^                         TC , UT , MT , SH , SU , SW , SK ,$/;"	e	enum:__anon13	file:
+SLEN	HSLab.c	73;"	d	file:
+SORT	HLEd.c	/^   SBDEF,   EXPAND, IFILL,  SORT,   WBDEF,  VBDEF,  LCTXT,  $/;"	e	enum:__anon14	file:
+SPLITP	HDMan.c	/^              REPLACEP, CONREPLACE, MERGEP, SPLITP, DELETEP, DELSOURCE, $/;"	e	enum:__anon5	file:
+SPLLEV	HLEd.c	/^   RCTXT,   TCTXT,  SETLEV, DELLEV, SPLLEV, ISIL,$/;"	e	enum:__anon14	file:
+SS	HHEd.c	/^typedef enum           { AT=1, RT , SS , CL , CO , JO , MU , TI , UF , NC ,$/;"	e	enum:__anon13	file:
+ST	HHEd.c	/^                         LS , QS , TB , TR , AU , GQ , MD , ST , LT ,$/;"	e	enum:__anon13	file:
+STACKSIZE	HCopy.c	98;"	d	file:
+STACKSIZE	HSLab.c	144;"	d	file:
+STATICPRIOR	HMMIRest.c	/^static Boolean STATICPRIOR = FALSE;$/;"	v	file:
+STR_BG	HSLab.c	1148;"	d	file:
+STR_FG	HSLab.c	1147;"	d	file:
+SU	HHEd.c	/^                         TC , UT , MT , SH , SU , SW , SK ,$/;"	e	enum:__anon13	file:
+SW	HHEd.c	/^                         TC , UT , MT , SH , SU , SW , SK ,$/;"	e	enum:__anon13	file:
+SameLinks	HParse.c	/^static Boolean SameLinks(int a1, int a2)$/;"	f	file:
+SameTriphone	HHEd.c	/^MLink SameTriphone(HLink left, HLink right)$/;"	f
+SampleType	HSLab.c	/^typedef signed short SampleType;$/;"	t	file:
+SaveLabs	HCopy.c	/^void SaveLabs(char *tgt, Transcription *t)$/;"	f
+SaveLattice	HBuild.c	/^void SaveLattice(Lattice *lat, char *latFn, LatFormat format)$/;"	f
+SaveLattice	HParse.c	/^static void SaveLattice(Lattice *lat, char *latFn, LatFormat format)$/;"	f	file:
+SaveModel	HCompV.c	/^void SaveModel(char *outfn)$/;"	f
+SaveModel	HInit.c	/^void SaveModel(char *outfn)$/;"	f
+ScanDict	HDMan.c	/^Boolean ScanDict(DBuffer *db, LabId reqd)$/;"	f
+ScriptItem	HDMan.c	/^}ScriptItem;$/;"	t	typeref:struct:_ScriptItem	file:
+ScriptItem	HLEd.c	/^}ScriptItem;$/;"	t	typeref:struct:_ScriptItem	file:
+ScriptWord	HERest.c	/^char *ScriptWord(FILE *script, char *scriptBuf)$/;"	f
+Select	HSGen.c	/^int Select(NodeId n, int nfoll, LogFloat *prob)$/;"	f
+SeqMatch	HDMan.c	/^Boolean SeqMatch(int nMerge, LabId *list1, LabId *list2)$/;"	f
+SeqMatch	HLEd.c	/^LLink SeqMatch(LLink l,int numIds, LabId *idList)$/;"	f
+SetActiveCount	HDMan.c	/^void SetActiveCount(void)$/;"	f
+SetAlpha	HRest.c	/^LogDouble SetAlpha(int seg)$/;"	f
+SetBarWidth	HList.c	/^void SetBarWidth(int itemWidth)$/;"	f
+SetBeta	HRest.c	/^LogDouble SetBeta(int seg)$/;"	f
+SetCase	HDMan.c	/^static void SetCase(EdOp cmd, char *s)$/;"	f	file:
+SetConfParms	HBuild.c	/^void SetConfParms(void)$/;"	f
+SetConfParms	HCompV.c	/^void SetConfParms(void)$/;"	f
+SetConfParms	HCopy.c	/^void SetConfParms(void)$/;"	f
+SetConfParms	HDMan.c	/^void SetConfParms(void)$/;"	f
+SetConfParms	HERest.c	/^void SetConfParms(void)$/;"	f
+SetConfParms	HHEd.c	/^void SetConfParms(void)$/;"	f
+SetConfParms	HInit.c	/^void SetConfParms(void)$/;"	f
+SetConfParms	HLEd.c	/^void SetConfParms(void)$/;"	f
+SetConfParms	HLRescore.c	/^void SetConfParms(void)$/;"	f
+SetConfParms	HLStats.c	/^void SetConfParms(void)$/;"	f
+SetConfParms	HList.c	/^void SetConfParms(void)$/;"	f
+SetConfParms	HMMIRest.c	/^void SetConfParms(void)$/;"	f
+SetConfParms	HParse.c	/^void SetConfParms(void)$/;"	f
+SetConfParms	HQuant.c	/^void SetConfParms(void)$/;"	f
+SetConfParms	HRest.c	/^void SetConfParms(void)$/;"	f
+SetConfParms	HResults.c	/^void SetConfParms(void)$/;"	f
+SetConfParms	HSGen.c	/^void SetConfParms(void)$/;"	f
+SetConfParms	HSLab.c	/^void SetConfParms(void)$/;"	f
+SetConfParms	HSmooth.c	/^void SetConfParms(void)$/;"	f
+SetConfParms	HVite.c	/^void SetConfParms(void)$/;"	f
+SetCovs	HCompV.c	/^void SetCovs(void)$/;"	f
+SetGCStats	HHEd.c	/^void SetGCStats(void)$/;"	f
+SetGDist	HHEd.c	/^void SetGDist(CLink *cvec, Matrix id, Matrix gd, int N)$/;"	f
+SetHSetKindCommand	HHEd.c	/^void SetHSetKindCommand(void)$/;"	f
+SetIDist	HHEd.c	/^void SetIDist(CLink *cvec, Matrix id, int N, char type)$/;"	f
+SetLabSeg	HCopy.c	/^void SetLabSeg(Transcription *tr)$/;"	f
+SetMSize	HHEd.c	/^void SetMSize(STriMat m,int n)$/;"	f
+SetOccSums	HHEd.c	/^Vector SetOccSums(CLink *cvec, int N)$/;"	f
+SetOccr	HRest.c	/^void SetOccr(LogDouble pr, int seg)$/;"	f
+SetOutP	HRest.c	/^void SetOutP(int seg)$/;"	f
+SetSampKindCommand	HHEd.c	/^void SetSampKindCommand(void)$/;"	f
+SetSize	HHEd.c	/^int SetSize(char *hname, StreamElem *ste \/*nMix must be +ve*\/, int tgt){ \/*returns nDefunct*\/$/;"	f
+SetStreamWidthCommand	HHEd.c	/^void SetStreamWidthCommand(void)$/;"	f
+SetTraceCommand	HHEd.c	/^void SetTraceCommand(void)$/;"	f
+SetTreeName	HHEd.c	/^static void SetTreeName(char *name) {$/;"	f	file:
+SetVSize	HHEd.c	/^void SetVSize(SVector v,int n)$/;"	f
+SetuFlags	HERest.c	/^void SetuFlags(void)$/;"	f
+SetuFlags	HInit.c	/^void SetuFlags(void)$/;"	f
+SetuFlags	HMMIRest.c	/^void SetuFlags(UPDSet *uFlags)$/;"	f
+SetuFlags	HRest.c	/^void SetuFlags(void)$/;"	f
+SetuFlags	HSmooth.c	/^void SetuFlags(void)$/;"	f
+ShowAlignment	HInit.c	/^void ShowAlignment(int segNum, int segLen, IntVec states, IntVec *mixes)$/;"	f
+ShowDB	HDMan.c	/^void ShowDB(DBuffer *db, char * title)$/;"	f
+ShowHMMSet	HHEd.c	/^void ShowHMMSet(void)$/;"	f
+ShowMacros	HHEd.c	/^void ShowMacros(HMMDef *hmm)$/;"	f
+ShowP	HInit.c	/^void ShowP(int col, Vector colVec)$/;"	f
+ShowSegNum	HRest.c	/^void ShowSegNum(int seg)$/;"	f
+ShowSeqMat	HInit.c	/^void ShowSeqMat(Sequence **seqMat)$/;"	f
+ShowTraceBack	HInit.c	/^void ShowTraceBack(int len, short **tB)$/;"	f
+ShowTreesCommand	HHEd.c	/^void ShowTreesCommand(void)$/;"	f
+ShowWhere	HHEd.c	/^void ShowWhere(int state, int stream, int mix)$/;"	f
+ShrinkNode	HParse.c	/^static void ShrinkNode(Link p)$/;"	f	file:
+SkipHeader	HBuild.c	/^Boolean SkipHeader(FILE *f)$/;"	f
+SkipHeader	HDMan.c	/^void SkipHeader(Source *src, int skipHeaderLines)$/;"	f
+SkipSpacesEoln	HBuild.c	/^Boolean SkipSpacesEoln(FILE *f)$/;"	f
+SliceTriMat	HHEd.c	/^Matrix SliceTriMat(Matrix mat, int i, int j)$/;"	f
+SliceVector	HHEd.c	/^Vector SliceVector(Vector vec, int i, int j)$/;"	f
+SmoothTransFromPriorHMM	HMMIRest.c	/^static void SmoothTransFromPriorHMM(int index, float Tau){$/;"	f	file:
+SmoothWeightsFromPriorHMM	HMMIRest.c	/^static void SmoothWeightsFromPriorHMM(int index, float Tau){$/;"	f	file:
+SmoothWtAcc	HSmooth.c	/^void SmoothWtAcc(StreamElem *ste, float l, int M)$/;"	f
+SolveQuadratic	HMMIRest.c	/^Boolean SolveQuadratic(double a, double b, double c, double *ans1, double *ans2){$/;"	f
+SortOp	HLEd.c	/^void SortOp(LabList *rl)$/;"	f
+SpMatch	HResults.c	/^Boolean SpMatch(char *spkrpat, char *spkr, char *str)$/;"	f
+SpRMatch	HResults.c	/^static Boolean SpRMatch(char *s,char *p,char *spkr,$/;"	f	file:
+Spkr	HResults.c	/^} Spkr;$/;"	t	typeref:struct:_Spkr	file:
+SpkrAcc	HCompV.c	/^}SpkrAcc;                  $/;"	t	typeref:struct:__anon4	file:
+SpkrAccListItem	HCompV.c	/^typedef struct SpkrAccListItem{$/;"	s	file:
+SpkrAccListItem	HCompV.c	/^}SpkrAccListItem;$/;"	t	typeref:struct:SpkrAccListItem	file:
+SpkrName	HCompV.c	/^   char SpkrName[MAXSTRLEN];             \/* speaker name *\/$/;"	m	struct:__anon4	file:
+SplitLevels	HLEd.c	/^Transcription *SplitLevels(LabList *rl)$/;"	f
+SplitMix	HHEd.c	/^void SplitMix(MixtureElem *mi,MixtureElem *m01,MixtureElem *m02,int vSize)$/;"	f
+SplitName	HParse.c	/^}SplitName;$/;"	t	typeref:struct:__anon20	file:
+SplitPhon	HDMan.c	/^void SplitPhon(Pronunciation *p, int nArgs, LabId *args)$/;"	f
+SplitPhoneOp	HDMan.c	/^void SplitPhoneOp(WordBuf *wb, int nArgs, LabId *args)$/;"	f
+SplitStreamCommand	HHEd.c	/^void SplitStreamCommand(Boolean userWidths)$/;"	f
+SplitStreams	HHEd.c	/^void SplitStreams(HMMSet *hset,StateInfo *si,Boolean simple,Boolean first)$/;"	f
+SplitTreeNode	HHEd.c	/^void SplitTreeNode(Tree *tree, Node *node)$/;"	f
+SplitTriName	HParse.c	/^static void SplitTriName(LabId n, SplitName *x)$/;"	f	file:
+SpotRec	HResults.c	/^} SpotRec;$/;"	t	typeref:struct:_SpotRec	file:
+StatReport	HERest.c	/^void StatReport(HMMSet *hset)$/;"	f
+StatReport	HMMIRest.c	/^void StatReport(void) \/*This is used by other programs so I have had to change it back to how it was.*\/$/;"	f
+StatReport	HSmooth.c	/^void StatReport(void)$/;"	f
+StateDistance	HHEd.c	/^float StateDistance(ILink i1, ILink i2)$/;"	f
+StepBar	HSLab.c	/^static void StepBar(BarType *bar, int pos)$/;"	f	file:
+SubNetDef	HParse.c	/^} SubNetDef;$/;"	t	typeref:struct:_SubNetDef	file:
+SubstituteSubNet	HParse.c	/^static void SubstituteSubNet(HPNetwork *subNet, Link p)$/;"	f	file:
+SumWtChain	HSmooth.c	/^float SumWtChain(WALink wa, Vector v, int dBlk, int M)$/;"	f
+Summary	HDMan.c	/^void Summary(void)$/;"	f
+Summary	HHEd.c	/^void Summary(void)$/;"	f
+Summary	HLEd.c	/^void Summary(void)$/;"	f
+SwapLists	HHEd.c	/^void SwapLists(HMMSet *set,HMMSet *list)$/;"	f
+SwapMacro	HHEd.c	/^void SwapMacro(HMMSet *hset,char type,Ptr o, Ptr n)$/;"	f
+SwapNodeNames	HParse.c	/^void SwapNodeNames(Link l1, Link l2)$/;"	f
+SwapSN	HParse.c	/^void SwapSN(SplitName *sn1, SplitName *sn2)$/;"	f
+SynthModel	HHEd.c	/^HMMDef *SynthModel(LabId id)$/;"	f
+T	HRest.c	/^static int maxT,minT,T;    \/* max,min and current segment lengths *\/$/;"	v	file:
+T	HSLab.c	/^static long  T;              \/* number of samples *\/$/;"	v	file:
+TB	HHEd.c	/^                         LS , QS , TB , TR , AU , GQ , MD , ST , LT ,$/;"	e	enum:__anon13	file:
+TC	HHEd.c	/^                         TC , UT , MT , SH , SU , SW , SK ,$/;"	e	enum:__anon13	file:
+TCTXT	HDMan.c	/^              TCTXT, APPSIL, REMSTRESS, REPLACEW, RAWMODE, $/;"	e	enum:__anon5	file:
+TCTXT	HLEd.c	/^   RCTXT,   TCTXT,  SETLEV, DELLEV, SPLLEV, ISIL,$/;"	e	enum:__anon14	file:
+TCtxtOp	HDMan.c	/^void TCtxtOp(WordBuf *wb, int nArgs,LabId *args)$/;"	f
+TDistance	HHEd.c	/^float TDistance(StreamElem *s1, StreamElem *s2)$/;"	f
+THREEACCS	HMMIRest.c	/^static Boolean THREEACCS = FALSE;  \/*  Set TRUE if 3 sets of accs need to be stored (for MPE, or possibly for MMI-MAP) *\/$/;"	v	file:
+TI	HHEd.c	/^typedef enum           { AT=1, RT , SS , CL , CO , JO , MU , TI , UF , NC ,$/;"	e	enum:__anon13	file:
+TIMES_LABELLED	HSLab.c	103;"	d	file:
+TR	HHEd.c	/^                         LS , QS , TB , TR , AU , GQ , MD , ST , LT ,$/;"	e	enum:__anon13	file:
+TRIST	HLEd.c	/^   REPLACE, CHANGE, FIND,   MERGE,  EDOP_DELETE, DEFCON, TRIST,  $/;"	e	enum:__anon14	file:
+T_ALF	HRest.c	51;"	d	file:
+T_ALN	HInit.c	52;"	d	file:
+T_BAS	HHEd.c	64;"	d	file:
+T_BAS	HLStats.c	48;"	d	file:
+T_BAS	HResults.c	42;"	d	file:
+T_BET	HRest.c	52;"	d	file:
+T_BID	HHEd.c	87;"	d	file:
+T_BIG	HLStats.c	50;"	d	file:
+T_CHOP	HLEd.c	47;"	d	file:
+T_CLUST	HQuant.c	48;"	d	file:
+T_CLUSTERS	HHEd.c	75;"	d	file:
+T_CMDX	HLEd.c	46;"	d	file:
+T_CMV	HCompV.c	71;"	d	file:
+T_CNT	HInit.c	54;"	d	file:
+T_COVS	HCompV.c	68;"	d	file:
+T_DET	HHEd.c	66;"	d	file:
+T_DET	HSGen.c	43;"	d	file:
+T_DIC	HLEd.c	52;"	d	file:
+T_DLEV	HLEd.c	49;"	d	file:
+T_DSOP	HDMan.c	54;"	d	file:
+T_DWOP	HDMan.c	55;"	d	file:
+T_EDIN	HLEd.c	50;"	d	file:
+T_EDW0	HDMan.c	50;"	d	file:
+T_EDW1	HDMan.c	51;"	d	file:
+T_EVN	HResults.c	43;"	d	file:
+T_FIL	HLStats.c	51;"	d	file:
+T_FRS	HVite.c	61;"	d	file:
+T_HPMEMSTAT	HParse.c	93;"	d	file:
+T_HPNET	HParse.c	92;"	d	file:
+T_HPREMGLUE	HParse.c	94;"	d	file:
+T_IND	HHEd.c	86;"	d	file:
+T_INT	HHEd.c	65;"	d	file:
+T_INT	HSmooth.c	43;"	d	file:
+T_ITM	HHEd.c	67;"	d	file:
+T_KINDS	HCopy.c	39;"	d	file:
+T_LAT	HLRescore.c	58;"	d	file:
+T_LD0	HInit.c	48;"	d	file:
+T_LD0	HRest.c	48;"	d	file:
+T_LD1	HInit.c	49;"	d	file:
+T_LD1	HRest.c	49;"	d	file:
+T_LGP	HRest.c	62;"	d	file:
+T_LOAD	HCompV.c	69;"	d	file:
+T_LOAD	HQuant.c	46;"	d	file:
+T_MAC	HHEd.c	71;"	d	file:
+T_MAC	HRest.c	55;"	d	file:
+T_MAP	HERest.c	84;"	d	file:
+T_MD	HHEd.c	88;"	d	file:
+T_MEAN	HQuant.c	45;"	d	file:
+T_MEM	HCopy.c	41;"	d	file:
+T_MEM	HHEd.c	68;"	d	file:
+T_MEM	HLEd.c	51;"	d	file:
+T_MEM	HLRescore.c	59;"	d	file:
+T_MEM	HLStats.c	49;"	d	file:
+T_MEM	HResults.c	47;"	d	file:
+T_MEM	HVite.c	62;"	d	file:
+T_MIX	HInit.c	53;"	d	file:
+T_MMU	HVite.c	63;"	d	file:
+T_MRE	HRest.c	60;"	d	file:
+T_NKY	HResults.c	45;"	d	file:
+T_NPHN	HDMan.c	53;"	d	file:
+T_OBP	HInit.c	55;"	d	file:
+T_OBS	HVite.c	60;"	d	file:
+T_OCC	HRest.c	53;"	d	file:
+T_OPT	HSmooth.c	44;"	d	file:
+T_OTP	HRest.c	50;"	d	file:
+T_QST	HHEd.c	76;"	d	file:
+T_RDSC	HLEd.c	45;"	d	file:
+T_SCPT	HDMan.c	52;"	d	file:
+T_SEGMENT	HCopy.c	40;"	d	file:
+T_SEGS	HCompV.c	70;"	d	file:
+T_SEGS	HQuant.c	47;"	d	file:
+T_SIZ	HHEd.c	72;"	d	file:
+T_SLEV	HLEd.c	48;"	d	file:
+T_SPK	HResults.c	44;"	d	file:
+T_SPT	HResults.c	46;"	d	file:
+T_TAB	HQuant.c	49;"	d	file:
+T_TAC	HRest.c	54;"	d	file:
+T_TIM	HMMIRest.c	69;"	d	file:
+T_TOP	HBuild.c	37;"	d	file:
+T_TOP	HCompV.c	67;"	d	file:
+T_TOP	HCopy.c	38;"	d	file:
+T_TOP	HDMan.c	47;"	d	file:
+T_TOP	HERest.c	83;"	d	file:
+T_TOP	HInit.c	47;"	d	file:
+T_TOP	HLEd.c	44;"	d	file:
+T_TOP	HLRescore.c	56;"	d	file:
+T_TOP	HList.c	53;"	d	file:
+T_TOP	HMMIRest.c	68;"	d	file:
+T_TOP	HParse.c	91;"	d	file:
+T_TOP	HQuant.c	44;"	d	file:
+T_TOP	HRest.c	47;"	d	file:
+T_TOP	HSGen.c	42;"	d	file:
+T_TOP	HSmooth.c	42;"	d	file:
+T_TOP	HVite.c	59;"	d	file:
+T_TRAN	HLRescore.c	57;"	d	file:
+T_TRE	HRest.c	58;"	d	file:
+T_TREE	HHEd.c	85;"	d	file:
+T_TREE_ALLM	HHEd.c	82;"	d	file:
+T_TREE_ALLQ	HHEd.c	81;"	d	file:
+T_TREE_ANS	HHEd.c	77;"	d	file:
+T_TREE_BESTM	HHEd.c	79;"	d	file:
+T_TREE_BESTQ	HHEd.c	78;"	d	file:
+T_TREE_OKQ	HHEd.c	80;"	d	file:
+T_UNI	HInit.c	50;"	d	file:
+T_UPD	HERest.c	85;"	d	file:
+T_VAC	HRest.c	56;"	d	file:
+T_VALI	HDMan.c	49;"	d	file:
+T_VIT	HInit.c	51;"	d	file:
+T_VRE	HRest.c	61;"	d	file:
+T_WAC	HRest.c	57;"	d	file:
+T_WBUF	HDMan.c	48;"	d	file:
+T_WRE	HRest.c	59;"	d	file:
+TailMerge	HParse.c	/^void TailMerge(Link a, Link b)$/;"	f
+TargetPKStr	HCompV.c	/^static char TargetPKStr[MAXSTRLEN];      \/* target parm kind string *\/$/;"	v	file:
+TieCommand	HHEd.c	/^void TieCommand(void)$/;"	f
+TieDur	HHEd.c	/^void TieDur(ILink ilist, LabId macId)$/;"	f
+TieHMMs	HHEd.c	/^void TieHMMs(ILink ilist,LabId macId)$/;"	f
+TieInv	HHEd.c	/^void TieInv(ILink ilist, LabId macId)$/;"	f
+TieLeafNodes	HHEd.c	/^void TieLeafNodes(Tree *tree, char *macRoot)$/;"	f
+TieMean	HHEd.c	/^void TieMean(ILink ilist, LabId macId)$/;"	f
+TieMix	HHEd.c	/^void TieMix(ILink ilist, LabId macId)$/;"	f
+TiePDF	HHEd.c	/^void TiePDF(ILink ilist, LabId macId)$/;"	f
+TieState	HHEd.c	/^void TieState(ILink ilist, LabId macId)$/;"	f
+TieTrans	HHEd.c	/^void TieTrans(ILink ilist, LabId macId)$/;"	f
+TieVar	HHEd.c	/^void TieVar(ILink ilist, LabId macId)$/;"	f
+TieWeights	HHEd.c	/^void TieWeights(ILink ilist, LabId macId)$/;"	f
+TieXform	HHEd.c	/^void TieXform(ILink ilist, LabId macId)$/;"	f
+TimesLabelled	HSLab.c	/^int TimesLabelled(LabList *ll, long pos)$/;"	f
+TotalCorr	HMMIRest.c	/^static double TotalCorr=0;$/;"	v	file:
+TotalNWords	HMMIRest.c	/^static int TotalNWords=0;$/;"	v	file:
+TrL	HCopy.c	/^} TrL;$/;"	t	typeref:struct:_TrList	file:
+TrOpEntry	HLEd.c	/^void TrOpEntry(char *name)$/;"	f
+TrOpExit	HLEd.c	/^void TrOpExit(int count)$/;"	f
+TrPtr	HCopy.c	/^typedef struct _TrList *TrPtr;  \/* simple linked list for trace info *\/$/;"	t	typeref:struct:_TrList	file:
+TraceQuestion	HHEd.c	/^void TraceQuestion(char *cmd, QLink q)$/;"	f
+TrackWPtr	HSLab.c	/^void TrackWPtr(void)$/;"	f
+Tree	HHEd.c	/^}Tree;$/;"	t	typeref:struct:_Tree	file:
+TreeBuildCommand	HHEd.c	/^void TreeBuildCommand(void)$/;"	f
+TreeFilter	HHEd.c	/^void TreeFilter(HMMSet *newSet)$/;"	f
+TriDiag2Vector	HCompV.c	/^void TriDiag2Vector(TriMat m, Vector v)$/;"	f
+TriPhon	HDMan.c	/^void TriPhon(Pronunciation *p, Boolean left, Boolean right, $/;"	f
+TriPhonise	HLEd.c	/^int TriPhonise(LabList *ll,Boolean left, Boolean right, LabId stId, $/;"	f
+TriRec	HHEd.c	/^}TriRec;$/;"	t	typeref:struct:__anon11	file:
+Triphonise	HDMan.c	/^void Triphonise(WordBuf *wb,  Boolean left, Boolean right, $/;"	f
+TypicalState	HHEd.c	/^ILink TypicalState(ILink ilist, LabId macId)$/;"	f
+UCPHONE	HDMan.c	/^typedef enum {UCWORD, UCPHONE, LCWORD, LCPHONE, DELETEW, DELDEF, FUNCW, DEFCON,$/;"	e	enum:__anon5	file:
+UCPhoneOp	HDMan.c	/^void UCPhoneOp(WordBuf *wb)$/;"	f
+UCWORD	HDMan.c	/^typedef enum {UCWORD, UCPHONE, LCWORD, LCPHONE, DELETEW, DELDEF, FUNCW, DEFCON,$/;"	e	enum:__anon5	file:
+UCase	HDMan.c	/^LabId UCase(LabId id)$/;"	f
+UCollectData	HInit.c	/^void UCollectData(Sequence **seqMat)$/;"	f
+UF	HHEd.c	/^typedef enum           { AT=1, RT , SS , CL , CO , JO , MU , TI , UF , NC ,$/;"	e	enum:__anon13	file:
+UPMODE_BOTH	HERest.c	91;"	d	file:
+UPMODE_BOTH	HMMIRest.c	74;"	d	file:
+UPMODE_DUMP	HERest.c	89;"	d	file:
+UPMODE_DUMP	HMMIRest.c	72;"	d	file:
+UPMODE_UPDATE	HERest.c	90;"	d	file:
+UPMODE_UPDATE	HMMIRest.c	73;"	d	file:
+USE_STAT	HSLab.c	59;"	d	file:
+UT	HHEd.c	/^                         TC , UT , MT , SH , SU , SW , SK ,$/;"	e	enum:__anon13	file:
+UndoOp	HSLab.c	/^void UndoOp(void)$/;"	f
+UndoRecord	HSLab.c	/^} UndoRecord; $/;"	t	typeref:struct:__anon25	file:
+UniformSegment	HInit.c	/^void UniformSegment(void)$/;"	f
+UntieCommand	HHEd.c	/^void UntieCommand(void)$/;"	f
+UntieInv	HHEd.c	/^void UntieInv(ILink ilist)$/;"	f
+UntieMean	HHEd.c	/^void UntieMean(ILink ilist)$/;"	f
+UntieMix	HHEd.c	/^void UntieMix(ILink ilist)$/;"	f
+UntieState	HHEd.c	/^void UntieState(ILink ilist)$/;"	f
+UntieTrans	HHEd.c	/^void UntieTrans(ILink ilist)$/;"	f
+UntieVar	HHEd.c	/^void UntieVar(ILink ilist)$/;"	f
+UntieXform	HHEd.c	/^void UntieXform(ILink ilist)$/;"	f
+UpDProbs	HInit.c	/^void UpDProbs(int i, int s, int M, WtAcc *wa, ShortVec dw)$/;"	f
+UpMeans	HInit.c	/^void UpMeans(int i, int s, int m, int size, MuAcc *ma, Vector mean)$/;"	f
+UpMix	HHEd.c	/^void UpMix(char *hname, StreamElem *ste, int oldM, int newM)$/;"	f
+UpPDFCounts	HRest.c	/^void UpPDFCounts(LogDouble pr, int seg)$/;"	f
+UpStreamCounts	HRest.c	/^void UpStreamCounts(int j, int s, StreamElem *se, int vSize, LogDouble pr, int seg,$/;"	f
+UpTranCounts	HRest.c	/^void UpTranCounts(LogDouble pr,int seg)$/;"	f
+UpTrans	HInit.c	/^void UpTrans(TrAcc *ta, Matrix tr)$/;"	f
+UpVars	HInit.c	/^void UpVars(int i, int s, int m, int size, VaAcc *va, Vector oldMean,$/;"	f
+UpWeights	HInit.c	/^void UpWeights(int i, int s, int M, WtAcc *wa, StreamElem *ste)$/;"	f
+UpdateCounters	HRest.c	/^void UpdateCounters(LogDouble pr, int seg)$/;"	f
+UpdateCounts	HInit.c	/^void UpdateCounts(int segNum, int segLen, IntVec states,IntVec *mixes)$/;"	f
+UpdateGauss	HMMIRest.c	/^Boolean UpdateGauss(int stream, MixPDF *mp){$/;"	f
+UpdateMeanVar	HCompV.c	/^void UpdateMeanVar(SpkrAccListItem *sal)$/;"	f
+UpdateMeans	HERest.c	/^void UpdateMeans(HMMSet *hset, int px, HLink hmm)$/;"	f
+UpdateModels	HERest.c	/^void UpdateModels(HMMSet *hset, ParmBuf pbuf2)$/;"	f
+UpdateModels	HMMIRest.c	/^void UpdateModels(void)$/;"	f
+UpdateModels	HSmooth.c	/^void UpdateModels(void)$/;"	f
+UpdateOccSums	HHEd.c	/^void UpdateOccSums(int i, int j, Vector occSum, int N)$/;"	f
+UpdateParameters	HInit.c	/^void UpdateParameters(void)$/;"	f
+UpdateSpkrAccList	HCompV.c	/^SpkrAccListItem *UpdateSpkrAccList(SpkrAccListItem *sal, SpkrAcc *sa)$/;"	f
+UpdateTMMeans	HERest.c	/^void UpdateTMMeans(HMMSet *hset)$/;"	f
+UpdateTMMeans	HSmooth.c	/^void UpdateTMMeans(void)$/;"	f
+UpdateTMVars	HERest.c	/^void UpdateTMVars(HMMSet *hset)$/;"	f
+UpdateTMVars	HSmooth.c	/^void UpdateTMVars(void)$/;"	f
+UpdateTheModel	HRest.c	/^void UpdateTheModel(void)$/;"	f
+UpdateTrans	HERest.c	/^void UpdateTrans(HMMSet *hset, int px, HLink hmm)$/;"	f
+UpdateTrans	HMMIRest.c	/^void UpdateTrans(int px, HLink hmm)$/;"	f
+UpdateTrans	HSmooth.c	/^void UpdateTrans(HLink hmm)$/;"	f
+UpdateVars	HERest.c	/^void UpdateVars(HMMSet *hset, int px, HLink hmm)$/;"	f
+UpdateWeight	HMMIRest.c	/^void UpdateWeight(int s, StreamElem *ste){$/;"	f
+UpdateWeights	HERest.c	/^void UpdateWeights(HMMSet *hset, int px, HLink hmm)$/;"	f
+UpdateWeights	HSmooth.c	/^void UpdateWeights(HLink hmm)$/;"	f
+UpdateWeightsAndTrans	HMMIRest.c	/^void UpdateWeightsAndTrans(void){$/;"	f
+UpdateWeightsOrTrans	HMMIRest.c	/^void UpdateWeightsOrTrans(int M, float *acc1, float *acc2, float *mixes, float *oldMixes, float C){ $/;"	f
+UseCommand	HHEd.c	/^void UseCommand(void)$/;"	f
+VARATSYM	HParse.c	/^enum _Symbol{NAMESYM, VARSYM, VARATSYM, LPARSYM, RPARSYM, LBRACESYM, $/;"	e	enum:_Symbol	file:
+VARSYM	HParse.c	/^enum _Symbol{NAMESYM, VARSYM, VARATSYM, LPARSYM, RPARSYM, LBRACESYM, $/;"	e	enum:_Symbol	file:
+VAdd	HHEd.c	/^void VAdd(Vector a, Vector b)$/;"	f
+VBDEF	HLEd.c	/^   SBDEF,   EXPAND, IFILL,  SORT,   WBDEF,  VBDEF,  LCTXT,  $/;"	e	enum:__anon14	file:
+VERT	HResults.c	/^enum _Direction{DIAG,VERT,HOR,NIL};$/;"	e	enum:_Direction	file:
+VGetLabelList	HLEd.c	/^LabList* VGetLabelList(Transcription *t, int n)$/;"	f
+VMax	HHEd.c	/^void VMax(Vector a, Vector b)$/;"	f
+VNorm	HHEd.c	/^void VNorm(Vector a, int n)$/;"	f
+VOLUME_STEPS	HSLab.c	102;"	d	file:
+VSetLabelList	HLEd.c	/^void VSetLabelList(int n)$/;"	f
+ValidProbNode	HHEd.c	/^void ValidProbNode(Node *node,float thresh)$/;"	f
+ViterbiAlign	HInit.c	/^LogFloat ViterbiAlign(int segNum,int segLen, IntVec states, IntVec *mixes)$/;"	f
+WALink	HSmooth.c	/^typedef struct _ChWtAcc *WALink;$/;"	t	typeref:struct:_ChWtAcc	file:
+WAVE_WIN	HSLab.c	/^   WAVE_WIN, LAB_WIN, IO_WIN, NO_WIN $/;"	e	enum:__anon21	file:
+WBDEF	HLEd.c	/^   SBDEF,   EXPAND, IFILL,  SORT,   WBDEF,  VBDEF,  LCTXT,  $/;"	e	enum:__anon14	file:
+WIDTH	HSLab.c	78;"	d	file:
+WINNAME	HSLab.c	70;"	d	file:
+WPGrammar	HBuild.c	/^}WPGrammar;$/;"	t	typeref:struct:__anon2	file:
+WPtrOff	HSLab.c	/^void WPtrOff(void)$/;"	f
+WPtrOn	HSLab.c	/^void WPtrOn(void)$/;"	f
+WinKind	HSLab.c	/^} WinKind;$/;"	t	typeref:enum:__anon21	file:
+WordBuf	HDMan.c	/^}WordBuf;$/;"	t	typeref:struct:__anon8	file:
+WordFllr	HBuild.c	/^}WordFllr;$/;"	t	typeref:struct:_WordFllr	file:
+WordInfo	HLStats.c	/^} WordInfo;$/;"	t	typeref:struct:wordinfo	file:
+WriteDictWord	HDMan.c	/^void WriteDictWord(DBuffer *db, FILE *f, int margin, Boolean findNew)$/;"	f
+WriteEntry	HDMan.c	/^void WriteEntry(FILE *f, LabId word, LabId outsym, Pronunciation *p, int margin, Boolean findNew)$/;"	f
+WriteVQTable	HQuant.c	/^void WriteVQTable(ClusterSet *cs[], char *fn)$/;"	f
+XF	HHEd.c	/^                         MM , DP , HK , FC , FA , FV, XF, PS, PR }$/;"	e	enum:__anon13	file:
+X_	Makefile	/^	if [ X_ = X_yes ] ; then $(INSTALL) -m 755 $@ $(bindir)  ; fi$/;"	m
+ZapAliases	HHEd.c	/^void ZapAliases(void)$/;"	f
+ZeroAccSum	HHEd.c	/^void ZeroAccSum(AccSum *acc)$/;"	f
+ZoomRecord	HSLab.c	/^} ZoomRecord;$/;"	t	typeref:struct:__anon23	file:
+_AccSum	HHEd.c	/^typedef struct _AccSum {        \/* Accumulator Record for storing *\/$/;"	s	file:
+_CRec	HHEd.c	/^typedef struct _CRec{$/;"	s	file:
+_Cell	HResults.c	/^typedef struct _Cell{           \/* used in DP routines below *\/$/;"	s	file:
+_ChWtAcc	HSmooth.c	/^typedef struct _ChWtAcc{     \/* attached to StreamElem *\/$/;"	s	file:
+_CoList	HHEd.c	/^typedef struct _CoList {$/;"	s	file:
+_Context	HLEd.c	/^typedef struct _Context{$/;"	s	file:
+_Direction	HResults.c	/^enum _Direction{DIAG,VERT,HOR,NIL};$/;"	g	file:
+_Equiv	HResults.c	/^struct _Equiv{$/;"	s	file:
+_FindAcc	HLEd.c	/^typedef struct _FindAcc{$/;"	s	file:
+_FixHMMForICrit	HMMIRest.c	/^static void _FixHMMForICrit(float Tau, Boolean THREEACCS){$/;"	f	file:
+_GramEntry	HBuild.c	/^typedef struct _GramEntry{$/;"	s	file:
+_IPat	HHEd.c	/^typedef struct _IPat{$/;"	s	file:
+_Node	HHEd.c	/^typedef struct _Node {          \/* Tree Node *\/$/;"	s	file:
+_Node	HParse.c	/^typedef struct _Node{$/;"	s	file:
+_NodeInfo	HParse.c	/^typedef struct _NodeInfo{$/;"	s	file:
+_QEnt	HHEd.c	/^typedef struct _QEnt{           \/* each question stored as both pattern and  *\/$/;"	s	file:
+_ScriptItem	HDMan.c	/^typedef struct _ScriptItem{     \/* internal rep of a complete edit script *\/$/;"	s	file:
+_ScriptItem	HLEd.c	/^typedef struct _ScriptItem{$/;"	s	file:
+_Spkr	HResults.c	/^typedef struct _Spkr{           \/* list of spkr records *\/$/;"	s	file:
+_SpotRec	HResults.c	/^typedef struct _SpotRec{$/;"	s	file:
+_SubNetDef	HParse.c	/^typedef struct _SubNetDef{$/;"	s	file:
+_Symbol	HParse.c	/^enum _Symbol{NAMESYM, VARSYM, VARATSYM, LPARSYM, RPARSYM, LBRACESYM, $/;"	g	file:
+_TrList	HCopy.c	/^typedef struct _TrList {      $/;"	s	file:
+_Tree	HHEd.c	/^typedef struct _Tree{           \/* A tree *\/$/;"	s	file:
+_WordFllr	HBuild.c	/^typedef struct _WordFllr{   \/* storage for word followers *\/$/;"	s	file:
+aSet	HSmooth.c	/^static HLink *aSet;          \/* array[1..aSize]of allophone *\/$/;"	v	file:
+aSetStack	HSmooth.c	/^static MemHeap aSetStack;$/;"	v	file:
+aSize	HSmooth.c	/^static int aSize;            \/* size of current aSet *\/$/;"	v	file:
+acScale	HLRescore.c	/^static double acScale = 1.0;    \/* acoustic scale factor *\/$/;"	v	file:
+acc	HLEd.c	/^   int acc;             \/* num of matches *\/$/;"	m	struct:_FindAcc	file:
+accStack	HERest.c	/^static MemHeap accStack;$/;"	v	file:
+accStack	HMMIRest.c	/^static MemHeap accStack;           \/* accumulated statistics *\/$/;"	v	file:
+accs	HCompV.c	/^static CovAcc accs[SMAX];           \/* one CovAcc for each stream *\/$/;"	v	file:
+accsStack	HRest.c	/^static MemHeap accsStack;        \/* For storage of accumulators *\/$/;"	v	file:
+aentry	HLStats.c	/^typedef struct aentry {          \/* Storage for counts *\/$/;"	s	file:
+aetab	HLStats.c	/^static AEntry **aetab;           \/* Hash table for bigram accumulators  *\/$/;"	v	file:
+aetabsize	HLStats.c	/^static int aetabsize=0;          \/* Size of hash table selected from .. *\/$/;"	v	file:
+al_hmmDir	HERest.c	/^static char al_hmmDir[MAXFNAMELEN];  \/* dir to look for alignment hmm defs *\/$/;"	v	file:
+al_hmmExt	HERest.c	/^static char al_hmmExt[MAXSTRLEN];  	 \/* alignment hmm def file extension *\/$/;"	v	file:
+al_hmmLst	HERest.c	/^static char al_hmmLst[MAXFNAMELEN];  \/* alignment hmm list *\/$/;"	v	file:
+al_hmmMMF	HERest.c	/^static char al_hmmMMF[MAXFNAMELEN];  \/* alignment hmm MMF *\/$/;"	v	file:
+al_hmmUsed	HERest.c	/^static Boolean al_hmmUsed = FALSE;   \/* Set for 2-model ReEstimation *\/$/;"	v	file:
+al_hset	HERest.c	/^static HMMSet al_hset ;      	 \/* Option 2nd set of models for alignment *\/$/;"	v	file:
+alignpsi	HVite.c	/^static PSetInfo *alignpsi;        \/* Private data used by HRec *\/$/;"	v	file:
+alignvri	HVite.c	/^static VRecInfo *alignvri;        \/* Visible HRec Info *\/$/;"	v	file:
+alpha	HRest.c	/^static DMatrix alpha;      \/* array[1..nStates][1..maxT] of forward prob *\/$/;"	v	file:
+alphaBetaStack	HRest.c	/^static MemHeap alphaBetaStack;   \/* For storage of alpha and beta probs *\/$/;"	v	file:
+ans	HHEd.c	/^   Boolean ans;                 \/* TRUE = yes, FALSE = no *\/$/;"	m	struct:_Node	file:
+ans	HHEd.c	/^   Boolean ans;                 \/* answer to current question *\/$/;"	m	struct:_CRec	file:
+ans	HResults.c	/^static Transcription *ans;            \/* the full set of answers *\/$/;"	v	file:
+ansHeap	HVite.c	/^static MemHeap ansHeap;$/;"	v	file:
+applyVFloor	HHEd.c	/^static Boolean applyVFloor = TRUE; \/* apply modfied varFloors to vars in model set *\/ $/;"	v	file:
+args	HDMan.c	/^   LabId args[MAXARGS];$/;"	m	struct:__anon6	file:
+args	HLEd.c	/^   LabId args[MAXARGS];$/;"	m	struct:__anon15	file:
+asterix	HDMan.c	/^static LabId asterix;                \/* LabId of a "*" *\/$/;"	v	file:
+asterix	HLEd.c	/^static LabId asterix;               \/* id of an asterix *\/$/;"	v	file:
+audSignal	HList.c	/^static int audSignal;$/;"	v	file:
+audStack	HSLab.c	/^static MemHeap audStack;$/;"	v	file:
+auxLab	HCopy.c	/^static int auxLab = 0;          \/* auxiliary label to use (0==primary) *\/$/;"	v	file:
+aveCovar	HHEd.c	/^   Vector aveCovar;          \/* node cluster variance *\/$/;"	m	struct:__anon12	file:
+aveMean	HHEd.c	/^   Vector aveMean;           \/* node cluster mean *\/$/;"	m	struct:__anon12	file:
+bEndId	HBuild.c	/^static LabId bEndId=NULL;           \/* id of end bracket *\/$/;"	v	file:
+bStartId	HBuild.c	/^static LabId bStartId=NULL;         \/* id of start bracket *\/$/;"	v	file:
+badGC	HHEd.c	/^static Boolean badGC = FALSE;          \/* set TRUE if gConst out of date *\/$/;"	v	file:
+barc	HList.c	/^static char barc = '-';          \/* bar character *\/$/;"	v	file:
+barwidth	HList.c	/^static int barwidth;             \/* width of printed bars *\/$/;"	v	file:
+baseId	HHEd.c	/^   LabId baseId;                \/* base phone name *\/$/;"	m	struct:_Tree	file:
+baseLeft	HHEd.c	/^typedef enum { baseNorm=0, baseLeft, baseRight, baseMono } baseType;$/;"	e	enum:__anon10	file:
+baseMono	HHEd.c	/^typedef enum { baseNorm=0, baseLeft, baseRight, baseMono } baseType;$/;"	e	enum:__anon10	file:
+baseNorm	HHEd.c	/^typedef enum { baseNorm=0, baseLeft, baseRight, baseMono } baseType;$/;"	e	enum:__anon10	file:
+baseRight	HHEd.c	/^typedef enum { baseNorm=0, baseLeft, baseRight, baseMono } baseType;$/;"	e	enum:__anon10	file:
+baseType	HHEd.c	/^typedef enum { baseNorm=0, baseLeft, baseRight, baseMono } baseType;$/;"	t	typeref:enum:__anon10	file:
+beta	HRest.c	/^static DMatrix beta;       \/* array[1..nStates][1..maxT] of backward prob *\/$/;"	v	file:
+bg	HSLab.c	/^   HColour fg, bg;$/;"	m	struct:__anon26	file:
+bigFile	HLStats.c	/^static char *bigFile    = NULL;     \/* file for bigram *\/$/;"	v	file:
+bigFloor	HLStats.c	/^static float bigFloor   = 0.0;      \/* floor for matrix bigram probs *\/$/;"	v	file:
+bigThresh	HLStats.c	/^static int bigThresh    = 0;        \/* threshold for including bigram probs *\/$/;"	v	file:
+bindir	Makefile	/^bindir = ${exec_prefix}\/bin$/;"	m
+bndId	HVite.c	/^static LabId bndId = NULL;        \/* Boundary word for alignment *\/$/;"	v	file:
+boBiGram	HBuild.c	/^typedef enum {unknown, wordLoop, boBiGram, matBiGram, multiLat, wordPair} BuildType;$/;"	e	enum:__anon1	file:
+btnList	HSLab.c	/^static HButton *btnList;     \/* the list of buttons displayed on the HSLab window *\/$/;"	v	file:
+btn_h	HSLab.c	/^static int btn_h;            \/* calculated button height *\/$/;"	v	file:
+btn_h_spc	HSLab.c	/^static int btn_h_spc;        \/* calculated button horizontal spacing *\/$/;"	v	file:
+btn_v_spc	HSLab.c	/^static int btn_v_spc;        \/* calculated button vertical spacing *\/$/;"	v	file:
+btn_w	HSLab.c	/^static int btn_w;            \/* calculated button width *\/$/;"	v	file:
+bufHeap	HVite.c	/^static MemHeap bufHeap;$/;"	v	file:
+bufferStack	HInit.c	/^static MemHeap bufferStack;      \/* For storage of buffer *\/$/;"	v	file:
+bufferStack	HRest.c	/^static MemHeap bufferStack;      \/* For storage of buffer *\/$/;"	v	file:
+buildStack	HBuild.c	/^MemHeap buildStack;$/;"	v
+bw	HSLab.c	/^   int x, y, w, h, bw;    \/* x-pos, y-pos, width, height, fg and bg colours *\/$/;"	m	struct:__anon26	file:
+c	HSmooth.c	/^   Vector c;         \/* array[1..M] of mixture weight *\/$/;"	m	struct:_ChWtAcc	file:
+cParm	HBuild.c	/^static ConfParam *cParm[MAXGLOBS];$/;"	v	file:
+cParm	HCompV.c	/^static ConfParam *cParm[MAXGLOBS];   \/* configuration parameters *\/$/;"	v	file:
+cParm	HCopy.c	/^static ConfParam *cParm[MAXGLOBS];$/;"	v	file:
+cParm	HDMan.c	/^static ConfParam *cParm[MAXGLOBS];   \/* configuration parameters *\/$/;"	v	file:
+cParm	HERest.c	/^static ConfParam *cParm[MAXGLOBS];   \/* configuration parameters *\/$/;"	v	file:
+cParm	HHEd.c	/^static ConfParam *cParm[MAXGLOBS];$/;"	v	file:
+cParm	HInit.c	/^static ConfParam *cParm[MAXGLOBS];   \/* configuration parameters *\/$/;"	v	file:
+cParm	HLEd.c	/^static ConfParam *cParm[MAXGLOBS];   \/* configuration parameters *\/$/;"	v	file:
+cParm	HLRescore.c	/^static ConfParam *cParm[MAXGLOBS];$/;"	v	file:
+cParm	HLStats.c	/^static ConfParam *cParm[MAXGLOBS];$/;"	v	file:
+cParm	HList.c	/^static ConfParam *cParm[MAXGLOBS];$/;"	v	file:
+cParm	HMMIRest.c	/^static ConfParam *cParm[MAXGLOBS];   \/* configuration parameters *\/$/;"	v	file:
+cParm	HParse.c	/^static ConfParam *cParm[MAXGLOBS];$/;"	v	file:
+cParm	HQuant.c	/^static ConfParam *cParm[MAXGLOBS];   \/* configuration parameters *\/$/;"	v	file:
+cParm	HRest.c	/^static ConfParam *cParm[MAXGLOBS];   \/* configuration parameters *\/$/;"	v	file:
+cParm	HResults.c	/^static ConfParam *cParm[MAXGLOBS];   \/* configuration parameters *\/$/;"	v	file:
+cParm	HSGen.c	/^static ConfParam *cParm[MAXGLOBS];$/;"	v	file:
+cParm	HSLab.c	/^static ConfParam *cParm[MAXGLOBS];   \/* configuration parameters *\/$/;"	v	file:
+cParm	HSmooth.c	/^static ConfParam *cParm[MAXGLOBS];$/;"	v	file:
+cParm	HVite.c	/^static ConfParam *cParm[MAXGLOBS];$/;"	v	file:
+cStack	HCopy.c	/^static MemHeap cStack;          \/* chop stack *\/$/;"	v	file:
+cStack	HQuant.c	/^static MemHeap cStack;             \/* cluster stack *\/$/;"	v	file:
+calcStats	HLRescore.c	/^static Boolean calcStats = FALSE;   \/* -c *\/$/;"	v	file:
+cbSizes	HQuant.c	/^static int cbSizes[SMAX];           \/* codebook sizes, per stream *\/$/;"	v	file:
+cdef	HLEd.c	/^   LabId cdef[MAXARGS];$/;"	m	struct:_Context	file:
+ch	HParse.c	/^static char ch;                     \/* Current character *\/$/;"	v	file:
+chain	HParse.c	/^   Link chain;       \/* simple linked list of all nodes *\/  $/;"	m	struct:_Node	file:
+chain	HParse.c	/^   Link chain;$/;"	m	struct:__anon18	file:
+chopF	HCopy.c	/^static Boolean chopF = FALSE;   \/* set if we should truncate files\/trans *\/$/;"	v	file:
+ck	HQuant.c	/^CovKind ck = NULLC;                \/* determines distance metric *\/$/;"	v
+classId	HResults.c	/^   LabId classId;$/;"	m	struct:_Equiv	file:
+clist	HHEd.c	/^   CLink clist;                 \/* list of cluster items *\/$/;"	m	struct:_Node	file:
+clustAcc	HHEd.c	/^   float  clustAcc;          \/* accumulates in this cluster *\/$/;"	m	struct:__anon12	file:
+clustSetStack	HInit.c	/^static MemHeap clustSetStack;    \/* For storage of cluster sets *\/$/;"	v	file:
+clusterScore	HHEd.c	/^   float  clusterScore;      \/* node cluster score *\/$/;"	m	struct:__anon12	file:
+cmDir	HCompV.c	/^static char cmDir[MAXSTRLEN];            \/* directory to export CMV *\/$/;"	v	file:
+cmd	HDMan.c	/^   EditCmd cmd;$/;"	m	struct:_ScriptItem	file:
+cmd	HLEd.c	/^   EditCmd cmd;$/;"	m	struct:_ScriptItem	file:
+cmdMap	HDMan.c	/^static char *cmdMap[] = { "UW","UP","LW","LP","DW","DD","FW","DC",$/;"	v	file:
+cmdNum	HHEd.c	/^cmdNum;$/;"	t	typeref:enum:__anon13	file:
+cmdTrace	HHEd.c	/^static int  cmdTrace    = 0;     \/* trace level from command line *\/$/;"	v	file:
+cmdmap	HHEd.c	/^static char *cmdmap[] = {"AT","RT","SS","CL","CO","JO","MU","TI","UF","NC",$/;"	v	file:
+cmdmap	HLEd.c	/^static char *cmdmap[] = {"","RE","CH","FI","ME","DE","DC","IT",$/;"	v	file:
+cmpMix	HHEd.c	/^static int cmpMix(const void *v1,const void *v2)$/;"	f	file:
+cmuId	HDMan.c	/^static LabId cmuId;                  \/* "cmu" *\/$/;"	v	file:
+cname	HLEd.c	/^   LabId cname;$/;"	m	struct:_Context	file:
+cntr	HLStats.c	/^typedef struct cntr{             \/* Physical Label Occurrence Counters *\/$/;"	s	file:
+command_map	HSLab.c	/^static char *command_map[] = {$/;"	v	file:
+commentChars	HDMan.c	/^static char commentChars[10] = "#";  \/* default dictionary comment char *\/$/;"	v	file:
+conDel	HResults.c	/^static ShortVec conDel,conIns; \/* corresponding deletion and insertion counts *\/$/;"	v	file:
+conIns	HResults.c	/^static ShortVec conDel,conIns; \/* corresponding deletion and insertion counts *\/$/;"	v	file:
+conMat	HResults.c	/^static ShortVec *conMat;  \/* confusion matrix, conMat[i][j] is the number of$/;"	v	file:
+contexts	HDMan.c	/^   EditCmd contexts[MAXCONS];   \/* array of context defs *\/$/;"	m	struct:__anon9	file:
+count	HLStats.c	/^   int count;                    \/* Count *\/$/;"	m	struct:aentry	file:
+count	HLStats.c	/^   int count;                    \/* Times seen *\/$/;"	m	struct:cntr	file:
+count	HLStats.c	/^   int count;                    \/* Times seen *\/$/;"	m	struct:wordinfo	file:
+cov	HQuant.c	/^Covariance cov[SMAX];              \/* Global stream covariance  *\/$/;"	v
+cprob	HHEd.c	/^static float  cprob;            \/* complete likelihood at current node *\/$/;"	v	file:
+cs	HQuant.c	/^ClusterSet *cs[SMAX];              \/* stores vector clusters *\/$/;"	v
+curChain	HParse.c	/^static Link curChain;       \/* current network being built *\/$/;"	v	file:
+curId	HParse.c	/^LabId curId;         \/* name of current variable def, if any *\/$/;"	v
+curenidx	HCopy.c	/^static int curenidx=0;          \/* label end index (if set) *\/$/;"	v	file:
+curlen	HParse.c	/^static int curlen;                  \/* Current length of input line *\/$/;"	v	file:
+curpos	HParse.c	/^static int curpos;                  \/* Current position in input line *\/$/;"	v	file:
+curstidx	HCopy.c	/^static int curstidx=0;          \/* label start index (if set) *\/$/;"	v	file:
+dSeq	HQuant.c	/^Sequence dSeq[SMAX];               \/* main data pools; one per stream *\/$/;"	v
+dStack	HQuant.c	/^static MemHeap dStack;             \/* sequence stack *\/$/;"	v	file:
+datFN	HVite.c	/^static char *datFN;               \/* Speech file *\/$/;"	v	file:
+data	HSLab.c	/^static short *data;          \/* the data samples *\/$/;"	v	file:
+datadir	Makefile	/^datadir = ${prefix}\/share$/;"	m
+defList	HDMan.c	/^static LabId defList[MAXPVOC];       \/* list of predefined phones *\/$/;"	v	file:
+defs	HParse.c	/^static SubNetDef *defs;$/;"	v	file:
+del	HResults.c	/^   int ins,del,sub,hit;$/;"	m	struct:_Cell	file:
+del	HResults.c	/^   int ins,del,sub,hit;$/;"	m	struct:_Spkr	file:
+del	HResults.c	/^static long del   = 0;     \/* Total deletions *\/$/;"	v	file:
+delPen	HResults.c	/^static const int delPen = 7;$/;"	v	file:
+delPenNIST	HResults.c	/^static const int delPenNIST = 3;$/;"	v	file:
+denLatDir	HMMIRest.c	/^static char *denLatDir [MAXLATS];  \/*MMI lattices.*\/$/;"	v	file:
+denLatSubDirPat	HMMIRest.c	/^static char denLatSubDirPat[MAXSTRLEN] = "\\0";  \/* path mask of denominator lattices *\/$/;"	v	file:
+dff	HCompV.c	/^static FileFormat dff=UNDEFF;       \/* data file format *\/$/;"	v	file:
+dff	HERest.c	/^static FileFormat dff=UNDEFF;       \/* data file format *\/$/;"	v	file:
+dff	HInit.c	/^static FileFormat dff=UNDEFF;       \/* data file format *\/$/;"	v	file:
+dff	HMMIRest.c	/^static FileFormat dff=UNDEFF;       \/* data file format *\/$/;"	v	file:
+dff	HQuant.c	/^static FileFormat dff=UNDEFF;       \/* data file format *\/$/;"	v	file:
+dff	HRest.c	/^static FileFormat dff=UNDEFF;    \/* data file format *\/$/;"	v	file:
+dfmt	HVite.c	/^static FileFormat dfmt=UNDEFF;    \/* Data input file format *\/$/;"	v	file:
+dictFN	HMMIRest.c	/^static char *dictFN=0;             \/* not needed at the moment. *\/$/;"	v	file:
+dictFn	HLEd.c	/^static char *dictFn = NULL;         \/* Dictionary used for EX command *\/$/;"	v	file:
+dictFn	HVite.c	/^static char *dictFn;              \/* Dictionary *\/$/;"	v	file:
+dictfn	HLRescore.c	/^static char *dictfn;		\/* dict filename from commandline *\/$/;"	v	file:
+dir	HResults.c	/^   Direction dir;$/;"	m	struct:_Cell	file:
+disCount	HLStats.c	/^static float disCount = 0.5;        \/* discount for backoff *\/$/;"	v	file:
+doBOff	HLStats.c	/^static Boolean doBOff   = FALSE;$/;"	v	file:
+doBigram	HLStats.c	/^static Boolean doBigram = FALSE;    \/* do what? *\/$/;"	v	file:
+doDurs	HLStats.c	/^static Boolean doDurs   = FALSE;$/;"	v	file:
+doLCount	HLStats.c	/^static Boolean doLCount = FALSE;$/;"	v	file:
+doList	HLStats.c	/^static Boolean doList   = FALSE;$/;"	v	file:
+doPCount	HLStats.c	/^static Boolean doPCount = FALSE; $/;"	v	file:
+en	HCopy.c	/^static HTime en=0.0;            \/* end of samples to copy *\/$/;"	v	file:
+en	HSLab.c	/^   long st, en;            \/* start and end sample of the previous zoom level *\/$/;"	m	struct:__anon23	file:
+endLMWord	HLRescore.c	/^static char *endLMWord;         \/* word at end in LM (<\/s>) *\/$/;"	v	file:
+endLab	HLRescore.c	/^static LabId endLab;            \/* corresponding LabId *\/$/;"	v	file:
+endWord	HLRescore.c	/^static char *endWord;           \/* word at end of Lattice (!SENT_END) *\/$/;"	v	file:
+ent2	HLStats.c	627;"	d	file:
+enterExitId	HParse.c	/^static LabId  enterExitId;   \/* for use in RemoveGlue *\/$/;"	v	file:
+enterId	HBuild.c	/^static LabId enterId;               \/* id of !ENTRY label in ngram *\/$/;"	v	file:
+enterId	HLStats.c	/^static LabId enterId;               \/* id of ENTRY label in ngram *\/$/;"	v	file:
+enterId	HParse.c	/^static LabId enterId;                 \/* LabId of the ENTER node name *\/$/;"	v	file:
+entry	HBuild.c	/^   WordFllr *entry;$/;"	m	struct:_GramEntry	file:
+entryHeap	HBuild.c	/^   MemHeap entryHeap;$/;"	m	struct:__anon2	file:
+entryNode	HParse.c	/^   Link entryNode;$/;"	m	struct:__anon18	file:
+epsilon	HInit.c	/^static float epsilon = 1.0E-4;      \/* convergence criterion *\/$/;"	v	file:
+epsilon	HRest.c	/^static float epsilon = 1.0E-4;   \/* convergence criterion *\/$/;"	v	file:
+epsilon	HSmooth.c	/^static float epsilon = 0.0001;   \/* binary chop convergence criterion *\/$/;"	v	file:
+eqlist	HResults.c	/^static Equiv *eqlist=NULL;            \/* List of equivalent label ids *\/$/;"	v	file:
+equivId	HResults.c	/^   LabId equivId;$/;"	m	struct:_Equiv	file:
+equivState	HHEd.c	/^static Boolean equivState = TRUE;      \/* TRUE if states can be equivalent *\/$/;"	v	file:
+exec_prefix	Makefile	/^exec_prefix = ${prefix}$/;"	m
+exitId	HBuild.c	/^static LabId exitId;                \/* id of !EXIT label in ngram *\/$/;"	v	file:
+exitId	HLStats.c	/^static LabId exitId;                \/* id of EXIT label in ngram *\/$/;"	v	file:
+exitId	HParse.c	/^static LabId exitId;                  \/* LabId of the EXIT node name *\/$/;"	v	file:
+exitNode	HParse.c	/^   Link exitNode;$/;"	m	struct:__anon18	file:
+expandLat	HLRescore.c	/^static Boolean expandLat = FALSE;   \/* -n *\/$/;"	v	file:
+extName	HParse.c	/^   LabId extName;    \/* external name (used in compatability mode) *\/$/;"	m	struct:_Node	file:
+f	HParse.c	/^static FILE *f;                     \/* Input stream *\/$/;"	v	file:
+faTimeUnit	HResults.c	/^static float faTimeUnit = 1.0;        \/* unit for measuring false alarms *\/$/;"	v	file:
+facc	HLEd.c	/^static FindAcc *facc = NULL;$/;"	v	file:
+fbInfo	HMMIRest.c	/^static FBLatInfo  fbInfo;            \/* Structure for discriminative forward-backward. *\/$/;"	v	file:
+fbInfo	HVite.c	/^static FBInfo *fbInfo;            \/* forward-backward info for alignment *\/$/;"	v	file:
+fbInfoStack	HERest.c	/^static MemHeap fbInfoStack;$/;"	v	file:
+ff	HLStats.c	/^static FileFormat ff=UNDEFF;        \/* Label file format *\/$/;"	v	file:
+ff	HList.c	/^static FileFormat ff = UNDEFF;   \/* Source File format *\/$/;"	v	file:
+fg	HSLab.c	/^   HColour fg, bg;$/;"	m	struct:__anon26	file:
+fg	HSLab.c	/^   HColour fg;$/;"	m	struct:__anon27	file:
+fidx	HHEd.c	/^static int fidx;           \/* current macro file id *\/$/;"	v	file:
+fileLimit	HResults.c	/^static int fileLimit = INT_MAX;       \/* max num of label files to process *\/$/;"	v	file:
+fileWin	HSLab.c	/^static RectWin fileWin;      \/* the window for file names and other info *\/$/;"	v	file:
+findBest	HLRescore.c	/^static Boolean findBest = FALSE;    \/* -f *\/$/;"	v	file:
+firstTime	HERest.c	/^static Boolean firstTime = TRUE;    \/* Flag used to enable creation of ot *\/$/;"	v	file:
+firstTime	HInit.c	/^static Boolean firstTime = TRUE;    \/* Flag used to enable InitSegStore *\/$/;"	v	file:
+firstTime	HRest.c	/^static Boolean firstTime = TRUE; \/* Flag used to enable InitSegStore *\/$/;"	v	file:
+fixBadLats	HLRescore.c	/^static Boolean fixBadLats = FALSE;         \/* fix final word in lattices *\/$/;"	v	file:
+fixPronprobs	HLRescore.c	/^static Boolean fixPronprobs = FALSE; \/* get pron probs from dict *\/$/;"	v	file:
+fixed	HCompV.c	/^   Covariance   fixed;              \/* fixed (co)variance values *\/$/;"	m	struct:__anon3	file:
+fllrHeap	HBuild.c	/^   MemHeap fllrHeap;$/;"	m	struct:__anon2	file:
+fltcompare	HERest.c	/^static  int fltcompare(const void *_i, const void *_j)$/;"	f	file:
+fltcompare	HMMIRest.c	/^static  int fltcompare(const void *_i, const void *_j)$/;"	f	file:
+fmt	HList.c	/^   FileFormat fmt;$/;"	m	struct:__anon16	file:
+fomA	HResults.c	/^static float fomA;            \/* interpolation factor *\/$/;"	v	file:
+fomN	HResults.c	/^static int fomN;              \/* num FA levels needed *\/$/;"	v	file:
+fomTab	HResults.c	/^static Matrix fomTab;         \/* array[1..kn+1,1..fomN+1] of hitRate *\/$/;"	v	file:
+frcDisc	HList.c	/^static Boolean frcDisc = FALSE;  \/* List VQ symbols from cont file *\/$/;"	v	file:
+fullResults	HResults.c	/^static Boolean fullResults = FALSE;   \/* enable full Results *\/$/;"	v	file:
+fullcNeeded	HCompV.c	/^static Boolean fullcNeeded[SMAX];   \/* true for each stream that needs full$/;"	v	file:
+gScriptFN	HDMan.c	/^static char *gScriptFN = NULL;       \/* name of global edit script *\/$/;"	v	file:
+gen	HList.c	/^static long gen = -1;             \/* end sample to list *\/$/;"	v	file:
+genBeam	HVite.c	/^static LogDouble genBeam = -LZERO;\/* genBeam threshold *\/$/;"	v	file:
+genBeamInc	HVite.c	/^static LogDouble genBeamInc  = 0.0;       \/* increment         *\/$/;"	v	file:
+genBeamLim	HVite.c	/^static LogDouble genBeamLim = -LZERO;     \/* max value       *\/$/;"	v	file:
+glist	HBuild.c	/^   GramEntry *glist;   $/;"	m	struct:__anon2	file:
+globClustVar	HQuant.c	/^static Boolean globClustVar = FALSE;\/*Output global variance of data to$/;"	v	file:
+grid	HResults.c	/^static CellPtr *grid;     \/* matrix of cells *\/$/;"	v	file:
+gst	HList.c	/^static long gst = -1;             \/* start sample to list *\/$/;"	v	file:
+h	HSLab.c	/^   int x, y, w, h, bw;    \/* x-pos, y-pos, width, height, fg and bg colours *\/$/;"	m	struct:__anon26	file:
+hRedrawWindow	HSLab.c	/^void hRedrawWindow(void)$/;"	f
+hSet	HHEd.c	/^static HMMSet hSet;        \/* current HMM set *\/$/;"	v	file:
+hSize	HLStats.c	/^static int hSize = 0;               \/* hash table size, small(0), med(1), large(2)  *\/$/;"	v	file:
+hashsizes	HLStats.c	/^static int hashsizes[4]={ 87793, 188281, 715249 };$/;"	v	file:
+hbuild_vc_id	HBuild.c	/^char *hbuild_vc_id = "$Id: HBuild.c,v 1.1.1.1 2006\/10\/11 09:54:59 jal58 Exp $";$/;"	v
+hbuild_version	HBuild.c	/^char *hbuild_version = "!HVER!HBuild:   3.4.1 [CUED 12\/03\/09]";$/;"	v
+hcompv_vc_id	HCompV.c	/^char *hcompv_vc_id = "$Id: HCompV.c,v 1.1.1.1 2006\/10\/11 09:54:59 jal58 Exp $";$/;"	v
+hcompv_version	HCompV.c	/^char *hcompv_version = "!HVER!HCompV:   3.4.1 [CUED 12\/03\/09]";$/;"	v
+hcopy_vc_id	HCopy.c	/^char *hcopy_vc_id = "$Id: HCopy.c,v 1.1.1.1 2006\/10\/11 09:54:59 jal58 Exp $";$/;"	v
+hcopy_version	HCopy.c	/^char *hcopy_version = "!HVER!HCopy:   3.4.1 [CUED 12\/03\/09]";$/;"	v
+hcrit	HMMIRest.c	/^static float hcrit = 1.0; \/* Scale on denominator (MMI) part. Not really useful.  *\/$/;"	v	file:
+hdman_vc_id	HDMan.c	/^char *hdman_vc_id = "$Id: HDMan.c,v 1.2 2006\/12\/07 11:09:08 mjfg Exp $";$/;"	v
+hdman_version	HDMan.c	/^char *hdman_version = "!HVER!HDMan:   3.4.1 [CUED 12\/03\/09]";$/;"	v
+headSkip	HDMan.c	/^   int headSkip;                \/* num header lines to skip on input *\/$/;"	m	struct:__anon9	file:
+headerPrinted	HResults.c	/^static Boolean headerPrinted = FALSE;  \/* delay header as long as poss *\/$/;"	v	file:
+herest_vc_id	HERest.c	/^char *herest_vc_id = "$Id: HERest.c,v 1.2 2006\/12\/07 11:09:08 mjfg Exp $";$/;"	v
+herest_version	HERest.c	/^char *herest_version = "!HVER!HERest:   3.4.1 [CUED 12\/03\/09]";$/;"	v
+hhed_vc_id	HHEd.c	/^char *hhed_vc_id = "$Id: HHEd.c,v 1.2 2006\/12\/07 11:09:08 mjfg Exp $";$/;"	v
+hhed_version	HHEd.c	/^char *hhed_version = "!HVER!HHEd:   3.4.1 [CUED 12\/03\/09]";$/;"	v
+hinit_vc_id	HInit.c	/^char *hinit_vc_id = "$Id: HInit.c,v 1.1.1.1 2006\/10\/11 09:55:01 jal58 Exp $";$/;"	v
+hinit_version	HInit.c	/^char *hinit_version = "!HVER!HInit:   3.4.1 [CUED 12\/03\/09]";$/;"	v
+history	HParse.c	/^   Link history;     \/* used for word pronunciation expansion *\/$/;"	m	struct:_NodeInfo	file:
+hit	HResults.c	/^   Boolean hit;                 \/* true if real occurrence *\/$/;"	m	struct:_SpotRec	file:
+hit	HResults.c	/^   int ins,del,sub,hit;$/;"	m	struct:_Cell	file:
+hit	HResults.c	/^   int ins,del,sub,hit;$/;"	m	struct:_Spkr	file:
+hits	HResults.c	/^static long hits  = 0;     \/* Total hits *\/$/;"	v	file:
+hled_vc_id	HLEd.c	/^char *hled_vc_id = "$Id: HLEd.c,v 1.1.1.1 2006\/10\/11 09:55:01 jal58 Exp $";$/;"	v
+hled_version	HLEd.c	/^char *hled_version = "!HVER!HLEd:   3.4.1 [CUED 12\/03\/09]";$/;"	v
+hlist_vc_id	HList.c	/^char *hlist_vc_id = "$Id: HList.c,v 1.1.1.1 2006\/10\/11 09:55:01 jal58 Exp $";$/;"	v
+hlist_version	HList.c	/^char *hlist_version = "!HVER!HList:   3.4.1 [CUED 12\/03\/09]";$/;"	v
+hlrescore_vc_id	HLRescore.c	/^char *hlrescore_vc_id = "$Id: HLRescore.c,v 1.1.1.1 2006\/10\/11 09:55:01 jal58 Exp $";$/;"	v
+hlrescore_version	HLRescore.c	/^char *hlrescore_version = "!HVER!HLRescore:   3.4.1 [CUED 12\/03\/09]";$/;"	v
+hlstats_vc_id	HLStats.c	/^char *hlstats_vc_id = "$Id: HLStats.c,v 1.1.1.1 2006\/10\/11 09:55:01 jal58 Exp $";$/;"	v
+hlstats_version	HLStats.c	/^char *hlstats_version = "!HVER!HLStats:   3.4.1 [CUED 12\/03\/09]";$/;"	v
+hmm	HRest.c	/^static HLink hmm;          \/* link to the hmm itself *\/$/;"	v	file:
+hmmDir	HERest.c	/^static char * hmmDir = NULL;     \/* directory to look for hmm def files *\/$/;"	v	file:
+hmmDir	HHEd.c	/^static char * hmmDir = NULL;     \/* directory to look for hmm def files *\/$/;"	v	file:
+hmmDir	HMMIRest.c	/^static char * hmmDir = NULL;     \/* directory to look for hmm def files *\/$/;"	v	file:
+hmmDir	HSmooth.c	/^static char * hmmDir = NULL;     \/* directory to look for hmm def files *\/$/;"	v	file:
+hmmDir	HVite.c	/^static char * hmmDir = NULL;      \/* directory to look for hmm def files *\/$/;"	v	file:
+hmmExt	HERest.c	/^static char * hmmExt = NULL;     \/* hmm def file extension *\/$/;"	v	file:
+hmmExt	HHEd.c	/^static char * hmmExt = NULL;     \/* hmm def file extension *\/$/;"	v	file:
+hmmExt	HMMIRest.c	/^static char * hmmExt = NULL;     \/* hmm def file extension *\/$/;"	v	file:
+hmmExt	HSmooth.c	/^static char * hmmExt = NULL;     \/* hmm def file extension *\/$/;"	v	file:
+hmmExt	HVite.c	/^static char * hmmExt = NULL;      \/* hmm def file extension *\/$/;"	v	file:
+hmmHeap	HHEd.c	/^static MemHeap hmmHeap;     \/* Heap holds all hmm related info *\/$/;"	v	file:
+hmmId	HCompV.c	/^static LabId  hmmId  = NULL;        \/* id of model *\/$/;"	v	file:
+hmmLink	HCompV.c	/^static HLink hmmLink;               \/* Link to the physical HMM *\/$/;"	v	file:
+hmmLink	HInit.c	/^static HLink hmmLink;            \/* link to the hmm itself *\/$/;"	v	file:
+hmmListFn	HVite.c	/^static char *hmmListFn;           \/* HMMs *\/$/;"	v	file:
+hmmName	HHEd.c	/^   char   *hmmName;          \/* Physical hmm name for this component *\/$/;"	m	struct:_CoList	file:
+hmmStack	HERest.c	/^static MemHeap hmmStack;   \/*For Storage of all dynamic structures created...*\/$/;"	v	file:
+hmmStack	HMMIRest.c	/^static MemHeap hmmStack;           \/* HMM defs and related structures *\/$/;"	v	file:
+hmmStack	HSmooth.c	/^static MemHeap hmmStack;     \/*For Storage of dynamic data structures *\/$/;"	v	file:
+hmmfn	HCompV.c	/^static char *hmmfn=NULL;            \/* HMM definition file name *\/$/;"	v	file:
+hmmfn	HInit.c	/^static char *hmmfn;                 \/* HMM definition file name (& part dir)*\/$/;"	v	file:
+hmmfn	HRest.c	/^static char *hmmfn;              \/* HMM definition file name *\/$/;"	v	file:
+hmmirest_vc_id	HMMIRest.c	/^char *hmmirest_vc_id = "$Id: HMMIRest.c,v 1.1.1.1 2006\/10\/11 09:55:01 jal58 Exp $";$/;"	v
+hmmirest_version	HMMIRest.c	/^char *hmmirest_version = "!HVER!HMMIRest:   3.4.1 [CUED 12\/03\/09]";$/;"	v
+hparse_vc_id	HParse.c	/^char *hparse_vc_id = "$Id: HParse.c,v 1.1.1.1 2006\/10\/11 09:55:01 jal58 Exp $";$/;"	v
+hparse_version	HParse.c	/^char *hparse_version = "!HVER!HParse:   3.4.1 [CUED 12\/03\/09]";$/;"	v
+hquant_vc_id	HQuant.c	/^char *hquant_vc_id = "$Id: HQuant.c,v 1.1.1.1 2006\/10\/11 09:55:01 jal58 Exp $";$/;"	v
+hquant_version	HQuant.c	/^char *hquant_version = "!HVER!HQuant:   3.4.1 [CUED 12\/03\/09]";$/;"	v
+hrest_vc_id	HRest.c	/^char *hrest_vc_id = "$Id: HRest.c,v 1.1.1.1 2006\/10\/11 09:55:01 jal58 Exp $";$/;"	v
+hrest_version	HRest.c	/^char *hrest_version = "!HVER!HRest:   3.4.1 [CUED 12\/03\/09]";$/;"	v
+hresults_vc_id	HResults.c	/^char *hresults_vc_id = "$Id: HResults.c,v 1.1.1.1 2006\/10\/11 09:55:01 jal58 Exp $";$/;"	v
+hresults_version	HResults.c	/^char *hresults_version = "!HVER!HResults:   3.4.1 [CUED 12\/03\/09]";$/;"	v
+hsKind	HMMIRest.c	/^static HSetKind hsKind;          \/* kind of the HMM system *\/ \/*!Must be PLAINHS | SHAREDHS (|TIEDHS?) *\/$/;"	v	file:
+hsKind	HRest.c	/^static HSetKind hsKind;          \/* kind of the HMM system *\/$/;"	v	file:
+hsKind	HSmooth.c	/^static HSetKind hsKind;          \/* kind of loaded hmm set *\/$/;"	v	file:
+hset	HCompV.c	/^static HMMSet hset;                 \/* HMM to be initialised with *\/$/;"	v	file:
+hset	HHEd.c	/^static HMMSet *hset;       \/* current HMM set *\/$/;"	v	file:
+hset	HInit.c	/^static HMMSet hset;              \/* The current unitary hmm set *\/$/;"	v	file:
+hset	HMMIRest.c	/^static HMMSet hset;                  \/* Set of HMMs to be re-estimated *\/$/;"	v	file:
+hset	HRest.c	/^static HMMSet hset;        \/* The current unitary hmm set *\/$/;"	v	file:
+hset	HSmooth.c	/^static HMMSet hset;        \/* Set of HMMs to be re-estimated *\/$/;"	v	file:
+hset	HVite.c	/^static HMMSet hset;               \/* the HMM set *\/$/;"	v	file:
+hset_prior	HMMIRest.c	/^static HMMSet hset_prior;            \/* Usually uninitialised, except for MMI-MAP\/MPE-MAP *\/$/;"	v	file:
+hset_prior_dir	HMMIRest.c	/^static char *hset_prior_dir = NULL;$/;"	v	file:
+hset_prior_initialised	HMMIRest.c	/^Boolean hset_prior_initialised = FALSE;$/;"	v
+hsgen_vc_id	HSGen.c	/^char *hsgen_vc_id = "$Id: HSGen.c,v 1.1.1.1 2006\/10\/11 09:55:01 jal58 Exp $";$/;"	v
+hsgen_version	HSGen.c	/^char *hsgen_version = "!HVER!HSGen:   3.4.1 [CUED 12\/03\/09]";$/;"	v
+hslab_vc_id	HSLab.c	/^char *hslab_vc_id = "$Id: HSLab.c,v 1.1.1.1 2006\/10\/11 09:55:01 jal58 Exp $";$/;"	v
+hslab_version	HSLab.c	/^char *hslab_version = "!HVER!HSLab:   3.4.1 [CUED 12\/03\/09]";$/;"	v
+hsmooth_vc_id	HSmooth.c	/^char *hsmooth_vc_id = "$Id: HSmooth.c,v 1.1.1.1 2006\/10\/11 09:55:01 jal58 Exp $";$/;"	v
+hsmooth_version	HSmooth.c	/^char *hsmooth_version = "!HVER!HSmooth:   3.4.1 [CUED 12\/03\/09]";$/;"	v
+htkWidth	HResults.c	/^static int  htkWidth  = 66;     \/* width of output banners *\/$/;"	v	file:
+hvite_vc_id	HVite.c	/^char *hvite_vc_id = "$Id: HVite.c,v 1.1.1.1 2006\/10\/11 09:55:02 jal58 Exp $";$/;"	v
+hvite_version	HVite.c	/^char *hvite_version = "!HVER!HVite:   3.4.1 [CUED 12\/03\/09]";$/;"	v
+iStack	HCompV.c	/^static MemHeap iStack;$/;"	v	file:
+iStack	HCopy.c	/^static MemHeap iStack;          \/* input stack *\/$/;"	v	file:
+iStack	HQuant.c	/^static MemHeap iStack;             \/* input buffer  *\/$/;"	v	file:
+ident	HParse.c	/^static LabId ident;                 \/* Current identifier, if any *\/$/;"	v	file:
+idx	HHEd.c	/^   int idx;                     \/* index of this item *\/$/;"	m	struct:_CRec	file:
+ifmt	HLEd.c	/^static FileFormat ifmt=UNDEFF;      \/* Label input file format *\/$/;"	v	file:
+ifmt	HLRescore.c	/^static FileFormat ifmt=UNDEFF;  \/* Label input file format *\/$/;"	v	file:
+ifmt	HSLab.c	/^static FileFormat ifmt=UNDEFF;      \/* Label input file format *\/$/;"	v	file:
+ifmt	HVite.c	/^static FileFormat ifmt=UNDEFF;    \/* Label input file format *\/$/;"	v	file:
+ignoreCase	HResults.c	/^static Boolean ignoreCase = FALSE;    \/* true converts labels to upper case *\/$/;"	v	file:
+ilist	HHEd.c	/^   ILink ilist;$/;"	m	struct:_QEnt	file:
+inBinary	HHEd.c	/^static Boolean inBinary = FALSE; \/* set to save models in binary *\/$/;"	v	file:
+inbuf	HDMan.c	/^static DBuffer inbuf[MAXDICTS];      \/* the input buffers and associated scripts *\/$/;"	v	file:
+inc	Makefile	/^inc = ..\/HTKLib$/;"	m
+incLab	HSLab.c	/^static Boolean incLab       = FALSE;   \/* increment global label *\/$/;"	v	file:
+incOutSyms	HDMan.c	/^static Boolean incOutSyms = FALSE;   \/* write out extra field *\/$/;"	v	file:
+incProbs	HDMan.c	/^static Boolean incProbs = FALSE;     \/* write out extra field *\/$/;"	v	file:
+includedir	Makefile	/^includedir = ${prefix}\/include$/;"	m
+info	HQuant.c	/^static BufferInfo info;             \/* global observation format, etc. *\/$/;"	v	file:
+infodir	Makefile	/^infodir = ${prefix}\/share\/info$/;"	m
+inlyne	HParse.c	/^static char inlyne[SCANBUFMAX+1];   \/* (Portion of) current input line *\/$/;"	v	file:
+ins	HResults.c	/^   int ins,del,sub,hit;$/;"	m	struct:_Cell	file:
+ins	HResults.c	/^   int ins,del,sub,hit;$/;"	m	struct:_Spkr	file:
+ins	HResults.c	/^static long ins   = 0;     \/* Total insertions *\/$/;"	v	file:
+insPen	HResults.c	/^static const int insPen = 7;$/;"	v	file:
+insPenNIST	HResults.c	/^static const int insPenNIST = 3;$/;"	v	file:
+io_Win	HSLab.c	/^static RectWin io_Win;       \/* the I\/O window used for messages and inputing strings *\/$/;"	v	file:
+isAudio	HList.c	/^   Boolean isAudio;$/;"	m	struct:__anon16	file:
+isLogging	HDMan.c	/^static Boolean isLogging = FALSE;$/;"	v	file:
+isPipe	HDMan.c	/^   Boolean isPipe;              \/* dictionary is input thru pipe *\/$/;"	m	struct:__anon9	file:
+isSource	HList.c	/^   Boolean isSource;$/;"	m	struct:__anon16	file:
+item	HHEd.c	/^   ILink item;                  \/* a single item in this cluster (group) *\/$/;"	m	struct:_CRec	file:
+jMatHeap	HParse.c	/^MemHeap  jMatHeap;$/;"	v
+jmCols	HParse.c	/^static int jmRows,jmCols;      \/* size of JoinMatrix *\/$/;"	v	file:
+jmRows	HParse.c	/^static int jmRows,jmCols;      \/* size of JoinMatrix *\/$/;"	v	file:
+jmat	HParse.c	/^static JoinMatrix jmat;        \/* binary join matrix *\/$/;"	v	file:
+joinFloor	HHEd.c	/^static float joinFloor;                \/* join mix weight floor (* MINMIX) *\/$/;"	v	file:
+joinHeap	HParse.c	/^MemHeap  joinHeap;$/;"	v
+joinSet	HHEd.c	/^static MixtureElem *joinSet;           \/* current join Mix Set *\/$/;"	v	file:
+joinSize	HHEd.c	/^static int joinSize=0;                 \/* number of mixes in a joined pdf *\/$/;"	v	file:
+keyOccs	HResults.c	/^static int *keyOccs;          \/* array[1..kn] of actual keyword occurrences *\/$/;"	v	file:
+kind	HList.c	/^   ParmKind kind;$/;"	m	struct:__anon16	file:
+l	HParse.c	/^   LabId l;$/;"	m	struct:__anon20	file:
+lCountLimit	HLStats.c	/^static int lCountLimit  = -1;       \/* max occurrences to list for lCount *\/$/;"	v	file:
+lRef	HResults.c	/^static LabId *lRef,*lTest;$/;"	v	file:
+lSize	HLStats.c	/^static int lSize;                \/* Number of logical labels *\/$/;"	v	file:
+lStack	HCopy.c	/^static MemHeap lStack;          \/* label i\/o  stack *\/$/;"	v	file:
+lTab	HLStats.c	/^static WordInfo *lTab;           \/* Table of logical counts\/durations *\/$/;"	v	file:
+lTest	HResults.c	/^static LabId *lRef,*lTest;$/;"	v	file:
+lab	HSLab.c	/^   Label lab;           \/* the label prior to change *\/$/;"	m	struct:__anon25	file:
+lab2Lat	HLRescore.c	/^static Boolean lab2Lat = FALSE;     \/* -I *\/$/;"	v	file:
+labDir	HCompV.c	/^static char *labDir = NULL;         \/* label file directory *\/$/;"	v	file:
+labDir	HCopy.c	/^static char *labDir = NULL;     \/* label file directory *\/$/;"	v	file:
+labDir	HERest.c	/^static char * labDir = NULL;     \/* label (transcription) file directory *\/$/;"	v	file:
+labDir	HInit.c	/^static char * labDir = NULL;        \/* label file directory *\/$/;"	v	file:
+labDir	HQuant.c	/^static char *labDir = NULL;         \/* label file directory *\/$/;"	v	file:
+labDir	HRest.c	/^static char * labDir = NULL;     \/* label file directory *\/$/;"	v	file:
+labDir	HResults.c	/^static char * labDir    = NULL;       \/* label file directory *\/$/;"	v	file:
+labDir	HSLab.c	/^static char *labDir = NULL;                \/* directory for label files *\/$/;"	v	file:
+labDir	HVite.c	/^static char * labDir = NULL;      \/* output label file directory *\/$/;"	v	file:
+labExt	HCompV.c	/^static char *labExt = "lab";        \/* label file extension *\/$/;"	v	file:
+labExt	HCopy.c	/^static char *labExt = "lab";    \/* label file extension *\/$/;"	v	file:
+labExt	HERest.c	/^static char * labExt = "lab";    \/* label file extension *\/$/;"	v	file:
+labExt	HInit.c	/^static char * labExt = "lab";       \/* label file extension *\/$/;"	v	file:
+labExt	HQuant.c	/^static char *labExt = "lab";        \/* label file extension *\/$/;"	v	file:
+labExt	HRest.c	/^static char * labExt = "lab";    \/* label file extension *\/$/;"	v	file:
+labExt	HResults.c	/^static char * labExt    = "lab";      \/* label file extension *\/$/;"	v	file:
+labExt	HSLab.c	/^static char *labExt = "lab";               \/* label file extension *\/$/;"	v	file:
+labExt	HVite.c	/^static char * labExt = "rec";     \/* output label file extension *\/$/;"	v	file:
+labF	HCopy.c	/^static Boolean labF=FALSE;      \/* set if we should  process label files too *\/$/;"	v	file:
+labFile	HCopy.c	/^static char labFile[255];       \/* current source of trans *\/$/;"	v	file:
+labFileMask	HERest.c	/^static char *labFileMask = NULL;$/;"	v	file:
+labFileMask	HVite.c	/^static char * labFileMask = NULL; \/* mask for reading lablels (lattices) *\/$/;"	v	file:
+labForm	HVite.c	/^static char * labForm = NULL;     \/* output label reformat *\/$/;"	v	file:
+labHeap	HLRescore.c	/^static MemHeap labHeap;$/;"	v	file:
+labIdStack	HSmooth.c	/^static MemHeap labIdStack;$/;"	v	file:
+labInDir	HLRescore.c	/^static char *labInDir = NULL;   \/* Label input dir, set by -L  *\/$/;"	v	file:
+labInDir	HVite.c	/^static char * labInDir = NULL;    \/* input network\/label file directory *\/$/;"	v	file:
+labInExt	HLRescore.c	/^static char *labInExt = "lab";  \/* Label Extension, set by -X *\/$/;"	v	file:
+labInExt	HVite.c	/^static char * labInExt = "lab";   \/* input network\/label file extension *\/$/;"	v	file:
+labName	HCopy.c	/^static LabId labName = NULL;    \/* name of label to extract (if set) *\/$/;"	v	file:
+labOutDir	HLRescore.c	/^static char *labOutDir = NULL;  \/* output label file directory *\/$/;"	v	file:
+labOutExt	HLRescore.c	/^static char *labOutExt = "rec"; \/* output label file extension *\/$/;"	v	file:
+labOutForm	HLRescore.c	/^static char *labOutForm = NULL; \/* output label format *\/$/;"	v	file:
+labRep	HCopy.c	/^static int labRep=1;            \/* repetition of named label *\/$/;"	v	file:
+labSet	HSLab.c	/^static int labSet;              \/* the number of the current label list *\/$/;"	v	file:
+labStack	HSLab.c	/^static MemHeap labStack;     \/* storage for label objects *\/$/;"	v	file:
+labWin1	HSLab.c	/^static RectWin labWin1;      \/* the label window *\/$/;"	v	file:
+labenidx	HCopy.c	/^static int labenidx=0;          \/* label end index (if set) *\/$/;"	v	file:
+labfn	HResults.c	/^static char labfn[255];               \/* lab file name (reference) *\/$/;"	v	file:
+labfn	HSLab.c	/^static char labfn[SLEN];                   \/* the label file name *\/$/;"	v	file:
+labsModified	HSLab.c	/^static Boolean labsModified = FALSE;   \/* tracks any changes made to the labels *\/$/;"	v	file:
+labstidx	HCopy.c	/^static int labstidx=0;          \/* label start index (if set) *\/$/;"	v	file:
+labstr	HSLab.c	/^static char labstr[LAB_BUF_LEN] = "Speech";$/;"	v	file:
+labstr_btn	HSLab.c	/^static HButton *labstr_btn;$/;"	v	file:
+lastCommand	HHEd.c	/^static int lastCommand=0;              \/* index of previous command *\/$/;"	v	file:
+lastP	HInit.c	/^static Vector   thisP,lastP;     \/* Columns of log probabilities *\/$/;"	v	file:
+lastWpos	HSLab.c	/^static int thisWpos, lastWpos;      \/* the positions of the waveform pointer *\/$/;"	v	file:
+lat	HSGen.c	/^static Lattice *lat;    \/* The defining syntax Lattice *\/$/;"	v	file:
+latExt	HMMIRest.c	/^static char *latExt    = "lat";$/;"	v	file:
+latExt	HVite.c	/^static char * latExt = NULL;      \/* output lattice file extension *\/$/;"	v	file:
+latFileMask	HMMIRest.c	/^static char *latFileMask = NULL;$/;"	v	file:
+latForm	HVite.c	/^static char * latForm = NULL;     \/* output lattice format *\/$/;"	v	file:
+latHeap	HLRescore.c	/^static MemHeap latHeap;$/;"	v	file:
+latInDir	HLRescore.c	/^static char *latInDir = NULL;   \/* Lattice input dir, set by -L  *\/$/;"	v	file:
+latInExt	HLRescore.c	/^static char *latInExt = "lat";  \/* Lattice Extension, set by -X *\/$/;"	v	file:
+latOutForm	HLRescore.c	/^static char *latOutForm = NULL; \/* output lattice format *\/$/;"	v	file:
+latStack	HMMIRest.c	/^static MemHeap latStack;           \/* Lattices. *\/$/;"	v	file:
+ldBinary	HERest.c	/^static Boolean ldBinary = TRUE;        \/* load\/dump in binary *\/$/;"	v	file:
+ldBinary	HSmooth.c	/^static Boolean ldBinary = TRUE;     \/* load in binary *\/$/;"	v	file:
+leaf	HHEd.c	/^   Node *leaf;                  \/* chain of leaf nodes *\/$/;"	m	struct:_Tree	file:
+left	HHEd.c	/^   HLink left,right;            \/* physical names of constituent biphones *\/$/;"	m	struct:__anon11	file:
+lenSum	HSGen.c	/^static long lenSum;     \/* total length of all sentences *\/$/;"	v	file:
+levSplit	HLEd.c	/^static Boolean levSplit = FALSE;    \/* Split levels into lists *\/$/;"	v	file:
+levStr	HSLab.c	/^static char levStr[10];      \/* the level button string *\/$/;"	v	file:
+lev_btn	HSLab.c	/^static HButton *lev_btn;     \/* the level button *\/$/;"	v	file:
+lff	HCompV.c	/^static FileFormat lff=UNDEFF;       \/* label file format *\/$/;"	v	file:
+lff	HERest.c	/^static FileFormat lff=UNDEFF;       \/* label file format *\/$/;"	v	file:
+lff	HInit.c	/^static FileFormat lff=UNDEFF;       \/* label file format *\/$/;"	v	file:
+lff	HQuant.c	/^static FileFormat lff=UNDEFF;       \/* label file format *\/$/;"	v	file:
+lff	HRest.c	/^static FileFormat lff=UNDEFF;    \/* label file format *\/$/;"	v	file:
+libdir	Makefile	/^libdir = ${exec_prefix}\/lib$/;"	m
+libexecdir	Makefile	/^libexecdir = ${exec_prefix}\/libexec$/;"	m
+link	HLStats.c	/^   struct aentry *link;          \/* Next entry in hash table *\/$/;"	m	struct:aentry	typeref:struct:aentry::aentry	file:
+links	HParse.c	/^   Link *links;      \/* array[1..numLinks]of Link *\/$/;"	m	struct:__anon17	file:
+list	HHEd.c	/^   CoList *list;             \/* linked list of the mixture components *\/$/;"	m	struct:__anon12	file:
+listFile	HLStats.c	/^static char *listFile   = NULL;     \/* file for label list *\/$/;"	v	file:
+llist	HSLab.c	/^static LabList *llist;          \/* the current label list edited *\/$/;"	v	file:
+lm	HLRescore.c	/^static LModel *lm;              \/* LM for expandin lattices *\/$/;"	v	file:
+lmFile	HLRescore.c	/^static char *lmFile = NULL;     \/* LM filename *\/$/;"	v	file:
+lmHeap	HLRescore.c	/^static MemHeap lmHeap;$/;"	v	file:
+lmScale	HLRescore.c	/^static double lmScale = 1.0;    \/* LM scale factor *\/$/;"	v	file:
+lmScale	HVite.c	/^static double lmScale = 1.0;      \/* bigram and log(1\/NSucc) scale factor *\/$/;"	v	file:
+lnum	HSGen.c	/^static Boolean lnum = FALSE;        \/* enable line numbers *\/$/;"	v	file:
+loadLabels	HVite.c	/^static Boolean loadLabels = FALSE; \/* Load network for each file *\/$/;"	v	file:
+loadNetworks	HVite.c	/^static Boolean loadNetworks = FALSE; \/* Load network for each file *\/$/;"	v	file:
+localstatedir	Makefile	/^localstatedir = ${prefix}\/var$/;"	m
+log2	HLStats.c	626;"	d	file:
+logF	HDMan.c	/^static FILE *logF = NULL;            \/* log file if any *\/$/;"	v	file:
+lsChunkHeap	HParse.c	/^static MemHeap lsChunkHeap;$/;"	v	file:
+lsHeap	HParse.c	/^static MemHeap lsHeap;$/;"	v	file:
+lsLargeHeap	HParse.c	/^static MemHeap lsLargeHeap;$/;"	v	file:
+lset	HSLab.c	/^   int lset;            \/* label set *\/$/;"	m	struct:__anon25	file:
+m	HParse.c	/^   LabId m;$/;"	m	struct:__anon20	file:
+macro	HHEd.c	/^   MLink macro;                 \/* macro used for tie *\/$/;"	m	struct:_Node	file:
+macroLink	HCompV.c	/^static MLink macroLink;             \/* Link to specific HMM macro *\/$/;"	v	file:
+macroLink	HInit.c	/^static MLink macroLink;          \/* Access to macro in HMMSet *\/$/;"	v	file:
+main	HBuild.c	/^int main(int argc, char *argv[])$/;"	f
+main	HCompV.c	/^int main(int argc, char *argv[])$/;"	f
+main	HCopy.c	/^int main(int argc, char *argv[])$/;"	f
+main	HDMan.c	/^int main(int argc, char *argv[])$/;"	f
+main	HERest.c	/^int main(int argc, char *argv[])$/;"	f
+main	HHEd.c	/^int main(int argc, char *argv[])$/;"	f
+main	HInit.c	/^int main(int argc, char *argv[])$/;"	f
+main	HLEd.c	/^int main(int argc, char *argv[])$/;"	f
+main	HLRescore.c	/^int main(int argc, char *argv[])$/;"	f
+main	HLStats.c	/^int main(int argc, char *argv[])$/;"	f
+main	HList.c	/^int main(int argc, char *argv[])$/;"	f
+main	HMMIRest.c	/^int main(int argc, char *argv[]) $/;"	f
+main	HParse.c	/^int main(int argc, char *argv[])$/;"	f
+main	HQuant.c	/^int main(int argc, char *argv[])$/;"	f
+main	HRest.c	/^int main(int argc, char *argv[])$/;"	f
+main	HResults.c	/^int main(int argc, char *argv[])$/;"	f
+main	HSGen.c	/^int main(int argc, char *argv[])$/;"	f
+main	HSLab.c	/^int main(int argc, char *argv[])$/;"	f
+main	HSmooth.c	/^int main(int argc, char *argv[])$/;"	f
+main	HVite.c	/^int main(int argc, char *argv[])$/;"	f
+mandir	Makefile	/^mandir = ${prefix}\/share\/man$/;"	m
+markA	HSLab.c	/^static int markA, markB;               \/* boundaries of a marked region *\/$/;"	v	file:
+markB	HSLab.c	/^static int markA, markB;               \/* boundaries of a marked region *\/$/;"	v	file:
+matBiGram	HBuild.c	/^typedef enum {unknown, wordLoop, boBiGram, matBiGram, multiLat, wordPair} BuildType;$/;"	e	enum:__anon1	file:
+maxActive	HVite.c	/^static int maxActive = 0;         \/* max active phone instances *\/$/;"	v	file:
+maxDur	HLStats.c	/^   float maxDur;                 \/* Max duration *\/$/;"	m	struct:wordinfo	file:
+maxIter	HInit.c	/^static int  maxIter  = 20;          \/* max iterations in param estimation *\/$/;"	v	file:
+maxIter	HRest.c	/^static int  maxIter  = 20;       \/* max iterations in parameter estimation *\/$/;"	v	file:
+maxLinks	HParse.c	/^   short maxLinks;   \/* max number of links *\/$/;"	m	struct:__anon17	file:
+maxM	HMMIRest.c	/^static int maxM = 0;             \/* max mixtures in any model *\/$/;"	v	file:
+maxM	HVite.c	/^static int maxM = 0;              \/* max mixtures in any model *\/$/;"	v	file:
+maxMixInS	HInit.c	/^static int maxMixInS[SMAX];      \/* array[1..swidth[0]] of max mixes *\/$/;"	v	file:
+maxMixInS	HRest.c	/^static int maxMixInS[SMAX];\/* array[1..swidth[0]] of max mixes *\/$/;"	v	file:
+maxMixInS	HVite.c	/^static int maxMixInS[SMAX];       \/* array[1..swidth[0]] of max mixes *\/$/;"	v	file:
+maxMixes	HHEd.c	/^static int maxMixes;       \/* max number of mixes in current HMM set *\/$/;"	v	file:
+maxMixes	HRest.c	/^static int maxMixes;       \/* max num mixtures across all streams *\/$/;"	v	file:
+maxMixes	HSmooth.c	/^static int maxMixes = 0;         \/* max mixtures in any model *\/$/;"	v	file:
+maxNDepth	HResults.c	/^static int maxNDepth=1;               \/* find best of 1..max lists *\/$/;"	v	file:
+maxSpUtt	HERest.c	/^static int maxSpUtt = 0;$/;"	v	file:
+maxStates	HHEd.c	/^static int maxStates;      \/* max number of states in current HMM set *\/$/;"	v	file:
+maxStates	HSmooth.c	/^static int maxStates = 0;        \/* max states in any model *\/$/;"	v	file:
+maxStep	HSmooth.c	/^static int maxStep   = 16;       \/* max number of binary chops *\/$/;"	v	file:
+maxT	HRest.c	/^static int maxT,minT,T;    \/* max,min and current segment lengths *\/$/;"	v	file:
+maxWordLen	HResults.c	/^static int maxWordLen = 5;$/;"	v	file:
+mean	HQuant.c	/^Vector mean[SMAX];                 \/* Global stream mean  *\/$/;"	v
+meanGC	HHEd.c	/^static float meanGC,stdGC;             \/* mean and stdev of GConst *\/$/;"	v	file:
+meanSum	HCompV.c	/^   Vector       meanSum;            \/* acc for mean vector value *\/$/;"	m	struct:__anon3	file:
+meanSum	HCompV.c	/^   Vector meanSum;                       \/* mean accumulate structure for speaker *\/$/;"	m	struct:__anon4	file:
+meanUpdate	HCompV.c	/^static Boolean meanUpdate = FALSE;  \/* update means  *\/$/;"	v	file:
+memStak	HDMan.c	/^static MemHeap memStak;              \/* all storage allocated in this *\/$/;"	v	file:
+mergeDir	HLRescore.c	/^static char *mergeDir;          \/* lattice merging direction *\/$/;"	v	file:
+mergeLat	HLRescore.c	/^static Boolean mergeLat = FALSE;    \/* -m *\/$/;"	v	file:
+mergeProns	HDMan.c	/^static Boolean mergeProns = FALSE;   \/* merge prons from all sources *\/$/;"	v	file:
+minDur	HLStats.c	/^   float minDur;                 \/* Min duration *\/$/;"	m	struct:wordinfo	file:
+minEgs	HERest.c	/^static int minEgs    = 3;        \/* min examples to train a model *\/$/;"	v	file:
+minEgs	HSmooth.c	/^static int minEgs    = 3;        \/* min examples to train a model *\/$/;"	v	file:
+minFrwdP	HERest.c	/^static float minFrwdP = NOPRUNE;         \/* mix prune threshold *\/$/;"	v	file:
+minGap	HLEd.c	/^static HTime minGap = 50000.0;      \/* minimum interword gap *\/$/;"	v	file:
+minSeg	HInit.c	/^static int minSeg    = 3;           \/* min segments to train a model *\/$/;"	v	file:
+minSeg	HRest.c	/^static int minSeg    = 3;        \/* min segments to train a model *\/$/;"	v	file:
+minT	HRest.c	/^static int maxT,minT,T;    \/* max,min and current segment lengths *\/$/;"	v	file:
+minVar	HCompV.c	/^static float minVar  = 0.0;         \/* minimum variance *\/$/;"	v	file:
+minVar	HERest.c	/^static float minVar  = 0.0;      \/* minimum variance (diagonal only) *\/$/;"	v	file:
+minVar	HInit.c	/^static float minVar  = 1.0E-2;      \/* minimum variance *\/$/;"	v	file:
+minVar	HMMIRest.c	/^static float minVar  = 0.0;      \/* minimum variance (diagonal only). $/;"	v	file:
+minVar	HRest.c	/^static float minVar  = 0.0;      \/* minimum variance *\/$/;"	v	file:
+minVar	HSmooth.c	/^static float minVar  = 0.0;      \/* minimum variance (diagonal only) *\/$/;"	v	file:
+mix	HHEd.c	/^   int    mix;               \/* mixture for this component *\/$/;"	m	struct:_CoList	file:
+mixWeightFloor	HERest.c	/^static float mixWeightFloor=0.0; \/* Floor for mixture weights *\/$/;"	v	file:
+mixWeightFloor	HInit.c	/^static float mixWeightFloor=0.0;    \/*Floor for mixture\/discrete prob weights*\/$/;"	v	file:
+mixWeightFloor	HMMIRest.c	/^static float mixWeightFloor=MINMIX*2; \/* Floor for mixture weights *\/$/;"	v	file:
+mixWeightFloor	HRest.c	/^static float mixWeightFloor=0.0; \/* Floor for mixture weights *\/$/;"	v	file:
+mixWeightFloor	HSmooth.c	/^static float mixWeightFloor=0.0; \/* Floor for mixture weights *\/$/;"	v	file:
+mixoutp	HRest.c	/^static Matrix **mixoutp;   \/* array[2..nStates-1][1..maxT][1..nStreams]$/;"	v	file:
+ml	HHEd.c	/^   MLink ml;$/;"	m	struct:__anon11	file:
+mmWPos	HSLab.c	/^static int mmWPos;$/;"	v	file:
+mmfFn	HERest.c	/^static char * mmfFn  = NULL;     \/* output MMF file, if any *\/$/;"	v	file:
+mmfFn	HHEd.c	/^static char * mmfFn  = NULL;     \/* output MMF file, if any *\/$/;"	v	file:
+mmfFn	HMMIRest.c	/^static char * mmfFn  = NULL;     \/* output MMF file, if any *\/$/;"	v	file:
+mmfIdMask	HHEd.c	/^static char mmfIdMask[MAXSTRLEN] = "*"; \/* MMF Id Mask for baseclass *\/$/;"	v	file:
+modelHeap	HVite.c	/^static MemHeap modelHeap;$/;"	v	file:
+modelName	HParse.c	/^   LabId modelName;  \/* name of node *\/$/;"	m	struct:_Node	file:
+models	HVite.c	/^static Boolean models = FALSE;    \/* Keep track of model alignment *\/$/;"	v	file:
+monophones	HSmooth.c	/^static LabId *monophones;    \/* array[1..nPhones]of LabId *\/$/;"	v	file:
+mp	HHEd.c	/^   MixPDF *mp;               \/* actual component *\/$/;"	m	struct:_CoList	file:
+multiLat	HBuild.c	/^typedef enum {unknown, wordLoop, boBiGram, matBiGram, multiLat, wordPair} BuildType;$/;"	e	enum:__anon1	file:
+n1Cmds	HLEd.c	/^static int  n1Cmds = 17;$/;"	v	file:
+nArgs	HDMan.c	/^   short nArgs;$/;"	m	struct:__anon6	file:
+nArgs	HLEd.c	/^   short nArgs;$/;"	m	struct:__anon15	file:
+nBeam	HVite.c	/^static LogDouble nBeam = 0.0;     \/* nBeam threshold *\/$/;"	v	file:
+nBlk	HSmooth.c	/^static int nBlk = 0;       \/* number of data blocks *\/$/;"	v	file:
+nCmds	HDMan.c	/^static int  nCmds = 21;$/;"	v	file:
+nCmds	HHEd.c	/^static int  nCmds = 40;$/;"	v	file:
+nCmds	HLEd.c	/^static int  nCmds = LASTCMD-1;$/;"	v	file:
+nComponents	HHEd.c	/^   int  nComponents;         \/* number of components in this cluster *\/$/;"	m	struct:__anon12	file:
+nDefPhones	HDMan.c	/^static int nDefPhones = 0;               \/* num predefined phones *\/$/;"	v	file:
+nDefs	HLEd.c	/^   short nDefs;$/;"	m	struct:_Context	file:
+nDenLats	HMMIRest.c	/^int nDenLats = 0;$/;"	v
+nFloorVar	HERest.c	/^static int nFloorVar = 0;     \/* # of floored variance comps *\/$/;"	v	file:
+nFloorVar	HMMIRest.c	/^static int nFloorVar = 0;     \/* # of floored variance comps *\/$/;"	v	file:
+nFloorVarMix	HERest.c	/^static int nFloorVarMix = 0;  \/* # of mix comps with floored vars *\/$/;"	v	file:
+nFloorVarMix	HMMIRest.c	/^static int nFloorVarMix = 0;  \/* # of mix comps with floored vars *\/$/;"	v	file:
+nFloorWeight	HMMIRest.c	/^static int nFloorWeight = 0;  \/* # of floored weights. *\/$/;"	v	file:
+nInc	HSmooth.c	/^   long nInc;        \/* num times this acc incremented *\/$/;"	m	struct:_ChWtAcc	file:
+nInputs	HDMan.c	/^static int nInputs = 0;              \/* number of input dictionaries *\/$/;"	v	file:
+nItems	HList.c	/^static int nItems  = 10;         \/* num items per line *\/$/;"	v	file:
+nJoins	HHEd.c	/^static int nJoins;                     \/* current num mixs in joinSet *\/$/;"	v	file:
+nLabs	HResults.c	/^static int nLabs;$/;"	v	file:
+nLogHmms	HSmooth.c	/^static int nLogHmms;       \/* number of logical HMM's *\/$/;"	v	file:
+nMix	HMMIRest.c	/^static int nMix = 0;  \/*  total # of gaussians. *\/$/;"	v	file:
+nNewPhones	HDMan.c	/^static int nNewPhones = 0;               \/* num new phones encountered *\/$/;"	v	file:
+nNumLats	HMMIRest.c	/^int nNumLats = 0;$/;"	v
+nParm	HBuild.c	/^static int nParm = 0;            \/* total num params *\/$/;"	v	file:
+nParm	HCompV.c	/^static int nParm = 0;               \/* total num params *\/$/;"	v	file:
+nParm	HCopy.c	/^static int nParm = 0;            \/* total num params *\/$/;"	v	file:
+nParm	HDMan.c	/^static int nParm = 0;               \/* total num params *\/$/;"	v	file:
+nParm	HERest.c	/^static int nParm = 0;               \/* total num params *\/$/;"	v	file:
+nParm	HHEd.c	/^static int nParm = 0;            \/* total num params *\/$/;"	v	file:
+nParm	HInit.c	/^static int nParm = 0;               \/* total num params *\/$/;"	v	file:
+nParm	HLEd.c	/^static int nParm = 0;               \/* total num params *\/$/;"	v	file:
+nParm	HLRescore.c	/^static int nParm = 0;            \/* total num params *\/$/;"	v	file:
+nParm	HLStats.c	/^static int nParm = 0;               \/* total num params *\/$/;"	v	file:
+nParm	HList.c	/^static int nParm = 0;            \/* total num params *\/$/;"	v	file:
+nParm	HMMIRest.c	/^static int nParm = 0;                \/* total num params *\/$/;"	v	file:
+nParm	HParse.c	/^static int nParm = 0;            \/* total num params *\/$/;"	v	file:
+nParm	HQuant.c	/^static int nParm = 0;               \/* total num params *\/$/;"	v	file:
+nParm	HRest.c	/^static int nParm = 0;               \/* total num params *\/$/;"	v	file:
+nParm	HResults.c	/^static int nParm = 0;               \/* total num params *\/$/;"	v	file:
+nParm	HSGen.c	/^static int nParm = 0;            \/* total num params *\/$/;"	v	file:
+nParm	HSLab.c	/^static int nParm = 0;                \/* total num params *\/$/;"	v	file:
+nParm	HSmooth.c	/^static int nParm = 0;        \/* total num params *\/$/;"	v	file:
+nParm	HVite.c	/^static int nParm = 0;            \/* total num params *\/$/;"	v	file:
+nPhone	HDMan.c	/^   short nPhone;$/;"	m	struct:__anon7	file:
+nPhones	HSmooth.c	/^static int nPhones;          \/* number of monophones *\/$/;"	v	file:
+nPhyHmms	HSmooth.c	/^static int nPhyHmms;       \/* number of physical HMM's *\/$/;"	v	file:
+nPron	HDMan.c	/^   short nPron;$/;"	m	struct:__anon8	file:
+nRef	HResults.c	/^static int nRef,nTest;$/;"	v	file:
+nSamples	HList.c	/^   long nSamples;$/;"	m	struct:__anon16	file:
+nSamples	HSLab.c	/^static long nSamples;        \/* number of samples *\/$/;"	v	file:
+nSeg	HRest.c	/^static int nSeg;           \/* num training segments *\/$/;"	v	file:
+nSnt	HMMIRest.c	/^static int nSnt      = 0;        \/* num sentences from current speaker *\/$/;"	v	file:
+nStates	HInit.c	/^static int nStates;              \/* number of states in hmm *\/$/;"	v	file:
+nStates	HRest.c	/^static int nStates;        \/* numStates of hmm *\/$/;"	v	file:
+nStreams	HInit.c	/^static int nStreams;             \/* number of streams in hmm *\/$/;"	v	file:
+nStreams	HRest.c	/^static int nStreams;       \/* numStreams of hmm *\/$/;"	v	file:
+nStreams	HSmooth.c	/^static int nStreams;             \/* number of data streams *\/$/;"	v	file:
+nTest	HResults.c	/^static int nRef,nTest;$/;"	v	file:
+nTokUsed	HRest.c	/^static int nTokUsed;       \/* actual number of tokens used *\/$/;"	v	file:
+nToks	HVite.c	/^static int nToks = 0;             \/* Number of tokens for N best *\/$/;"	v	file:
+nTrans	HVite.c	/^static int nTrans = 1;            \/* Number of transcriptions for N best *\/$/;"	v	file:
+nType	HParse.c	/^   NodeType nType;   \/* the type of this node *\/$/;"	m	struct:_NodeInfo	file:
+nUse	HParse.c	/^   int nUse;         \/* num sharing this LinkSet *\/$/;"	m	struct:__anon17	file:
+nVB	HLEd.c	/^static int nVB = 0;                 \/* number of non-interword boundaries *\/$/;"	v	file:
+nVar	HMMIRest.c	/^static long int nVar = 0;     \/* # total of vars *\/$/;"	v	file:
+nWB	HLEd.c	/^static int nWB = 0;                 \/* number of interword boundaries *\/$/;"	v	file:
+nWeight	HMMIRest.c	/^static int nWeight = 0;  \/*  total # of weights. *\/$/;"	v	file:
+nWords	HDMan.c	/^static int nWords = 0;               \/* number of words in word list *\/$/;"	v	file:
+nae	HLStats.c	/^static int nae=0;                \/* Number of accumulators created *\/$/;"	v	file:
+name	HDMan.c	/^   char *name;                  \/* full path of dictionary file *\/$/;"	m	struct:__anon9	file:
+name	HLStats.c	/^   LabId name;                   \/* Name *\/$/;"	m	struct:cntr	file:
+name	HLStats.c	/^   LabId name;                   \/* Name *\/$/;"	m	struct:wordinfo	file:
+name	HList.c	/^   char *name;$/;"	m	struct:__anon16	file:
+name	HResults.c	/^   char *name;$/;"	m	struct:_Spkr	file:
+names	HResults.c	/^static LabId *names;$/;"	v	file:
+nconv	HHEd.c	/^static int nconv;$/;"	v	file:
+netHeap	HVite.c	/^static MemHeap netHeap;$/;"	v	file:
+netName	HParse.c	/^   LabId netName;    \/* variable name (LHS of rule) *\/$/;"	m	struct:_SubNetDef	file:
+network	HParse.c	/^   HPNetwork network;  \/* sub-network (RHS of rule) *\/ $/;"	m	struct:_SubNetDef	file:
+newData	HSLab.c	/^static Boolean newData=FALSE;$/;"	v	file:
+newDir	HERest.c	/^static char * newDir = NULL;     \/* directory to store new hmm def files *\/$/;"	v	file:
+newDir	HHEd.c	/^static char * newDir = NULL;     \/* directory to store new hmm def files *\/$/;"	v	file:
+newDir	HLEd.c	/^static char * newDir    = NULL;     \/* dest label file directory *\/$/;"	v	file:
+newDir	HMMIRest.c	/^static char * newDir = NULL;     \/* directory to store new hmm def files *\/$/;"	v	file:
+newDir	HSmooth.c	/^static char * newDir = NULL;     \/* directory to store new hmm def files *\/$/;"	v	file:
+newExt	HERest.c	/^static char * newExt = NULL;     \/* extension of new reestimated hmm files *\/$/;"	v	file:
+newExt	HHEd.c	/^static char * newExt = NULL;     \/* extension of new edited hmm files *\/$/;"	v	file:
+newExt	HLEd.c	/^static char * newExt    = "lab";    \/* dest label file extension *\/$/;"	v	file:
+newExt	HMMIRest.c	/^static char * newExt = NULL;     \/* extension of new reestimated hmm files *\/$/;"	v	file:
+newExt	HSmooth.c	/^static char * newExt = NULL;     \/* extension of new reestimated hmm files *\/$/;"	v	file:
+newLabFile	HSLab.c	/^static Boolean newLabFile   = FALSE;   \/* forcing the creation of a new (empty) label file *\/$/;"	v	file:
+newLabs	HLEd.c	/^static FILE *newLabs = NULL;        \/* list of newly created labels *\/$/;"	v	file:
+newList	HDMan.c	/^static LabId newList[MAXPVOC];       \/* list of new phones encountered *\/$/;"	v	file:
+newModel	HInit.c	/^static Boolean  newModel = TRUE;    \/* enable initial uniform segmentation *\/$/;"	v	file:
+newPhones	HDMan.c	/^static FILE *newPhones = NULL;       \/* file of newly created phones *\/$/;"	v	file:
+next	HBuild.c	/^   struct _GramEntry *next;$/;"	m	struct:_GramEntry	typeref:struct:_GramEntry::_GramEntry	file:
+next	HBuild.c	/^   struct _WordFllr *next;$/;"	m	struct:_WordFllr	typeref:struct:_WordFllr::_WordFllr	file:
+next	HCopy.c	/^   TrPtr next;                  \/* pointer to next in list *\/$/;"	m	struct:_TrList	file:
+next	HDMan.c	/^   struct _ScriptItem *next;$/;"	m	struct:_ScriptItem	typeref:struct:_ScriptItem::_ScriptItem	file:
+next	HHEd.c	/^   CLink next;                  \/* next item in group *\/$/;"	m	struct:_CRec	file:
+next	HHEd.c	/^   QLink next;$/;"	m	struct:_QEnt	file:
+next	HHEd.c	/^   struct _CoList *next;     \/* next component in the linked list *\/$/;"	m	struct:_CoList	typeref:struct:_CoList::_CoList	file:
+next	HHEd.c	/^   struct _IPat *next;$/;"	m	struct:_IPat	typeref:struct:_IPat::_IPat	file:
+next	HHEd.c	/^   struct _Node *next;          \/* doubly linked chain of *\/$/;"	m	struct:_Node	typeref:struct:_Node::_Node	file:
+next	HHEd.c	/^   struct _Tree *next;          \/* next tree in list *\/$/;"	m	struct:_Tree	typeref:struct:_Tree::_Tree	file:
+next	HLEd.c	/^   struct _Context *next;$/;"	m	struct:_Context	typeref:struct:_Context::_Context	file:
+next	HLEd.c	/^   struct _FindAcc *next;$/;"	m	struct:_FindAcc	typeref:struct:_FindAcc::_FindAcc	file:
+next	HLEd.c	/^   struct _ScriptItem *next;$/;"	m	struct:_ScriptItem	typeref:struct:_ScriptItem::_ScriptItem	file:
+next	HParse.c	/^   struct _SubNetDef *next;$/;"	m	struct:_SubNetDef	typeref:struct:_SubNetDef::_SubNetDef	file:
+next	HResults.c	/^   Equiv *next;$/;"	m	struct:_Equiv	file:
+next	HResults.c	/^   struct _Spkr *next;$/;"	m	struct:_Spkr	typeref:struct:_Spkr::_Spkr	file:
+next	HResults.c	/^   struct _SpotRec *next;$/;"	m	struct:_SpotRec	typeref:struct:_SpotRec::_SpotRec	file:
+next	HSmooth.c	/^   WALink next;      \/* chain for wt accs *\/$/;"	m	struct:_ChWtAcc	file:
+nextOutSym	HDMan.c	/^   LabId nextOutSym;            \/* next input output sym - for lookahead *\/$/;"	m	struct:__anon9	file:
+nextSpkr	HCompV.c	/^   struct SpkrAccListItem *nextSpkr;     \/* next pointer *\/$/;"	m	struct:SpkrAccListItem	typeref:struct:SpkrAccListItem::SpkrAccListItem	file:
+nextWord	HDMan.c	/^   LabId nextWord;              \/* next input word - for lookahead *\/$/;"	m	struct:__anon9	file:
+nfllrs	HBuild.c	/^   int nfllrs;$/;"	m	struct:__anon2	file:
+ngen	HSGen.c	/^static int ngen = 100;              \/* num sents to gen *\/$/;"	v	file:
+nistAlign	HResults.c	/^static Boolean nistAlign = FALSE;     \/* use NIST alignment & penalties *\/$/;"	v	file:
+nistFormat	HResults.c	/^static Boolean nistFormat = FALSE;    \/* use NIST formatting *\/$/;"	v	file:
+no	HHEd.c	/^   struct _Node *no;            \/* no subtree *\/$/;"	m	struct:_Node	typeref:struct:_Node::_Node	file:
+no	HHEd.c	/^static AccSum yes,no;           \/* global accs for yes - no branches *\/$/;"	v	file:
+noAlias	HHEd.c	/^static Boolean noAlias = FALSE;  \/* set to zap all aliases in hmmlist *\/$/;"	v	file:
+noBounds	HLEd.c	/^static Boolean noBounds = FALSE;    \/* suppress boundary times if TRUE *\/$/;"	v	file:
+nodeHeap	HParse.c	/^static MemHeap nodeHeap;$/;"	v	file:
+nodeIndex	HHEd.c	/^   short  nodeIndex;         \/* node index number *\/$/;"	m	struct:__anon12	file:
+nodeInfoHeap	HParse.c	/^static MemHeap nodeInfoHeap;$/;"	v	file:
+nodeNum	HParse.c	/^   int  nodeNum;     \/* store node numbers *\/$/;"	m	struct:_NodeInfo	file:
+nonFlooredConst	HMMIRest.c	/^static int totalConst=0,nonFlooredConst=0; \/*TODO: print.*\/$/;"	v	file:
+nonKeys	HResults.c	/^static int nonKeys=0;         \/* count of nonKeyWords encountered *\/$/;"	v	file:
+nphr	HResults.c	/^   int nsyms,nphr,phrcor;$/;"	m	struct:_Spkr	file:
+nphr	HResults.c	/^static long nphr  = 0;     \/* Total phrases *\/$/;"	v	file:
+nsyms	HResults.c	/^   int nsyms,nphr,phrcor;$/;"	m	struct:_Spkr	file:
+nsyms	HResults.c	/^static long nsyms = 0;     \/* Total symbols *\/$/;"	v	file:
+nulClass	HResults.c	/^static LabId nulClass;                \/* Id of NULCLASS phone label *\/$/;"	v	file:
+nulName	HResults.c	/^static char * nulName = "???";        \/* name of null class *\/$/;"	v	file:
+nullId	HLStats.c	/^static LabId nullId;                \/* id of !NULL label in ngram *\/$/;"	v	file:
+nullLab	HLRescore.c	/^static LabId nullLab;           \/* !NULL LabId *\/$/;"	v	file:
+nullNode	HParse.c	/^typedef enum {unknown, wdInternal, wdExternal, wdBegin, wdEnd, nullNode} NodeType;$/;"	e	enum:__anon19	file:
+nullOutput	HDMan.c	/^static Boolean nullOutput = FALSE;   \/* suppress generation of output dict *\/$/;"	v	file:
+numActive	HDMan.c	/^static int numActive;                \/* num active input dictionaries *\/$/;"	v	file:
+numComps	HList.c	/^   int numComps;$/;"	m	struct:__anon16	file:
+numCons	HDMan.c	/^   int numCons;                 \/* number of context defs *\/$/;"	m	struct:__anon9	file:
+numFllrs	HBuild.c	/^   int numFllrs;$/;"	m	struct:_GramEntry	file:
+numLatDir	HMMIRest.c	/^static char *numLatDir [MAXLATS];  \/*Numerator-alignment lattices.*\/$/;"	v	file:
+numLatSubDirPat	HMMIRest.c	/^static char numLatSubDirPat[MAXSTRLEN] = "\\0";  \/* path mask of numerator lattices *\/$/;"	v	file:
+numLinkSets	HParse.c	/^static long numLinkSets = 0;     \/* usage counters *\/$/;"	v	file:
+numLinks	HParse.c	/^   short numLinks;   \/* number of links in set *\/$/;"	m	struct:__anon17	file:
+numLinks	HParse.c	/^static long numLinks = 0;$/;"	v	file:
+numMissing	HDMan.c	/^static int numMissing = 0;           \/* num words not found *\/$/;"	v	file:
+numNodes	HParse.c	/^static long numNodes = 0;$/;"	v	file:
+numOut	HDMan.c	/^static int numOut = 0;               \/* num words processed *\/$/;"	v	file:
+numS	HList.c	/^static int numS = 1;             \/* number of streams *\/$/;"	v	file:
+numSet	HSLab.c	/^static int numSet;              \/* number of alternative transcriptions *\/$/;"	v	file:
+numSpkrs	HResults.c	/^static int  numSpkrs  = 0;$/;"	v	file:
+numTreeClust	HHEd.c	/^static int numTreeClust;        \/* number of clusters in tree *\/$/;"	v	file:
+numWdBegin	HParse.c	/^static int numWdBegin=0;              \/* number of WORD_BEGIN nodes *\/$/;"	v	file:
+numWdEnd	HParse.c	/^static int numWdEnd=0;                \/* number of WORD_END nodes *\/$/;"	v	file:
+nwords	HBuild.c	/^   int nwords;$/;"	m	struct:__anon2	file:
+oStack	HCopy.c	/^static MemHeap oStack;          \/* output stack *\/$/;"	v	file:
+obs	HCompV.c	/^static Observation obs;             \/* storage for observations  *\/$/;"	v	file:
+obs	HQuant.c	/^static Observation obs;             \/* storage for observations  *\/$/;"	v	file:
+obs	HVite.c	/^static Observation obs;           \/* current observation *\/$/;"	v	file:
+obsFmt	HList.c	/^static Boolean obsFmt  = FALSE;  \/* print observation format *\/$/;"	v	file:
+occ	HHEd.c	/^   float  occ;$/;"	m	struct:_AccSum	file:
+occ	HHEd.c	/^   float occ;                   \/* total occupation count *\/$/;"	m	struct:_Node	file:
+occ	HSmooth.c	/^   float occ;        \/* occ for states sharing this pdf *\/$/;"	m	struct:_ChWtAcc	file:
+occStatsLoaded	HHEd.c	/^static Boolean occStatsLoaded = FALSE; \/* set when RO\/LS has loaded occ stats *\/$/;"	v	file:
+occr	HRest.c	/^static Vector occr;        \/* array[1..nStates-1] of occ count for cur time *\/$/;"	v	file:
+occs	HHEd.c	/^static float occs[2];           \/* array[Boolean]of occupation counts *\/$/;"	v	file:
+off	HCopy.c	/^static HTime off = 0.0;         \/* length of files appended so far *\/$/;"	v	file:
+oflags	HCompV.c	/^static char oflags[MAXSTRLEN] = "m";     \/* export flags for CMV *\/  $/;"	v	file:
+ofmt	HLEd.c	/^static FileFormat ofmt=UNDEFF;      \/* Label output file format *\/$/;"	v	file:
+ofmt	HLRescore.c	/^static FileFormat ofmt=UNDEFF;  \/* Label output file format *\/$/;"	v	file:
+ofmt	HSLab.c	/^static FileFormat ofmt=UNDEFF;      \/* Label output file format *\/$/;"	v	file:
+ofmt	HVite.c	/^static FileFormat ofmt=UNDEFF;    \/* Label output file format *\/$/;"	v	file:
+oldincludedir	Makefile	/^oldincludedir = \/usr\/include$/;"	m
+oldmap	HLEd.c	/^static char oldmap[] = " RCFMDXZBEISWVLGTY ";$/;"	v	file:
+op	HDMan.c	/^   EdOp op;$/;"	m	struct:__anon6	file:
+op	HLEd.c	/^   EdOp op;$/;"	m	struct:__anon15	file:
+op	HSLab.c	/^   OpType op;           \/* the operation carried out *\/$/;"	m	struct:__anon25	file:
+ospfn	HSLab.c	/^static char *ospfn = "noname.wav";         \/* the speech file name on the command line *\/$/;"	v	file:
+outDir	HCompV.c	/^static char *outDir=NULL;           \/* HMM output directory *\/$/;"	v	file:
+outDir	HInit.c	/^static char *outDir=NULL;           \/* HMM output directory *\/$/;"	v	file:
+outDir	HRest.c	/^static char * outDir = NULL;     \/* output macro file directory, if any *\/$/;"	v	file:
+outLabDir	HCopy.c	/^static char *outLabDir = NULL;  \/* output label dir *\/$/;"	v	file:
+outPStats	HResults.c	/^static Boolean outPStats  = FALSE;    \/* enable phoneme statistics *\/$/;"	v	file:
+outTrans	HResults.c	/^static Boolean outTrans   = FALSE;    \/* enable transcription output *\/$/;"	v	file:
+outbuf	HDMan.c	/^static DBuffer outbuf;               \/* the output buffer with its global script *\/$/;"	v	file:
+outfile	HDMan.c	/^static FILE *outfile = NULL;         \/* The output file *\/$/;"	v	file:
+outfn	HCompV.c	/^static char *outfn=NULL;            \/* output HMM file name (name only) *\/$/;"	v	file:
+outfn	HInit.c	/^static char *outfn=NULL;            \/* output HMM file name (name only) *\/$/;"	v	file:
+outfn	HRest.c	/^static char *outfn=NULL;         \/* output definition file name *\/$/;"	v	file:
+outlierThresh	HHEd.c	/^static float outlierThresh = -1.0;     \/* outlier threshold set by RO cmd *\/$/;"	v	file:
+outprob	HRest.c	/^static Matrix outprob;     \/* array[2..nStates-1][1..maxT] of output prob *\/$/;"	v	file:
+outsym	HDMan.c	/^   LabId outsym;                \/* name of output symbol if any *\/$/;"	m	struct:__anon8	file:
+pCntr	HLStats.c	/^   Cntr *pCntr;                  \/* Physical counter *\/$/;"	m	struct:wordinfo	file:
+pCountLimit	HLStats.c	/^static int pCountLimit  = -1;       \/* max occurrences to list for pCount *\/$/;"	v	file:
+pListFN	HDMan.c	/^static char *pListFN = NULL;         \/* name of phone list file *\/$/;"	v	file:
+pSize	HLStats.c	/^static int pSize;                \/* Number of physical labels *\/$/;"	v	file:
+pTab	HLStats.c	/^static Cntr *pTab;               \/* Table of physical counts *\/$/;"	v	file:
+parMode	HERest.c	/^static int parMode   = -1;       \/* enable one of the \/\/ modes *\/$/;"	v	file:
+parMode	HMMIRest.c	/^static int parMode   = -1;       \/* enable one of the parallel modes *\/$/;"	v	file:
+parent	HHEd.c	/^   struct _Node *parent;        \/* parent of this node *\/$/;"	m	struct:_Node	typeref:struct:_Node::_Node	file:
+pat	HHEd.c	/^   char *pat;$/;"	m	struct:_IPat	file:
+patList	HHEd.c	/^   IPat *patList;               $/;"	m	struct:_QEnt	file:
+pathPattern	HCompV.c	/^static char pathPattern[MAXSTRLEN];      \/* path mask *\/$/;"	v	file:
+pattern	HLEd.c	/^   LabId *pattern;      \/* pattern to find *\/$/;"	m	struct:_FindAcc	file:
+pb	HCopy.c	/^static ParmBuf pb;              \/* main parmBuf; cat input, xform wv to this *\/$/;"	v	file:
+pbuf	HDMan.c	/^   Pronunciation pbuf;          \/* and its pronunciation - for lookahead *\/$/;"	m	struct:__anon9	file:
+pbuf	HInit.c	/^static ParmBuf pbuf;             \/* Currently input parm buffer *\/$/;"	v	file:
+pbuf	HRest.c	/^static ParmBuf pbuf;             \/* Currently input parm buffer *\/$/;"	v	file:
+period	HList.c	/^   HTime period;$/;"	m	struct:__anon16	file:
+permHeap	HLEd.c	/^static MemHeap permHeap;            \/* Permanent storage *\/$/;"	v	file:
+permHeap	HResults.c	/^MemHeap permHeap;                     \/* Stores global stats *\/$/;"	v
+phone	HDMan.c	/^   LabId phone[MAXPHONES];$/;"	m	struct:__anon7	file:
+phoneStr	HResults.c	/^static char * phoneStr  = "WORD";     \/* label for phone level stats *\/$/;"	v	file:
+phonebuf	HParse.c	/^static LabId phonebuf[MAXPHONES];   \/* space to store the current pronunciation *\/$/;"	v	file:
+phraseStr	HResults.c	/^static char * phraseStr = "SENT";     \/* label for phrase level stats *\/$/;"	v	file:
+phrcor	HResults.c	/^   int nsyms,nphr,phrcor;$/;"	m	struct:_Spkr	file:
+phrcor	HResults.c	/^static long phrcor= 0;     \/* Phrase correct *\/$/;"	v	file:
+playVol	HSLab.c	/^static short playVol = 0;    \/* the volume for playing samples *\/$/;"	v	file:
+plotBuf	HSLab.c	/^static int *plotBuf;         \/* buffer to store waveform samples to plot *\/$/;"	v	file:
+prData	HList.c	/^static Boolean prData  = TRUE;   \/* print data *\/$/;"	v	file:
+prScale	HLRescore.c	/^static double prScale = 1.0;    \/* pronunciation scale factor *\/$/;"	v	file:
+prScale	HVite.c	/^static double prScale = 1.0;      \/* pronunciation scale factor *\/$/;"	v	file:
+pred	HParse.c	/^   LinkSet *pred;    \/* predecessors to this node *\/$/;"	m	struct:_Node	file:
+prefix	Makefile	/^prefix = \/usr\/local$/;"	m
+prev	HHEd.c	/^   struct _Node *prev;          \/* leaf nodes *\/$/;"	m	struct:_Node	typeref:struct:_Node::_Node	file:
+prob	HDMan.c	/^   float prob;$/;"	m	struct:__anon7	file:
+pron	HDMan.c	/^   Pronunciation pron[MAXPRONS];$/;"	m	struct:__anon8	file:
+pronsUsed	HDMan.c	/^   int pronsUsed;               \/* num prons actually used *\/$/;"	m	struct:__anon9	file:
+pruneInArcsPerSec	HLRescore.c	/^static LogDouble pruneInArcsPerSec = 0.0;  \/* arcs per second threshold (-t) *\/$/;"	v	file:
+pruneInLat	HLRescore.c	/^static Boolean pruneInLat = FALSE;  \/* -t *\/$/;"	v	file:
+pruneInThresh	HLRescore.c	/^static LogDouble pruneInThresh = - LZERO;  \/* beam for pruning (-t) *\/$/;"	v	file:
+pruneInc	HERest.c	/^static LogDouble pruneInc = 0.0;         \/* pruning threshold increment *\/$/;"	v	file:
+pruneInit	HERest.c	/^static LogDouble pruneInit = NOPRUNE;    \/* pruning threshold initially *\/$/;"	v	file:
+pruneLim	HERest.c	/^static LogDouble pruneLim = NOPRUNE;     \/* pruning threshold limit *\/$/;"	v	file:
+pruneOutArcsPerSec	HLRescore.c	/^static LogDouble pruneOutArcsPerSec = 0.0; \/* arcs per second threshold (-u) *\/$/;"	v	file:
+pruneOutLat	HLRescore.c	/^static Boolean pruneOutLat = FALSE; \/* -u *\/$/;"	v	file:
+pruneOutThresh	HLRescore.c	/^static LogDouble pruneOutThresh = - LZERO; \/* beam for pruning (-u) *\/$/;"	v	file:
+psSum	HSGen.c	/^static double psSum;    \/* total log prob of all sentences *\/$/;"	v	file:
+psi	HVite.c	/^static PSetInfo *psi;             \/* Private data used by HRec *\/$/;"	v	file:
+ptr	HSLab.c	/^   LLink ptr;           \/* pointer to the label last modified (if any) *\/$/;"	m	struct:__anon25	file:
+qHead	HHEd.c	/^static QLink qHead = NULL;      \/* Head of question list *\/$/;"	v	file:
+qName	HHEd.c	/^   LabId qName;                 \/* an expanded list of model names *\/$/;"	m	struct:_QEnt	file:
+qTail	HHEd.c	/^static QLink qTail = NULL;      \/* Tail of question list *\/$/;"	v	file:
+quest	HHEd.c	/^   QLink quest;                 \/* question used to do split *\/$/;"	m	struct:_Node	file:
+questHeap	HHEd.c	/^static MemHeap questHeap;   \/* Heap holds all questions *\/$/;"	v	file:
+quiet	HSGen.c	/^static Boolean quiet = FALSE;       \/* suppress sentence output *\/$/;"	v	file:
+r	HParse.c	/^   LabId r;$/;"	m	struct:__anon20	file:
+rawMode	HDMan.c	/^   Boolean rawMode;             \/* Raw input mode *\/$/;"	m	struct:__anon9	file:
+rawOut	HList.c	/^static Boolean rawOut = FALSE;   \/* raw output i.e no numbering *\/$/;"	v	file:
+recfn	HResults.c	/^static char *recfn;                   \/* rec file name (test) *\/$/;"	v	file:
+recid	HResults.c	/^static char recid[5][255];            \/* upto 5 identifiers for *\/$/;"	v	file:
+recidUsed	HResults.c	/^static int recidUsed = 0;             \/* number of test identifiers set *\/$/;"	v	file:
+ref	HResults.c	/^static LabList *ref,*test;            \/* the labels being compared *\/$/;"	v	file:
+refid	HResults.c	/^static char * refid=NULL;             \/* identifiers for reference material *\/$/;"	v	file:
+regA	HSLab.c	/^   int   regA, regB;       \/* marked regions on the screen (if any) *\/$/;"	m	struct:__anon23	file:
+regB	HSLab.c	/^   int   regA, regB;       \/* marked regions on the screen (if any) *\/$/;"	m	struct:__anon23	file:
+regHeap	HVite.c	/^static MemHeap regHeap;$/;"	v	file:
+regnMarked	HSLab.c	/^static Boolean regnMarked = FALSE;     \/* region marked *\/$/;"	v	file:
+repHeap	HVite.c	/^static MemHeap repHeap;$/;"	v	file:
+replay	HList.c	/^static Boolean replay = FALSE;   \/* replay audio *\/$/;"	v	file:
+replay	HVite.c	/^static Boolean replay = FALSE;    \/* enable audio replay *\/$/;"	v	file:
+required	HDMan.c	/^static LabId required;               \/* current required word *\/$/;"	v	file:
+rff	HResults.c	/^static FileFormat rff   = UNDEFF;     \/* ff of reference transcription files *\/$/;"	v	file:
+right	HHEd.c	/^   HLink left,right;            \/* physical names of constituent biphones *\/$/;"	m	struct:__anon11	file:
+rlev	HResults.c	/^static int rlev=0;                    \/* Label level to be used as ref *\/$/;"	v	file:
+roCounter	HVite.c	/^static int roCounter = 0;         \/* Counter for audio output name *\/$/;"	v	file:
+roPrefix	HVite.c	/^static char * roPrefix=NULL;      \/* Prefix for direct audio output name *\/$/;"	v	file:
+roSuffix	HVite.c	/^static char * roSuffix=NULL;      \/* Suffix for direct audio output name *\/$/;"	v	file:
+root	HHEd.c	/^   Node *root;                  \/* root of tree *\/$/;"	m	struct:_Tree	file:
+sEnd	HSLab.c	/^static long sStart, sEnd;                  \/* the start and end sample currently visible on the screen *\/$/;"	v	file:
+sProb	HHEd.c	/^   float sProb;                 \/* likelihood of split cluster *\/$/;"	m	struct:_Node	file:
+sSet	HSmooth.c	/^static StreamElem **sSet;    \/* array[1..aSize]of stream *\/$/;"	v	file:
+sSetStack	HSmooth.c	/^static MemHeap sSetStack;$/;"	v	file:
+sStart	HSLab.c	/^static long sStart, sEnd;                  \/* the start and end sample currently visible on the screen *\/$/;"	v	file:
+sa	HCompV.c	/^   SpkrAcc *sa;                          \/* speaker accumulate *\/$/;"	m	struct:SpkrAccListItem	file:
+salist	HCompV.c	/^static SpkrAccListItem *salist = NULL;   \/* global speaker accumulate list *\/$/;"	v	file:
+sampPeriod	HList.c	/^static HTime sampPeriod;         \/* raw audio input only *\/$/;"	v	file:
+sampPeriod	HSLab.c	/^static HTime sampPeriod;     \/* the sample period *\/$/;"	v	file:
+sampSize	HList.c	/^   int sampSize;$/;"	m	struct:__anon16	file:
+samplesPt	HSLab.c	/^static float samplesPt;      \/* samples per point of the graphics screen *\/$/;"	v	file:
+saveAsVQ	HCopy.c	/^Boolean saveAsVQ = FALSE;$/;"	v
+saveAudioOut	HVite.c	/^static Boolean saveAudioOut=FALSE;\/* Save rec output from direct audio *\/$/;"	v	file:
+saveBinary	HCompV.c	/^static Boolean saveBinary = FALSE;  \/* save output in binary  *\/$/;"	v	file:
+saveBinary	HERest.c	/^static Boolean saveBinary = FALSE;  \/* save output in binary  *\/$/;"	v	file:
+saveBinary	HInit.c	/^static Boolean saveBinary = FALSE;  \/* save output in binary  *\/$/;"	v	file:
+saveBinary	HMMIRest.c	/^static Boolean saveBinary = FALSE;  \/* save output HMMs in binary  *\/$/;"	v	file:
+saveBinary	HRest.c	/^static Boolean saveBinary = FALSE;  \/* save output in binary  *\/$/;"	v	file:
+saveBinary	HSmooth.c	/^static Boolean saveBinary = FALSE;  \/* save output in binary  *\/$/;"	v	file:
+saveBinary	HVite.c	/^static Boolean saveBinary=FALSE;  \/* Save tmf in binary format *\/$/;"	v	file:
+saveHMMSet	HHEd.c	/^static Boolean saveHMMSet   = TRUE;    \/* Save the HMMSet *\/$/;"	v	file:
+saveLatBin	HParse.c	/^static Boolean saveLatBin=FALSE;      \/* save lattice in binary *\/ $/;"	v	file:
+saveLatLM	HParse.c	/^static Boolean saveLatLM=FALSE;       \/* output lattice probabilities *\/$/;"	v	file:
+sbindir	Makefile	/^sbindir = ${exec_prefix}\/sbin$/;"	m
+scIndex	HSLab.c	/^static short scIndex = 0;    \/* initial scaling index == 1.0*\/$/;"	v	file:
+scString	HSLab.c	/^static char *scString[NUM_OF_SCALES] = {"x1", "x2", "x4", "x8", "x16", "x32"};$/;"	v	file:
+scValues	HSLab.c	/^static float scValues[NUM_OF_SCALES] = {1.0, 2.0, 4.0, 8.0, 16.0, 32.0};$/;"	v	file:
+scale_btn	HSLab.c	/^static HButton *scale_btn;   \/* pointer to the amplitude scale button *\/$/;"	v	file:
+score	HResults.c	/^   float score;                 \/* score for this hit *\/$/;"	m	struct:_SpotRec	file:
+score	HResults.c	/^   int score;$/;"	m	struct:_Cell	file:
+script	HDMan.c	/^   ScriptItem *script;          \/* edit script for this input dictionary *\/$/;"	m	struct:__anon9	file:
+script	HLEd.c	/^static ScriptItem *script;          \/* linked list of edit commands *\/$/;"	v	file:
+scriptDir	HDMan.c	/^static char *scriptDir = NULL;       \/* directory to look for scripts *\/$/;"	v	file:
+se_cmp	HLStats.c	/^int se_cmp(const void *v1,const void *v2)$/;"	f
+seen	HParse.c	/^   Boolean seen;     \/* flag used when scanning network *\/$/;"	m	struct:_NodeInfo	file:
+segId	HCompV.c	/^static LabId  segId  = NULL;        \/* and its id *\/$/;"	v	file:
+segId	HInit.c	/^static LabId  segId  = NULL;        \/* and its id *\/$/;"	v	file:
+segId	HQuant.c	/^static LabId segId  = NULL;         \/* and its id *\/$/;"	v	file:
+segId	HRest.c	/^static LabId  segId  = NULL;     \/* and its index *\/$/;"	v	file:
+segLab	HCompV.c	/^static char *segLab = NULL;         \/* segment label if any *\/$/;"	v	file:
+segLab	HInit.c	/^static char * segLab = NULL;        \/* segment label if any *\/$/;"	v	file:
+segLab	HQuant.c	/^static char *segLab = NULL;         \/* segment label, if any *\/$/;"	v	file:
+segLab	HRest.c	/^static char * segLab = NULL;     \/* segment label if any *\/$/;"	v	file:
+segReject	HRest.c	/^static Boolean segReject = TRUE; \/* Enable short train segment rejection *\/$/;"	v	file:
+segStore	HInit.c	/^static SegStore segStore;        \/* Storage for data segments *\/$/;"	v	file:
+segStore	HRest.c	/^static SegStore segStore;        \/* Storage for data segments *\/$/;"	v	file:
+segmentStack	HInit.c	/^static MemHeap segmentStack;     \/* Used by segStore *\/$/;"	v	file:
+segmentStack	HRest.c	/^static MemHeap segmentStack;     \/* Used by segStore *\/$/;"	v	file:
+sentMarker	HLEd.c	/^static LabId sentMarker=NULL;       \/* sentence bndary marker set by SB cmd *\/$/;"	v	file:
+sequenceStack	HInit.c	/^static MemHeap sequenceStack;    \/* For storage of sequences *\/$/;"	v	file:
+sharedstatedir	Makefile	/^sharedstatedir = ${prefix}\/com$/;"	m
+size	HHEd.c	/^   int size;                    \/* number of non terminal nodes *\/$/;"	m	struct:_Tree	file:
+snum	HHEd.c	/^   short snum;$/;"	m	struct:_Node	file:
+sortFirst	HLEd.c	/^static Boolean sortFirst = FALSE;   \/* Sort on loading *\/$/;"	v	file:
+sortLattice	HLRescore.c	/^static Boolean sortLattice = TRUE;         \/* sort lattice nodes by time & posterior *\/$/;"	v	file:
+source	HDMan.c	/^   LabId source;                \/* name of source dict *\/$/;"	m	struct:__anon7	file:
+source	HDMan.c	/^   LabId source;                \/* name of source dict *\/$/;"	m	struct:__anon9	file:
+source	HHEd.c	/^static Source source;      \/* the current input file *\/$/;"	v	file:
+spPattern	HCompV.c	/^static char spPattern[MAXSTRLEN];        \/* speaker mask *\/$/;"	v	file:
+spcl_btn	HSLab.c	/^static HButton *spcl_btn;                 \/* pointer to special button *\/$/;"	v	file:
+spcl_str	HSLab.c	/^static char spcl_str[SLEN] = "Command";   \/* special button string *\/$/;"	v	file:
+spfn	HSLab.c	/^static char spfn[SLEN] = "noname.wav";     \/* the speech (waveform) file name *\/$/;"	v	file:
+spkrFails	HResults.c	/^static int  spkrFails = 0;     \/* num time spkr pattern fails to match *\/$/;"	v	file:
+spkrHead	HResults.c	/^static Spkr *spkrHead = NULL;$/;"	v	file:
+spkrMask	HResults.c	/^static char * spkrMask = NULL;        \/* non-null report on per spkr basis *\/$/;"	v	file:
+splitNameHeap	HParse.c	/^MemHeap  splitNameHeap;$/;"	v
+spotWidth	HResults.c	/^static int spotWidth = 66;$/;"	v	file:
+spots	HResults.c	/^static SpotRec **spots;$/;"	v	file:
+sqr	HHEd.c	/^   Vector sqr;                  \/* count statistics             *\/$/;"	m	struct:_AccSum	file:
+squareSum	HCompV.c	/^   Covariance   squareSum;          \/* acc for sum of squares *\/$/;"	m	struct:__anon3	file:
+squareSum	HCompV.c	/^   Vector squareSum;                     \/* variance structure for speaker *\/$/;"	m	struct:__anon4	file:
+src	HDMan.c	/^   Source src;                  \/* input file source *\/$/;"	m	struct:__anon9	file:
+srcFF	HCopy.c	/^FileFormat srcFF     = UNDEFF;   \/* I\/O configuration options *\/$/;"	v
+srcHdr	HList.c	/^static Boolean srcHdr  = FALSE;  \/* print source header info *\/$/;"	v	file:
+srcLabFF	HCopy.c	/^FileFormat srcLabFF  = UNDEFF;$/;"	v
+srcPK	HCopy.c	/^ParmKind srcPK       = ANON;$/;"	v
+srcSampRate	HCopy.c	/^HTime srcSampRate    = 0.0;$/;"	v
+srcdir	Makefile	/^srcdir = .$/;"	m
+st	HCopy.c	/^static HTime st=0.0;            \/* start of samples to copy *\/$/;"	v	file:
+st	HSLab.c	/^   long st, en;            \/* start and end sample of the previous zoom level *\/$/;"	m	struct:__anon23	file:
+startLMWord	HLRescore.c	/^static char *startLMWord;       \/* word at start in LM (<s>) *\/$/;"	v	file:
+startLab	HLRescore.c	/^static LabId startLab;          \/* corresponding LabId *\/$/;"	v	file:
+startWord	HLRescore.c	/^static char *startWord;         \/* word at start of Lattice (!SENT_START) *\/$/;"	v	file:
+statFN	HERest.c	/^static char * statFN;            \/* stats file, if any *\/$/;"	v	file:
+statFN	HMMIRest.c	/^static char * statFN=0;            \/* stats file, if any *\/$/;"	v	file:
+statFN	HSmooth.c	/^static char * statFN;            \/* stats file, if any *\/$/;"	v	file:
+statHeap	HLStats.c	/^static MemHeap statHeap;            \/* Permenant stats storage *\/$/;"	v	file:
+state	HHEd.c	/^   int    state;             \/* state containing this component *\/$/;"	m	struct:_CoList	file:
+state	HHEd.c	/^   int state;                   \/* state (or 0 if hmm tree) *\/$/;"	m	struct:_Tree	file:
+state	HHEd.c	/^   short state;                 \/* state of clink *\/$/;"	m	struct:_CRec	file:
+states	HVite.c	/^static Boolean states = FALSE;    \/* Keep track of state alignment *\/$/;"	v	file:
+stats	HERest.c	/^static Boolean stats = FALSE;    \/* enable statistics reports *\/$/;"	v	file:
+stats	HMMIRest.c	/^static Boolean stats = FALSE;    \/* enable statistics reports *\/$/;"	v	file:
+stats	HSGen.c	/^static Boolean stats = FALSE;       \/* enable grammar stats estimation *\/$/;"	v	file:
+stats	HSmooth.c	/^static Boolean stats = FALSE;    \/* enable statistics reports *\/$/;"	v	file:
+stdGC	HHEd.c	/^static float meanGC,stdGC;             \/* mean and stdev of GConst *\/$/;"	v	file:
+stenSet	HCopy.c	/^static Boolean stenSet=FALSE;   \/* set if either st or en set *\/$/;"	v	file:
+step	HSLab.c	/^   float step;$/;"	m	struct:__anon27	file:
+str	HCopy.c	/^   char *str;                   \/* output string *\/$/;"	m	struct:_TrList	file:
+stream	HHEd.c	/^   int    stream;            \/* stream for this component *\/$/;"	m	struct:_CoList	file:
+stripContexts	HResults.c	/^static Boolean stripContexts = FALSE; \/* strip triphone contexts *\/$/;"	v	file:
+stroutp	HRest.c	/^static Vector **stroutp;   \/* array[1..maxT][2..nStates-1][1..nStreams] ...*\/$/;"	v	file:
+sub	HResults.c	/^   int ins,del,sub,hit;$/;"	m	struct:_Cell	file:
+sub	HResults.c	/^   int ins,del,sub,hit;$/;"	m	struct:_Spkr	file:
+sub	HResults.c	/^static long sub   = 0;     \/* Total substitutions *\/$/;"	v	file:
+subNetHeap	HParse.c	/^static MemHeap subNetHeap;$/;"	v	file:
+subNetId	HParse.c	/^static LabId  subNetId;$/;"	v	file:
+subNetStoreHeap	HParse.c	/^MemHeap  subNetStoreHeap;$/;"	v
+subPen	HResults.c	/^static const int subPen = 10;     \/* error penalties *\/$/;"	v	file:
+subPenNIST	HResults.c	/^static const int subPenNIST = 4;  \/* NIST error penalties *\/$/;"	v	file:
+succ	HParse.c	/^   LinkSet *succ;    \/* successors to this node *\/$/;"	m	struct:_Node	file:
+sum	HHEd.c	/^   Vector sum;                  \/* the sum, sqr and occupation  *\/$/;"	m	struct:_AccSum	file:
+sumDur	HLStats.c	/^   float sumDur;                 \/* Total duration *\/$/;"	m	struct:wordinfo	file:
+swidth	HQuant.c	/^static short swidth[SMAX];          \/* stream widths *\/$/;"	v	file:
+swidth0	HCopy.c	/^int swidth0 = 1;$/;"	v
+symbol	HParse.c	/^static enum _Symbol symbol;         \/* Current symbol *\/$/;"	v	typeref:enum:_Symbol	file:
+sysconfdir	Makefile	/^sysconfdir = ${prefix}\/etc$/;"	m
+tMPruneThresh	HRest.c	/^static float tMPruneThresh = 10.0;    \/* tied mix prune threshold *\/$/;"	v	file:
+tProb	HHEd.c	/^   float tProb;                 \/* likelihood of total cluster *\/$/;"	m	struct:_Node	file:
+tStack	HCopy.c	/^static MemHeap tStack;          \/* trace list  stack *\/$/;"	v	file:
+tType	HQuant.c	/^static TreeType tType = linTree;    \/* codebook structure *\/$/;"	v	file:
+tagSources	HDMan.c	/^static Boolean tagSources = FALSE;   \/* tag output words with name of source dict *\/$/;"	v	file:
+tempHeap	HLEd.c	/^static MemHeap tempHeap;            \/* Storage for current file *\/$/;"	v	file:
+tempHeap	HResults.c	/^MemHeap tempHeap;                     \/* Stores data valid only for file *\/$/;"	v
+test	HResults.c	/^static LabList *ref,*test;            \/* the labels being compared *\/$/;"	v	file:
+tff	HResults.c	/^static FileFormat tff   = UNDEFF;     \/* ff of test transcription files *\/$/;"	v	file:
+tgtFF	HCopy.c	/^FileFormat tgtFF     = UNDEFF;$/;"	v
+tgtHdr	HList.c	/^static Boolean tgtHdr  = FALSE;  \/* print target header info *\/$/;"	v	file:
+tgtLabFF	HCopy.c	/^FileFormat tgtLabFF  = UNDEFF;$/;"	v
+tgtPK	HCopy.c	/^ParmKind tgtPK       = ANON;$/;"	v
+tgtSampRate	HCopy.c	/^HTime tgtSampRate    = 0.0;$/;"	v
+thisCommand	HHEd.c	/^static int thisCommand;                \/* index of current command *\/$/;"	v	file:
+thisP	HInit.c	/^static Vector   thisP,lastP;     \/* Columns of log probabilities *\/$/;"	v	file:
+thisWpos	HSLab.c	/^static int thisWpos, lastWpos;      \/* the positions of the waveform pointer *\/$/;"	v	file:
+tiedMixName	HHEd.c	/^static char tiedMixName[MAXSTRLEN] = "TM"; \/* Tied mixture base name *\/$/;"	v	file:
+tlev	HResults.c	/^static int tlev=0;                    \/* Label level to be scored *\/$/;"	v	file:
+tmBeam	HVite.c	/^static LogFloat tmBeam = 10.0;    \/* tied mix prune threshold *\/$/;"	v	file:
+tmpCHeap	HSLab.c	/^static MemHeap tmpCHeap;     \/* storage allocated once *\/$/;"	v	file:
+tmpHeap	HHEd.c	/^static MemHeap tmpHeap;     \/* Temporary (duration of command or less) heap *\/$/;"	v	file:
+tmpHeap	HLStats.c	/^static MemHeap tmpHeap;             \/* Temporary storage *\/$/;"	v	file:
+tmpStack	HSLab.c	/^static MemHeap tmpStack;     \/* temporary storage with reset *\/$/;"	v	file:
+top	HLEd.c	/^static int top=1;    \/* virtual top level of current label list *\/$/;"	v	file:
+top_srcdir	Makefile	/^top_srcdir = ..$/;"	m
+totalConst	HMMIRest.c	/^static int totalConst=0,nonFlooredConst=0; \/*TODO: print.*\/$/;"	v	file:
+totalCount	HCompV.c	/^static long totalCount=0;           \/* total number of vector samples*\/$/;"	v	file:
+totalDur	HResults.c	/^static HTime totalDur = 0.0;          \/* total duration of test input *\/$/;"	v	file:
+totalPr	HERest.c	/^static LogDouble totalPr=0;   \/* total log prob upto current utterance *\/$/;"	v	file:
+totalPr	HSmooth.c	/^static LogDouble totalPr;    \/* total log prob of all training utterances *\/$/;"	v	file:
+totalPr1	HMMIRest.c	/^static LogDouble totalPr1=0,totalPr2=0,totalPr3=0;              \/* total log prob upto current utterance, totalPr3 for MMI den in MPE with MMI Prior*\/$/;"	v	file:
+totalPr2	HMMIRest.c	/^static LogDouble totalPr1=0,totalPr2=0,totalPr3=0;              \/* total log prob upto current utterance, totalPr3 for MMI den in MPE with MMI Prior*\/$/;"	v	file:
+totalPr3	HMMIRest.c	/^static LogDouble totalPr1=0,totalPr2=0,totalPr3=0;              \/* total log prob upto current utterance, totalPr3 for MMI den in MPE with MMI Prior*\/$/;"	v	file:
+totalProns	HDMan.c	/^   int totalProns;              \/* total prons in this source *\/$/;"	m	struct:__anon9	file:
+totalT	HERest.c	/^static int totalT=0;       \/* total number of frames in training data *\/$/;"	v	file:
+totalT	HMMIRest.c	/^static int totalT=0;                             \/* total number of frames in training data *\/$/;"	v	file:
+totalT	HSmooth.c	/^static int totalT=0;         \/* total number of frames in training data *\/$/;"	v	file:
+totalWords	HDMan.c	/^   int totalWords;              \/* total words in this source *\/$/;"	m	struct:__anon9	file:
+tr	HCopy.c	/^static Transcription *tr;       \/* current transcription *\/$/;"	v	file:
+trList	HCopy.c	/^static TrL trList;              \/* 1st element in trace linked list *\/$/;"	v	file:
+trStr	HCopy.c	/^static TrPtr trStr = &trList;   \/* ptr to it *\/$/;"	v	file:
+trace	HBuild.c	/^static int trace     = 0;           \/* Trace flags *\/$/;"	v	file:
+trace	HCompV.c	/^static int  trace    = 0;           \/* trace level *\/$/;"	v	file:
+trace	HCopy.c	/^static int  trace  = 0;         \/* Trace level *\/$/;"	v	file:
+trace	HDMan.c	/^static int  trace    = 0;           \/* trace level *\/$/;"	v	file:
+trace	HERest.c	/^static int trace     = 0;        \/* Trace level *\/$/;"	v	file:
+trace	HHEd.c	/^static int  trace    = 0;        \/* current trace level *\/$/;"	v	file:
+trace	HInit.c	/^static int trace = 0;               \/* Trace level *\/$/;"	v	file:
+trace	HLEd.c	/^static int  trace    = 0;           \/* trace level *\/$/;"	v	file:
+trace	HLRescore.c	/^static int trace = 0;$/;"	v	file:
+trace	HLStats.c	/^static int trace = 0;               \/* trace level *\/$/;"	v	file:
+trace	HList.c	/^static int trace = 0;$/;"	v	file:
+trace	HMMIRest.c	/^static long int trace     = 1;        \/* Trace level *\/$/;"	v	file:
+trace	HParse.c	/^static int trace     = 0;         \/* Trace flags *\/$/;"	v	file:
+trace	HQuant.c	/^static int trace = 0;               \/* trace level *\/$/;"	v	file:
+trace	HRest.c	/^static int  trace    = 0;        \/* Trace level *\/$/;"	v	file:
+trace	HResults.c	/^static int trace = 0;               \/* trace level *\/$/;"	v	file:
+trace	HSGen.c	/^static int trace = 0;$/;"	v	file:
+trace	HSLab.c	/^static int trace = 0;                \/* trace level *\/$/;"	v	file:
+trace	HSmooth.c	/^static int trace     = 0;        \/* Trace level *\/$/;"	v	file:
+trace	HVite.c	/^static int trace = 0;$/;"	v	file:
+traceBack	HInit.c	/^static short   **traceBack;      \/* array[1..segLen][2..numStates-1] *\/$/;"	v	file:
+traceBackStack	HInit.c	/^static MemHeap traceBackStack;   \/* For storage of traceBack info *\/$/;"	v	file:
+traceWidth	HCopy.c	/^static int traceWidth = 70;     \/* print this many chars before wrapping ln *\/$/;"	v	file:
+trans	HCopy.c	/^static Transcription *trans=NULL;\/* main labels; cat all input to this *\/$/;"	v	file:
+trans	HSLab.c	/^static Transcription *trans;    \/* the transcriptions *\/$/;"	v	file:
+transHeap	HLRescore.c	/^static MemHeap transHeap;$/;"	v	file:
+transStack	HInit.c	/^static MemHeap transStack;       \/* For storage of transcription *\/$/;"	v	file:
+transStack	HMMIRest.c	/^static MemHeap transStack;         \/* Transcriptions... comment in original HERest says transformations, but it's wrong.*\/$/;"	v	file:
+transStack	HRest.c	/^static MemHeap transStack;       \/* For storage of transcription *\/$/;"	v	file:
+treeList	HHEd.c	/^static Tree *treeList = NULL;   \/* list of trees *\/$/;"	v	file:
+treeMerge	HHEd.c	/^static Boolean treeMerge = TRUE; \/* After tree spltting merge leaves *\/$/;"	v	file:
+treeName	HHEd.c	/^static char treeName[256] = "";$/;"	v	file:
+triSize	HHEd.c	/^static int triSize;        \/* num items in triTab *\/$/;"	v	file:
+triStrip	HLEd.c	/^static Boolean triStrip = FALSE;    \/* ignore triphone contexts in matching *\/$/;"	v	file:
+triTab	HHEd.c	/^static TriRec *triTab;     \/* array[0..triSize-1] of TriRec; *\/$/;"	v	file:
+twoDataFiles	HERest.c	/^static Boolean twoDataFiles = FALSE; \/* Enables creation of ot2 for FB$/;"	v	file:
+twoDataFiles	HMMIRest.c	/^static Boolean twoDataFiles = FALSE; \/* For training using two data files, probably never needed & code not tested. *\/$/;"	v	file:
+uFlags	HERest.c	/^static UPDSet uFlags = (UPDSet) (UPMEANS|UPVARS|UPTRANS|UPMIXES); \/* update flags *\/$/;"	v	file:
+uFlags	HInit.c	/^static UPDSet uFlags = (UPDSet) (UPMEANS|UPVARS|UPMIXES|UPTRANS); \/* update flags *\/$/;"	v	file:
+uFlags	HMMIRest.c	/^static UPDSet uFlags = UPMEANS|UPVARS|UPTRANS|UPMIXES;   \/* update flags *\/$/;"	v	file:
+uFlags	HRest.c	/^static UPDSet uFlags = (UPDSet) (UPMEANS|UPVARS|UPTRANS|UPMIXES);     \/* update flags *\/$/;"	v	file:
+uFlags	HSmooth.c	/^static UPDSet uFlags = (UPDSet) (UPMEANS|UPVARS|UPTRANS|UPMIXES);   \/* update flags *\/$/;"	v	file:
+uFlagsAccs	HMMIRest.c	/^static UPDSet uFlagsAccs = UPMEANS|UPVARS|UPTRANS|UPMIXES;   \/* used in storing accs. *\/$/;"	v	file:
+uFlagsMLE	HMMIRest.c	/^static UPDSet uFlagsMLE = 0; \/*which we only update with MLE, ignoring the MMI parameters.*\/$/;"	v	file:
+undo	HSLab.c	/^static UndoRecord undo;                \/* the undo record variable *\/$/;"	v	file:
+undoEmpty	HSLab.c	/^static Boolean undoEmpty;              \/* shows the status of the record *\/$/;"	v	file:
+uniFloor	HLStats.c	/^static float uniFloor   = 1.0;      \/* min count for unigram probs *\/$/;"	v	file:
+unknown	HBuild.c	/^typedef enum {unknown, wordLoop, boBiGram, matBiGram, multiLat, wordPair} BuildType;$/;"	e	enum:__anon1	file:
+unknown	HParse.c	/^typedef enum {unknown, wdInternal, wdExternal, wdBegin, wdEnd, nullNode} NodeType;$/;"	e	enum:__anon19	file:
+unknownId	HBuild.c	/^static LabId unknownId;             \/* id of unknown label in ngram *\/$/;"	v	file:
+up_hmmMMF	HERest.c	/^static char up_hmmMMF[MAXFNAMELEN];  \/* alignment hmm list *\/$/;"	v	file:
+update	HVite.c	/^static int update = 0;            \/* Perfom MLLR & update every n utts *\/$/;"	v	file:
+updateMode	HERest.c	/^static int updateMode = UPMODE_UPDATE; \/* dump summed accs, update models or do both? *\/$/;"	v	file:
+updateMode	HMMIRest.c	/^static int updateMode = UPMODE_UPDATE; \/* dump summed accs, update models or do both? *\/$/;"	v	file:
+useLLF	HMMIRest.c	/^static Boolean useLLF = FALSE;          \/* use directory based LLF files instead of individual lattices *\/$/;"	v	file:
+useLeafStats	HHEd.c	/^static Boolean useLeafStats = TRUE; \/* Use leaf stats to init macros *\/$/;"	v	file:
+useMLF	HCopy.c	/^static Boolean useMLF=FALSE;    \/* set if we are saving to an mlf *\/$/;"	v	file:
+useModelName	HHEd.c	/^static Boolean useModelName = TRUE;    \/* Use base-phone name as tree name *\/$/;"	v	file:
+user	HParse.c	/^   Ptr  user;       \/* for attaching user defined data *\/$/;"	m	struct:_Node	file:
+user	HParse.c	/^   Ptr  user;       \/* for attaching user defined data *\/$/;"	m	struct:__anon17	file:
+utt	HVite.c	/^static UttInfo *utt;              \/* utterance info for state\/frame align *\/$/;"	v	file:
+uttStack	HERest.c	/^static MemHeap uttStack;$/;"	v	file:
+v1Compat	HParse.c	/^static Boolean v1Compat=FALSE;        \/* compatability mode? *\/$/;"	v	file:
+vDefunct	HRest.c	/^static float vDefunct=0.0;       \/* variance below which mixture defunct *\/$/;"	v	file:
+vFloor	HERest.c	/^static Vector vFloor[SMAX]; \/* variance floor - default is all zero *\/$/;"	v	file:
+vFloor	HInit.c	/^static Vector vFloor[SMAX];         \/* variance floor - default is all zero *\/$/;"	v	file:
+vFloor	HMMIRest.c	/^static Vector vFloor[SMAX];          \/* variance floor - default is all zero *\/$/;"	v	file:
+vFloor	HRest.c	/^static Vector vFloor[SMAX];      \/* variance floor - default is all zero *\/$/;"	v	file:
+vFloor	HSmooth.c	/^static Vector vFloor[SMAX];  \/* variance floor - default is all zero *\/$/;"	v	file:
+vFloorScale	HCompV.c	/^static float vFloorScale = 0.0;     \/* if >0.0 then vFloor scaling *\/$/;"	v	file:
+vSize	HCompV.c	/^static int vSize = 0;                    \/* target observation vector size *\/$/;"	v	file:
+vSize	HMMIRest.c	/^static int vSize;                \/* input vector size *\/$/;"	v	file:
+vSize	HSmooth.c	/^static int vSize;                \/* input vector size *\/$/;"	v	file:
+varFloorPercent	HERest.c	/^static float varFloorPercent = 0;$/;"	v	file:
+varFloorPercent	HMMIRest.c	/^static float varFloorPercent = 0;$/;"	v	file:
+varSmooth	HMMIRest.c	/^static float varSmooth = 0;$/;"	v	file:
+vbnd	HLEd.c	/^static LabId vbnd[MAXIV];           \/* non-interwd bndaries set via NB cmd *\/$/;"	v	file:
+voc	HSGen.c	/^static Vocab   voc;     \/* associated vocab *\/$/;"	v	file:
+vocab	HLEd.c	/^static Vocab vocab;                 \/* And the associated vocab *\/$/;"	v	file:
+vocab	HLRescore.c	/^static Vocab vocab;		\/* wordlist or dictionary *\/$/;"	v	file:
+vocab	HMMIRest.c	/^Vocab vocab;$/;"	v
+vocab	HVite.c	/^static Vocab vocab;               \/* the dictionary *\/$/;"	v	file:
+volStr	HSLab.c	/^static char volStr[10];      \/* the string displayed in the volume button *\/$/;"	v	file:
+vol_btn	HSLab.c	/^static HButton *vol_btn;     \/* pointer to the volume button *\/$/;"	v	file:
+vqfn	HQuant.c	/^static char *vqfn = NULL;           \/* filename for output VQ table *\/$/;"	v	file:
+vri	HVite.c	/^static VRecInfo *vri;             \/* Visible HRec Info *\/$/;"	v	file:
+w	HSLab.c	/^   int x, y, w, h, bw;    \/* x-pos, y-pos, width, height, fg and bg colours *\/$/;"	m	struct:__anon26	file:
+wList	HDMan.c	/^static LabId *wList = NULL;          \/* filter word list *\/$/;"	v	file:
+wListFN	HDMan.c	/^static char *wListFN = NULL;         \/* name of word list file *\/$/;"	v	file:
+wSpot	HResults.c	/^static Boolean wSpot      = FALSE;    \/* true if word spotting *\/$/;"	v	file:
+wavStack	HSLab.c	/^static MemHeap wavStack;     \/* storage for waveforms *\/$/;"	v	file:
+wave	HSLab.c	/^static Wave wave;            \/* the input waveform *\/$/;"	v	file:
+wavePtrOn	HSLab.c	/^static Boolean wavePtrOn = FALSE;   \/* keeps track of the state of the waveform pointer *\/$/;"	v	file:
+waveWin	HSLab.c	/^static RectWin waveWin;      \/* the waveform window *\/$/;"	v	file:
+wbar	HSmooth.c	/^static Vector *wbar;         \/* array[0..nBlk]of weight vector *\/$/;"	v	file:
+wbnd	HLEd.c	/^static LabId wbnd[MAXIW];           \/* interword bndaries set via WB cmd *\/$/;"	v	file:
+wbuf	HDMan.c	/^   WordBuf wbuf;                \/* current input word *\/$/;"	m	struct:__anon9	file:
+wcd	HSmooth.c	/^static Vector *wcd;          \/* array[0..nBlk]of weight vector *\/$/;"	v	file:
+wd	HBuild.c	/^   Word wd;$/;"	m	struct:_GramEntry	file:
+wd	HBuild.c	/^   Word wd;$/;"	m	struct:_WordFllr	file:
+wdBegin	HParse.c	/^typedef enum {unknown, wdInternal, wdExternal, wdBegin, wdEnd, nullNode} NodeType;$/;"	e	enum:__anon19	file:
+wdBeginId	HParse.c	/^static LabId wdBeginId;               \/* LabId of WD_BEGIN nodes  *\/$/;"	v	file:
+wdBnd	HDMan.c	/^static LabId wdBnd;                  \/* LabId of word boundary symbol  *\/   $/;"	v	file:
+wdBndSym	HDMan.c	/^static char wdBndSym[10] = "#";      \/* word boundary symbol *\/$/;"	v	file:
+wdEnd	HParse.c	/^typedef enum {unknown, wdInternal, wdExternal, wdBegin, wdEnd, nullNode} NodeType;$/;"	e	enum:__anon19	file:
+wdEndId	HParse.c	/^static LabId wdEndId;                 \/* LabId of WD_END nodes  *\/$/;"	v	file:
+wdExternal	HParse.c	/^typedef enum {unknown, wdInternal, wdExternal, wdBegin, wdEnd, nullNode} NodeType;$/;"	e	enum:__anon19	file:
+wdInternal	HParse.c	/^typedef enum {unknown, wdInternal, wdExternal, wdBegin, wdEnd, nullNode} NodeType;$/;"	e	enum:__anon19	file:
+wdNet	HVite.c	/^static Lattice *wdNet;            \/* the word level recognition network *\/$/;"	v	file:
+wdNetFn	HVite.c	/^static char *wdNetFn = NULL;      \/* Word level lattice *\/$/;"	v	file:
+wd_cmp	HLStats.c	/^static int wd_cmp(const void *v1,const void *v2)$/;"	f	file:
+wfmt	HSLab.c	/^static FileFormat wfmt=UNDEFF;      \/* wave file format *\/$/;"	v	file:
+widthSet	HQuant.c	/^Boolean widthSet = FALSE;          \/* true if width of any stream is set *\/$/;"	v
+widx	HDMan.c	/^static int widx = 0;                 \/* next word to take from wordList *\/$/;"	v	file:
+wop	HDMan.c	/^   EdOp wop;                    \/* Used to apply UCWORD\/LCWORD before sorting inputs *\/$/;"	m	struct:__anon9	file:
+word	HDMan.c	/^   LabId word;                  \/* a word + its pronunciations *\/$/;"	m	struct:__anon8	file:
+word	HLStats.c	/^   unsigned short word[ASIZE];   \/* Bigram id *\/$/;"	m	struct:aentry	file:
+wordBeam	HVite.c	/^static LogDouble wordBeam = -LZERO;\/* word-end pruning threshold *\/$/;"	v	file:
+wordLoop	HBuild.c	/^typedef enum {unknown, wordLoop, boBiGram, matBiGram, multiLat, wordPair} BuildType;$/;"	e	enum:__anon1	file:
+wordNum	HBuild.c	/^   int wordNum;$/;"	m	struct:_GramEntry	file:
+wordPair	HBuild.c	/^typedef enum {unknown, wordLoop, boBiGram, matBiGram, multiLat, wordPair} BuildType;$/;"	e	enum:__anon1	file:
+wordPen	HLRescore.c	/^static LogDouble wordPen = 0.0; \/* inter word log penalty *\/$/;"	v	file:
+wordPen	HVite.c	/^static LogDouble wordPen = 0.0;   \/* inter model propagation log prob *\/$/;"	v	file:
+wordinfo	HLStats.c	/^typedef struct wordinfo{         \/* Label Occurrence Counters *\/$/;"	s	file:
+wordsUsed	HDMan.c	/^   int wordsUsed;               \/* num words actually used *\/$/;"	m	struct:__anon9	file:
+wpNet	HLRescore.c	/^static Lattice *wpNet;          \/* the word level recognition network *\/$/;"	v	file:
+wpNetFile	HLRescore.c	/^static char *wpNetFile = NULL;  \/* word pair LM network filename *\/$/;"	v	file:
+writeLat	HLRescore.c	/^static Boolean writeLat = FALSE;    \/* -w *\/$/;"	v	file:
+wsStack	HSmooth.c	/^static MemHeap wsStack;$/;"	v	file:
+wtAccStack	HSmooth.c	/^static MemHeap wtAccStack;$/;"	v	file:
+wtStore	HSmooth.c	/^static WALink ***wtStore;  \/* array [1..nPhyHmms][2..nStates-1][1..nStreams]$/;"	v	file:
+wv	HCopy.c	/^static Wave wv;                 \/* main waveform; cat all input to this *\/$/;"	v	file:
+x	HSLab.c	/^   int x, y, w, h, bw;    \/* x-pos, y-pos, width, height, fg and bg colours *\/$/;"	m	struct:__anon26	file:
+x	HSLab.c	/^   int x, y;$/;"	m	struct:__anon27	file:
+xMargin	HCopy.c	/^static HTime xMargin=0.0;       \/* margin to include around extracted labs *\/$/;"	v	file:
+xfInfo	HERest.c	/^static XFInfo xfInfo;$/;"	v	file:
+xfInfo	HMMIRest.c	/^static XFInfo xfInfo;$/;"	v	file:
+xfInfo	HVite.c	/^static XFInfo xfInfo;$/;"	v	file:
+xlist	HLEd.c	/^static Context *xlist = NULL;$/;"	v	file:
+y	HSLab.c	/^   int x, y, w, h, bw;    \/* x-pos, y-pos, width, height, fg and bg colours *\/$/;"	m	struct:__anon26	file:
+y	HSLab.c	/^   int x, y;$/;"	m	struct:__anon27	file:
+yes	HHEd.c	/^   struct _Node *yes;           \/* yes subtree *\/$/;"	m	struct:_Node	typeref:struct:_Node::_Node	file:
+yes	HHEd.c	/^static AccSum yes,no;           \/* global accs for yes - no branches *\/$/;"	v	file:
+zapUnknown	HBuild.c	/^static Boolean zapUnknown = FALSE;  \/* zap unknown symbols from bigram *\/$/;"	v	file:
+zoomLev	HSLab.c	/^static int zoomLev;                    \/* the current zoom level - ptr in the zoom record *\/$/;"	v	file:
+zoomRec	HSLab.c	/^static ZoomRecord zoomRec[MAX_ZOOM];   \/* the zoom record *\/$/;"	v	file:
+zot	HRest.c	/^static Vector zot;         \/* temp storage for zero mean obs vector *\/$/;"	v	file:
