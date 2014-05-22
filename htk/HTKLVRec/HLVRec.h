@@ -122,19 +122,23 @@ struct _AltWordendHyp {         /* stores info about N-best word(end) for lattic
 #define TOK_LMSTATE_EQ(t1,t2)   (((t1)->lmState == (t2)->lmState) &&   \
                                  ((t1)->we_tag == (t2)->we_tag))
 
-#if 0   /* not used -- #### out of date! */
-  #define TOK_LMSTATE_LE(t1,t2)   ((t1)->lmState <= (t2)->lmState)
-  #define TOK_LMSTATE_GE(t1,t2)   ((t1)->lmState >= (t2)->lmState)
-  #define TOK_LMSTATE_GT(t1,t2)   ((t1)->lmState >  (t2)->lmState)
-#endif
-
 typedef struct _TokenSet TokenSet;      /* contains n tokens with different LM states */
 
 struct _TokenSet {
    TokScore score;
    RelToken *relTok;            /*# sorted by LMState? */
-   unsigned short n;
+   unsigned short n;		/* size of tokenset (ref. HLVRec-propagate.c:75 ) */
    unsigned int id;             /*####  should be only 2byte short! */
+   
+   _TokenSet& operator = (const _TokenSet& rhs) {
+
+      this->n = rhs.n;
+      this->score = rhs.score;
+      this->id = rhs.id;
+
+      for (int i = 0; i < this->n; ++i)
+	this->relTok[i] = rhs.relTok[i];
+   }
 };
    
 struct _LexNodeInst {           /* attached to active LexNode's, contains info about tokens */
@@ -307,7 +311,7 @@ struct _DecoderInst {
    RelToken *winTok;            /* RelTok array fro MergeTokSet() */
 
    int maxNStates;              /* max number of states in a HMM in HMMSet */
-   int nLayers;                 /* nuber of node layers */
+   int nLayers;                 /* number of node layers */
    LexNodeInst **instsLayer;    /* array of pointers to the linked list of 
                                    active LexNodeInsts in each layer */
    char *utterFN;               /* name of current utterance */

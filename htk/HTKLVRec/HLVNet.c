@@ -557,6 +557,7 @@ HLink FindHMM (HMMSet *hset, LabId id)
  */
 void CreateSILnodes (MemHeap *heap, TLexNet *net)
 {
+
    int i, j;
    TLexNode *lcnZS, *lcnSA, *ln;
    LabId z, s, a, sil, sp;
@@ -676,6 +677,7 @@ void Handle1PhonePron (MemHeap *heap, TLexNet *net, Pron pron)
 */
 void CreateBYnodes (MemHeap *heap, TLexNet *net)
 {
+
    int i,p;
    HLink hmm;
    TLexNode *prevln, *ln;

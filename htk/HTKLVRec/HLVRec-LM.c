@@ -45,57 +45,36 @@ static void UpdateLMlookahead(DecoderInst *dec, LexNode *ln)
    LMTokScore lmscore;
    RelTokScore bestDelta;
 
-   assert (ln->type != LN_WORDEND);
-
    lmlaIdx = ln->lmlaIdx;
-   assert (lmlaIdx != 0);
-   assert (lmlaIdx < dec->net->laTree->nNodes + dec->net->laTree->nCompNodes);
-   
    ts = ln->inst->ts;
-   assert (ts->n > 0);
 
    bestDelta = LZERO;
 
    for (i = 0, tok = ts->relTok; i < ts->n; ++i, ++tok) {
 
-      if (!dec->fastlmla) {
+      if (!dec->fastlmla)
          lmscore = LMCacheLookaheadProb (dec, tok->lmState, lmlaIdx, FALSE);
-         /*      lmscore = LMLA_nocache (dec, tok->lmState, lmlaIdx); */
-         
-         assert (lmscore <= tok->lmscore + 0.1);   /* +0.1 because of accuracy problems (yuck!) */
-      }
       else {    /* if we ever do fastLMLA, be careful as tok->lmscore might increase! */
          lmscore = LMCacheLookaheadProb (dec, tok->lmState, lmlaIdx, 
                                          tok->delta < dec->fastlmlaBeam);
-         if (lmscore > tok->lmscore)    /* if lmla goes up, leave old estimate */
-            lmscore = tok->lmscore;
+	 lmscore = std::min(lmscore, tok->lmscore);
       }
 
       if (lmscore > LSMALL &&  tok->lmscore - lmscore > dec->maxLMLA)
          lmscore = tok->lmscore - dec->maxLMLA;
 
       tok->delta += lmscore - tok->lmscore;     /* subtract previous lookahead */
-      if (tok->delta > bestDelta)
-         bestDelta = tok->delta;
+      bestDelta = std::max(bestDelta, tok->delta);
 
       tok->lmscore = lmscore;   /* store current lookahead */
    }
 
    /* renormalise to new best score */
-   assert (bestDelta <= 0.1);   /* 0.1 for accuracy reasons */
 
    if (bestDelta > LSMALL) {
-      for (i = 0, tok = ts->relTok; i < ts->n; ++i, ++tok) {
+      for (i = 0, tok = ts->relTok; i < ts->n; ++i, ++tok)
          tok->delta -= bestDelta;
-      }
       ts->score += bestDelta;
-
-#if 0
-      /* #### new id because we renrmalised. Is this necessary? */
-      ts->id = ++dec->tokSetIdCount;
-
-      PruneTokSet (dec, ts);
-#endif
    }
    else {       /* short cut pruning for LMLA = LZERO */
       ts->n = 0;
@@ -103,9 +82,6 @@ static void UpdateLMlookahead(DecoderInst *dec, LexNode *ln)
       ts->id = 0;
    }
 }
-
-
-
 
 
 /******************* LM trans * lookahead caching */

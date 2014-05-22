@@ -91,7 +91,7 @@ GZIP_ENV = --best
 .SUFFIXES:
 
 # build rules
-all: htktools hlmtools
+all: htktools hlmtools hdecode
 $(HTKLIB)/HTKLib.a:
 	(cd $(HTKLIB) && $(MAKE) HTKLib.a) \
 	  || case "$(MFLAGS)" in *k*) fail=yes;; *) exit 1;; esac;

@@ -97,7 +97,7 @@ typedef struct _LexNet {
    LexNode *node;               /* pointer to array of LexNodes */
    int nNodes;
 
-   int nLayers;                 /* nuber of node layers */
+   int nLayers;                 /* number of node layers */
    int wordEndLayerId;          /* id of layer where token's time and score are copied to weHyp */
    int spSkipLayer;             /* id of layer where tokens get pronprob added and bypass sp */
    HLink hmmSP;                 /* pointer to "sp" hmm for spSkipLayer handling */
@@ -135,7 +135,6 @@ typedef enum _LayerId {
    LAYER_Z=0, LAYER_ZS=1, LAYER_SIL=2, LAYER_SA=3, LAYER_A=4, LAYER_AB=5,
    LAYER_BY=6, LAYER_WE=7, LAYER_YZ=8
 } LayerId;
-
 
 /*   temporary lexicon network structure used for creating the net,
      more explicit info and easier to manipulate data structures.

@@ -32,13 +32,15 @@ mandir = ${prefix}/share/man
 includedir = ${prefix}/include
 oldincludedir = /usr/include
 
-CC      = 	g++
-CFLAGS  := 	-DNO_LAT_LM -m32 -ansi -D_SVID_SOURCE -DOSS_AUDIO -D'ARCH="x86_64"' -w -I$(inc)
+CC      = 	g++ -std=c++0x
+CFLAGS  := 	-DNO_LAT_LM -m32 -D_SVID_SOURCE -DOSS_AUDIO -D'ARCH="x86_64"' -w -I$(inc)
 LDFLAGS = 	-L/usr/X11R6/lib  -lm
 INSTALL = 	/usr/bin/install -c
 HTKLIB = $(inc)/HTKLiblv.a
 HEADER = HLVLM.h  HLVModel.h  HLVNet.h  HLVRec.h config.h
 
+debug: CFLAGS+=-DDEBUG_TRACE
+debug: all
 all: HDecode HDecode.mod
 
 

@@ -1,0 +1,21 @@
+#!/bin/bash -e
+
+if [ "$1" == "" ] || [ "$2" == "" ] || [ "$3" == "" ]; then
+  echo "Usage: ./compute-wer output.mlf transcription output.wer"
+  exit -1
+fi
+
+mlf=$1
+trans=$2
+output=$3
+tmp=`mktemp`
+utils=utility/
+
+cat $mlf \
+  | $utils/result.htk2kaldi.pl \
+  | python $utils/word2char.py \
+  > $tmp
+
+cat $tmp \
+  | python $utils/compute-acc.py $trans \
+  > $output

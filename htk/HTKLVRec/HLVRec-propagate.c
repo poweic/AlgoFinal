@@ -29,10 +29,13 @@
 /*                                  propagation                */
 /* ----------------------------------------------------------- */
 
+#include <cmath>
+#include <algorithm>
+
 char *hlvrec_prop_vc_id = "$Id: HLVRec-propagate.c,v 1.1.1.1 2006/10/11 09:54:56 jal58 Exp $";
 
 
-static int winTok_cmp (const void *v1,const void *v2)
+static int winTok_cmp (const void *v1, const void *v2)
 {
    RelToken **tok1,**tok2;
 
@@ -40,15 +43,6 @@ static int winTok_cmp (const void *v1,const void *v2)
    tok2 = (RelToken **) v2;
    return ((int) ((*tok2)->delta - (*tok1)->delta));   /* reverse! i.e. largest first */
 }
-
-
-/* stats for TokenSet Id optimisation */
-static int mts_copy = 0;
-static int mts_fast = 0;
-static int mts_slow = 0;
-static int mts_newid = 0;
-static int mts_newidNTOK = 0;
-
 
 /* MergeTokSet
 
@@ -58,70 +52,38 @@ static int mts_newidNTOK = 0;
 
 */
 static void MergeTokSet (DecoderInst *dec, TokenSet *src, TokenSet *dest, 
-                         LogFloat score, Boolean prune)
-{
+                         LogFloat score, Boolean prune) {
    int i, j;
-   RelToken *srcTok, *destTok;
 
-   assert (src->n > 0);
-   assert (src->n <= dec->nTok);
-   assert (dest->n <= dec->nTok);
+   /* empty dest tokenset -> just copy src */
+   if (dest->n == 0) {   
+      *dest = *src;
+      dest->score += score;
 
-   assert (!prune || (src->score >= dec->beamLimit));
-
-   if (dest->n == 0) {   /* empty dest tokenset -> just copy src */
-      dest->n = src->n;
-      dest->score = src->score + score;
-      dest->id = src->id;
-
-      ++mts_copy;
-      for (i = 0, srcTok = src->relTok, destTok = dest->relTok; i < src->n; ++i, ++srcTok, ++destTok)
-         *destTok = *srcTok;
-      /*         dest->relTok[i] = src->relTok[i]; */
-      return;
    } else if (prune && src->score + score < dec->beamLimit) {
-      /*       printf ("MergeTokSet: pruned src TS\n"); */
-      return;
+     // Do nothing
    }
 #ifdef TSIDOPT
    else if (src->id == dest->id) {      /* TokenSet Id optimisation from [Odell:2000] */
-      TokScore srcScore;
-
-      ++mts_fast;
-      /* only compare Tokensets' best scores and pick better */
-      srcScore = src->score + score;
-      
-      if (dest->score > srcScore)
-         return;
-      else {
-         /* id, n and all RelToks are the same anyway */
-         dest->score = srcScore;
-         return;
-      }
+      /* Only compare Tokensets' best scores and pick better */
+      /* id, n and all RelToks are the same anyway */
+      dest->score = std::max(src->score + score, dest->score);
    }
 #endif
    else {    /* expensive MergeTokSet, #### move into separate function */
-#if 1
       /* exploit & retain RelTok order (sorted by lmState?) */
-      int srcTokCount, destTokCount, nWinTok;
       int nWin[2], winLoc;
-      RelToken *winTok;
       TokScore winScore;
       RelTokScore srcCorr, destCorr, deltaLimit;
 
-      ++mts_slow;
+      RelToken *winTok = dec->winTok;
+      int nWinTok = 0;
 
-      winTok = dec->winTok;
-      nWinTok = 0;
+      RelToken *srcTok = src->relTok, *destTok = dest->relTok;
 
-      srcTok = &src->relTok[0];
-      destTok = &dest->relTok[0];
-      srcTokCount = src->n;
-      destTokCount = dest->n;
+      int nSrcTok = src->n, nDestTok = dest->n;
 
-      /* #### first go at sorted Tok merge, 
-         #### very explicit, no optimisation at all, yet! */
-      
+      /* first go at sorted Tok merge, very explicit, no optimisation at all, yet! */
 
       /* find best score */
       if (src->score + score > dest->score) {
@@ -135,24 +97,13 @@ static void MergeTokSet (DecoderInst *dec, TokenSet *src, TokenSet *dest,
       }
 
       deltaLimit = dec->nTok * dec->relBeamWidth;  /* scaled relative beam, must initialize !!!*/;
-      if (prune) {
       /* set pruning deltaLimit */
-#if 0
-      deltaLimit = dec->relBeamWidth;          /* relative beam */
-#else
-      deltaLimit = dec->beamLimit - winScore;     /* main beam */
-      if (dec->relBeamWidth > deltaLimit)            
-         deltaLimit = dec->relBeamWidth;          /* relative beam */
-#endif
-#ifdef DEBUG_TRACE
-      printf("dec->beamLimit = %f, winScore = %f, dec->beamLimit - winScore = %f, dec->relBeamWidth = %f, deltaLimit = %f\n",
-             dec->beamLimit, winScore, dec->beamLimit - winScore, dec->relBeamWidth, deltaLimit);
-#endif
-      }
+      if (prune)
+	deltaLimit = std::max(dec->beamLimit - winScore, dec->relBeamWidth);
 
       /* find winning tokens */
-      nWin[0] = nWin[1] = 0;    /* location where winnning toks came from:
-                                   0 == src   1 == dest */
+      /* location where winnning toks came from: 0 == src, 1 == dest */
+      nWin[0] = nWin[1] = 0;    
       do {
          if (TOK_LMSTATE_EQ(srcTok, destTok)) {
             /* pick winner */
@@ -168,34 +119,35 @@ static void MergeTokSet (DecoderInst *dec, TokenSet *src, TokenSet *dest,
                winLoc = 1;
             }
             ++srcTok;
-            --srcTokCount;
+            --nSrcTok;
             ++destTok;
-            --destTokCount;
+            --nDestTok;
          } else if (TOK_LMSTATE_LT(srcTok, destTok)) {
             /* store srcTok */
             winTok[nWinTok] = *srcTok;
             winTok[nWinTok].delta += srcCorr + score;
             winLoc = 0;
             ++srcTok;
-            --srcTokCount;
+            --nSrcTok;
          } else {
             /* store destTok */
             winTok[nWinTok] = *destTok;
             winTok[nWinTok].delta += destCorr;
             winLoc = 1;
             ++destTok;
-            --destTokCount;
+            --nDestTok;
          }
          
          if (winTok[nWinTok].delta >= deltaLimit) {      /* keep or prune? */
             ++nWinTok;
             ++nWin[winLoc];
          }
-      } while (srcTokCount != 0 && destTokCount != 0);
 
-      /* add left overs to winTok set 
-         only at most one of the two loops will actually do something */
-      for (i = srcTokCount; i > 0; --i, ++srcTok) {
+      } while (nSrcTok != 0 && nDestTok != 0);
+
+      /* Add left overs to winTok set, only at most one of the two loops will
+       * actually do something */
+      for (i = nSrcTok; i > 0; --i, ++srcTok) {
          winTok[nWinTok] = *srcTok;
          winTok[nWinTok].delta += srcCorr + score;
          if (winTok[nWinTok].delta >= deltaLimit) {     /* keep or prune? */
@@ -203,7 +155,8 @@ static void MergeTokSet (DecoderInst *dec, TokenSet *src, TokenSet *dest,
             ++nWin[0];
          }
       }
-      for (i = destTokCount; i > 0; --i, ++destTok) {
+
+      for (i = nDestTok; i > 0; --i, ++destTok) {
          winTok[nWinTok] = *destTok;
          winTok[nWinTok].delta += destCorr;
          if (winTok[nWinTok].delta >= deltaLimit) {     /* keep or prune? */
@@ -212,59 +165,45 @@ static void MergeTokSet (DecoderInst *dec, TokenSet *src, TokenSet *dest,
          }
       }
 
-      /* prune and copy back */
-      assert (nWinTok <= src->n + dest->n);
-
       if (nWinTok <= dec->nTok) {
          /* just copy */
          for (i = 0; i < nWinTok; ++i)
             dest->relTok[i] = winTok[i];
+
          dest->n = nWinTok;
          dest->score = winScore;
 
-         /*          printf ("MTS: %d nWin  %d src  %d dest\n", nWinTok, nWin[0], nWin[1]); */
          if (nWin[0] == nWinTok)
             dest->id = src->id;          /* copy src->id */
          else if (nWin[1] == nWinTok)
             dest->id = dest->id;         /* copy dest->id */
-         else {
+         else
             dest->id = ++dec->tokSetIdCount;    /* new id */
-            ++mts_newid;
-         }
+
       } else {
          /* perform Bucket sort/Histogram pruning to reduce to dec->nTok tokens */
 #define NBINS 64
 
-         int n[NBINS], binLimit;
-         int nTok;
+	 int binLimit;
 
          LogFloat binWidth, limit;
 
          dest->id = ++dec->tokSetIdCount;    /* #### new id always necessary? */
-         ++mts_newidNTOK;
 
-         binWidth = deltaLimit*1.001 / NBINS;   /* handle delta==deltaLimit case */
+         binWidth = deltaLimit * 1.001 / NBINS;   /* handle delta == deltaLimit case */
 
-         for (i = 0; i < NBINS; ++i)
-            n[i] = 0;
+         int n[NBINS] = {0};
 
-         for (i = 0; i < nWinTok; ++i) {
-            assert (((int) (winTok[i].delta / binWidth)) >= 0);
-            assert (((int) (winTok[i].delta / binWidth)) < NBINS);
+         for (i = 0; i < nWinTok; ++i)
             ++n[(int) (winTok[i].delta / binWidth)];
-         }
          
-         nTok = 0;
+         int nTok = 0;
          i = -1;
-         while (nTok < dec->nTok) {
-            ++i;
-            nTok += n[i];
-         }
+         while (nTok < dec->nTok)
+            nTok += n[++i];
          
          if (nTok == dec->nTok) {
             binLimit = i;
-            limit = binWidth * (i+1);
-
 
             for (i = 0, j = 0; i < nWinTok; ++i) { 
                if ((int) (winTok[i].delta / binWidth) <= binLimit) {
@@ -272,7 +211,6 @@ static void MergeTokSet (DecoderInst *dec, TokenSet *src, TokenSet *dest,
                   ++j;
                }
             }
-            assert (j == dec->nTok);
          }
          else {
             int nBetter;
@@ -284,7 +222,6 @@ static void MergeTokSet (DecoderInst *dec, TokenSet *src, TokenSet *dest,
 
             /* need to relax limit so that we get an extra (dec->nTok - nTok) tokens */
             /* #### very simplistic implementation -- imporve? */
-
             
             bestDelta = limit;
             do {
@@ -294,15 +231,13 @@ static void MergeTokSet (DecoderInst *dec, TokenSet *src, TokenSet *dest,
                for (i = 0, j = 0; i < nWinTok; ++i) {
                   if (winTok[i].delta >= limit)
                      ++nBetter;
-                  else
-                     if (winTok[i].delta > bestDelta)
-                        bestDelta = winTok[i].delta;
+		  else if (winTok[i].delta > bestDelta)
+		    bestDelta = winTok[i].delta;
                }
             } while (nBetter < dec->nTok);
-            /*             printf ("nBetter %d\n", nBetter); */
 
-            if (nBetter > dec->nTok) {  /* multiple tokens with delta == limit
-                                           ==> delete some */
+	    /* multiple tokens with delta == limit ==> delete some */
+            if (nBetter > dec->nTok) {  
                for (i = 0; nBetter > dec->nTok; ++i)
                   if (winTok[i].delta == limit) {
                      winTok[i].delta = LZERO;
@@ -316,91 +251,45 @@ static void MergeTokSet (DecoderInst *dec, TokenSet *src, TokenSet *dest,
                   ++j;
                }
             }
-            assert (j == dec->nTok);
          }
 
          dest->n = dec->nTok;
          dest->score = winScore;
       }
-#endif
-      
-#ifndef NDEBUG   /* sanity check for reltoks */
-   for (i = 0; i < dest->n; ++i) {
-      assert (dest->relTok[i].delta <= 0.01);
    }
-   for (i = 0; i < dest->n; ++i)
-      if (dest->relTok[i].delta >= -0.01 && dest->relTok[i].delta <= 0.01)
-         return;
+}
 
-   abort ();
-#endif
-   }
-
-#ifndef NDEBUG   /* sanity check for reltoks */
-   for (i = 0; i < dest->n; ++i) {
-      assert (dest->relTok[i].delta <= 0.01);
-   }
-   for (i = 0; i < dest->n; ++i)
-      if (dest->relTok[i].delta >= -0.01 && dest->relTok[i].delta <= 0.01)
-         return;
-
-   abort ();
+void __collect_stats__ (DecoderInst *dec, TokenSet *instTS, int N) {
+#ifdef COLLECT_STATS
+  for (int i = 0; i < N; ++i) {
+    if (instTS[i].n > 0) {
+      ++dec->stats.nTokSet;
+      dec->stats.sumTokPerTS += instTS[i].n;
+    }
+  }
 #endif
 }
 
-
 static int PI_LR = 0;
 static int PI_GEN = 0;
-/* PropagateInternal
 
-     Internal token propagation
-*/
-static void PropagateInternal (DecoderInst *dec, LexNodeInst *inst)
-{
-   LexNode *ln;
-   HLink hmm;
-   int i, j, N;
-   SMatrix trP;
-   LogFloat outP, bestScore;
-   TokenSet *instTS, *ts;
+void OptimizedLeftToRightInternalPropagation(DecoderInst *dec, LexNodeInst *inst, TokenSet* instTS, int N, SMatrix &trP, HLink &hmm) {
 
-   ln = inst->node;
-   hmm = ln->data.hmm;
-   N = hmm->numStates;
-   trP = hmm->transP;
-   instTS = inst->ts;
-
-   assert (ln->type == LN_MODEL);               /* Model node */
-
-
-   /* LM lookahead has already been updated in PropIntoNode() !!! */
-
-   /* main beam pruning: prune tokensets before propagation
-      the beamLimit is the one found during the last frame */
-   for (i = 1, ts = &instTS[0]; i < N; ++i, ++ts)
-      if (ts->score < dec->beamLimit) {
-         ts->n = 0;
-         ts->id = 0;
-      }
-
-   /* optimised version for L-R models */
-   if (hmm->tIdx < 0) {
-      /*         PropagateInternal_LR (dec, inst);  */
-      
       PI_LR++;
-      bestScore = LZERO;
+      LogFloat bestScore = LZERO;
       
       /* loop transition for state N-1 (which has no forward trans) */
       instTS[N-2].score += trP[N-1][N-1];
 
-      for (i = N-2; i >=2; --i) {             /* for all internal states, except N-1 */
-         ts = &instTS[i-1];
+      for (int i = N-2; i >=2; --i) {             /* for all internal states, except N-1 */
+	 /* ts is an array of tokenSet ( of the type TokenSet* ) ,
+	  * starting from state 0 to stae N ( N = 5 typically ). */
+         TokenSet* ts = &instTS[i-1];
          
-         if (ts->n > 0) {   /*  && (trP[i][i+1] > LSMALL)) { */
+         if (ts->n > 0) {
             /* propagate forward from state i */
-            /* for j */
-            
-            /* only propagate to next -- no skip!!! */
+
+            /* only propagate to next -- no skip!! ( i.e. i->i+1 no i->i+2 ) */
             MergeTokSet (dec, ts, ts+1 , trP[i][i+1], (!mergeTokOnly));
             
             /* loop transition */
@@ -414,9 +303,9 @@ static void PropagateInternal (DecoderInst *dec, LexNodeInst *inst)
       }
       
       /* output probabilities */
-      for (i = 2; i < N; ++i) {             /* for all internal states */
+      for (int i = 2; i < N; ++i) {             /* for all internal states */
          if (instTS[i-1].n > 0) {
-            outP = cOutP (dec, dec->obs, hmm, i);
+            LogFloat outP = cOutP (dec, dec->obs, hmm, i);
             instTS[i-1].score += outP;         /* only change top score */
             if (instTS[i-1].score > bestScore)
                bestScore = instTS[i-1].score;
@@ -431,156 +320,112 @@ static void PropagateInternal (DecoderInst *dec, LexNodeInst *inst)
       instTS[N-1].id = 0;
       
       /* exit transition i=N-1 -> j=N */
-      if (instTS[N-2].n > 0) {      /* && (trP[N-1][N] > LSMALL)) { */
-         /* don't prune -- beam stil refers to last frame's scores, here we have 
-            already added this frame's outP */
+      /* don't prune -- beam stil refers to last frame's scores, here we have 
+	 already added this frame's outP */
+      if (instTS[N-2].n > 0)
          MergeTokSet (dec, &instTS[N-2], &instTS[N-1], trP[N-1][N], FALSE);
-      }
       
       if (bestScore > dec->bestScore) {
          dec->bestScore = bestScore;
          dec->bestInst = inst;
       }
       
-#ifdef COLLECT_STATS
-      {
-         TokenSet *ts;
-         for (i = 1, ts = &instTS[0]; i <= N; ++i, ++ts) {
-            if (ts->n > 0) {
-               ++dec->stats.nTokSet;
-               dec->stats.sumTokPerTS += ts->n;
-            }
-         }
-      }
-#endif
+      __collect_stats__(dec, instTS, N);
+}
 
+/* PropagateInternal
+
+     Internal token propagation
+*/
+static void PropagateInternal (DecoderInst *dec, LexNodeInst *inst)
+{
+   int i, j;
+   TokenSet *ts;
+
+   LexNode *ln = inst->node;
+   HLink hmm = ln->data.hmm;
+   int N = hmm->numStates;
+   SMatrix trP = hmm->transP;
+   TokenSet* instTS = inst->ts;
+
+   assert (ln->type == LN_MODEL);               /* Model node */
+   /* LM lookahead has already been updated in PropIntoNode() !!! */
+
+   /* main beam pruning: prune tokensets before propagation
+      the beamLimit is the one found during the last frame */
+   for (i = 1, ts = &instTS[0]; i < N; ++i, ++ts)
+      if (ts->score < dec->beamLimit) {
+         ts->n = 0;
+         ts->id = 0;
+      }
+
+   /* optimised version for L-R models */
+   if (hmm->tIdx < 0) {
+      OptimizedLeftToRightInternalPropagation(dec, inst, instTS, N, trP, hmm);
       return;
    }
 
    /* general (not left-to-right) PropagateInternal   */
-   {
-      TokenSet *ts;
-      TokenSet *tempTS;         /* temp storage for N tokensets 
-                                   #### N-2 would be enough? */
-      LogFloat score;
-      
-      tempTS = dec->tempTS[N];
-      
-      PI_GEN++;
-#ifdef DEBUG_TRACE
-      if (trace & T_PROP)
-         printf ("#########################PropagateInternal hmm %p '%s':\n", inst->node,
-                 FindMacroStruct (dec->net->hset, 'h', inst->node->data.hmm)->id->name);
-#endif
-      
-      /* internal propagation; transition i -> j,  \forall 2 <= j <= N-1 */
-      
-      /* internal states */
-      for (j = 2; j < N; ++j) {
-         tempTS[j-1].score = 0.0;
-         tempTS[j-1].n = 0;
-         tempTS[j-1].id = 0;
-         
-         for (i = 1; i < N; ++i) {
-#ifdef DEBUG_TRACE
-            if (trace & T_PROP)
-               printf ("transP[%d][%d] = %f\n", i, j, trP[i][j]);
-#endif
-            if ((instTS[i-1].n > 0) && (trP[i][j] > LSMALL)) {
-               MergeTokSet (dec, &instTS[i-1], &tempTS[j-1], trP[i][j], (!mergeTokOnly));
-            }
-         }
-         if (tempTS[j-1].n > 0) {
-            outP = cOutP (dec, dec->obs, hmm, j);
-            tempTS[j-1].score += outP;         /* only change top tok */
-         }
-#ifdef DEBUG_TRACE
-         if (trace & T_PROP) {
-            printf ("PropagateInternal: tokens in state %d after OutP: ", j);
-            PrintTokSet (dec, &instTS[j-1]);
-            printf ("-------------------\n");
-         }
-#endif
-      }
-      
-      instTS[0].n = 0;          /* clear entry state */
-      instTS[0].id = 0;
-      
-      /* internal states: copy temp array back and find best score */
-      bestScore = LZERO;
-      for (j = 2; j < N; ++j) {
-         /* copy reltoks */
-         int k;
-         
-         instTS[j-1].n = tempTS[j-1].n;
-         instTS[j-1].id = tempTS[j-1].id;
-         instTS[j-1].score = tempTS[j-1].score;
-         for (k = 0; k < tempTS[j-1].n; ++k)
-            instTS[j-1].relTok[k] = tempTS[j-1].relTok[k];
-         
-         if (instTS[j-1].n > 0) {
-            score = instTS[j-1].score;
-            if (score > bestScore)
-               bestScore = score;
-         }
-      }
-      inst->best = bestScore;
-      
-      /* exit state (j=N),
-         merge directly into ints->ts */
-      j = N;
-      instTS[j-1].n = 0;
-      instTS[j-1].id = 0;
-      
-      for (i = 2; i < N; ++i) {
-#ifdef DEBUG_TRACE
-         if (trace & T_PROP)
-            printf ("transP[%d][%d] = %f\n", i, j,trP[i][j]);
-#endif
-         if ((instTS[i-1].n > 0) && (trP[i][j] > LSMALL))
-            MergeTokSet (dec, &instTS[i-1], &instTS[j-1], trP[i][j], FALSE);
-      }
-      
-      /* exit state score is some internal state score plus transP,
-         thus can be ignored for findeing the best score */
-      
-#ifdef DEBUG_TRACE
-      if (trace & T_PROP) {
-         printf ("PropagateInternal: tokens in exit state %d: ", j);
-         PrintTokSet (dec, &instTS[j-1]);
-         printf ("-------------------\n");
-      }
-#endif
-      
-      /* update global best score */
-      if (bestScore > dec->bestScore) {
-         dec->bestScore = bestScore;
-         dec->bestInst = inst;
-      }
-      
-      /* # this only collects stats for the model nodes */
-#ifdef COLLECT_STATS
-      for (i = 1, ts = &instTS[0]; i <= N; ++i, ++ts) {
-         if (ts->n > 0) {
-            ++dec->stats.nTokSet;
-            dec->stats.sumTokPerTS += ts->n;
-         }
-      }
-#endif
-      
-      
-#ifdef DEBUG_TRACE
-      if (trace & T_PROP) {
-         printf ("best %f\n", inst->best);
-         for (i = 0; i < N; ++i)
-            printf (" %d ",inst->ts[i].n);
-         
-         printf("\n");
-      }
-#endif
-   }
-}
 
+   /* temp storage for N tokensets  */
+   TokenSet *tempTS = dec->tempTS[N];
+
+   PI_GEN++;
+
+   /* internal propagation; transition i -> j,  \forall 2 <= j <= N-1 */
+
+   /* internal states */
+   for (j = 2; j < N; ++j) {
+     tempTS[j-1].score = 0.0;
+     tempTS[j-1].n = 0;
+     tempTS[j-1].id = 0;
+
+     for (i = 1; i < N; ++i) {
+       if ((instTS[i-1].n > 0) && (trP[i][j] > LSMALL))
+	 MergeTokSet (dec, &instTS[i-1], &tempTS[j-1], trP[i][j], (!mergeTokOnly));
+     }
+
+     if (tempTS[j-1].n > 0) {
+       LogFloat outP = cOutP (dec, dec->obs, hmm, j);
+       tempTS[j-1].score += outP;         /* only change top tok */
+     }
+   }
+
+   instTS[0].n = 0;          /* clear entry state */
+   instTS[0].id = 0;
+
+   /* internal states: copy temp array back and find best score */
+   LogFloat bestScore = LZERO;
+   for (j = 1; j < N-1; ++j) {
+     instTS[j] = tempTS[j]; // copy reltoks
+
+     if (instTS[j].n > 0)
+       bestScore = std::max(instTS[j].score, bestScore);
+   }
+   inst->best = bestScore;
+
+   /* exit state (j=N), merge directly into ints->ts */
+   j = N;
+   instTS[j-1].n = 0;
+   instTS[j-1].id = 0;
+
+   for (i = 2; i < N; ++i) {
+     if ((instTS[i-1].n > 0) && (trP[i][j] > LSMALL))
+       MergeTokSet (dec, &instTS[i-1], &instTS[j-1], trP[i][j], FALSE);
+   }
+
+   /* exit state score is some internal state score plus transP,
+      thus can be ignored for findeing the best score */
+
+   /* update global best score */
+   if (bestScore > dec->bestScore) {
+     dec->bestScore = bestScore;
+     dec->bestInst = inst;
+   }
+
+   /* # this only collects stats for the model nodes */
+   __collect_stats__(dec, instTS, N);
+}
 
 #ifdef MODALIGN
 void UpdateModPaths (DecoderInst *dec, TokenSet *ts, LexNode *ln)
@@ -606,9 +451,7 @@ void UpdateModPaths (DecoderInst *dec, TokenSet *ts, LexNode *ln)
 }
 #endif   
 
-
 /* PropIntoNode
-
      Propagate tokenset into entry state of LexNode, activating as necessary
 */
 static void PropIntoNode (DecoderInst *dec, TokenSet *ts, LexNode *ln, Boolean updateLMLA)
@@ -664,27 +507,7 @@ static void PropagateExternal (DecoderInst *dec, LexNodeInst *inst,
          #### maybe unnecessary? can be done in PropIntoNode */
       if ((entryTS->n > 0) && (hmm->transP[1][N] > LSMALL) && 
           (entryTS->score > dec->beamLimit)) {
-#ifdef DEBUG_TRACE
-         if (trace & T_PROP) {
-            printf ("found tee HMM node '%s' transp %f\n",
-                    FindMacroStruct (dec->net->hset, 'h', hmm)->id->name,
-                    hmm->transP[1][N]);
-            printf ("PropagateExternal: entry state:\n");
-            PrintTokSet (dec, entryTS);
-            printf ("----\n");
-            printf ("PropagateExternal: exit state:\n");
-            PrintTokSet (dec, exitTS);
-            printf ("----\n");
-         }
-#endif
          MergeTokSet (dec, entryTS, exitTS, hmm->transP[1][N], TRUE);
-#ifdef DEBUG_TRACE
-         if (trace & T_PROP) {
-            printf ("PropagateExternal: exit state after tee propagation:\n");
-            PrintTokSet (dec, exitTS);
-            printf ("----\n");
-         }
-#endif
       }
    }
    else {
@@ -693,8 +516,7 @@ static void PropagateExternal (DecoderInst *dec, LexNodeInst *inst,
 
       /* for wordend nodes first apply LM and recombine */
       if (ln->type == LN_WORDEND) {
-         /* for LAYER_WR call HandleWordend() on all WE nodes 
-            in separate pass for WE-pruning */
+         /* for LAYER_WR call HandleWordend() on all WE nodes in separate pass for WE-pruning */
          if (handleWE)
             HandleWordend (dec, ln);
       }      
@@ -708,15 +530,12 @@ static void PropagateExternal (DecoderInst *dec, LexNodeInst *inst,
          inst->best = exitTS->score;
    }
 
-#if 1
    /* prune token sets in states 2..N-1 */
    /* ####RELTOK  don't do this to avoid changing tokSet->id?? */
    for (i = 2; i < N; ++i) {
       if (inst->ts[i-1].n > 0)
          PruneTokSet (dec, &inst->ts[i-1]);
    }
-#endif
-
    /* prune exit state token set */
    if (exitTS->n > 0)
       PruneTokSet (dec, exitTS);
@@ -740,7 +559,6 @@ static void PropagateExternal (DecoderInst *dec, LexNodeInst *inst,
 /* HandleWordend
 
      update traceback, add LM, update LM state, recombine tokens
-
 */
 static void HandleWordend (DecoderInst *dec, LexNode *ln)
 {
@@ -760,33 +578,19 @@ static void HandleWordend (DecoderInst *dec, LexNode *ln)
    assert (ln->type == LN_WORDEND);
 
    inst = ln->inst;
-   assert (inst);
    ts = inst->ts;
-   
-   if (trace & T_WORD) {
-      printf ("PropagateWordEnd: handleWordend '%s'\n", dec->net->pronlist[ln->data.pron]->word->wordName->name);
-      printf ("before LM application:\n");
-      PrintTokSet (dec, ts);
-      printf ("++++++++++\n");
-   }
 
-#if 0
-   /* apply only relative beam */
-   deltaLimit = dec->relBeamWidth;
-#else   /* main beam pruning for reltoks */
+   /* main beam pruning for reltoks */
    /* main and relative beam pruning */
    deltaLimit = dec->beamLimit - ts->score;
    if (dec->relBeamWidth > deltaLimit)
       deltaLimit = dec->relBeamWidth;
-#endif
 
-   /* for each token i in set take transition in LM
+   /* for each token i in set, take transition in LM
       recombine tokens in same LMState 
-      newN is (current) number of new tokens (newN <= ts->n)
-   */
+      newN is (current) number of new tokens (newN <= ts->n) */
 
    pronid = (PronId) ln->data.pron;
-   assert (ts->n >= 1);
 
    newN = 0;
    bestDelta = LZERO;
@@ -806,11 +610,7 @@ static void HandleWordend (DecoderInst *dec, LexNode *ln)
       modpath = tok->modpath;
 #endif
 
-
       /* subtract lookahead which has already been applied */
-      if (!dec->fastlmla) {
-         assert (lmScore <= tok->lmscore + 0.1); /* +0.1 because of accuracy problems (yuck!) */
-      }
       newDelta = tok->delta + (lmScore - tok->lmscore);
 
       if (newDelta < deltaLimit)
@@ -819,11 +619,6 @@ static void HandleWordend (DecoderInst *dec, LexNode *ln)
       if (newDelta > bestDelta)
          bestDelta = newDelta;
 
-#if 0   /* removed -- we store the info directly in tokJ below */
-      tok->delta = newDelta;
-      tok->lmState = dest;
-      tok->lmscore = 0.0;       /* reset lookahead */
-#endif 
       /* insert in list */
       for (j = 0; j < newN; ++j) {      /* is there already a token in state dest? */
          tokJ = &ts->relTok[j];
@@ -837,7 +632,6 @@ static void HandleWordend (DecoderInst *dec, LexNode *ln)
 #endif
                   /* update path; 
                      weHyp exists, pron is the same anyway, update rest */
-                  assert (tokJ->path->pron == ln->data.pron);
                   tokJ->path->prev = prev;
                   tokJ->path->score = ts->score + newDelta;
                   tokJ->path->lm = lmScore;
@@ -872,7 +666,6 @@ static void HandleWordend (DecoderInst *dec, LexNode *ln)
 
                   /* store new tok info in path 
                      weHyp exists, pron is the same anyway, update rest */
-                  assert (tokJ->path->pron == ln->data.pron);
                   tokJ->path->prev = prev;
                   tokJ->path->score = ts->score + newDelta;
                   tokJ->path->lm = lmScore;
@@ -940,19 +733,13 @@ static void HandleWordend (DecoderInst *dec, LexNode *ln)
    if (newN > 0) {
       AltWordendHyp *alt;
       /* renormalise  to new best score */
-      if (!dec->fastlmla) {
-         assert (bestDelta <= 0.1);  /* 0.1 for accuracy reasons */
-      }
-      assert (bestDelta > LSMALL);
       for (i = 0; i < ts->n; ++i) {
          tok = &ts->relTok[i];
          tok->delta -= bestDelta;
 
          /* convert alt wordendHyp scores to deltas relativ to main weHyp */
-         for (alt = tok->path->alt; alt; alt = alt->next) {
+         for (alt = tok->path->alt; alt; alt = alt->next)
             alt->score = alt->score - tok->path->score;
-            assert (alt->score <= 0.1);         /* 0.1 for accuracy reasons */
-         }
       }
       ts->score += bestDelta;
 
@@ -964,17 +751,7 @@ static void HandleWordend (DecoderInst *dec, LexNode *ln)
       ts->score = LZERO;
    }
 
-#if 0
-   CheckTokenSetOrder (dec, ts);
-#endif
-
    inst->best = ts->score;
-
-   if (trace & T_WORD) {
-      printf ("after LM application:\n");
-      PrintTokSet (dec, ts);
-      printf ("++++++++++\n");
-   }
 }
 
 
@@ -1022,15 +799,13 @@ static void AddPronProbs (DecoderInst *dec, TokenSet *ts, int var)
       #### fix by storing 3 lists parallel to pronlist with 
       #### prescaled pronprobs
    */
-   int i;
-   RelToken *tok;
-   Pron pron;
-   WordendHyp *path;
    RelTokScore bestDelta = LZERO;
 
-   for (i = 0, tok = ts->relTok; i < ts->n; ++i, ++tok) {
-      path = tok->path;
-      pron = dec->net->pronlist[path->pron];
+   for (int i = 0; i < ts->n; ++i) {
+      RelToken* tok = &(ts->relTok[i]);
+      WordendHyp *path = tok->path;
+      Pron pron = dec->net->pronlist[path->pron];
+
       if (var == 1)
          pron = pron->next;
       else if (var == 2)
@@ -1052,8 +827,8 @@ static void AddPronProbs (DecoderInst *dec, TokenSet *ts, int var)
    }
 
    /* renormalise token set */
-   for (i = 0, tok = ts->relTok; i < ts->n; ++i, ++tok)
-      tok->delta -= bestDelta;
+   for (int i = 0; i < ts->n; ++i)
+      ts->relTok[i].delta -= bestDelta;
    ts->score += bestDelta;
 }
 
@@ -1135,17 +910,29 @@ void HandleSpSkipLayer (DecoderInst *dec, LexNodeInst *inst)
    }
 }
 
+inline TokScore findBestScore(LexNodeInst * head) {
+  TokScore bestScore = LZERO;
+  for (; head; head = head->next )
+    bestScore = std::max(bestScore, head->best);
+  return bestScore;
+}
+
+
+inline void eraseLinkedListNode(LexNodeInst* &head, LexNodeInst* prev, LexNodeInst* inst) {
+  if (prev)
+    prev->next = inst->next;
+  else                 // first inst in layer
+    head = inst->next;
+}
+
 /* ProcessFrame
 
      Takes the observation vector and propatagets all tokens and
      performs pruning as necessary.
 */
-void ProcessFrame (DecoderInst *dec, Observation **obsBlock, int nObs, 
-                   AdaptXForm *xform)
-{
-   int l, i;
-   LexNodeInst *inst, *prevInst, *next;
-   int nActive, modelActive;
+void ProcessFrame (DecoderInst *dec, Observation **obsBlock, int nObs, AdaptXForm *xform) {
+   int i;
+   LexNodeInst *inst, *prev, *next;
    TokScore beamLimit;
    
    inXForm = xform; /* sepcifies the transform to use */
@@ -1161,286 +948,125 @@ void ProcessFrame (DecoderInst *dec, Observation **obsBlock, int nObs,
    if (dec->frame % gcFreq == 0)
       GarbageCollectPaths (dec);
 
-   mts_copy = mts_fast = mts_slow = 0;
-   mts_newid = mts_newidNTOK = 0;
-
-   if (trace & T_BEST) {
-      printf ("frame: %d beamLimit: %f\n", dec->frame, dec->beamLimit);
-   }
-
    /* internal token propagation:
       order doesn't really matter, but we use the same as for external propagation */
-   modelActive = 0;
-   for (l = 0; l < dec->nLayers; ++l) {
-      nActive = 0;
-      for (inst = dec->instsLayer[l]; inst; inst = inst->next) {
-         ++nActive;
-         ++modelActive;
-#ifdef DEBUG_TRACE
-         if (trace & T_ACTIV) {
-            printf ("l %d active node %p ",l, inst);
-            switch (inst->node->type) {
-            case LN_MODEL:
-               printf (" HMM '%s' ",
-                       FindMacroStruct (dec->net->hset, 'h', inst->node->data.hmm)->id->name);
-               break;
-            case LN_WORDEND:
-               printf (" WE '%s' ",
-                       dec->net->pronlist[inst->node->data.pron]->word->wordName->name);
-               break;
-            }
-            printf ("\n");
-         }
-#endif
-
-         if (inst->node->type != LN_MODEL) {         /* Context or Wordend node */
-            /* clear tokenset in preparation for external propagation*/
-            inst->ts[0].n = 0;
-            inst->best =  LZERO;
-         }
-         else {               /* Model node */
-            PropagateInternal (dec, inst);
-         }
-         /*         printf ("BEST %p %f\n", inst->node, inst->best); */
+   for (int l = 0; l < dec->nLayers; ++l) {
+      for (LexNodeInst* inst = dec->instsLayer[l]; inst; inst = inst->next) {
+	 switch (inst->node->type) {
+	   case LN_MODEL:   /* Model node */
+	     PropagateInternal (dec, inst);
+	     break;
+	   case LN_CON:	    /* Context or Wordend node */
+	   case LN_WORDEND:
+	      /* clear tokenset in preparation for external propagation*/
+	     inst->ts[0].n = 0;
+	     inst->best = LZERO;
+	     break;
+	 }
       }
-#if 0
-   printf ("MTS_copy: %d MTS_fast: %d  MTS slow: %d ", mts_copy, mts_fast, mts_slow);
-   printf ("MTS_newid: %d MTS_newidNTOK: %d\n", mts_newid, mts_newidNTOK);
-#endif
-      if (trace & T_TOKSTATS)
-         printf ("Pass1: %d active nodes in layer %d\n", nActive, l);
    }
-
-   if (trace & T_TOKSTATS)
-      printf ("Sum Pass1: %d active models\n", modelActive);
-
 
    /* now for all LN_MODEL nodes inst->best is set, this is used to determine 
       the lower beam limit */
 
    dec->beamLimit = dec->bestScore - dec->curBeamWidth;
 
-   if (trace & T_BEST)
-      printf ("best token in HMM %p '%s' score %f %f\n", dec->bestInst->node, 
-              FindMacroStruct (dec->net->hset, 'h', dec->bestInst->node->data.hmm)->id->name,
-              dec->bestScore, dec->bestScore/dec->frame);
-
-
    /* beam pruning & external propagation */
-   modelActive = 0;
-   for (l = 0; l < dec->nLayers; ++l) {
+   for (int l = 0; l < dec->nLayers; ++l) {
+      LexNodeInst* &head = dec->instsLayer[l];
 
-#ifdef DEBUG_TRACE
-      if (trace & T_ACTIV)
-         printf ("external propagation for layer %d\n", l);
-#endif
-      nActive=0;
-
-#if 1           /* # make this a command line option */
       /* update word end time and score in tok->path when passing
          through the appropriate layer */
       if (l == dec->net->wordEndLayerId) {
-         for (inst = dec->instsLayer[l]; inst; inst = inst->next) {
+         for (inst = head; inst; inst = inst->next)
             UpdateWordEndHyp (dec, inst);
-         }
       }
-#endif
 
       /*** wordend beam pruning ***/
       beamLimit = dec->beamLimit;
-      if ((dec->weBeamWidth < dec->beamWidth) && 
-          (l == LAYER_WE)) {
+      if ((dec->weBeamWidth < dec->beamWidth) && (l == LAYER_WE)) {
          TokScore bestWEscore = LZERO;
-         
-         prevInst = NULL;
-         for (inst = dec->instsLayer[l]; inst; inst = next) {
+
+         prev = NULL;
+         for (inst = head; inst; inst = next) {
             next = inst->next;     /* store now, we might free inst below! */
-            assert (inst->node->type == LN_WORDEND);
-            assert (inst->ts[0].n == 0 || inst->ts[0].score == inst->best);
+
             if (inst->best < beamLimit) {  /* global main beam */
-               if (prevInst)
-                  prevInst->next = inst->next;
-               else                 /* first inst in layer */
-                  dec->instsLayer[l] = inst->next;
-
-#ifdef DEBUG_TRACE
-            if (trace & T_PRUNE) {
-               char *name = NULL;
-               name = dec->net->pronlist[inst->node->data.pron]->word->wordName->name;
-               printf ("pruning word end node %p '%s' score %f off beam limit %f\n", inst->node, name, inst->best, beamLimit);
-               PrintTokSet (dec, inst->ts);
-            }
-#endif
-
-               DeactivateNode (dec, inst->node);
-            }
+	      eraseLinkedListNode(head, prev, inst);
+	      DeactivateNode (dec, inst->node);
+	    }
             else {
                HandleWordend (dec, inst->node);
-               if (inst->best > bestWEscore)
-                  bestWEscore = inst->best;
-               prevInst = inst;
+	       bestWEscore = std::max(bestWEscore, inst->best);
+               prev = inst;
             }
          }
-         beamLimit = bestWEscore - dec->weBeamWidth;
-         if (dec->beamLimit > beamLimit)  /* global beam is tighter */
-            beamLimit = dec->beamLimit; 
+
+	 beamLimit = std::max(bestWEscore - dec->weBeamWidth, dec->beamLimit); /* global beam is tighter */
       }
-#if 1
-      else if ((dec->zsBeamWidth < dec->beamWidth) &&   /* Z..S layer pruning */
-               (l == LAYER_ZS || l == LAYER_SA)) {
-#if 0
-               ((l == LAYER_YZ) || (l == LAYER_Z) || (l == LAYER_ZS) || 
-                (l == LAYER_SIL) || (l == LAYER_SA))) {
-#endif
-         TokScore bestScore = LZERO;
-         
-         for (inst = dec->instsLayer[l]; inst; inst = inst->next) {
-            if (inst->best > bestScore)
-               bestScore = inst->best;
-         }
-         beamLimit = bestScore - dec->zsBeamWidth;
-         if (dec->beamLimit > beamLimit)  /* global beam is tighter */
-            beamLimit = dec->beamLimit; 
+      /* Z..S layer pruning */
+      else if ((dec->zsBeamWidth < dec->beamWidth) && (l == LAYER_ZS || l == LAYER_SA)) {
+         TokScore bestScore = findBestScore(head);
+	 beamLimit = std::max(bestScore - dec->zsBeamWidth, dec->beamLimit);
       }
-#endif      
 
       /* Due to the layer-by-layer structure inst->best values for
          LN_CON and LN_WORDEND nodes are set before they are examined
          for pruning purposes, although they were not available when the 
          beamlimit  was set.
       */
-      prevInst = NULL;
-      for (inst = dec->instsLayer[l]; inst; inst = next) {
+      prev = NULL;
+      for (inst = head; inst; inst = next) {
          next = inst->next;     /* store now, we might free inst below! */
          
          if (inst->node->type != LN_WORDEND && inst->node->lmlaIdx != 0 &&
              inst->ts->n > 0) {
-            TokScore best;
-
-#ifdef DEBUG_TRACE
-            if (trace & T_PRUNE) {
-               char *name = NULL;
-               if (inst->node->type == LN_MODEL)
-                  name = FindMacroStruct (dec->net->hset, 'h', inst->node->data.hmm)->id->name;
-               else 
-                  name = "NULL_NODE";
-               printf ("before lmla, node %p '%s' score %f\n", inst->node, name, inst->ts[0].score);
-            }
-#endif
 
             if (inst->ts[0].score >= beamLimit)       /* don't bother if inst will be pruned anyway */
                UpdateLMlookahead (dec, inst->node);
 
-            if (inst->ts->n > 0) {      /* UpLMLA might have killed the entire TS, esp. in latlm */
-#ifdef DEBUG_TRACE
-               if (trace & T_PRUNE) {
-                  char *name = NULL;
-                  if (inst->node->type == LN_MODEL)
-                     name = FindMacroStruct (dec->net->hset, 'h', inst->node->data.hmm)->id->name;
-                  else 
-                  name = "NULL_NODE";
-                  if (inst->ts[0].score > inst->best) 
-                     printf ("after lmla, node %p '%s' score %f\n", inst->node, name, inst->ts[0].score);
-               }
-#endif
-               best = inst->ts[0].score;
-               if (best > inst->best)
-                  inst->best = best;
-            }
-            else {
-#ifdef DEBUG_TRACE
-               if (trace & T_PRUNE) {
-                  char *name = NULL;
-                  if (inst->node->type == LN_MODEL)
-                     name = FindMacroStruct (dec->net->hset, 'h', inst->node->data.hmm)->id->name;
-                  else 
-                     name = "NULL_NODE";
-                  printf ("after lmla, node %p '%s' has no active token : %d\n", inst->node, name, inst->ts->n);
-               }
-#endif
-            }
+	    /* UpLMLA might have killed the entire TS, esp. in latlm */
+            if (inst->ts->n > 0)
+	      inst->best = std::max(inst->best, inst->ts[0].score);
          }
 
-         if (inst->best < beamLimit) {
-#ifdef DEBUG_TRACE
-            if (trace & T_PRUNE) {
-               char *name = NULL;
-               if (inst->node->type == LN_MODEL)
-                  name = FindMacroStruct (dec->net->hset, 'h', inst->node->data.hmm)->id->name;
-               else 
-                  name = "NULL_NODE";
-               printf ("pruning node %p '%s' score %f off beam limit %f\n", inst->node, name, inst->best, beamLimit);
-
-               PrintTokSet (dec, inst->ts);
-            }
-#endif
-            /* take inst out of instsLayer list and deactivate it */
-            if (prevInst)
-               prevInst->next = inst->next;
-            else                 /* first inst in layer */
-               dec->instsLayer[l] = inst->next;
-            DeactivateNode (dec, inst->node);
+         if (inst->best < beamLimit) { /* take inst out of instsLayer list and deactivate it */
+	   eraseLinkedListNode(head, prev, inst);
+	   DeactivateNode (dec, inst->node);
+	   continue;
          }
-         else {         /* inst survived */
+
 #ifdef COLLECT_STATS
-            ++dec->stats.nActive;
+	 ++dec->stats.nActive;
 #endif
-            /* special code for pronprob handling before sil layer */
-            if (dec->net->silDict && (l == dec->net->spSkipLayer) && inst->ts[0].n > 0) 
-               HandleSpSkipLayer (dec, inst);
-            else {      /* normal case: non silDict or non spSkipLayer */
-               /* call HandleWordend, if we don't do we-pruning or we 
-                  are in in LAYER_SIL and LAYER_AB (where we need to handle the 
-                  wordend nodes for SENT_START and SENT_END).
-                  ### fix this
-               */
-#if 1          /* experiment for richer lattices. keep sp and sil
-                  variants distinct by marking sil in LSBit of
-                  tok->we_tag */
-               /* #### we need the equivalent for pronprob sildicts! */
-               if (l == LAYER_SIL && inst->node->type == LN_MODEL) {
-                  if (inst->node->data.hmm != dec->net->hmmSP) {
-                     int N, i;
-                     TokenSet *ts;
-                     RelToken *tok;
-                     N = inst->node->data.hmm->numStates;
-                     ts = &inst->ts[N-1];
-                     for (i = 0; i < ts->n; ++i) {
-                        tok = &ts->relTok[i];
-                        tok->we_tag = (void *) ((long) tok->we_tag | 1);
-                     }
-                  }
-               }
-#endif
+	 /* special code for pronprob handling before sil layer */
+	 if (dec->net->silDict && (l == dec->net->spSkipLayer) && inst->ts[0].n > 0) {
+	   HandleSpSkipLayer (dec, inst);
+	   continue;
+	 }
+	 
+	 /* normal case: non silDict or non spSkipLayer */
+	 /* call HandleWordend, if we don't do we-pruning or we are in in LAYER_SIL and LAYER_AB (where we need to handle the wordend nodes for SENT_START and SENT_END). */
+	 /* ### fix this */
+	 /* experiment for richer lattices. keep sp and sil variants distinct by marking sil in LSBit of tok->we_tag */ /* #### we need the equivalent for pronprob sildicts! */
+	 if (l == LAYER_SIL && inst->node->type == LN_MODEL) {
+	   auto &H = inst->node->data.hmm;
+	   if (H != dec->net->hmmSP) {
+	     int N = H->numStates;
+	     TokenSet *ts = &inst->ts[N-1];
+	     for (int i = 0; i < ts->n; ++i) {
+	       RelToken *tok = &ts->relTok[i];
+	       tok->we_tag = (void *) ((long) tok->we_tag | 1);
+	     }
+	   }
+	 }
 
-               PropagateExternal (dec, inst, !(dec->weBeamWidth < dec->beamWidth) || 
-                                  (l == LAYER_SIL) || (l == LAYER_AB),
-                                  l == LAYER_BY);
-            }
+	 PropagateExternal (dec, inst, !(dec->weBeamWidth < dec->beamWidth) || (l == LAYER_SIL) || (l == LAYER_AB), l == LAYER_BY);
 
-            
-            prevInst = inst;
-            ++nActive;
-            ++modelActive;
-         }
+	 prev = inst;
       } /* for inst */
-
-#if 0
-      printf ("MTS_copy: %d MTS_fast: %d  MTS slow: %d ", mts_copy, mts_fast, mts_slow);
-      printf ("MTS_newid: %d MTS_newidNTOK: %d\n", mts_newid, mts_newidNTOK);
-      printf ("LMCacheLA:  %d hits  %d misses\n", 
-              dec->lmCache->laHit, dec->lmCache->laMiss);
-#endif
-      if (trace & T_TOKSTATS)
-         printf ("Pass2: %d active nodes in layer %d\n", nActive, l);
-
    }    /* for layer */
 
-   if (trace & T_TOKSTATS)
-      printf ("Sum Pass2: %d %f \n", modelActive, dec->curBeamWidth);
-
-
-#if 1   /* max model pruning (using histogram pruning) */
 #define MMP_NBINS 128
    if (dec->maxModel > 0) {
       int i, bin, nhist, hist[MMP_NBINS];
@@ -1453,7 +1079,7 @@ void ProcessFrame (DecoderInst *dec, Observation **obsBlock, int nObs,
       
       
       /* fill histogram */
-      for (l = 0; l < dec->nLayers; ++l) {
+      for (int l = 0; l < dec->nLayers; ++l) {
          for (inst = dec->instsLayer[l]; inst; inst = inst->next) {
             if (inst->best > LSMALL) { 
                bin = (dec->bestScore - inst->best) / binWidth;
@@ -1479,64 +1105,30 @@ void ProcessFrame (DecoderInst *dec, Observation **obsBlock, int nObs,
             assert (i < MMP_NBINS);
             nMod += hist[i];
          }
-         
-         if (trace & T_PRUNE)
-            printf ("nMod: %d, dec->maxModel: %d\n", nMod, dec->maxModel);
-
-         if (trace & T_PRUNE)
-            printf ("beam old: %f  ", dec->curBeamWidth);
-         dec->curBeamWidth = (binWidth * i > maxLNBeamFlr * dec->beamWidth) ? binWidth * i : maxLNBeamFlr * dec->beamWidth;
-         if (trace & T_PRUNE)
-            printf ("  new: %f\n", dec->curBeamWidth);
       }
-      else {       /* modelActive < maxModel */
+      else {
          /* slowly increase beamWidth again */
          dec->curBeamWidth *= dynBeamInc;
          if (dec->curBeamWidth > dec->beamWidth)
             dec->curBeamWidth = dec->beamWidth;
       }
    }
-#endif
 
    dec->beamLimit = dec->bestScore - dec->curBeamWidth;
-
 
 #ifdef COLLECT_STATS
    ++dec->stats.nFrames;
 #endif
 
-#if 0
-   printf ("cacheHits: %d  cacheMisses: %d\n", 
-           dec->outPCache->cacheHit, dec->outPCache->cacheMiss);
-   printf ("MTS_copy: %d MTS_fast: %d  MTS slow: %d ", mts_copy, mts_fast, mts_slow);
-   printf ("MTS_newid: %d MTS_newidNTOK: %d\n", mts_newid, mts_newidNTOK);
-   printf ("tokSetIDcount: %d\n", dec->tokSetIdCount);
-   printf ("PI_LR: %d  PI_GEN: %d\n", PI_LR, PI_GEN);
-#endif
    PI_LR = PI_GEN = 0;
    dec->outPCache->cacheHit = dec->outPCache->cacheMiss = 0;
 
-#if 0
-   printf ("LMCacheTrans:  %d hits  %d misses\n", 
-           dec->lmCache->transHit, dec->lmCache->transMiss);
-   printf ("LMCacheLA:  %d hits  %d misses\n", 
-           dec->lmCache->laHit, dec->lmCache->laMiss);
-#endif
    dec->lmCache->transHit = dec->lmCache->transMiss = 0;
    dec->lmCache->laHit = dec->lmCache->laMiss = 0;
-
-#if 0
-   Debug_DumpNet (dec->net);
-#endif
-#if 0
-   AccumulateStats (dec);
-#endif
 
    if (dec->nPhone > 0)
       CalcPhonePost (dec);
 }
-
-
 
 
 /*  CC-mode style info for emacs
