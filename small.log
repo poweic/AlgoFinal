@@ -4,7 +4,7 @@ Reading acoustic models...Read 2635 physical / 427426 logical HMMs
 lmla count 16686
 nprons 13294
 Reading language model from data/lm.arpa.txt
-File: /share/ASR/m1010_scripts/feat/mfc/20060221-1-005870.mfc
+File: data/mfc/20060221-1-005870.mfc
 
 Transcription: 1-best hypothesis [1 lists]
  List 1
@@ -26,7 +26,7 @@ Stats: activePerFrame 1494.351351
 Stats: activateNodePerFrame 636.587838
 Stats: deActivateNodePerFrame 635.631757
 
-File: /share/ASR/m1010_scripts/feat/mfc/20060221-1-005880.mfc
+File: data/mfc/20060221-1-005880.mfc
 
 Transcription: 1-best hypothesis [1 lists]
  List 1
@@ -51,7 +51,7 @@ Stats: activePerFrame 1385.059233
 Stats: activateNodePerFrame 602.184669
 Stats: deActivateNodePerFrame 600.554007
 
-File: /share/ASR/m1010_scripts/feat/mfc/20060221-1-005890.mfc
+File: data/mfc/20060221-1-005890.mfc
 
 Transcription: 1-best hypothesis [1 lists]
  List 1
@@ -75,7 +75,7 @@ Stats: activePerFrame 1028.582878
 Stats: activateNodePerFrame 463.952641
 Stats: deActivateNodePerFrame 462.253188
 
-File: /share/ASR/m1010_scripts/feat/mfc/20060221-1-005900.mfc
+File: data/mfc/20060221-1-005900.mfc
 
 Transcription: 1-best hypothesis [1 lists]
  List 1
@@ -100,7 +100,7 @@ Stats: activePerFrame 990.255269
 Stats: activateNodePerFrame 464.044496
 Stats: deActivateNodePerFrame 463.466042
 
-File: /share/ASR/m1010_scripts/feat/mfc/20060221-1-005910.mfc
+File: data/mfc/20060221-1-005910.mfc
 
 Transcription: 1-best hypothesis [1 lists]
  List 1
@@ -132,7 +132,7 @@ Stats: activePerFrame 1263.915873
 Stats: activateNodePerFrame 540.847619
 Stats: deActivateNodePerFrame 539.642857
 
-File: /share/ASR/m1010_scripts/feat/mfc/20060221-1-005920.mfc
+File: data/mfc/20060221-1-005920.mfc
 
 Transcription: 1-best hypothesis [1 lists]
  List 1
@@ -156,7 +156,7 @@ Stats: activePerFrame 1317.713904
 Stats: activateNodePerFrame 518.762032
 Stats: deActivateNodePerFrame 517.954545
 
-File: /share/ASR/m1010_scripts/feat/mfc/20060221-1-005930.mfc
+File: data/mfc/20060221-1-005930.mfc
 
 Transcription: 1-best hypothesis [1 lists]
  List 1
@@ -193,7 +193,7 @@ Stats: activePerFrame 986.293478
 Stats: activateNodePerFrame 465.528533
 Stats: deActivateNodePerFrame 465.014946
 
-File: /share/ASR/m1010_scripts/feat/mfc/20060221-1-005940.mfc
+File: data/mfc/20060221-1-005940.mfc
 
 Transcription: 1-best hypothesis [1 lists]
  List 1
@@ -215,7 +215,7 @@ Stats: activePerFrame 1001.005731
 Stats: activateNodePerFrame 453.848138
 Stats: deActivateNodePerFrame 452.670487
 
-File: /share/ASR/m1010_scripts/feat/mfc/20060221-1-005950.mfc
+File: data/mfc/20060221-1-005950.mfc
 
 Transcription: 1-best hypothesis [1 lists]
  List 1
@@ -246,7 +246,7 @@ Stats: activePerFrame 693.403571
 Stats: activateNodePerFrame 344.076786
 Stats: deActivateNodePerFrame 343.573214
 
-File: /share/ASR/m1010_scripts/feat/mfc/20060221-1-005960.mfc
+File: data/mfc/20060221-1-005960.mfc
 
 Transcription: 1-best hypothesis [1 lists]
  List 1

@@ -19,6 +19,7 @@ options="-A -T 1 -a 0.1 -s 1.0 -t $beam -z lat -q tvaldm -o M"
 lat_dir=lat
 rec_result=dev.rec
 
+mkdir $lat_dir
 $decoder $options \
 	 -l $lat_dir -i $rec_result \
 	 -w $LM -H $AM -S $scp $lexicon $tiedlist
