@@ -97,8 +97,8 @@ static FileFormat dataForm = UNDEFF; /* data input file format */
 
 static Vocab vocab;		/* wordlist or dictionary */
 static HMMSet hset;		/* HMM set */
-static FSLM *lm;                /* language model */
-static LexNet *net;             /* Lexicon network of all required words/prons */
+// static FSLM *lm = NULL;         /* language model */
+static LexNet *net = NULL;      /* Lexicon network of all required words/prons */
 
 static char *startWord = "<s>"; /* word used at start of network */
 static LabId startLab;          /*   corresponding LabId */
@@ -172,9 +172,34 @@ struct _BestInfo {
    BestInfo *next;
 };
 
+class LanguageModel {
+  public:
+    LanguageModel(Vocab& vocab): lm(NULL), _vocab(vocab) {
+      CreateHeap (&_lmHeap, "LM heap", MSTAK, 1, 0,1000000, 10000000);
+    }
+
+    void loadFromFile(char* lm_fn) {
+      lm = CreateLM (&_lmHeap, lm_fn, startWord, endWord, &vocab);
+    }
+
+    void loadFromLattice(char* lat_fn, Lattice* lat) {
+      lm = CreateLMfromLat (&_lmHeap, lat_fn, lat, &vocab);
+    }
+
+    FSLM* get_lm() {
+      return lm;
+    }
+
+  private:
+    FSLM *lm;         /* language model */
+    MemHeap _lmHeap;
+
+    Vocab& _vocab;
+};
+
 class Decoder {
   public:
-    Decoder();
+    Decoder(LanguageModel& lm);
     void init();
     void recognize(char *fn);
 
@@ -183,7 +208,13 @@ class Decoder {
     void PrintAlignBestInfo (BestInfo *bestInfo);
     void AnalyseSearchSpace (BestInfo *bestInfo);
 
+
+    // ===== THIS function does NOT belongs here. Move it somewhere else. =====
+    void rescoreLattice(char* fn);
+
   private:
+    LanguageModel& _lm;
+
     DecoderInst* _decInst;
 
     MemHeap _modelHeap;
@@ -212,7 +243,8 @@ FILE *debug_stderr = stderr;
 
 int main (int argc, char *argv[]) {
 
-  Decoder decoder;
+  LanguageModel languageModel(vocab);
+  Decoder decoder(languageModel);
 
   if (InitShell (argc, argv, hdecode_version, hdecode_sccs_id) < SUCCESS)
     HError (4000, "HDecode: InitShell failed");
@@ -658,126 +690,14 @@ void ParseCommandArguments() {
 
 // void DoRecognition (DecoderInst *dec, char *fn) { }
 
-#ifdef LEGACY_CUHTK2_MLLR
-void ResetFVTrans (HMMSet *hset, BlockMatrix transMat)
-{
-   HError (9999, "HDecode: switching speakers/transforms not supprted, yet");
-}
-
-void LoadFVTrans (char *fn, BlockMatrix *transMat)
-{
-   Source src;
-   int blockSize, bs, i;
-   short nblocks;
-   char buf[MAXSTRLEN];
-   Boolean binary = FALSE;
-   
-   InitSource (fn, &src, NoFilter);
-
-   /* #### the file input should use HModel's/HAdapt's scanner  */
-   ReadUntilLine (&src, "~k \"globalSemi\"");
-   if (!ReadString (&src, buf) || strcmp (buf, "<SEMICOVAR>"))
-      HError (9999, "LoadSemiTrans: expected <SEMICOVAR> tag in file '%s'");
-   ReadShort (&src, &nblocks, 1, binary);
-
-   ReadInt (&src, &blockSize, 1, binary);
-   for(i = 2; i <= nblocks; i++) {
-      ReadInt (&src, &bs, 1, binary);
-      if (bs != blockSize)
-         HError (9999, "LoadSemiTrans: BlockMats with different size blocks not supported");
-   }
-   if(!*transMat)
-      *transMat = CreateBlockMat (&gcheap, nblocks * blockSize, nblocks);
-   if (!ReadBlockMat (&src, *transMat, binary))
-      HError (9999, "LoadSemiTrans: cannot read transform matrix");
-      
-   CloseSource(&src);
-}
-
-void FVTransModels (HMMSet *hset, BlockMatrix transMat)
-{
-   int i = 0;
-   HMMScanState hss;
-
-   NewHMMScan (hset, &hss);
-   do{
-      while(GoNextMix (&hss, FALSE)){
-         MultBlockMat_Vec (transMat, hss.mp->mean, hss.mp->mean);
-         ++i;
-      }
-   }while (GoNextHMM (&hss));
-   EndHMMScan (&hss);
-
-   if (trace & T_ADP)
-      printf ("applied full-var transform to %d mixture means", i);
-}
-
-
-/* UpdateSpkrModels
-
-     apply speaker specific transforms
-*/
-Boolean UpdateSpkrModels (char *fn)
-{
-   char spkrName[MAXSTRLEN] = "";
-   char fvTransFN[MAXSTRLEN] = "";
-   char mllrTransFN[MAXSTRLEN] = "";
-   Boolean changed = FALSE;
-   
-   /* full-variance transform: apply to means & feature space */
-   if (!MaskMatch (spkrPat, spkrName, fn))
-      HError (9999, "UpdateSpkrModels: non-matching speaker mask '%s'", spkrPat);
-   
-   if (!curSpkrName || strcmp (spkrName, curSpkrName)) {
-      if (trace & T_ADP)
-         printf ("new speaker %s, adapting...\n", spkrName);
-
-      /* MLLR transform */
-      if (mllrTransDir) {
-         if (curSpkrName) {
-            /* apply back tranform */
-            HError (9999, "UpdateSpkrModels: switching speakers not supported, yet!");
-         }
-         if (trace & T_ADP)
-            printf (" applying MLLR transform");
-
-         MakeFN (spkrName, mllrTransDir, NULL, mllrTransFN);
-         LoadLegacyTransformSet (&hset, mllrTransFN, rt);
-
-         ApplyTransforms (rt);
-         changed = TRUE;
-      }
-
-      if (fvTransDir) {
-         if (trace & T_ADP)
-            printf (" applying full-var transform");
-
-         /* full-variance transform */
-         if (fvTransMat)
-            ResetFVTrans (&hset, fvTransMat);
-         MakeFN (spkrName, fvTransDir, NULL, fvTransFN);
-         LoadFVTrans (fvTransFN, &fvTransMat);
-         FVTransModels (&hset, fvTransMat);
-         /* # store per frame offset log(BlkMatDet(transMat)) */
-
-         changed = TRUE;
-      }
-      curSpkrName = spkrName;
-   }
-
-   return changed;
-}
-#else
-Boolean UpdateSpkrModels (char *fn)
-{
+Boolean UpdateSpkrModels (char *fn) {
    HError (1, "MLLR or FV transforms not supported");
    return FALSE;
 }
-#endif
 
 // =======================================================
 
-Decoder::Decoder(): _decInst(NULL) {
+Decoder::Decoder(LanguageModel& lm): _lm(lm), _decInst(NULL) {
    /* init model heap & set early to support loading MMFs */
    CreateHeap(&_modelHeap, "Model heap",  MSTAK, 1, 0.0, 100000, 800000 );
    CreateHMMSet(&hset, &_modelHeap, TRUE); 
@@ -861,9 +781,7 @@ void Decoder::init() {
    }
 
    if (!latRescore) {
-
-      if (!langfn)
-         HError (9999, "HDecode: no LM or lattice specified");
+      if (!langfn) HError (9999, "HDecode: no LM or lattice specified");
 
       /* mark all words  for inclusion in Net */
       MarkAllWords (&vocab);
@@ -875,11 +793,7 @@ void Decoder::init() {
       if (trace & T_TOP)
          printf ("Reading language model from %s\n", langfn);
       
-      lm = CreateLM (&_lmHeap, langfn, startWord, endWord, &vocab);
-   }
-   else {
-      net = NULL;
-      lm = NULL;
+      _lm.loadFromFile(langfn);
    }
 
    modAlign = FALSE;
@@ -891,7 +805,7 @@ void Decoder::init() {
    }
 
    /* create Decoder instance */
-   _decInst = CreateDecoderInst (&hset, lm, nTok, TRUE, useHModel, outpBlocksize,
+   _decInst = CreateDecoderInst (&hset, _lm.get_lm(), nTok, TRUE, useHModel, outpBlocksize,
                             bestAlignMLF ? TRUE : FALSE,
                             modAlign);
    
@@ -918,25 +832,56 @@ void Decoder::init() {
 
       /* online adaptation not supported yet! */
    }
+}
 
+void Decoder::rescoreLattice(char* fn) {
+  /* read lattice and create LM */
+  char latfn[MAXSTRLEN],buf3[MAXSTRLEN];
+  FILE *latF;
+  Boolean isPipe;
+  Lattice *lat;
 
-#ifdef LEGACY_CUHTK2_MLLR
-   /* initialise adaptation */
-   if (mllrTransDir) {
-      CreateHeap(&_regHeap,   "regClassStore",  MSTAK, 1, 0.5, 80000, 80000 );
-      rt = (RegTransInfo *) New(&_regHeap, sizeof(RegTransInfo));
-      rt->nBlocks = 0;
-      rt->classKind = DEF_REGCLASS;
-      rt->adptSil = TRI_UNDEF;
-      rt->nodeOccThresh = 0.0;
+  /* clear out previous LexNet, Lattice and LM structures */
+  ResetHeap (&_lmHeap);
+  ResetHeap (&_netHeap);
 
-      /*# legacy CU-HTK adapt: create RegTree from INCORE/CLASS files
-          and strore in ~r macro */
-      LoadLegacyRegTree (&hset);
-      
-      InitialiseTransform(&hset, &_regHeap, rt, FALSE);
-   }
-#endif
+  if (latFileMask != NULL ) { /* support for rescoring lattoce masks */
+    if (!MaskMatch(latFileMask, buf3 , fn))
+      HError(2319,"HDecode: mask %s has no match with segemnt %s",latFileMask,fn);
+    MakeFN (buf3, latInDir, latInExt, latfn);
+  } else {
+    MakeFN (fn, latInDir, latInExt, latfn);
+  }
+
+  if (trace & T_TOP)
+    printf ("Loading Lattice from %s\n", latfn);
+  {
+    latF = FOpen (latfn, NetFilter, &isPipe);
+    if (!latF)
+      HError (9999, "DoRecognition: Cannot open lattice file %s\n", latfn);
+
+    /* #### maybe separate lattice heap? */
+    lat = ReadLattice (latF, &_lmHeap, &vocab, FALSE, FALSE);
+    FClose (latF, isPipe);
+    if (!lat)
+      HError (9999, "DoRecognition: cannot read lattice file %s\n", latfn);
+  }
+
+  /* mark prons of all words in lattice */
+  UnMarkAllWords (&vocab);
+  MarkAllWordsfromLat (&vocab, lat, silDict);
+
+  /* create network of all the words/prons marked (word->aux and pron->aux == 1) */
+  if (trace & T_TOP)
+    printf ("Creating network\n");
+  net = CreateLexNet (&_netHeap, &vocab, &hset, startWord, endWord, silDict);
+
+  /* create LM based on pronIds defined by CreateLexNet */
+  if (trace & T_TOP)
+    printf ("Creating language model\n");
+
+  _lm.loadFromLattice(latfn, lat);
+  _decInst->lm = _lm.get_lm();
 }
 
 void Decoder::recognize(char *fn) {
@@ -975,54 +920,8 @@ void Decoder::recognize(char *fn) {
               ParmKind2Str (pbInfo.tgtPK, buf1),
               ParmKind2Str (hset.pkind, buf2));
               
-   if (latRescore) {
-      /* read lattice and create LM */
-      char latfn[MAXSTRLEN],buf3[MAXSTRLEN];
-      FILE *latF;
-      Boolean isPipe;
-      Lattice *lat;
-
-      /* clear out previous LexNet, Lattice and LM structures */
-      ResetHeap (&_lmHeap);
-      ResetHeap (&_netHeap);
-      
-      if (latFileMask != NULL ) { /* support for rescoring lattoce masks */
-         if (!MaskMatch(latFileMask, buf3 , fn))
-            HError(2319,"HDecode: mask %s has no match with segemnt %s",latFileMask,fn);
-         MakeFN (buf3, latInDir, latInExt, latfn);
-      } else {
-         MakeFN (fn, latInDir, latInExt, latfn);
-      }
-      
-      if (trace & T_TOP)
-         printf ("Loading Lattice from %s\n", latfn);
-      {
-         latF = FOpen (latfn, NetFilter, &isPipe);
-         if (!latF)
-            HError (9999, "DoRecognition: Cannot open lattice file %s\n", latfn);
-         
-         /* #### maybe separate lattice heap? */
-         lat = ReadLattice (latF, &_lmHeap, &vocab, FALSE, FALSE);
-         FClose (latF, isPipe);
-         if (!lat)
-            HError (9999, "DoRecognition: cannot read lattice file %s\n", latfn);
-      }
-      
-      /* mark prons of all words in lattice */
-      UnMarkAllWords (&vocab);
-      MarkAllWordsfromLat (&vocab, lat, silDict);
-      
-      /* create network of all the words/prons marked (word->aux and pron->aux == 1) */
-      if (trace & T_TOP)
-         printf ("Creating network\n");
-      net = CreateLexNet (&_netHeap, &vocab, &hset, startWord, endWord, silDict);
-
-      /* create LM based on pronIds defined by CreateLexNet */
-      if (trace & T_TOP)
-         printf ("Creating language model\n");
-      lm = CreateLMfromLat (&_lmHeap, latfn, lat, &vocab);
-      _decInst->lm = lm;
-   }
+   if (latRescore)
+     rescoreLattice(fn);
 
    if (weBeamWidth > beamWidth)
       weBeamWidth = beamWidth;
@@ -1039,16 +938,6 @@ void Decoder::recognize(char *fn) {
    frameN = frameProc = 0;
    while (BufferStatus (parmBuf) != PB_CLEARED) {
       ReadAsBuffer (parmBuf, &obs[frameN % outpBlocksize]);
-      
-#ifdef LEGACY_CUHTK2_MLLR
-      if (fvTransMat) {
-         if (trace & T_OBS)
-            printf ("apply full variance transform\n");
-
-         MultBlockMat_Vec (fvTransMat, obs[frameN % outpBlocksize].fv[1], 
-                           obs[frameN % outpBlocksize].fv[1]);
-      }
-#endif
 
       if (frameN+1 >= outpBlocksize) {  /* enough frames available */
          if (trace & T_OBS)
