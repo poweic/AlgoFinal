@@ -143,19 +143,57 @@ static char *bestAlignMLF;      /* MLF with 1-best alignment */
 
 /* -------------------------- Heaps ------------------------------------- */
 
-static MemHeap modelHeap;
-static MemHeap netHeap;
-static MemHeap lmHeap;
-static MemHeap inputBufHeap;
-static MemHeap transHeap;
-static MemHeap regHeap;
+// static MemHeap _modelHeap;
+// static MemHeap _netHeap;
+// static MemHeap _lmHeap;
+// static MemHeap _inputBufHeap;
+// static MemHeap _transHeap;
+// static MemHeap _regHeap;
 
 /* -------------------------- Prototypes -------------------------------- */
+
+void ParseCommandArguments();
+void InitAll();
+
 void SetConfParms (void);
 void ReportUsage (void);
-DecoderInst *Initialise (void);
-void DoRecognition (DecoderInst *dec, char *fn);
+// DecoderInst *Initialise (void);
+// void DoRecognition (DecoderInst *dec, char *fn);
 Boolean UpdateSpkrModels (char *fn);
+
+/* linked list storing the info about the 1-best alignment read from BESTALIGNMLF 
+   one bestInfo struct per model */
+typedef struct _BestInfo BestInfo;
+struct _BestInfo {
+   int start;           /* frame numbers */
+   int end;
+   LexNode *ln;
+   LLink ll;           /* get rid of this? currently start/end are redundant */
+   BestInfo *next;
+};
+
+class Decoder {
+  public:
+    Decoder();
+    void init();
+    void recognize(char *fn);
+
+    BestInfo *CreateBestInfo (char *fn, HTime frameDur);
+
+    void PrintAlignBestInfo (BestInfo *bestInfo);
+    void AnalyseSearchSpace (BestInfo *bestInfo);
+
+  private:
+    DecoderInst* _decInst;
+
+    MemHeap _modelHeap;
+    MemHeap _netHeap;
+    MemHeap _lmHeap;
+    MemHeap _inputBufHeap;
+    MemHeap _transHeap;
+    MemHeap _regHeap;
+};
+
 
 /* ---------------- Configuration Parameters ---------------------------- */
 
@@ -171,6 +209,57 @@ FILE *debug_stderr = stderr;
 #endif
 
 /* ---------------- Process Command Line ------------------------- */
+
+int main (int argc, char *argv[]) {
+
+  Decoder decoder;
+
+  if (InitShell (argc, argv, hdecode_version, hdecode_sccs_id) < SUCCESS)
+    HError (4000, "HDecode: InitShell failed");
+
+  InitAll();
+
+  if (!InfoPrinted () && NumArgs () == 0)
+    ReportUsage ();
+
+  if (NumArgs () == 0)
+    Exit (0);
+
+  SetConfParms ();
+
+  ParseCommandArguments();
+
+  /* load models and initialise decoder */
+  decoder.init();
+
+  /* load 1-best alignment */
+  if (bestAlignMLF)
+    LoadMasterFile (bestAlignMLF);
+
+  while (NumArgs () > 0) {
+    if (NextArg () != STRINGARG)
+      HError (4019, "HDecode: Data file name expected");
+
+    char* datafn = GetStrArg ();
+
+    if (trace & T_TOP)
+      printf ("File: %s\n", datafn);
+
+    // perform recognition
+    decoder.recognize(datafn);
+  }
+
+  if (trace & T_MEM) {
+    printf ("Memory State on Completion\n");
+    PrintAllHeapStats ();
+  }
+
+  /* maybe output transforms for last speaker */
+  UpdateSpkrStats(&hset, &xfInfo, NULL); 
+
+  Exit(0);             /* maybe print config and exit */
+  return 0;
+}
 
 /* SetConfParms: set conf parms relevant to this tool */
 void
@@ -245,250 +334,11 @@ ReportUsage (void)
    printf ("\n  sizes: PronId=%d  LMId=%d \n", sizeof (PronId), sizeof (LMId));
 }
 
-void ParseCommandArguments();
-void InitAll();
 
-int
-main (int argc, char *argv[])
-{
-   DecoderInst *dec;
-
-   if (InitShell (argc, argv, hdecode_version, hdecode_sccs_id) < SUCCESS)
-     HError (4000, "HDecode: InitShell failed");
-
-   InitAll();
-
-   if (!InfoPrinted () && NumArgs () == 0)
-      ReportUsage ();
-
-   if (NumArgs () == 0)
-      Exit (0);
-
-   SetConfParms ();
-
-   /* init model heap & set early to support loading MMFs */
-   CreateHeap(&modelHeap, "Model heap",  MSTAK, 1, 0.0, 100000, 800000 );
-   CreateHMMSet(&hset,&modelHeap,TRUE); 
-
-   ParseCommandArguments();
-
-   /* load models and initialise decoder */
-   dec = Initialise ();
-
-   /* load 1-best alignment */
-   if (bestAlignMLF)
-      LoadMasterFile (bestAlignMLF);
-
-   while (NumArgs () > 0) {
-      if (NextArg () != STRINGARG)
-	 HError (4019, "HDecode: Data file name expected");
-
-      char* datafn = GetStrArg ();
-
-      if (trace & T_TOP) {
-	 printf ("File: %s\n", datafn);
-	 fflush (stdout);
-      }
-      DoRecognition (dec, datafn);
-      /* perform recognition */
-   }
-
-   if (trace & T_MEM) {
-      printf ("Memory State on Completion\n");
-      PrintAllHeapStats ();
-   }
-
-   /* maybe output transforms for last speaker */
-   UpdateSpkrStats(&hset,&xfInfo, NULL); 
-
-   Exit(0);             /* maybe print config and exit */
-   return (0);
-}
-
-DecoderInst *Initialise (void)
-{
-   int i;
-   DecoderInst *dec;
-   Boolean eSep;
-   Boolean modAlign;
-
-   /* init Heaps */
-   CreateHeap (&netHeap, "Net heap", MSTAK, 1, 0,100000, 800000);
-   CreateHeap (&lmHeap, "LM heap", MSTAK, 1, 0,1000000, 10000000);
-   CreateHeap(&transHeap,"Transcription heap",MSTAK,1,0,8000,80000);
-
-   /* Read dictionary */
-   if (trace & T_TOP) {
-      printf ("Reading dictionary from %s\n", dictfn);
-      fflush (stdout);
-   }
-
-   InitVocab (&vocab);
-   if (ReadDict (dictfn, &vocab) < SUCCESS)
-      HError (9999, "Initialise: ReadDict failed");
-
-   /* Read accoustic models */
-   if (trace & T_TOP) {
-      printf ("Reading acoustic models...");
-      fflush (stdout);
-   }
-   if (MakeHMMSet (&hset, hmmListfn) < SUCCESS) 
-      HError (4128, "Initialise: MakeHMMSet failed");
-   if (LoadHMMSet (&hset, hmmDir, hmmExt) < SUCCESS) 
-      HError (4128, "Initialise: LoadHMMSet failed");
-   
-   /* convert to INVDIAGC */
-   ConvDiagC (&hset, TRUE);
-   ConvLogWt (&hset);
-   
-   if (trace&T_TOP) {
-      printf("Read %d physical / %d logical HMMs\n",
-	     hset.numPhyHMM, hset.numLogHMM);  
-      fflush (stdout);
-   }
-
-   /* process dictionary */
-   startLab = GetLabId (startWord, FALSE);
-   if (!startLab) 
-      HError (9999, "HDecode: cannot find STARTWORD '%s'\n", startWord);
-   endLab = GetLabId (endWord, FALSE);
-   if (!endLab) 
-      HError (9999, "HDecode: cannot find ENDWORD '%s'\n", endWord);
-
-   spLab = GetLabId (spModel, FALSE);
-   if (!spLab)
-      HError (9999, "HDecode: cannot find label 'sp'");
-   silLab = GetLabId (silModel, FALSE);
-   if (!silLab)
-      HError (9999, "HDecode: cannot find label 'sil'");
-
-
-   if (silDict) {    /* dict contains -/sp/sil variants (with probs) */
-      ConvertSilDict (&vocab, spLab, silLab, startLab, endLab);
-
-      /* check for skip in sp model */
-      { 
-         LabId spLab;
-         HLink spHMM;
-         MLink spML;
-         int N;
-
-         spLab = GetLabId ("sp", FALSE);
-         if (!spLab)
-            HError (9999, "cannot find 'sp' model.");
-
-         spML = FindMacroName (&hset, 'l', spLab);
-         if (!spML)
-            HError (9999, "cannot find model for sp");
-         spHMM = (HLink) spML->structure;
-         N = spHMM->numStates;
-
-         if (spHMM->transP[1][N] > LSMALL)
-            HError (9999, "HDecode: using -/sp/sil dictionary but sp contains tee transition!");
-      }
-   }
-   else {       /* lvx-style dict (no sp/sil at wordend */
-      MarkAllProns (&vocab);
-   }
-   
-
-   if (!latRescore) {
-
-      if (!langfn)
-         HError (9999, "HDecode: no LM or lattice specified");
-
-      /* mark all words  for inclusion in Net */
-      MarkAllWords (&vocab);
-
-      /* create network */
-      net = CreateLexNet (&netHeap, &vocab, &hset, startWord, endWord, silDict);
-      
-      /* Read language model */
-      if (trace & T_TOP) {
-         printf ("Reading language model from %s\n", langfn);
-         fflush (stdout);
-      }
-      
-      lm = CreateLM (&lmHeap, langfn, startWord, endWord, &vocab);
-   }
-   else {
-      net = NULL;
-      lm = NULL;
-   }
-
-   modAlign = FALSE;
-   if (latOutForm) {
-      if (strchr (latOutForm, 'd'))
-         modAlign = TRUE;
-      if (strchr (latOutForm, 'n'))
-         HError (9999, "DoRecognition: likelihoods for model alignment not supported");
-   }
-
-   /* create Decoder instance */
-   dec = CreateDecoderInst (&hset, lm, nTok, TRUE, useHModel, outpBlocksize,
-                            bestAlignMLF ? TRUE : FALSE,
-                            modAlign);
-   
-   /* create buffers for observations */
-   SetStreamWidths (hset.pkind, hset.vecSize, hset.swidth, &eSep);
-
-   obs = (Observation *) New (&gcheap, outpBlocksize * sizeof (Observation));
-   for (i = 0; i < outpBlocksize; ++i)
-      obs[i] = MakeObservation (&gcheap, hset.swidth, hset.pkind, 
-                                (hset.hsKind == DISCRETEHS), eSep);
-
-   CreateHeap (&inputBufHeap, "Input Buffer Heap", MSTAK, 1, 1.0, 80000, 800000);
-
-   /* Initialise adaptation */
-
-   /* sort out masks just in case using adaptation */
-   if (xfInfo.inSpkrPat == NULL) xfInfo.inSpkrPat = xfInfo.outSpkrPat; 
-   if (xfInfo.paSpkrPat == NULL) xfInfo.paSpkrPat = xfInfo.outSpkrPat; 
-
-   if (xfInfo.useOutXForm) {
-      CreateHeap(&regHeap,   "regClassStore",  MSTAK, 1, 0.5, 1000, 8000 );
-      /* This initialises things - temporary hack - THINK!! */
-      CreateAdaptXForm(&hset, "tmp");
-
-      /* online adaptation not supported yet! */
-   }
-
-
-#ifdef LEGACY_CUHTK2_MLLR
-   /* initialise adaptation */
-   if (mllrTransDir) {
-      CreateHeap(&regHeap,   "regClassStore",  MSTAK, 1, 0.5, 80000, 80000 );
-      rt = (RegTransInfo *) New(&regHeap, sizeof(RegTransInfo));
-      rt->nBlocks = 0;
-      rt->classKind = DEF_REGCLASS;
-      rt->adptSil = TRI_UNDEF;
-      rt->nodeOccThresh = 0.0;
-
-      /*# legacy CU-HTK adapt: create RegTree from INCORE/CLASS files
-          and strore in ~r macro */
-      LoadLegacyRegTree (&hset);
-      
-      InitialiseTransform(&hset, &regHeap, rt, FALSE);
-   }
-#endif
-
-   return dec;
-}
+// DecoderInst *Initialise (void) { }
 
 
 /**********  align best code  ****************************************/
-
-/* linked list storing the info about the 1-best alignment read from BESTALIGNMLF 
-   one bestInfo struct per model */
-typedef struct _BestInfo BestInfo;
-struct _BestInfo {
-   int start;           /* frame numbers */
-   int end;
-   LexNode *ln;
-   LLink ll;           /* get rid of this? currently start/end are redundant */
-   BestInfo *next;
-};
-
 
 /* find the LN_MODEL lexnode following ln that has label lab
    step over LN_CON and LN_WORDEND nodes.
@@ -545,116 +395,6 @@ BestInfo *FindLexNetLab (MemHeap *heap, LexNode *ln, LLink ll, HTime frameDur)
    }
    
    return NULL;
-}
-
-BestInfo *CreateBestInfo (MemHeap *heap, char *fn, HTime frameDur)
-{
-   char alignFN[MAXFNAMELEN];
-   Transcription *bestTrans;
-   LLink ll;
-   LexNode *ln;
-   MLink m;
-   LabId lnLabId;
-   BestInfo *bestAlignInfo;
-
-   MakeFN (fn, "", "rec", alignFN);
-   bestTrans = LOpen (&transHeap, alignFN, HTK);
-      
-   /* delete 'sp' or 'sil' before final 'sil' if it is there
-      these are always inserted by HVite but not possible in HDecode's net structure*/
-   if (bestTrans->head->tail->pred->pred->labid == spLab ||
-       bestTrans->head->tail->pred->pred->labid == silLab) {
-      LLink delLL;
-      
-      delLL = bestTrans->head->tail->pred->pred;
-      /* add sp's frames (if any) to final sil */
-      delLL->succ->start = delLL->pred->end;
-      
-      delLL->pred->succ = delLL->succ;
-      delLL->succ->pred = delLL->pred;
-   }
-   
-   ln = net->start;
-   assert (ln->type == LN_MODEL);
-   m = FindMacroStruct (&hset, 'h', ln->data.hmm);
-   lnLabId = m->id;
-   
-   /* info for net start node */
-   ll = bestTrans->head->head->succ;
-#if 0
-   printf ("%8.0f %8.0f %8s   ln %p %8s\n", ll->start, ll->end, ll->labid->name, 
-           ln, lnLabId->name);
-#endif
-   assert (ll->labid == lnLabId);
-   bestAlignInfo = (BestInfo*) New (&transHeap, sizeof (BestInfo));
-   bestAlignInfo->start = ll->start / (frameDur*1.0e7);
-   bestAlignInfo->end = ll->end / (frameDur*1.0e7);
-   bestAlignInfo->ll = ll;
-   bestAlignInfo->ln = ln;
-   
-   
-   /* info for all the following nodes */
-   bestAlignInfo->next = FindLexNetLab (&transHeap, ln, ll->succ, frameDur);
-   
-   {
-      BestInfo *b;
-      for (b = bestAlignInfo; b->next; b = b->next)
-         printf ("%d %d %8s %p\n", b->start, b->end, b->ll->labid->name, b->ln);
-   }
-
-   return bestAlignInfo;
-}
-
-void PrintAlignBestInfo (DecoderInst *dec, BestInfo *b)
-{
-   LexNodeInst *inst;
-   TokScore score;
-   int l;
-   LabId monoPhone;
-   LogDouble phonePost;
-
-   inst = b->ln->inst;
-   score = inst ? inst->best : LZERO;
-
-   if (b->ln->type == LN_MODEL) {
-      monoPhone =(LabId) b->ln->data.hmm->hook;
-      phonePost = dec->phonePost[(int) monoPhone->aux];
-   } else
-      phonePost = 999.99;
-
-   l = dec->nLayers-1;
-   while (dec->net->layerStart[l] > b->ln) {
-      --l;
-      assert (l >= 0);
-   }
-   
-   printf ("BESTALIGN frame %4d best %.3f alignbest %d -> %d ln %p layer %d score %.3f phonePost %.3f\n", 
-           dec->frame, dec->bestScore, 
-           b->start, b->end, b->ln, l, score, phonePost);
-}
-
-void AnalyseSearchSpace (DecoderInst *dec, BestInfo *bestInfo)
-{
-   BestInfo *b;
-   LabId monoPhone;
-
-   monoPhone =(LabId) dec->bestInst->node->data.hmm->hook;
-   printf ("frame %4d best %.3f phonePost %.3f\n", dec->frame, 
-           dec->bestScore, dec->phonePost[(int) monoPhone->aux]);
- 
-   for (b = bestInfo; b; b = b->next) {
-      if (b->start < dec->frame && b->end >= dec->frame) 
-         break;
-   }
-   if (b) {
-      PrintAlignBestInfo (dec, b);
-      for (b = b->next; b && b->start == b->end && b->start == dec->frame; b = b->next) {
-         PrintAlignBestInfo (dec, b);
-      }
-   }
-   else {
-      printf ("BESTALIGN ERROR\n");
-   }
 }
 
 void InitAll() {
@@ -916,265 +656,7 @@ void ParseCommandArguments() {
 
 /*****************  main recognition function  ************************/
 
-void DoRecognition (DecoderInst *dec, char *fn)
-{
-   char buf1[MAXSTRLEN], buf2[MAXSTRLEN];
-   ParmBuf parmBuf;
-   BufferInfo pbInfo;
-   int frameN, frameProc, i, bs;
-   Transcription *trans;
-   Lattice *lat;
-   clock_t startClock, endClock;
-   double cpuSec;
-   Observation *obsBlock[MAXBLOCKOBS];
-   BestInfo *bestAlignInfo = NULL;
-
-   /* This handles the initial input transform, parent transform setting
-      and output transform creation */
-   { 
-      Boolean changed;
-
-      changed = UpdateSpkrStats(&hset, &xfInfo, fn);
-
-#if 0   /* not neccessary if for USEHMODEL=T */
-      if (changed)
-         dec->si = ConvertHSet (&modelHeap, &hset, dec->useHModel);
-#endif
-   }
-
-   startClock = clock();
-
-   /* get transcrition of 1-best alignment */
-   if (bestAlignMLF)
-      bestAlignInfo = CreateBestInfo (&transHeap, fn, pbInfo.tgtSampRate/1.0e7);
-   
-   parmBuf = OpenBuffer (&inputBufHeap, fn, 50, dataForm, TRI_UNDEF, TRI_UNDEF);
-   if (!parmBuf)
-      HError (9999, "HDecode: Opening input failed");
-   
-   GetBufferInfo (parmBuf, &pbInfo);
-   if (pbInfo.tgtPK != hset.pkind)
-      HError (9999, "HDecode: Incompatible parm kinds %s vs. %s",
-              ParmKind2Str (pbInfo.tgtPK, buf1),
-              ParmKind2Str (hset.pkind, buf2));
-              
-   if (latRescore) {
-      /* read lattice and create LM */
-      char latfn[MAXSTRLEN],buf3[MAXSTRLEN];
-      FILE *latF;
-      Boolean isPipe;
-      Lattice *lat;
-
-      /* clear out previous LexNet, Lattice and LM structures */
-      ResetHeap (&lmHeap);
-      ResetHeap (&netHeap);
-      
-      if (latFileMask != NULL ) { /* support for rescoring lattoce masks */
-         if (!MaskMatch(latFileMask, buf3 , fn))
-            HError(2319,"HDecode: mask %s has no match with segemnt %s",latFileMask,fn);
-         MakeFN (buf3, latInDir, latInExt, latfn);
-      } else {
-         MakeFN (fn, latInDir, latInExt, latfn);
-      }
-      
-      if (trace & T_TOP)
-         printf ("Loading Lattice from %s\n", latfn);
-      {
-         latF = FOpen (latfn, NetFilter, &isPipe);
-         if (!latF)
-            HError (9999, "DoRecognition: Cannot open lattice file %s\n", latfn);
-         
-         /* #### maybe separate lattice heap? */
-         lat = ReadLattice (latF, &lmHeap, &vocab, FALSE, FALSE);
-         FClose (latF, isPipe);
-         if (!lat)
-            HError (9999, "DoRecognition: cannot read lattice file %s\n", latfn);
-      }
-      
-      /* mark prons of all words in lattice */
-      UnMarkAllWords (&vocab);
-      MarkAllWordsfromLat (&vocab, lat, silDict);
-      
-      /* create network of all the words/prons marked (word->aux and pron->aux == 1) */
-      if (trace & T_TOP)
-         printf ("Creating network\n");
-      net = CreateLexNet (&netHeap, &vocab, &hset, startWord, endWord, silDict);
-
-      /* create LM based on pronIds defined by CreateLexNet */
-      if (trace & T_TOP)
-         printf ("Creating language model\n");
-      lm = CreateLMfromLat (&lmHeap, latfn, lat, &vocab);
-      dec->lm = lm;
-   }
-
-   if (weBeamWidth > beamWidth)
-      weBeamWidth = beamWidth;
-   if (zsBeamWidth > beamWidth)
-      zsBeamWidth = beamWidth;
-
-   InitDecoderInst (dec, net, pbInfo.tgtSampRate, beamWidth, relBeamWidth,
-                    weBeamWidth, zsBeamWidth, maxModel,
-                    insPen, acScale, pronScale, lmScale, fastlmlaBeam);
-
-   net->vocabFN = dictfn;
-   dec->utterFN = fn;
-
-   frameN = frameProc = 0;
-   while (BufferStatus (parmBuf) != PB_CLEARED) {
-      ReadAsBuffer (parmBuf, &obs[frameN % outpBlocksize]);
-      
-#ifdef LEGACY_CUHTK2_MLLR
-      if (fvTransMat) {
-         if (trace & T_OBS)
-            printf ("apply full variance transform\n");
-
-         MultBlockMat_Vec (fvTransMat, obs[frameN % outpBlocksize].fv[1], 
-                           obs[frameN % outpBlocksize].fv[1]);
-      }
-#endif
-
-      if (frameN+1 >= outpBlocksize) {  /* enough frames available */
-         if (trace & T_OBS)
-            PrintObservation (frameProc+1, &obs[frameProc % outpBlocksize], 13);
-         for (i = 0; i < outpBlocksize; ++i)
-            obsBlock[i] = &obs[(frameProc + i) % outpBlocksize];
-
-#ifdef DEBUG_TRACE
-         fprintf(stdout, "\nProcessing frame %d :\n", frameProc);
-         fflush(stdout);
-#endif
-         
-         ProcessFrame (dec, obsBlock, outpBlocksize, xfInfo.inXForm);
-         if (bestAlignInfo)
-            AnalyseSearchSpace (dec, bestAlignInfo);
-         ++frameProc;
-      }
-      ++frameN;
-   }
-   CloseBuffer (parmBuf);
-
-   /* process remaining frames (no full blocks available anymore) */
-   for (bs = outpBlocksize-1; bs >=1; --bs) {
-      if (trace & T_OBS)
-         PrintObservation (frameProc+1, &obs[frameProc % outpBlocksize], 13);
-      for (i = 0; i < bs; ++i)
-         obsBlock[i] = &obs[(frameProc + i) % outpBlocksize];
-      
-      ProcessFrame (dec, obsBlock, bs, xfInfo.inXForm);
-      if (bestAlignInfo)
-         AnalyseSearchSpace (dec, bestAlignInfo);
-      ++frameProc;
-   }
-   assert (frameProc == frameN);
-
-   
-   endClock = clock();
-   cpuSec = (endClock - startClock) / (double) CLOCKS_PER_SEC;
-   printf ("CPU time %f  utterance length %f  RT factor %f\n",
-           cpuSec, frameN*dec->frameDur, cpuSec / (frameN*dec->frameDur));
-
-   trans = TraceBack (&transHeap, dec);
-
-   /* save 1-best transcription */
-   /* the following is from HVite.c */
-   if (trans) {
-      char labfn[MAXSTRLEN];
-
-      if (labForm != NULL)
-         ReFormatTranscription (trans, pbInfo.tgtSampRate, FALSE, FALSE,
-                                strchr(labForm,'X')!=NULL,
-                                strchr(labForm,'N')!=NULL,strchr(labForm,'S')!=NULL,
-                                strchr(labForm,'C')!=NULL,strchr(labForm,'T')!=NULL,
-                                strchr(labForm,'W')!=NULL,strchr(labForm,'M')!=NULL);
-      
-      MakeFN (fn, labDir, labExt, labfn);
-
-      if (LSave (labfn, trans, ofmt) < SUCCESS)
-         HError(9999, "DoRecognition: Cannot save file %s", labfn);
-      if (trace & T_TOP)
-         PrintTranscription (trans, "1-best hypothesis");
-
-      Dispose (&transHeap, trans);
-   }
-
-   if (latGen) {
-      lat = LatTraceBack (&transHeap, dec);
-
-      /* prune lattice */
-      if (lat && latPruneBeam < - LSMALL) {
-         lat = LatPrune (&transHeap, lat, latPruneBeam, latPruneAPS);
-      }
-
-      /* the following is from HVite.c */
-      if (lat) {
-         char latfn[MAXSTRLEN];
-         char *p;
-         Boolean isPipe;
-         FILE *file;
-         LatFormat form;
-         
-         MakeFN (fn, latOutDir, latOutExt, latfn);
-         file = FOpen (latfn, NetOFilter, &isPipe);
-         if (!file) 
-            HError (999, "DoRecognition: Could not open file %s for lattice output",latfn);
-         if (!latOutForm)
-            form = (HLAT_DEFAULT & ~HLAT_ALLIKE)|HLAT_PRLIKE;
-         else {
-            for (p = latOutForm, form=0; *p != 0; p++) {
-               switch (*p) {
-               case 'A': form|=HLAT_ALABS; break;
-               case 'B': form|=HLAT_LBIN; break;
-               case 't': form|=HLAT_TIMES; break;
-               case 'v': form|=HLAT_PRON; break;
-               case 'a': form|=HLAT_ACLIKE; break;
-               case 'l': form|=HLAT_LMLIKE; break;
-               case 'd': form|=HLAT_ALIGN; break;
-               case 'm': form|=HLAT_ALDUR; break;
-               case 'n': form|=HLAT_ALLIKE; 
-                  HError (9999, "DoRecognition: likelihoods for model alignment not supported");
-                  break;
-               case 'r': form|=HLAT_PRLIKE; break;
-               }
-            }
-         }
-         if (WriteLattice (lat, file, form) < SUCCESS)
-            HError(9999, "DoRecognition: WriteLattice failed");
-         
-         FClose (file,isPipe);
-         Dispose (&transHeap, lat);
-      }
-   }
-
-
-#ifdef COLLECT_STATS
-   printf ("Stats: nTokSet %lu\n", dec->stats.nTokSet);
-   printf ("Stats: TokPerSet %f\n", dec->stats.sumTokPerTS / (double) dec->stats.nTokSet);
-   printf ("Stats: activePerFrame %f\n", dec->stats.nActive / (double) dec->stats.nFrames);
-   printf ("Stats: activateNodePerFrame %f\n", dec->stats.nActivate / (double) dec->stats.nFrames);
-   printf ("Stats: deActivateNodePerFrame %f\n\n", 
-           dec->stats.nDeActivate / (double) dec->stats.nFrames);
-#if 0
-   printf ("Stats: LMlaCacheHits %ld\n", dec->stats.nLMlaCacheHit);
-   printf ("Stats: LMlaCacheMiss %ld\n", dec->stats.nLMlaCacheMiss);
-#endif
-#ifdef COLLECT_STATS_ACTIVATION
-   {
-      int i;
-      for (i = 0; i <= STATS_MAXT; ++i)
-         printf ("T %d Dead %lu Live %lu\n", i, dec->stats.lnDeadT[i], dec->stats.lnLiveT[i]);
-   }
-#endif
-#endif
-
-   if (trace & T_MEM) {
-      printf ("memory stats at end of recognition\n");
-      PrintAllHeapStats ();
-   }
-
-   ResetHeap (&inputBufHeap);
-   ResetHeap (&transHeap);
-   CleanDecoderInst (dec);
-}
+// void DoRecognition (DecoderInst *dec, char *fn) { }
 
 #ifdef LEGACY_CUHTK2_MLLR
 void ResetFVTrans (HMMSet *hset, BlockMatrix transMat)
@@ -1292,6 +774,533 @@ Boolean UpdateSpkrModels (char *fn)
    return FALSE;
 }
 #endif
+
+// =======================================================
+
+Decoder::Decoder(): _decInst(NULL) {
+   /* init model heap & set early to support loading MMFs */
+   CreateHeap(&_modelHeap, "Model heap",  MSTAK, 1, 0.0, 100000, 800000 );
+   CreateHMMSet(&hset, &_modelHeap, TRUE); 
+}
+
+void Decoder::init() {
+
+   Boolean eSep;
+   Boolean modAlign;
+
+   /* init Heaps */
+   CreateHeap (&_netHeap, "Net heap", MSTAK, 1, 0,100000, 800000);
+   CreateHeap (&_lmHeap, "LM heap", MSTAK, 1, 0,1000000, 10000000);
+   CreateHeap (&_transHeap,"Transcription heap",MSTAK,1,0,8000,80000);
+
+   /* Read dictionary */
+   if (trace & T_TOP)
+      printf ("Reading dictionary from %s\n", dictfn);
+
+   InitVocab (&vocab);
+   if (ReadDict (dictfn, &vocab) < SUCCESS)
+      HError (9999, "Initialise: ReadDict failed");
+
+   /* Read accoustic models */
+   if (trace & T_TOP)
+      printf ("Reading acoustic models...");
+
+   if (MakeHMMSet (&hset, hmmListfn) < SUCCESS) 
+      HError (4128, "Initialise: MakeHMMSet failed");
+   if (LoadHMMSet (&hset, hmmDir, hmmExt) < SUCCESS) 
+      HError (4128, "Initialise: LoadHMMSet failed");
+   
+   /* convert to INVDIAGC */
+   ConvDiagC (&hset, TRUE);
+   ConvLogWt (&hset);
+   
+   if (trace&T_TOP)
+      printf("Read %d physical / %d logical HMMs\n", hset.numPhyHMM, hset.numLogHMM);  
+
+   /* process dictionary */
+   startLab = GetLabId (startWord, FALSE);
+   if (!startLab) 
+      HError (9999, "HDecode: cannot find STARTWORD '%s'\n", startWord);
+   endLab = GetLabId (endWord, FALSE);
+   if (!endLab) 
+      HError (9999, "HDecode: cannot find ENDWORD '%s'\n", endWord);
+
+   spLab = GetLabId (spModel, FALSE);
+   if (!spLab)
+      HError (9999, "HDecode: cannot find label 'sp'");
+   silLab = GetLabId (silModel, FALSE);
+   if (!silLab)
+      HError (9999, "HDecode: cannot find label 'sil'");
+
+   if (silDict) {    /* dict contains -/sp/sil variants (with probs) */
+      ConvertSilDict (&vocab, spLab, silLab, startLab, endLab);
+
+      /* check for skip in sp model */
+      { 
+         LabId spLab;
+         HLink spHMM;
+         MLink spML;
+         int N;
+
+         spLab = GetLabId ("sp", FALSE);
+         if (!spLab)
+            HError (9999, "cannot find 'sp' model.");
+
+         spML = FindMacroName (&hset, 'l', spLab);
+         if (!spML)
+            HError (9999, "cannot find model for sp");
+         spHMM = (HLink) spML->structure;
+         N = spHMM->numStates;
+
+         if (spHMM->transP[1][N] > LSMALL)
+            HError (9999, "HDecode: using -/sp/sil dictionary but sp contains tee transition!");
+      }
+   }
+   else {       /* lvx-style dict (no sp/sil at wordend */
+      MarkAllProns (&vocab);
+   }
+
+   if (!latRescore) {
+
+      if (!langfn)
+         HError (9999, "HDecode: no LM or lattice specified");
+
+      /* mark all words  for inclusion in Net */
+      MarkAllWords (&vocab);
+
+      /* create network */
+      net = CreateLexNet (&_netHeap, &vocab, &hset, startWord, endWord, silDict);
+      
+      /* Read language model */
+      if (trace & T_TOP)
+         printf ("Reading language model from %s\n", langfn);
+      
+      lm = CreateLM (&_lmHeap, langfn, startWord, endWord, &vocab);
+   }
+   else {
+      net = NULL;
+      lm = NULL;
+   }
+
+   modAlign = FALSE;
+   if (latOutForm) {
+      if (strchr (latOutForm, 'd'))
+         modAlign = TRUE;
+      if (strchr (latOutForm, 'n'))
+         HError (9999, "DoRecognition: likelihoods for model alignment not supported");
+   }
+
+   /* create Decoder instance */
+   _decInst = CreateDecoderInst (&hset, lm, nTok, TRUE, useHModel, outpBlocksize,
+                            bestAlignMLF ? TRUE : FALSE,
+                            modAlign);
+   
+   /* create buffers for observations */
+   SetStreamWidths (hset.pkind, hset.vecSize, hset.swidth, &eSep);
+
+   obs = (Observation *) New (&gcheap, outpBlocksize * sizeof (Observation));
+   for (int i = 0; i < outpBlocksize; ++i)
+      obs[i] = MakeObservation (&gcheap, hset.swidth, hset.pkind, 
+                                (hset.hsKind == DISCRETEHS), eSep);
+
+   CreateHeap (&_inputBufHeap, "Input Buffer Heap", MSTAK, 1, 1.0, 80000, 800000);
+
+   /* Initialise adaptation */
+
+   /* sort out masks just in case using adaptation */
+   if (xfInfo.inSpkrPat == NULL) xfInfo.inSpkrPat = xfInfo.outSpkrPat; 
+   if (xfInfo.paSpkrPat == NULL) xfInfo.paSpkrPat = xfInfo.outSpkrPat; 
+
+   if (xfInfo.useOutXForm) {
+      CreateHeap(&_regHeap,   "regClassStore",  MSTAK, 1, 0.5, 1000, 8000 );
+      /* This initialises things - temporary hack - THINK!! */
+      CreateAdaptXForm(&hset, "tmp");
+
+      /* online adaptation not supported yet! */
+   }
+
+
+#ifdef LEGACY_CUHTK2_MLLR
+   /* initialise adaptation */
+   if (mllrTransDir) {
+      CreateHeap(&_regHeap,   "regClassStore",  MSTAK, 1, 0.5, 80000, 80000 );
+      rt = (RegTransInfo *) New(&_regHeap, sizeof(RegTransInfo));
+      rt->nBlocks = 0;
+      rt->classKind = DEF_REGCLASS;
+      rt->adptSil = TRI_UNDEF;
+      rt->nodeOccThresh = 0.0;
+
+      /*# legacy CU-HTK adapt: create RegTree from INCORE/CLASS files
+          and strore in ~r macro */
+      LoadLegacyRegTree (&hset);
+      
+      InitialiseTransform(&hset, &_regHeap, rt, FALSE);
+   }
+#endif
+}
+
+void Decoder::recognize(char *fn) {
+
+   char buf1[MAXSTRLEN], buf2[MAXSTRLEN];
+   ParmBuf parmBuf;
+   BufferInfo pbInfo;
+   int frameN, frameProc, i, bs;
+   Transcription *trans;
+   Lattice *lat;
+   clock_t startClock, endClock;
+   double cpuSec;
+   Observation *obsBlock[MAXBLOCKOBS];
+   BestInfo *bestAlignInfo = NULL;
+
+   /* This handles the initial input transform, parent transform setting
+      and output transform creation */
+   { 
+      Boolean changed;
+      changed = UpdateSpkrStats(&hset, &xfInfo, fn);
+   }
+
+   startClock = clock();
+
+   /* get transcrition of 1-best alignment */
+   if (bestAlignMLF)
+      bestAlignInfo = CreateBestInfo (fn, pbInfo.tgtSampRate/1.0e7);
+   
+   parmBuf = OpenBuffer (&_inputBufHeap, fn, 50, dataForm, TRI_UNDEF, TRI_UNDEF);
+   if (!parmBuf)
+      HError (9999, "HDecode: Opening input failed");
+   
+   GetBufferInfo (parmBuf, &pbInfo);
+   if (pbInfo.tgtPK != hset.pkind)
+      HError (9999, "HDecode: Incompatible parm kinds %s vs. %s",
+              ParmKind2Str (pbInfo.tgtPK, buf1),
+              ParmKind2Str (hset.pkind, buf2));
+              
+   if (latRescore) {
+      /* read lattice and create LM */
+      char latfn[MAXSTRLEN],buf3[MAXSTRLEN];
+      FILE *latF;
+      Boolean isPipe;
+      Lattice *lat;
+
+      /* clear out previous LexNet, Lattice and LM structures */
+      ResetHeap (&_lmHeap);
+      ResetHeap (&_netHeap);
+      
+      if (latFileMask != NULL ) { /* support for rescoring lattoce masks */
+         if (!MaskMatch(latFileMask, buf3 , fn))
+            HError(2319,"HDecode: mask %s has no match with segemnt %s",latFileMask,fn);
+         MakeFN (buf3, latInDir, latInExt, latfn);
+      } else {
+         MakeFN (fn, latInDir, latInExt, latfn);
+      }
+      
+      if (trace & T_TOP)
+         printf ("Loading Lattice from %s\n", latfn);
+      {
+         latF = FOpen (latfn, NetFilter, &isPipe);
+         if (!latF)
+            HError (9999, "DoRecognition: Cannot open lattice file %s\n", latfn);
+         
+         /* #### maybe separate lattice heap? */
+         lat = ReadLattice (latF, &_lmHeap, &vocab, FALSE, FALSE);
+         FClose (latF, isPipe);
+         if (!lat)
+            HError (9999, "DoRecognition: cannot read lattice file %s\n", latfn);
+      }
+      
+      /* mark prons of all words in lattice */
+      UnMarkAllWords (&vocab);
+      MarkAllWordsfromLat (&vocab, lat, silDict);
+      
+      /* create network of all the words/prons marked (word->aux and pron->aux == 1) */
+      if (trace & T_TOP)
+         printf ("Creating network\n");
+      net = CreateLexNet (&_netHeap, &vocab, &hset, startWord, endWord, silDict);
+
+      /* create LM based on pronIds defined by CreateLexNet */
+      if (trace & T_TOP)
+         printf ("Creating language model\n");
+      lm = CreateLMfromLat (&_lmHeap, latfn, lat, &vocab);
+      _decInst->lm = lm;
+   }
+
+   if (weBeamWidth > beamWidth)
+      weBeamWidth = beamWidth;
+   if (zsBeamWidth > beamWidth)
+      zsBeamWidth = beamWidth;
+
+   InitDecoderInst (_decInst, net, pbInfo.tgtSampRate, beamWidth, relBeamWidth,
+                    weBeamWidth, zsBeamWidth, maxModel,
+                    insPen, acScale, pronScale, lmScale, fastlmlaBeam);
+
+   net->vocabFN = dictfn;
+   _decInst->utterFN = fn;
+
+   frameN = frameProc = 0;
+   while (BufferStatus (parmBuf) != PB_CLEARED) {
+      ReadAsBuffer (parmBuf, &obs[frameN % outpBlocksize]);
+      
+#ifdef LEGACY_CUHTK2_MLLR
+      if (fvTransMat) {
+         if (trace & T_OBS)
+            printf ("apply full variance transform\n");
+
+         MultBlockMat_Vec (fvTransMat, obs[frameN % outpBlocksize].fv[1], 
+                           obs[frameN % outpBlocksize].fv[1]);
+      }
+#endif
+
+      if (frameN+1 >= outpBlocksize) {  /* enough frames available */
+         if (trace & T_OBS)
+            PrintObservation (frameProc+1, &obs[frameProc % outpBlocksize], 13);
+         for (i = 0; i < outpBlocksize; ++i)
+            obsBlock[i] = &obs[(frameProc + i) % outpBlocksize];
+
+#ifdef DEBUG_TRACE
+         fprintf(stdout, "\nProcessing frame %d :\n", frameProc);
+#endif
+         
+         ProcessFrame (_decInst, obsBlock, outpBlocksize, xfInfo.inXForm);
+         if (bestAlignInfo)
+            this->AnalyseSearchSpace (bestAlignInfo);
+         ++frameProc;
+      }
+      ++frameN;
+   }
+   CloseBuffer (parmBuf);
+
+   /* process remaining frames (no full blocks available anymore) */
+   for (bs = outpBlocksize-1; bs >=1; --bs) {
+      if (trace & T_OBS)
+         PrintObservation (frameProc+1, &obs[frameProc % outpBlocksize], 13);
+      for (i = 0; i < bs; ++i)
+         obsBlock[i] = &obs[(frameProc + i) % outpBlocksize];
+      
+      ProcessFrame (_decInst, obsBlock, bs, xfInfo.inXForm);
+      if (bestAlignInfo)
+         this->AnalyseSearchSpace (bestAlignInfo);
+      ++frameProc;
+   }
+   assert (frameProc == frameN);
+
+   
+   endClock = clock();
+   cpuSec = (endClock - startClock) / (double) CLOCKS_PER_SEC;
+   printf ("CPU time %f  utterance length %f  RT factor %f\n",
+           cpuSec, frameN*_decInst->frameDur, cpuSec / (frameN*_decInst->frameDur));
+
+   trans = TraceBack (&_transHeap, _decInst);
+
+   /* save 1-best transcription */
+   /* the following is from HVite.c */
+   if (trans) {
+      char labfn[MAXSTRLEN];
+
+      if (labForm != NULL)
+         ReFormatTranscription (trans, pbInfo.tgtSampRate, FALSE, FALSE,
+                                strchr(labForm,'X')!=NULL,
+                                strchr(labForm,'N')!=NULL,strchr(labForm,'S')!=NULL,
+                                strchr(labForm,'C')!=NULL,strchr(labForm,'T')!=NULL,
+                                strchr(labForm,'W')!=NULL,strchr(labForm,'M')!=NULL);
+      
+      MakeFN (fn, labDir, labExt, labfn);
+
+      if (LSave (labfn, trans, ofmt) < SUCCESS)
+         HError(9999, "DoRecognition: Cannot save file %s", labfn);
+      if (trace & T_TOP)
+         PrintTranscription (trans, "1-best hypothesis");
+
+      Dispose (&_transHeap, trans);
+   }
+
+   if (latGen) {
+      lat = LatTraceBack (&_transHeap, _decInst);
+
+      /* prune lattice */
+      if (lat && latPruneBeam < - LSMALL) {
+         lat = LatPrune (&_transHeap, lat, latPruneBeam, latPruneAPS);
+      }
+
+      /* the following is from HVite.c */
+      if (lat) {
+         char latfn[MAXSTRLEN];
+         char *p;
+         Boolean isPipe;
+         FILE *file;
+         LatFormat form;
+         
+         MakeFN (fn, latOutDir, latOutExt, latfn);
+         file = FOpen (latfn, NetOFilter, &isPipe);
+         if (!file) 
+            HError (999, "DoRecognition: Could not open file %s for lattice output",latfn);
+         if (!latOutForm)
+            form = (HLAT_DEFAULT & ~HLAT_ALLIKE)|HLAT_PRLIKE;
+         else {
+            for (p = latOutForm, form=0; *p != 0; p++) {
+               switch (*p) {
+               case 'A': form|=HLAT_ALABS; break;
+               case 'B': form|=HLAT_LBIN; break;
+               case 't': form|=HLAT_TIMES; break;
+               case 'v': form|=HLAT_PRON; break;
+               case 'a': form|=HLAT_ACLIKE; break;
+               case 'l': form|=HLAT_LMLIKE; break;
+               case 'd': form|=HLAT_ALIGN; break;
+               case 'm': form|=HLAT_ALDUR; break;
+               case 'n': form|=HLAT_ALLIKE; 
+                  HError (9999, "DoRecognition: likelihoods for model alignment not supported");
+                  break;
+               case 'r': form|=HLAT_PRLIKE; break;
+               }
+            }
+         }
+         if (WriteLattice (lat, file, form) < SUCCESS)
+            HError(9999, "DoRecognition: WriteLattice failed");
+         
+         FClose (file,isPipe);
+         Dispose (&_transHeap, lat);
+      }
+   }
+
+
+#ifdef COLLECT_STATS
+   printf ("Stats: nTokSet %lu\n", _decInst->stats.nTokSet);
+   printf ("Stats: TokPerSet %f\n", _decInst->stats.sumTokPerTS / (double) _decInst->stats.nTokSet);
+   printf ("Stats: activePerFrame %f\n", _decInst->stats.nActive / (double) _decInst->stats.nFrames);
+   printf ("Stats: activateNodePerFrame %f\n", _decInst->stats.nActivate / (double) _decInst->stats.nFrames);
+   printf ("Stats: deActivateNodePerFrame %f\n\n", 
+           _decInst->stats.nDeActivate / (double) _decInst->stats.nFrames);
+#if 0
+   printf ("Stats: LMlaCacheHits %ld\n", _decInst->stats.nLMlaCacheHit);
+   printf ("Stats: LMlaCacheMiss %ld\n", _decInst->stats.nLMlaCacheMiss);
+#endif
+#ifdef COLLECT_STATS_ACTIVATION
+   {
+      int i;
+      for (i = 0; i <= STATS_MAXT; ++i)
+         printf ("T %d Dead %lu Live %lu\n", i, _decInst->stats.lnDeadT[i], _decInst->stats.lnLiveT[i]);
+   }
+#endif
+#endif
+
+   if (trace & T_MEM) {
+      printf ("memory stats at end of recognition\n");
+      PrintAllHeapStats ();
+   }
+
+   ResetHeap (&_inputBufHeap);
+   ResetHeap (&_transHeap);
+   CleanDecoderInst (_decInst);
+}
+
+BestInfo* Decoder::CreateBestInfo (char *fn, HTime frameDur)
+{
+   char alignFN[MAXFNAMELEN];
+   Transcription *bestTrans;
+   LLink ll;
+   LexNode *ln;
+   MLink m;
+   LabId lnLabId;
+   BestInfo *bestAlignInfo;
+
+   MakeFN (fn, "", "rec", alignFN);
+   bestTrans = LOpen (&_transHeap, alignFN, HTK);
+      
+   /* delete 'sp' or 'sil' before final 'sil' if it is there
+      these are always inserted by HVite but not possible in HDecode's net structure*/
+   if (bestTrans->head->tail->pred->pred->labid == spLab ||
+       bestTrans->head->tail->pred->pred->labid == silLab) {
+      LLink delLL;
+      
+      delLL = bestTrans->head->tail->pred->pred;
+      /* add sp's frames (if any) to final sil */
+      delLL->succ->start = delLL->pred->end;
+      
+      delLL->pred->succ = delLL->succ;
+      delLL->succ->pred = delLL->pred;
+   }
+   
+   ln = net->start;
+   assert (ln->type == LN_MODEL);
+   m = FindMacroStruct (&hset, 'h', ln->data.hmm);
+   lnLabId = m->id;
+   
+   /* info for net start node */
+   ll = bestTrans->head->head->succ;
+
+   assert (ll->labid == lnLabId);
+   bestAlignInfo = (BestInfo*) New (&_transHeap, sizeof (BestInfo));
+   bestAlignInfo->start = ll->start / (frameDur*1.0e7);
+   bestAlignInfo->end = ll->end / (frameDur*1.0e7);
+   bestAlignInfo->ll = ll;
+   bestAlignInfo->ln = ln;
+   
+   /* info for all the following nodes */
+   bestAlignInfo->next = FindLexNetLab (&_transHeap, ln, ll->succ, frameDur);
+   
+   {
+      BestInfo *b;
+      for (b = bestAlignInfo; b->next; b = b->next)
+         printf ("%d %d %8s %p\n", b->start, b->end, b->ll->labid->name, b->ln);
+   }
+
+   return bestAlignInfo;
+}
+
+void Decoder::PrintAlignBestInfo (BestInfo *b)
+{
+   LexNodeInst *inst;
+   TokScore score;
+   LabId monoPhone;
+   LogDouble phonePost;
+
+   inst = b->ln->inst;
+   score = inst ? inst->best : LZERO;
+
+   if (b->ln->type == LN_MODEL) {
+      monoPhone =(LabId) b->ln->data.hmm->hook;
+      phonePost = _decInst->phonePost[(int) monoPhone->aux];
+   } else
+      phonePost = 999.99;
+
+   int l = _decInst->nLayers-1;
+   while (_decInst->net->layerStart[l] > b->ln) {
+      --l;
+      assert (l >= 0);
+   }
+   
+   printf ("BESTALIGN frame %4d best %.3f alignbest %d -> %d ln %p layer %d score %.3f phonePost %.3f\n", 
+           _decInst->frame, _decInst->bestScore, 
+           b->start, b->end, b->ln, l, score, phonePost);
+}
+
+void Decoder::AnalyseSearchSpace (BestInfo *bestInfo) {
+  if (!bestInfo)
+    return;
+
+  BestInfo *b;
+  LabId monoPhone;
+
+  monoPhone =(LabId) _decInst->bestInst->node->data.hmm->hook;
+  printf ("frame %4d best %.3f phonePost %.3f\n", _decInst->frame, 
+      _decInst->bestScore, _decInst->phonePost[(int) monoPhone->aux]);
+
+  for (b = bestInfo; b; b = b->next) {
+    if (b->start < _decInst->frame && b->end >= _decInst->frame) 
+      break;
+  }
+  if (b) {
+    this->PrintAlignBestInfo (b);
+    for (b = b->next; b && b->start == b->end && b->start == _decInst->frame; b = b->next) {
+      this->PrintAlignBestInfo (b);
+    }
+  }
+  else {
+    printf ("BESTALIGN ERROR\n");
+  }
+}
+
+
+// =======================================================
 
 /*void f() {
 

@@ -71,7 +71,7 @@ HLVRec.orig.o: HLVRec.c HLVRec-GC.c	HLVRec-LM.c	 HLVRec-misc.c	HLVRec-outP.c \
 	$(CC) -c $(CFLAGS) HLVRec.c 
 	mv HLVRec.o $@
 
-HDecode.orig.o: HDecode.c $(HEADER)
+HDecode.orig.o: HDecode.cpp $(HEADER)
 	$(CC) -c $(CFLAGS) $<
 	mv HDecode.o $@
 
@@ -95,7 +95,7 @@ HLVRec.mod.o: HLVRec.c HLVRec-GC.c	HLVRec-LM.c	 HLVRec-misc.c	HLVRec-outP.c \
 	$(CC) -c -DHDECODE_MOD $(CFLAGS) HLVRec.c 
 	mv HLVRec.o $@
 
-HDecode.mod.o: HDecode.c $(HEADER)
+HDecode.mod.o: HDecode.cpp $(HEADER)
 	$(CC) -c -DHDECODE_MOD $(CFLAGS) $<
 	mv HDecode.o $@
 
