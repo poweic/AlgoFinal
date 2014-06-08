@@ -95,7 +95,7 @@ static char *latOutForm = NULL;  /* lattice output format */
 
 static FileFormat dataForm = UNDEFF; /* data input file format */
 
-static Vocab vocab;		/* wordlist or dictionary */
+// static Vocab vocab;		/* wordlist or dictionary */
 static HMMSet hset;		/* HMM set */
 // static FSLM *lm = NULL;         /* language model */
 static LexNet *net = NULL;      /* Lexicon network of all required words/prons */
@@ -153,10 +153,10 @@ static char *bestAlignMLF;      /* MLF with 1-best alignment */
 /* -------------------------- Prototypes -------------------------------- */
 
 void ParseCommandArguments();
-void InitAll();
+void InitAll(int argc, char *argv[]);
 
-void SetConfParms (void);
-void ReportUsage (void);
+void SetConfParms ();
+void ReportUsage ();
 // DecoderInst *Initialise (void);
 // void DoRecognition (DecoderInst *dec, char *fn);
 Boolean UpdateSpkrModels (char *fn);
@@ -172,18 +172,58 @@ struct _BestInfo {
    BestInfo *next;
 };
 
+class Vocabulary {
+  public:
+    Vocabulary() {}
+
+    void init(char* dict_fn) {
+      InitVocab (&_vocab);
+      if (ReadDict (dict_fn, &_vocab) < SUCCESS)
+	HError (9999, "Initialise: ReadDict failed");
+    }
+
+    void ConvertSilDict (LabId spLab, LabId silLab, LabId startLab, LabId endLab) {
+      ::ConvertSilDict(&_vocab, spLab, silLab, startLab, endLab);
+    }
+
+    void MarkAllProns () {
+      ::MarkAllProns(&_vocab);
+    }
+
+    void MarkAllWords () {
+      ::MarkAllWords(&_vocab);
+    }
+
+    void UnMarkAllWords () {
+      ::UnMarkAllWords(&_vocab);
+    }
+
+    void MarkAllWordsfromLat (Lattice* lat, Boolean silDict) {
+      ::MarkAllWordsfromLat(&_vocab, lat, silDict);
+    }
+
+    Vocab& get_vocab() {
+      return _vocab;
+    }
+
+  private:
+    Vocab _vocab;
+};
+
 class LanguageModel {
   public:
-    LanguageModel(Vocab& vocab): lm(NULL), _vocab(vocab) {
+    LanguageModel(Vocabulary& vocab): lm(NULL), _vocab(vocab) {
       CreateHeap (&_lmHeap, "LM heap", MSTAK, 1, 0,1000000, 10000000);
     }
 
     void loadFromFile(char* lm_fn) {
-      lm = CreateLM (&_lmHeap, lm_fn, startWord, endWord, &vocab);
+      if (!lm_fn) 
+	HError (9999, "HDecode: no LM or lattice specified");
+      lm = CreateLM (&_lmHeap, lm_fn, startWord, endWord, &_vocab.get_vocab());
     }
 
     void loadFromLattice(char* lat_fn, Lattice* lat) {
-      lm = CreateLMfromLat (&_lmHeap, lat_fn, lat, &vocab);
+      lm = CreateLMfromLat (&_lmHeap, lat_fn, lat, &_vocab.get_vocab());
     }
 
     FSLM* get_lm() {
@@ -194,12 +234,12 @@ class LanguageModel {
     FSLM *lm;         /* language model */
     MemHeap _lmHeap;
 
-    Vocab& _vocab;
+    Vocabulary& _vocab;
 };
 
 class Decoder {
   public:
-    Decoder(LanguageModel& lm);
+    Decoder(LanguageModel& lm, Vocabulary& vocab);
     void init();
     void recognize(char *fn);
 
@@ -214,6 +254,7 @@ class Decoder {
 
   private:
     LanguageModel& _lm;
+    Vocabulary& _vocab;
 
     DecoderInst* _decInst;
 
@@ -243,25 +284,14 @@ FILE *debug_stderr = stderr;
 
 int main (int argc, char *argv[]) {
 
+  Vocabulary vocab;
   LanguageModel languageModel(vocab);
-  Decoder decoder(languageModel);
+  Decoder decoder(languageModel, vocab);
 
-  if (InitShell (argc, argv, hdecode_version, hdecode_sccs_id) < SUCCESS)
-    HError (4000, "HDecode: InitShell failed");
-
-  InitAll();
-
-  if (!InfoPrinted () && NumArgs () == 0)
-    ReportUsage ();
-
-  if (NumArgs () == 0)
-    Exit (0);
-
-  SetConfParms ();
-
-  ParseCommandArguments();
+  InitAll(argc, argv);
 
   /* load models and initialise decoder */
+  vocab.init(dictfn);
   decoder.init();
 
   /* load 1-best alignment */
@@ -294,9 +324,7 @@ int main (int argc, char *argv[]) {
 }
 
 /* SetConfParms: set conf parms relevant to this tool */
-void
-SetConfParms (void)
-{
+void SetConfParms () {
    int i;
    double f;
    Boolean b;
@@ -325,9 +353,7 @@ SetConfParms (void)
    }
 }
 
-void
-ReportUsage (void)
-{
+void ReportUsage () {
    printf ("\nUSAGE: HDecode [options] VocabFile HMMList DataFiles...\n\n");
    printf (" Option                                   Default\n\n");
    printf (" -m      enable XForm and use inXForm        off\n");
@@ -429,7 +455,10 @@ BestInfo *FindLexNetLab (MemHeap *heap, LexNode *ln, LLink ll, HTime frameDur)
    return NULL;
 }
 
-void InitAll() {
+void InitAll(int argc, char *argv[]) {
+
+  if (InitShell (argc, argv, hdecode_version, hdecode_sccs_id) < SUCCESS)
+    HError (4000, "HDecode: InitShell failed");
 
   InitMem ();
   InitMath ();
@@ -448,6 +477,11 @@ void InitAll() {
   InitAdapt (&xfInfo);
   InitLat ();
 
+  if (!InfoPrinted () && NumArgs () == 0) ReportUsage ();
+  if (NumArgs () == 0) Exit (0);
+
+  SetConfParms ();
+  ParseCommandArguments();
 }
 
 void ParseCommandArguments() {
@@ -697,7 +731,7 @@ Boolean UpdateSpkrModels (char *fn) {
 
 // =======================================================
 
-Decoder::Decoder(LanguageModel& lm): _lm(lm), _decInst(NULL) {
+Decoder::Decoder(LanguageModel& lm, Vocabulary& vocab): _lm(lm), _vocab(vocab), _decInst(NULL) {
    /* init model heap & set early to support loading MMFs */
    CreateHeap(&_modelHeap, "Model heap",  MSTAK, 1, 0.0, 100000, 800000 );
    CreateHMMSet(&hset, &_modelHeap, TRUE); 
@@ -716,10 +750,6 @@ void Decoder::init() {
    /* Read dictionary */
    if (trace & T_TOP)
       printf ("Reading dictionary from %s\n", dictfn);
-
-   InitVocab (&vocab);
-   if (ReadDict (dictfn, &vocab) < SUCCESS)
-      HError (9999, "Initialise: ReadDict failed");
 
    /* Read accoustic models */
    if (trace & T_TOP)
@@ -753,7 +783,7 @@ void Decoder::init() {
       HError (9999, "HDecode: cannot find label 'sil'");
 
    if (silDict) {    /* dict contains -/sp/sil variants (with probs) */
-      ConvertSilDict (&vocab, spLab, silLab, startLab, endLab);
+      _vocab.ConvertSilDict (spLab, silLab, startLab, endLab);
 
       /* check for skip in sp model */
       { 
@@ -777,17 +807,16 @@ void Decoder::init() {
       }
    }
    else {       /* lvx-style dict (no sp/sil at wordend */
-      MarkAllProns (&vocab);
+     _vocab.MarkAllProns();
    }
 
    if (!latRescore) {
-      if (!langfn) HError (9999, "HDecode: no LM or lattice specified");
 
       /* mark all words  for inclusion in Net */
-      MarkAllWords (&vocab);
+     _vocab.MarkAllWords();
 
       /* create network */
-      net = CreateLexNet (&_netHeap, &vocab, &hset, startWord, endWord, silDict);
+      net = CreateLexNet (&_netHeap, &_vocab.get_vocab(), &hset, startWord, endWord, silDict);
       
       /* Read language model */
       if (trace & T_TOP)
@@ -861,20 +890,20 @@ void Decoder::rescoreLattice(char* fn) {
       HError (9999, "DoRecognition: Cannot open lattice file %s\n", latfn);
 
     /* #### maybe separate lattice heap? */
-    lat = ReadLattice (latF, &_lmHeap, &vocab, FALSE, FALSE);
+    lat = ReadLattice (latF, &_lmHeap, &_vocab.get_vocab(), FALSE, FALSE);
     FClose (latF, isPipe);
     if (!lat)
       HError (9999, "DoRecognition: cannot read lattice file %s\n", latfn);
   }
 
   /* mark prons of all words in lattice */
-  UnMarkAllWords (&vocab);
-  MarkAllWordsfromLat (&vocab, lat, silDict);
+  _vocab.UnMarkAllWords();
+  _vocab.MarkAllWordsfromLat(lat, silDict);
 
   /* create network of all the words/prons marked (word->aux and pron->aux == 1) */
   if (trace & T_TOP)
     printf ("Creating network\n");
-  net = CreateLexNet (&_netHeap, &vocab, &hset, startWord, endWord, silDict);
+  net = CreateLexNet (&_netHeap, &_vocab.get_vocab(), &hset, startWord, endWord, silDict);
 
   /* create LM based on pronIds defined by CreateLexNet */
   if (trace & T_TOP)
