@@ -58,6 +58,8 @@ char *hdecode_sccs_id = "$Id: HDecode.c,v 1.1.1.1 2006/10/11 09:54:55 jal58 Exp 
 
 #include <time.h>
 
+#include <cmdparser.h>
+
 /* -------------------------- Trace Flags & Vars ------------------------ */
 
 #define T_TOP 00001		/* Basic progress reporting */
@@ -243,34 +245,22 @@ ReportUsage (void)
    printf ("\n  sizes: PronId=%d  LMId=%d \n", sizeof (PronId), sizeof (LMId));
 }
 
+void ParseCommandArguments();
+void InitAll();
+
 int
 main (int argc, char *argv[])
 {
-   char *s, *datafn;
    DecoderInst *dec;
 
    if (InitShell (argc, argv, hdecode_version, hdecode_sccs_id) < SUCCESS)
-      HError (4000, "HDecode: InitShell failed");
+     HError (4000, "HDecode: InitShell failed");
 
-   InitMem ();
-   InitMath ();
-   InitSigP ();
-   InitWave ();
-   InitLabel ();
-   InitAudio ();
-   InitModel ();
-   if (InitParm () < SUCCESS)
-      HError (4000, "HDecode: InitParm failed");
-   InitUtil ();
-   InitDict ();
-   InitLVNet ();
-   InitLVLM ();
-   InitLVRec ();
-   InitAdapt (&xfInfo);
-   InitLat ();
+   InitAll();
 
    if (!InfoPrinted () && NumArgs () == 0)
       ReportUsage ();
+
    if (NumArgs () == 0)
       Exit (0);
 
@@ -280,241 +270,7 @@ main (int argc, char *argv[])
    CreateHeap(&modelHeap, "Model heap",  MSTAK, 1, 0.0, 100000, 800000 );
    CreateHMMSet(&hset,&modelHeap,TRUE); 
 
-
-   while (NextArg () == SWITCHARG) {
-      s = GetSwtArg ();
-      if (strlen (s) != 1)
-	 HError (4019, "HDecode: Bad switch %s; must be single letter", s);
-      switch (s[0]) {
-      case 'd':
-	 if (NextArg() != STRINGARG)
-	    HError(4119,"HDecode: HMM definition directory expected");
-	 hmmDir = GetStrArg(); 
-	 break;
-      case 'x':
-	 if (NextArg() != STRINGARG)
-	    HError(4119,"HDecode: HMM file extension expected");
-	 hmmExt = GetStrArg(); 
-	 break;
-	 
-      case 'i':
-	 if (NextArg () != STRINGARG)
-	    HError (4019, "HDecode: Output MLF file name expected");
-	 if (SaveToMasterfile (GetStrArg ()) < SUCCESS)
-	    HError (4014, "HDecode: Cannot write to MLF");
-	 break;
-
-      case 'P':
-	 if (NextArg () != STRINGARG)
-	    HError (3219, "HVite: Target Label File format expected");
-	 if ((ofmt = Str2Format (GetStrArg ())) == ALIEN)
-	    HError (-3289,
-		    "HVite: Warning ALIEN Label output file format set");
-	 break;
-
-      case 'l':
-	 if (NextArg () != STRINGARG)
-	    HError (4019, "HDecode: Label/Lattice output directory expected");
-	 labDir = GetStrArg ();
-         latOutDir = labDir;
-	 break;
-      case 'o':
-	 if (NextArg () != STRINGARG)
-	    HError (4019, "HDecode: Output label format expected");
-	 labForm = GetStrArg ();
-	 break;
-      case 'y':
-	 if (NextArg () != STRINGARG)
-	    HError (4019, "HDecode: Output label file extension expected");
-	 labExt = GetStrArg ();
-	 break;
-
-      case 'X':
-	 if (NextArg () != STRINGARG)
-	    HError (4019, "HDecode: Input Lattice file extension expected");
-	 latInExt = GetStrArg ();
-	 break;
-      case 'L':
-	 if (NextArg () != STRINGARG)
-	    HError (4019, "HDecode: Input Lattice directory expected");
-	 latInDir = GetStrArg ();
-	 break;
-
-      case 'q':
-	 if (NextArg () != STRINGARG)
-	    HError (4019, "HDecode: Output lattice format expected");
-	 latOutForm = GetStrArg ();
-	 break;
-      case 'z':
-         latGen = TRUE;
-	 if (NextArg () != STRINGARG)
-	    HError (4019, "HDecode: Output lattice file extension expected");
-	 latOutExt = GetStrArg ();
-	 break;
-
-      case 'p':
-	 if (NextArg () != FLOATARG)
-	    HError (4019, "HDecode: word insertion penalty expected");
-         insPen = GetFltArg ();
-         if (insPen > 0.0)
-            HError (-1, "HDecode: positive word insertion penalty???");
-	 break;
-      case 'a':
-	 if (NextArg () != FLOATARG)
-	    HError (4019, "HDecode: acoustic scale factor expected");
-	 acScale = GetFltArg ();
-	 break;
-      case 'r':
-	 if (NextArg () != FLOATARG)
-	    HError (4019, "HDecode: pronunciation scale factor expected");
-	  pronScale = GetFltArg ();
-          silDict = TRUE;       /* #### maybe separate switch for this? */
-	 break;
-      case 's':
-	 if (NextArg () != FLOATARG)
-	    HError (4019, "HDecode: LM scale factor expected");
-         lmScale= GetFltArg ();
-	 break;
-
-
-      case 'u':
-	 if (NextArg () != INTARG)
-	    HError (4019, "HDecode: max model pruning limit expected");
-         maxModel = GetIntArg ();
-	 break;
-
-      case 't':
-	 if (NextArg () != FLOATARG)
-	    HError (4019, "HDecode: beam width expected");
-	 beamWidth = GetFltArg ();
-         if (latPruneBeam == -LZERO)
-            latPruneBeam = beamWidth;
-         relBeamWidth = beamWidth;
-         if (NextArg () == FLOATARG)
-            relBeamWidth = GetFltArg ();
-	 break;
-
-      case 'v':
-	 if (NextArg () != FLOATARG)
-	    HError (4019, "HDecode: wordend beam width expected");
-         weBeamWidth = GetFltArg ();
-         zsBeamWidth = weBeamWidth;
-	 if (NextArg () == FLOATARG)
-            zsBeamWidth = GetFltArg ();
-         break;
-
-      case 'w':
-	 if (NextArg() != STRINGARG) {
-            /*	    HError (4119,"HDecode: LM File name expected"); */
-            latRescore = TRUE;
-         }
-         else
-            langfn = GetStrArg();
-	 break;
-
-      case 'n':
-	 nTok = GetChkedInt (0, 1024, s);
-	 break;
-
-      case 'k':
-	 outpBlocksize = GetChkedInt (0, MAXBLOCKOBS, s);
-	 break;
-
-      case 'H':
-	 if (NextArg() != STRINGARG)
-	    HError (4119,"HDecode: MMF File name expected");
-	 AddMMF (&hset, GetStrArg()); 
-	 break;
-      case 'T':
-	 trace = GetChkedInt (0, 1000, s);
-	 break;
-
-      case 'h':
-         if (NextArg()!=STRINGARG)
-	    HError (4019, "HDecode: Speaker name pattern expected");
-         xfInfo.outSpkrPat = GetStrArg();
-         if (NextArg()==STRINGARG) {
-            xfInfo.inSpkrPat = GetStrArg();
-            if (NextArg()==STRINGARG)
-               xfInfo.paSpkrPat = GetStrArg(); 
-         }
-         if (NextArg() != SWITCHARG)
-	    HError (4019, "HDecode: cannot have -h as the last option");
-         break;
-      case 'm':
-	 xfInfo.useInXForm = TRUE;
-         break;
-      case 'E':
-         if (NextArg()!=STRINGARG)
-            HError(4019,"HDecode: parent transform directory expected");
-	 xfInfo.usePaXForm = TRUE;
-         xfInfo.paXFormDir = GetStrArg(); 
-         if (NextArg()==STRINGARG)
-            xfInfo.paXFormExt = GetStrArg(); 
-	 if (NextArg() != SWITCHARG)
-            HError(4019,"HDecode: cannot have -E as the last option");	  
-         break;              
-      case 'J':
-         if (NextArg()!=STRINGARG)
-            HError(4019,"HDecode: input transform directory expected");
-         AddInXFormDir(&hset,GetStrArg());
-         if (NextArg()==STRINGARG)
-            xfInfo.inXFormExt = GetStrArg(); 
-	 if (NextArg() != SWITCHARG)
-            HError(4019,"HDecode: cannot have -J as the last option");	  
-         break;              
-      case 'K':
-         HError(4019,"HDecode: transform estimation (-K option) not supported yet");	  
-         if (NextArg()!=STRINGARG)
-            HError(4019,"HDecode: output transform directory expected");
-         xfInfo.outXFormDir = GetStrArg(); 
-	 xfInfo.useOutXForm = TRUE;
-         if (NextArg()==STRINGARG)
-            xfInfo.outXFormExt = GetStrArg(); 
-	 if (NextArg() != SWITCHARG)
-            HError(4019,"HDecode: cannot have -K as the last option");	  
-         break;              
-      case 'N':
-         HError (4019, "HDecode: old style fv transform not supported!");
-	 break;
-      case 'Q':
-         HError (4019, "HDecode: old style mllr transform not supported!");
-	 break;
-
-      case 'R':
-	 if (NextArg () != STRINGARG)
-	    HError (4019, "HDecode: best align MLF name expected");
-	 bestAlignMLF = GetStrArg ();
-	 break;
-
-
-      default:
-	 HError (4019, "HDecode: Unknown switch %s", s);
-      }
-   }
-
-   if (NextArg () != STRINGARG)
-      HError (4019, "HDecode Vocab file name expected");
-   dictfn = GetStrArg ();
-
-   if (NextArg () != STRINGARG)
-      HError (4019, "HDecode model list file name expected");
-   hmmListfn = GetStrArg ();
-
-   if (beamWidth > -LSMALL)
-      HError (4019, "main beam is too wide!");
-
-   if (xfInfo.useInXForm) {
-      if (!useHModel) {
-         HError (-4019, "HDecode: setting USEHMODEL to TRUE.");
-         useHModel = TRUE;
-      }
-      if (outpBlocksize != 1) {
-         HError (-4019, "HDecode: outP blocksize >1 not supported with new XForm code! setting to 1.");
-         outpBlocksize = 1;
-      }
-   }   
-
+   ParseCommandArguments();
 
    /* load models and initialise decoder */
    dec = Initialise ();
@@ -523,11 +279,11 @@ main (int argc, char *argv[])
    if (bestAlignMLF)
       LoadMasterFile (bestAlignMLF);
 
-
    while (NumArgs () > 0) {
       if (NextArg () != STRINGARG)
 	 HError (4019, "HDecode: Data file name expected");
-      datafn = GetStrArg ();
+
+      char* datafn = GetStrArg ();
 
       if (trace & T_TOP) {
 	 printf ("File: %s\n", datafn);
@@ -899,6 +655,263 @@ void AnalyseSearchSpace (DecoderInst *dec, BestInfo *bestInfo)
    else {
       printf ("BESTALIGN ERROR\n");
    }
+}
+
+void InitAll() {
+
+  InitMem ();
+  InitMath ();
+  InitSigP ();
+  InitWave ();
+  InitLabel ();
+  InitAudio ();
+  InitModel ();
+  if (InitParm () < SUCCESS)
+    HError (4000, "HDecode: InitParm failed");
+  InitUtil ();
+  InitDict ();
+  InitLVNet ();
+  InitLVLM ();
+  InitLVRec ();
+  InitAdapt (&xfInfo);
+  InitLat ();
+
+}
+
+void ParseCommandArguments() {
+   while (NextArg () == SWITCHARG) {
+      char *s = GetSwtArg ();
+      if (strlen (s) != 1)
+	 HError (4019, "HDecode: Bad switch %s; must be single letter", s);
+      switch (s[0]) {
+      case 'd':
+	 if (NextArg() != STRINGARG)
+	    HError(4119,"HDecode: HMM definition directory expected");
+	 hmmDir = GetStrArg(); 
+	 break;
+      case 'x':
+	 if (NextArg() != STRINGARG)
+	    HError(4119,"HDecode: HMM file extension expected");
+	 hmmExt = GetStrArg(); 
+	 break;
+	 
+      case 'i':
+	 if (NextArg () != STRINGARG)
+	    HError (4019, "HDecode: Output MLF file name expected");
+	 if (SaveToMasterfile (GetStrArg ()) < SUCCESS)
+	    HError (4014, "HDecode: Cannot write to MLF");
+	 break;
+
+      case 'P':
+	 if (NextArg () != STRINGARG)
+	    HError (3219, "HVite: Target Label File format expected");
+	 if ((ofmt = Str2Format (GetStrArg ())) == ALIEN)
+	    HError (-3289,
+		    "HVite: Warning ALIEN Label output file format set");
+	 break;
+
+      case 'l':
+	 if (NextArg () != STRINGARG)
+	    HError (4019, "HDecode: Label/Lattice output directory expected");
+	 labDir = GetStrArg ();
+         latOutDir = labDir;
+	 break;
+      case 'o':
+	 if (NextArg () != STRINGARG)
+	    HError (4019, "HDecode: Output label format expected");
+	 labForm = GetStrArg ();
+	 break;
+      case 'y':
+	 if (NextArg () != STRINGARG)
+	    HError (4019, "HDecode: Output label file extension expected");
+	 labExt = GetStrArg ();
+	 break;
+
+      case 'X':
+	 if (NextArg () != STRINGARG)
+	    HError (4019, "HDecode: Input Lattice file extension expected");
+	 latInExt = GetStrArg ();
+	 break;
+      case 'L':
+	 if (NextArg () != STRINGARG)
+	    HError (4019, "HDecode: Input Lattice directory expected");
+	 latInDir = GetStrArg ();
+	 break;
+
+      case 'q':
+	 if (NextArg () != STRINGARG)
+	    HError (4019, "HDecode: Output lattice format expected");
+	 latOutForm = GetStrArg ();
+	 break;
+      case 'z':
+         latGen = TRUE;
+	 if (NextArg () != STRINGARG)
+	    HError (4019, "HDecode: Output lattice file extension expected");
+	 latOutExt = GetStrArg ();
+	 break;
+
+      case 'p':
+	 if (NextArg () != FLOATARG)
+	    HError (4019, "HDecode: word insertion penalty expected");
+         insPen = GetFltArg ();
+         if (insPen > 0.0)
+            HError (-1, "HDecode: positive word insertion penalty???");
+	 break;
+      case 'a':
+	 if (NextArg () != FLOATARG)
+	    HError (4019, "HDecode: acoustic scale factor expected");
+	 acScale = GetFltArg ();
+	 break;
+      case 'r':
+	 if (NextArg () != FLOATARG)
+	    HError (4019, "HDecode: pronunciation scale factor expected");
+	  pronScale = GetFltArg ();
+          silDict = TRUE;       /* #### maybe separate switch for this? */
+	 break;
+      case 's':
+	 if (NextArg () != FLOATARG)
+	    HError (4019, "HDecode: LM scale factor expected");
+         lmScale= GetFltArg ();
+	 break;
+
+
+      case 'u':
+	 if (NextArg () != INTARG)
+	    HError (4019, "HDecode: max model pruning limit expected");
+         maxModel = GetIntArg ();
+	 break;
+
+      case 't':
+	 if (NextArg () != FLOATARG)
+	    HError (4019, "HDecode: beam width expected");
+	 beamWidth = GetFltArg ();
+         if (latPruneBeam == -LZERO)
+            latPruneBeam = beamWidth;
+         relBeamWidth = beamWidth;
+         if (NextArg () == FLOATARG)
+            relBeamWidth = GetFltArg ();
+	 break;
+
+      case 'v':
+	 if (NextArg () != FLOATARG)
+	    HError (4019, "HDecode: wordend beam width expected");
+         weBeamWidth = GetFltArg ();
+         zsBeamWidth = weBeamWidth;
+	 if (NextArg () == FLOATARG)
+            zsBeamWidth = GetFltArg ();
+         break;
+
+      case 'w':
+	 if (NextArg() != STRINGARG) {
+            /*	    HError (4119,"HDecode: LM File name expected"); */
+            latRescore = TRUE;
+         }
+         else
+            langfn = GetStrArg();
+	 break;
+
+      case 'n':
+	 nTok = GetChkedInt (0, 1024, s);
+	 break;
+
+      case 'k':
+	 outpBlocksize = GetChkedInt (0, MAXBLOCKOBS, s);
+	 break;
+
+      case 'H':
+	 if (NextArg() != STRINGARG)
+	    HError (4119,"HDecode: MMF File name expected");
+	 AddMMF (&hset, GetStrArg()); 
+	 break;
+      case 'T':
+	 trace = GetChkedInt (0, 1000, s);
+	 break;
+
+      case 'h':
+         if (NextArg()!=STRINGARG)
+	    HError (4019, "HDecode: Speaker name pattern expected");
+         xfInfo.outSpkrPat = GetStrArg();
+         if (NextArg()==STRINGARG) {
+            xfInfo.inSpkrPat = GetStrArg();
+            if (NextArg()==STRINGARG)
+               xfInfo.paSpkrPat = GetStrArg(); 
+         }
+         if (NextArg() != SWITCHARG)
+	    HError (4019, "HDecode: cannot have -h as the last option");
+         break;
+      case 'm':
+	 xfInfo.useInXForm = TRUE;
+         break;
+      case 'E':
+         if (NextArg()!=STRINGARG)
+            HError(4019,"HDecode: parent transform directory expected");
+	 xfInfo.usePaXForm = TRUE;
+         xfInfo.paXFormDir = GetStrArg(); 
+         if (NextArg()==STRINGARG)
+            xfInfo.paXFormExt = GetStrArg(); 
+	 if (NextArg() != SWITCHARG)
+            HError(4019,"HDecode: cannot have -E as the last option");	  
+         break;              
+      case 'J':
+         if (NextArg()!=STRINGARG)
+            HError(4019,"HDecode: input transform directory expected");
+         AddInXFormDir(&hset,GetStrArg());
+         if (NextArg()==STRINGARG)
+            xfInfo.inXFormExt = GetStrArg(); 
+	 if (NextArg() != SWITCHARG)
+            HError(4019,"HDecode: cannot have -J as the last option");	  
+         break;              
+      case 'K':
+         HError(4019,"HDecode: transform estimation (-K option) not supported yet");	  
+         if (NextArg()!=STRINGARG)
+            HError(4019,"HDecode: output transform directory expected");
+         xfInfo.outXFormDir = GetStrArg(); 
+	 xfInfo.useOutXForm = TRUE;
+         if (NextArg()==STRINGARG)
+            xfInfo.outXFormExt = GetStrArg(); 
+	 if (NextArg() != SWITCHARG)
+            HError(4019,"HDecode: cannot have -K as the last option");	  
+         break;              
+      case 'N':
+         HError (4019, "HDecode: old style fv transform not supported!");
+	 break;
+      case 'Q':
+         HError (4019, "HDecode: old style mllr transform not supported!");
+	 break;
+
+      case 'R':
+	 if (NextArg () != STRINGARG)
+	    HError (4019, "HDecode: best align MLF name expected");
+	 bestAlignMLF = GetStrArg ();
+	 break;
+
+
+      default:
+	 HError (4019, "HDecode: Unknown switch %s", s);
+      }
+   }
+
+   if (NextArg () != STRINGARG)
+      HError (4019, "HDecode Vocab file name expected");
+   dictfn = GetStrArg ();
+
+   if (NextArg () != STRINGARG)
+      HError (4019, "HDecode model list file name expected");
+   hmmListfn = GetStrArg ();
+
+   if (beamWidth > -LSMALL)
+      HError (4019, "main beam is too wide!");
+
+   if (xfInfo.useInXForm) {
+      if (!useHModel) {
+         HError (-4019, "HDecode: setting USEHMODEL to TRUE.");
+         useHModel = TRUE;
+      }
+      if (outpBlocksize != 1) {
+         HError (-4019, "HDecode: outP blocksize >1 not supported with new XForm code! setting to 1.");
+         outpBlocksize = 1;
+      }
+   }   
 }
 
 /*****************  main recognition function  ************************/
@@ -1279,6 +1292,86 @@ Boolean UpdateSpkrModels (char *fn)
    return FALSE;
 }
 #endif
+
+/*void f() {
+
+  CmdParser cmd(argc, argv);
+
+  cmd.add("-m", "enable XForm and use inXForm      ", "")
+     .add("-d", "dir to find hmm definitions       ", "")
+     .add("-i", "Output transcriptions to MLF s    ", "")
+     .add("-k", "block size for outP calculation   ", "")
+     .add("-l", "dir to store label files          ", "")
+     .add("-o", "output label formating NCSTWMX    ", "")
+     .add("-h", "speaker name pattern              ", "")
+     .add("-p", "word insertion penalty            ", "")
+     .add("-a", "acoustic scale factor             ", "")
+     .add("-r", "pronunciation scale factor        ", "")
+     .add("-s", "LM scale factor                   ", "")
+     .add("-t", "pruning beam width                ", "")
+     .add("-u", "max model pruning                 ", "")
+     .add("-v", "wordend beam width                ", "")
+     .add("-n", "number of tokens per state        ", "")
+     .add("-w", "use language model                ", "")
+     .add("-x", "extension for hmm files           ", "")
+     .add("-y", "output label file extension       ", "")
+     .add("-z", "generate lattices with extension s", "")
+     .add("-q", "output lattices format ABtvaldmnr ", "")
+     .add("-R", "best align MLF                    ", "")
+     .add("-X", "set input lattice extension       ", "")
+     .add("-A", "Print command line arguments      ", "")
+     .add("-C", "Set config file to cf             ", "")
+     .add("-D", "Display configuration variables   ", "")
+     .add("-E", "set dir for parent xform to s and optional extension", "")
+     .add("-F", "Set source data format to fmt     ", "")
+     .add("-H", "Load HMM macro file mmf           ", "")
+     .add("-J", "set dir for input xform to s and optional extension", "")
+     .add("-L", "Set input label (or net) dir      ", "")
+     .add("-P", "Set target label format to fmt    ", "")
+     .add("-S", "Set script file to f              ", "")
+     .add("-T", "Set trace flags to N              ", "")
+     .add("-V", "Print version information         ", "");
+
+  cmd.addGroup(
+      "Example: htk/HTKLVRec/HDecode.mod -A -T 1 -a 0.1 -s 1.0 -t 13.0 -z lat"
+      "-q tvaldm -o M -l lat -i dev.rec -w data/lm.arpa.txt"
+      "-H data/final.mmf -S data/small.scp"
+      "data/lexicon.txt data/tiedlist")
+
+  if (!cmd.isOptionLegal())
+    cmd.showUsageAndExit();
+
+  // ===========================================================
+  hmmDir = cmd["-d"];
+  hmmExt = cmd["-x"];
+  string mlf_filename = cmd["-i"];
+  string target_label_format = cmd["-P"];
+
+  labDir = cmd["-l"];
+  labForm = cmd["-o"];
+  labExt = cmd["-y"];
+  labInExt = cmd["-X"];
+  latInDir = cmd["-L"];
+  latOutForm = cmd["-q"];
+  latOutExt = cmd["-z"];
+
+  insPen = cmd["-p"];
+
+  acScale = cmd["-a"];
+  pronScale = cmd["-r"];
+  lmScale = cmd["-s"];
+
+  maxModel = cmd["-u"];
+  beamWidth = cmd["t"];
+  relBeamWidth = beamWidth;
+
+  weBeamWidth = cmd["-v"];
+  zsBeamWidth = weBeamWidth;
+
+  langfn = cmd["-w"];
+
+  // ===========================================================
+}*/
 
 
 /*  CC-mode style info for emacs

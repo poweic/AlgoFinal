@@ -1,0 +1,2473 @@
+htk/HTKLVRec/HDecode.mod -A -T 1 -a 0.1 -s 1.0 -t 7.0 -z lat -q tvaldm -o M -l lat -i dev.rec -w data/lm.arpa.txt -H data/final.mmf -S data/small.scp data/lexicon.txt data/tiedlist 
+Reading dictionary from data/lexicon.txt
+Reading acoustic models...Read 2635 physical / 427426 logical HMMs
+lmla count 16686
+nprons 13294
+Reading language model from data/lm.arpa.txt
+File: data/mfc/20060221-1-005870.mfc
+
+ WARNING [-9999]  no token survived to sent end! in htk/HTKLVRec/HDecode.mod
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+ WARNING [-9999]  LatTraceBack: end node not active in htk/HTKLVRec/HDecode.mod
+ WARNING [-9999]  LatTraceBack: no active sil wordend nodes in htk/HTKLVRec/HDecode.mod
+ WARNING [-9999]  LatTraceBack: forcing lattice output in htk/HTKLVRec/HDecode.mod
+found 0 arcs
+nnodes 2 nlinks 1
+Stats: nTokSet 2792
+Stats: TokPerSet 1.000000
+Stats: activePerFrame 72.905405
+Stats: activateNodePerFrame 209.412162
+Stats: deActivateNodePerFrame 209.141892
+
+File: data/mfc/20060221-1-005880.mfc
+
+ WARNING [-9999]  no token survived to sent end! in htk/HTKLVRec/HDecode.mod
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+ WARNING [-9999]  LatTraceBack: end node not active in htk/HTKLVRec/HDecode.mod
+ WARNING [-9999]  LatTraceBack: no active sil wordend nodes in htk/HTKLVRec/HDecode.mod
+ WARNING [-9999]  LatTraceBack: forcing lattice output in htk/HTKLVRec/HDecode.mod
+found 0 arcs
+nnodes 2 nlinks 1
+Stats: nTokSet 3859
+Stats: TokPerSet 1.000000
+Stats: activePerFrame 79.128920
+Stats: activateNodePerFrame 213.445993
+Stats: deActivateNodePerFrame 213.195122
+
+File: data/mfc/20060221-1-005890.mfc
+
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0  800000      <s> -72.556305
+   2.   80000034000000 [A9D2][A548] -3315.375244
+   3. 3400000035700000 [B36F][ADD3] -177.682373
+   4. 3570000039200000 [C5E3][B27B] -367.593506
+   5. 3920000039900000   [AABA] -73.511475
+   6. 3990000044000000 [C0B3][A5CE] -413.854248
+   7. 4400000045300000   [AABA] -135.524902
+   8. 4530000049400000    NOISE -459.104492
+   9. 4940000053500000 [AEC9][ADD4] -390.122070
+  10. 5350000054900000     </s> -125.414551
+found 1 tokens in end state
+found 2 arcs
+nnodes 22 nlinks 31
+Stats: nTokSet 93413
+Stats: TokPerSet 2.598054
+Stats: activePerFrame 210.628415
+Stats: activateNodePerFrame 246.340619
+Stats: deActivateNodePerFrame 246.189435
+
+File: data/mfc/20060221-1-005900.mfc
+
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0 1200000      <s> -114.716125
+   2.  1200000 8000000 [A7DA][ADCC] -675.227844
+   3.  800000011600000 [A440][C249] -383.763184
+   4. 1160000016000000 [B0B5][B36F][ADD3] -441.293823
+   5. 1600000021200000    STATE -531.847168
+   6. 2120000026000000   [AABA] -418.568359
+   7. 2600000028400000 [B36F][ADD3] -229.194580
+   8. 2840000032100000   THEORY -371.635742
+   9. 3210000034100000 [B36F][ADD3] -209.371826
+  10. 3410000037200000   [AABA] -272.197021
+  11. 3720000039100000   [AABA] -170.830566
+  12. 3910000042700000     </s> -272.949463
+found 1 tokens in end state
+found 4 arcs
+nnodes 25 nlinks 31
+Stats: nTokSet 64175
+Stats: TokPerSet 1.631134
+Stats: activePerFrame 162.259953
+Stats: activateNodePerFrame 173.971897
+Stats: deActivateNodePerFrame 173.810304
+
+File: data/mfc/20060221-1-005910.mfc
+
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0 3100000      <s> -263.487518
+   2.  3100000 6200000 [A7DA][ADCC] -300.934540
+   3.  620000013700000   [A5CE] -797.698792
+   4. 1370000015400000   [AABA] -182.200439
+   5. 1540000016500000   [A448] -119.577759
+   6. 1650000017500000   [AABA] -99.823730
+   7. 1750000022000000 [B371][B6B6] -462.742554
+   8. 2200000037800000   [AABA] -1711.797607
+   9. 3780000057000000        N -1964.975342
+  10. 5700000058400000       OF -145.413086
+  11. 5840000059800000   [AABA] -144.139160
+  12. 5980000063000000     </s> -246.545410
+found 1 tokens in end state
+found 4 arcs
+nnodes 19 nlinks 22
+Stats: nTokSet 108390
+Stats: TokPerSet 1.503617
+Stats: activePerFrame 204.434921
+Stats: activateNodePerFrame 256.161905
+Stats: deActivateNodePerFrame 256.028571
+
+File: data/mfc/20060221-1-005920.mfc
+
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0 2800000      <s> -236.100677
+   2.  2800000 7100000 [B54D][ABE1][A94F] -425.805389
+   3.  710000010400000 [A7DA][ADCC] -319.430725
+   4. 1040000012500000   [B77C] -217.587402
+   5. 1250000016700000 [A552][A5F7] -443.004517
+   6. 1670000021600000 [A8BA][BBF2][A668] -521.847168
+   7. 2160000028500000 [A569][AC4F] -643.578369
+   8. 2850000032700000 [B3CC][ABE1] -422.310059
+   9. 3270000037400000     </s> -377.651855
+found 1 tokens in end state
+found 3 arcs
+nnodes 24 nlinks 35
+Stats: nTokSet 60542
+Stats: TokPerSet 3.761405
+Stats: activePerFrame 177.160428
+Stats: activateNodePerFrame 186.614973
+Stats: deActivateNodePerFrame 186.406417
+
+File: data/mfc/20060221-1-005930.mfc
+
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        066300000      <s> -6669.797852
+   2. 6630000068100000   [B44E] -181.302246
+   3. 6810000069500000   [A558] -156.399414
+   4. 6950000071500000   [A761] -204.030762
+   5. 7150000073600000     </s> -184.042480
+found 1 tokens in end state
+found 20 arcs
+nnodes 31 nlinks 61
+Stats: nTokSet 49712
+Stats: TokPerSet 2.532125
+Stats: activePerFrame 125.478261
+Stats: activateNodePerFrame 233.710598
+Stats: deActivateNodePerFrame 233.599185
+
+File: data/mfc/20060221-1-005940.mfc
+
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0 2000000      <s> -180.253265
+   2.  2000000 7000000 [A65D][A6B9][A94F] -486.553009
+   3.  700000010100000 [A7DA][ADCC] -297.776672
+   4. 1010000012900000 [A641][A8D3] -288.071350
+   5. 1290000015200000   [B4EE] -239.248169
+   6. 1520000018300000 [A8D3][BBA1] -340.648560
+   7. 1830000021400000 [A440][A8C7] -299.962158
+   8. 2140000024900000   [AC4F] -320.420654
+   9. 2490000034900000     </s> -951.408936
+found 1 tokens in end state
+found 11 arcs
+nnodes 28 nlinks 47
+Stats: nTokSet 34756
+Stats: TokPerSet 4.866527
+Stats: activePerFrame 132.180516
+Stats: activateNodePerFrame 155.521490
+Stats: deActivateNodePerFrame 155.320917
+
+File: data/mfc/20060221-1-005950.mfc
+
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0 1400000      <s> -114.433235
+   2.  1400000 3400000 [A8BA][BBF2] -187.545258
+   3.  3400000 7900000 [B36F][A8C7] -437.738495
+   4.  790000010900000 [A8E4][B9EA] -285.240173
+   5. 1090000019300000 [B44E][AC4F] -714.648315
+   6. 1930000022500000 [A7DA][ADCC] -303.858643
+   7. 2250000024900000 [ADE8][A47E] -246.165527
+   8. 2490000027400000   [C1BF] -249.643555
+   9. 2740000031600000 [A9B3][A455] -446.983887
+  10. 3160000034100000   [AABA] -263.723633
+  11. 3410000056000000     </s> -2277.093018
+found 1 tokens in end state
+found 0 arcs
+nnodes 12 nlinks 11
+Stats: nTokSet 42501
+Stats: TokPerSet 1.313828
+Stats: activePerFrame 107.032143
+Stats: activateNodePerFrame 157.971429
+Stats: deActivateNodePerFrame 157.832143
+
+File: data/mfc/20060221-1-005960.mfc
+
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0  700000      <s> -67.318977
+   2.   700000 2000000   [A8BA] -126.126869
+   3.  2000000 6000000 [A7DA][ADCC] -385.419617
+   4.  6000000 7500000   [A6B3] -158.024475
+   5.  750000010900000 [B3A3][B77C] -337.142639
+   6. 1090000031500000     </s> -2136.282715
+found 1 tokens in end state
+found 0 arcs
+nnodes 11 nlinks 14
+Stats: nTokSet 23640
+Stats: TokPerSet 1.874323
+Stats: activePerFrame 121.885714
+Stats: activateNodePerFrame 196.063492
+Stats: deActivateNodePerFrame 195.822222
+
+htk/HTKLVRec/HDecode.mod -A -T 1 -a 0.3 -s 1.0 -t 7.0 -z lat -q tvaldm -o M -l lat -i dev.rec -w data/lm.arpa.txt -H data/final.mmf -S data/small.scp data/lexicon.txt data/tiedlist 
+Reading dictionary from data/lexicon.txt
+Reading acoustic models...Read 2635 physical / 427426 logical HMMs
+lmla count 16686
+nprons 13294
+Reading language model from data/lm.arpa.txt
+File: data/mfc/20060221-1-005870.mfc
+
+ WARNING [-9999]  no token survived to sent end! in htk/HTKLVRec/HDecode.mod
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+ WARNING [-9999]  LatTraceBack: end node not active in htk/HTKLVRec/HDecode.mod
+ WARNING [-9999]  LatTraceBack: no active sil wordend nodes in htk/HTKLVRec/HDecode.mod
+ WARNING [-9999]  LatTraceBack: forcing lattice output in htk/HTKLVRec/HDecode.mod
+found 0 arcs
+nnodes 2 nlinks 1
+Stats: nTokSet 2951
+Stats: TokPerSet 1.000000
+Stats: activePerFrame 74.256757
+Stats: activateNodePerFrame 209.949324
+Stats: deActivateNodePerFrame 209.679054
+
+File: data/mfc/20060221-1-005880.mfc
+
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        013000000      <s> -3814.889648
+   2. 1300000018500000 [A9D2][A548] -1694.796875
+   3. 1850000020500000   [B8DC] -646.838867
+   4. 2050000022300000   [A457] -547.121094
+   5. 2230000024100000 [B36F][BBF2] -543.425781
+   6. 2410000025000000   [A446] -275.681641
+   7. 2500000028700000     </s> -1064.631836
+found 1 tokens in end state
+found 7 arcs
+nnodes 29 nlinks 49
+Stats: nTokSet 8162
+Stats: TokPerSet 4.264886
+Stats: activePerFrame 65.850174
+Stats: activateNodePerFrame 141.675958
+Stats: deActivateNodePerFrame 141.421603
+
+File: data/mfc/20060221-1-005890.mfc
+
+ WARNING [-9999]  no token survived to sent end! in htk/HTKLVRec/HDecode.mod
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0  800000      <s> -205.869797
+   2.   80000018600000 [B44E][BAE2] -5314.517578
+   3. 1860000038300000 [B36F][ADD3] -6065.434082
+   4. 3830000041300000     NAME -881.706055
+   5. 4130000041600000   [A446] -107.073242
+ WARNING [-9999]  LatTraceBack: end node not active in htk/HTKLVRec/HDecode.mod
+ WARNING [-9999]  LatTraceBack: no active sil wordend nodes in htk/HTKLVRec/HDecode.mod
+ WARNING [-9999]  LatTraceBack: forcing lattice output in htk/HTKLVRec/HDecode.mod
+found 2 arcs
+nnodes 10 nlinks 12
+CheckLAlign: MODALIGN Sanity check failed! 1 laDur 1.35  dur 0.03
+CheckLAlign: MODALIGN Sanity check failed! 9 laDur 1.35  dur 0.03
+CheckLAlign: MODALIGN Sanity check failed! 11 laDur 1.35  dur 0.03
+Stats: nTokSet 22506
+Stats: TokPerSet 1.646139
+Stats: activePerFrame 55.400729
+Stats: activateNodePerFrame 98.794171
+Stats: deActivateNodePerFrame 98.774135
+
+File: data/mfc/20060221-1-005900.mfc
+
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0 1200000      <s> -331.585083
+   2.  1200000 9300000 [A7DA][ADCC] -2437.111816
+   3.  930000013100000 [A5AD][B160] -1235.596191
+   4. 1310000014000000   [AABA] -282.436768
+   5. 1400000016000000 [B36F][ADD3] -573.963867
+   6. 1600000020700000    STATE -1351.437500
+   7. 2070000026700000   [A569] -1627.946289
+   8. 2670000028400000   [ADD3] -454.933105
+   9. 2840000033200000   SERIES -1403.230469
+  10. 3320000034000000   [AABA] -240.125977
+  11. 3400000037100000   [AABA] -780.848633
+  12. 3710000039100000   [AABA] -507.398438
+  13. 3910000042700000     </s> -798.826172
+found 1 tokens in end state
+found 2 arcs
+nnodes 26 nlinks 42
+Stats: nTokSet 17589
+Stats: TokPerSet 2.177156
+Stats: activePerFrame 46.725995
+Stats: activateNodePerFrame 67.601874
+Stats: deActivateNodePerFrame 67.430913
+
+File: data/mfc/20060221-1-005910.mfc
+
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0 1300000      <s> -317.282196
+   2.  1300000 5900000 [A7DA][ADCC] -1213.648926
+   3.  590000014000000   [B36F] -2544.916260
+   4. 1400000015100000   [A440] -346.337646
+   5. 1510000016400000   [C3FE] -409.988281
+   6. 1640000020700000   [AABA] -1331.500000
+   7. 2070000022200000 [AEE6][A6A1] -474.104004
+   8. 2220000023400000   [A45D] -332.957520
+   9. 2340000027600000 [BCBD][A558] -1282.478027
+  10. 2760000028300000   [A446] -214.576172
+  11. 2830000034000000 [B9EA][BBDA] -1575.072266
+  12. 3400000042500000   [AABA] -2508.410156
+  13. 4250000047600000 [B36F][ADD3] -1599.894531
+  14. 4760000048500000        A -295.098633
+  15. 4850000060600000 POSTERIOR -3745.393555
+  16. 6060000063000000     </s> -545.091797
+found 1 tokens in end state
+found 0 arcs
+nnodes 21 nlinks 22
+Stats: nTokSet 27050
+Stats: TokPerSet 1.709760
+Stats: activePerFrame 61.847619
+Stats: activateNodePerFrame 99.623810
+Stats: deActivateNodePerFrame 99.507937
+
+File: data/mfc/20060221-1-005920.mfc
+
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0 2800000      <s> -692.682190
+   2.  2800000 7100000 [B54D][ABE1][A94F] -1214.870850
+   3.  710000010800000 [A7DA][ADCC] -1038.457764
+   4. 1080000019900000 [B9EF][BAD9][AABA] -2877.450195
+   5. 1990000023600000 [BBA1][B5B9] -1184.404297
+   6. 2360000028500000   [AC4F] -1191.406250
+   7. 2850000032300000 [B3CC][ABE1] -1070.684570
+   8. 3230000033500000   [AABA] -365.401367
+   9. 3350000037400000     </s> -876.806641
+found 1 tokens in end state
+found 5 arcs
+nnodes 15 nlinks 19
+Stats: nTokSet 16195
+Stats: TokPerSet 2.589318
+Stats: activePerFrame 55.441176
+Stats: activateNodePerFrame 88.991979
+Stats: deActivateNodePerFrame 88.748663
+
+File: data/mfc/20060221-1-005930.mfc
+
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0 4300000      <s> -1106.804443
+   2.  4300000 8600000   [B4EE] -1318.915283
+   3.  860000011900000 [A4C1][A4C1] -994.726318
+   4. 1190000024700000 [AEC9][B6A1] -3902.056396
+   5. 2470000035300000   [ABE1] -3415.360840
+   6. 3530000037400000 [A655][A6EC] -650.458008
+   7. 3740000055300000 [B36F][ADD3] -5330.653320
+   8. 5530000066700000 [A668][ADD3] -3100.298828
+   9. 6670000072500000 [A45D][A569][A548] -1780.908203
+  10. 7250000073300000   [A672] -243.341797
+  11. 7330000073600000     </s> -87.388672
+found 1 tokens in end state
+found 0 arcs
+nnodes 17 nlinks 21
+Stats: nTokSet 23904
+Stats: TokPerSet 4.545934
+Stats: activePerFrame 51.012228
+Stats: activateNodePerFrame 84.849185
+Stats: deActivateNodePerFrame 84.740489
+
+File: data/mfc/20060221-1-005940.mfc
+
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0 2000000      <s> -526.668152
+   2.  2000000 7000000 [A65D][A6B9][A94F] -1388.023926
+   3.  700000010200000 [A7DA][ADCC] -883.965454
+   4. 1020000011500000   [A662] -390.108643
+   5. 1150000012500000   [A763] -304.140381
+   6. 1250000016400000 [A440][AABD] -1255.840576
+   7. 1640000017100000   [A741] -225.023438
+   8. 1710000018900000   [BBA1] -528.738281
+   9. 1890000020600000   [AC4F] -462.378418
+  10. 2060000021500000   [A440] -237.385742
+  11. 2150000024900000   [AC4F] -881.651367
+  12. 2490000034900000     </s> -2809.047363
+found 1 tokens in end state
+found 6 arcs
+nnodes 25 nlinks 33
+Stats: nTokSet 10639
+Stats: TokPerSet 2.490366
+Stats: activePerFrame 56.785100
+Stats: activateNodePerFrame 96.438395
+Stats: deActivateNodePerFrame 96.212034
+
+File: data/mfc/20060221-1-005950.mfc
+
+ WARNING [-9999]  no token survived to sent end! in htk/HTKLVRec/HDecode.mod
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0 1400000      <s> -330.354431
+   2.  1400000 3400000 [A8BA][BBF2] -531.556519
+   3.  3400000 7800000 [B36F][ADD3] -1316.913330
+   4.  7800000 9800000   [B5B9] -606.591309
+   5.  980000012200000 [A451][A443] -679.452393
+   6. 1220000012800000   [A440] -191.837158
+   7. 1280000019200000   [AC4F] -1548.594727
+   8. 1920000022500000 [A7DA][ADCC] -903.672852
+   9. 2250000024900000 [ADE8][A47E] -704.625000
+  10. 2490000027400000   [C1BF] -713.302246
+  11. 2740000027800000   [AABA] -121.715332
+ WARNING [-9999]  LatTraceBack: end node not active in htk/HTKLVRec/HDecode.mod
+ WARNING [-9999]  LatTraceBack: no active sil wordend nodes in htk/HTKLVRec/HDecode.mod
+ WARNING [-9999]  LatTraceBack: forcing lattice output in htk/HTKLVRec/HDecode.mod
+found 0 arcs
+nnodes 22 nlinks 34
+CheckLAlign: MODALIGN Sanity check failed! 1 laDur 2.85  dur 0.04
+Stats: nTokSet 13132
+Stats: TokPerSet 2.034420
+Stats: activePerFrame 30.891071
+Stats: activateNodePerFrame 42.076786
+Stats: deActivateNodePerFrame 42.057143
+
+File: data/mfc/20060221-1-005960.mfc
+
+ WARNING [-9999]  no token survived to sent end! in htk/HTKLVRec/HDecode.mod
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0  700000      <s> -190.348877
+   2.   700000 2000000   [A8BA] -354.462585
+   3.  2000000 6300000 [A7DA][ADCC] -1188.516357
+   4.  6300000 7500000   [A6B3] -364.114746
+   5.  750000010600000   [A668] -951.922852
+   6. 1060000017200000   [ADD3] -2122.334717
+   7. 1720000018200000     WORD -313.504395
+   8. 1820000019900000 [AABA][B8DC] -525.103027
+ WARNING [-9999]  LatTraceBack: end node not active in htk/HTKLVRec/HDecode.mod
+ WARNING [-9999]  LatTraceBack: no active sil wordend nodes in htk/HTKLVRec/HDecode.mod
+ WARNING [-9999]  LatTraceBack: forcing lattice output in htk/HTKLVRec/HDecode.mod
+found 0 arcs
+nnodes 14 nlinks 15
+CheckLAlign: MODALIGN Sanity check failed! 1 laDur 1.32  dur 0.17
+CheckLAlign: MODALIGN Sanity check failed! 12 laDur 1.32  dur 0.17
+Stats: nTokSet 8943
+Stats: TokPerSet 4.038913
+Stats: activePerFrame 34.126984
+Stats: activateNodePerFrame 32.247619
+Stats: deActivateNodePerFrame 32.212698
+
+htk/HTKLVRec/HDecode.mod -A -T 1 -a 0.5 -s 1.0 -t 7.0 -z lat -q tvaldm -o M -l lat -i dev.rec -w data/lm.arpa.txt -H data/final.mmf -S data/small.scp data/lexicon.txt data/tiedlist 
+Reading dictionary from data/lexicon.txt
+Reading acoustic models...Read 2635 physical / 427426 logical HMMs
+lmla count 16686
+nprons 13294
+Reading language model from data/lm.arpa.txt
+File: data/mfc/20060221-1-005870.mfc
+
+ WARNING [-9999]  no token survived to sent end! in htk/HTKLVRec/HDecode.mod
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0 8800000      <s> -4341.631348
+   2.  880000012300000 [A5A6][ADCC] -1654.835449
+   3. 1230000015800000   [A7E2] -1807.340820
+   4. 1580000017200000   [A5A6] -674.368164
+   5. 1720000019400000   [B9EF] -1198.171875
+   6. 1940000020400000   [A7DA] -517.123047
+   7. 2040000023800000 [A4A3][A66E] -1711.227539
+ WARNING [-9999]  LatTraceBack: end node not active in htk/HTKLVRec/HDecode.mod
+ WARNING [-9999]  LatTraceBack: no active sil wordend nodes in htk/HTKLVRec/HDecode.mod
+ WARNING [-9999]  LatTraceBack: forcing lattice output in htk/HTKLVRec/HDecode.mod
+found 0 arcs
+nnodes 9 nlinks 8
+CheckLAlign: MODALIGN Sanity check failed! 1 laDur 0.91  dur 0.34
+Stats: nTokSet 13234
+Stats: TokPerSet 1.855977
+Stats: activePerFrame 65.929054
+Stats: activateNodePerFrame 126.243243
+Stats: deActivateNodePerFrame 125.949324
+
+File: data/mfc/20060221-1-005880.mfc
+
+ WARNING [-9999]  no token survived to sent end! in htk/HTKLVRec/HDecode.mod
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0 4200000      <s> -1701.676270
+   2.  4200000 7200000 [B54D][ABE1] -1605.764404
+   3.  720000010000000 [B3F8][A769] -1421.974854
+   4. 1000000012100000 [A7DA][ADCC] -939.317383
+   5. 1210000018400000 [A6B3][ADAD] -3184.455566
+   6. 1840000019400000   [AD6E] -522.814453
+ WARNING [-9999]  LatTraceBack: end node not active in htk/HTKLVRec/HDecode.mod
+ WARNING [-9999]  LatTraceBack: no active sil wordend nodes in htk/HTKLVRec/HDecode.mod
+ WARNING [-9999]  LatTraceBack: forcing lattice output in htk/HTKLVRec/HDecode.mod
+found 0 arcs
+nnodes 8 nlinks 7
+CheckLAlign: MODALIGN Sanity check failed! 1 laDur 1.02  dur 0.10
+Stats: nTokSet 9923
+Stats: TokPerSet 1.817696
+Stats: activePerFrame 49.174216
+Stats: activateNodePerFrame 79.651568
+Stats: deActivateNodePerFrame 79.442509
+
+File: data/mfc/20060221-1-005890.mfc
+
+ WARNING [-9999]  no token survived to sent end! in htk/HTKLVRec/HDecode.mod
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0  600000      <s> -246.609604
+   2.   60000013700000 [B44E][BAE2] -6343.146484
+   3. 1370000020000000   [A446] -3368.021484
+   4. 2000000022700000   [AFE0] -1413.984375
+   5. 2270000031100000 [B36F][A8E2][ADD3] -3888.261719
+ WARNING [-9999]  LatTraceBack: end node not active in htk/HTKLVRec/HDecode.mod
+ WARNING [-9999]  LatTraceBack: no active sil wordend nodes in htk/HTKLVRec/HDecode.mod
+ WARNING [-9999]  LatTraceBack: forcing lattice output in htk/HTKLVRec/HDecode.mod
+found 0 arcs
+nnodes 7 nlinks 6
+CheckLAlign: MODALIGN Sanity check failed! 1 laDur 3.21  dur 0.84
+Stats: nTokSet 17300
+Stats: TokPerSet 1.026127
+Stats: activePerFrame 31.417122
+Stats: activateNodePerFrame 50.530055
+Stats: deActivateNodePerFrame 50.506375
+
+File: data/mfc/20060221-1-005900.mfc
+
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0 1200000      <s> -548.453979
+   2.  120000015100000 [A7DA][ADCC] -7189.131348
+   3. 1510000016200000   [BB5C] -615.013184
+   4. 1620000019100000   [AC4F] -1376.519531
+   5. 1910000025700000 [B36F][ADD3] -2789.876953
+   6. 2570000028400000 [B36F][ADD3] -1186.192383
+   7. 2840000030500000    STATE -1011.416016
+   8. 3050000032600000   [B256] -1110.494141
+   9. 3260000034000000   [A662] -736.414062
+  10. 3400000037100000 [B36F][ADD3] -1339.386719
+  11. 3710000039100000   [AABA] -838.941406
+  12. 3910000042700000     </s> -1324.005859
+found 1 tokens in end state
+found 2 arcs
+nnodes 27 nlinks 39
+Stats: nTokSet 11510
+Stats: TokPerSet 3.281407
+Stats: activePerFrame 36.309133
+Stats: activateNodePerFrame 61.838407
+Stats: deActivateNodePerFrame 61.665105
+
+File: data/mfc/20060221-1-005910.mfc
+
+ WARNING [-9999]  no token survived to sent end! in htk/HTKLVRec/HDecode.mod
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0 1300000      <s> -524.552185
+   2.  1300000 5900000 [A7DA][ADCC] -2007.504639
+   3.  5900000 7100000   [A662] -630.834229
+ WARNING [-9999]  LatTraceBack: end node not active in htk/HTKLVRec/HDecode.mod
+ WARNING [-9999]  LatTraceBack: no active sil wordend nodes in htk/HTKLVRec/HDecode.mod
+ WARNING [-9999]  LatTraceBack: forcing lattice output in htk/HTKLVRec/HDecode.mod
+found 0 arcs
+nnodes 5 nlinks 4
+CheckLAlign: MODALIGN Sanity check failed! 1 laDur 5.70  dur 0.12
+Stats: nTokSet 6064
+Stats: TokPerSet 1.050297
+Stats: activePerFrame 12.557143
+Stats: activateNodePerFrame 16.590476
+Stats: deActivateNodePerFrame 16.580952
+
+File: data/mfc/20060221-1-005920.mfc
+
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0 2800000      <s> -1149.263550
+   2.  2800000 7100000 [B54D][ABE1][A94F] -2003.737427
+   3.  710000010800000 [A7DA][ADCC] -1710.943848
+   4. 1080000019900000 [B9EF][BAD9][AABA] -4767.625488
+   5. 1990000023600000 [BBA1][B5B9] -1946.013672
+   6. 2360000028500000   [AC4F] -1969.332031
+   7. 2850000032300000 [B3CC][ABE1] -1763.139648
+   8. 3230000033500000   [AABA] -600.906250
+   9. 3350000037400000     </s> -1454.290039
+found 1 tokens in end state
+found 5 arcs
+nnodes 27 nlinks 42
+Stats: nTokSet 11174
+Stats: TokPerSet 2.561303
+Stats: activePerFrame 41.473262
+Stats: activateNodePerFrame 74.994652
+Stats: deActivateNodePerFrame 74.751337
+
+File: data/mfc/20060221-1-005930.mfc
+
+ WARNING [-9999]  no token survived to sent end! in htk/HTKLVRec/HDecode.mod
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0 4300000      <s> -1838.541748
+   2.  4300000 7900000   [B4EE] -1806.330078
+   3.  7900000 9000000   [B973] -576.333740
+   4.  900000010500000   [AC4F] -782.224121
+   5. 1050000012000000 [A4A7][A440] -810.463867
+   6. 1200000013300000   [AC4F] -624.985352
+   7. 1330000018600000 [B751][BFEC][AA6B] -2641.357422
+   8. 1860000020300000   [A8BA] -899.753906
+   9. 2030000026200000   [A4AD] -2769.571289
+  10. 2620000027400000   [ADD3] -647.481445
+  11. 2740000029700000 [C2E5][BEC7] -1081.862305
+  12. 2970000031600000 [AC4F][A548] -921.247070
+  13. 3160000034100000 [B9EA][BBDA] -1136.130859
+ WARNING [-9999]  LatTraceBack: end node not active in htk/HTKLVRec/HDecode.mod
+ WARNING [-9999]  LatTraceBack: no active sil wordend nodes in htk/HTKLVRec/HDecode.mod
+ WARNING [-9999]  LatTraceBack: forcing lattice output in htk/HTKLVRec/HDecode.mod
+found 0 arcs
+nnodes 22 nlinks 25
+CheckLAlign: MODALIGN Sanity check failed! 1 laDur 4.19  dur 0.25
+CheckLAlign: MODALIGN Sanity check failed! 18 laDur 4.19  dur 0.25
+CheckLAlign: MODALIGN Sanity check failed! 21 laDur 4.19  dur 0.25
+CheckLAlign: MODALIGN Sanity check failed! 23 laDur 4.19  dur 0.25
+Stats: nTokSet 11153
+Stats: TokPerSet 6.409307
+Stats: activePerFrame 26.308424
+Stats: activateNodePerFrame 39.565217
+Stats: deActivateNodePerFrame 39.563859
+
+File: data/mfc/20060221-1-005940.mfc
+
+ WARNING [-9999]  no token survived to sent end! in htk/HTKLVRec/HDecode.mod
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0 2000000      <s> -873.083130
+   2.  2000000 7000000 [A65D][A6B9][A94F] -2289.494141
+   3.  700000012900000 [A7DA][ADCC] -2885.242188
+   4. 1290000017100000 [B4EE][A8D3] -2108.884766
+   5. 1710000028300000 [AC4F][A4B0][BBF2] -5477.577148
+   6. 2830000028700000   [A94F] -207.881836
+ WARNING [-9999]  LatTraceBack: end node not active in htk/HTKLVRec/HDecode.mod
+ WARNING [-9999]  LatTraceBack: no active sil wordend nodes in htk/HTKLVRec/HDecode.mod
+ WARNING [-9999]  LatTraceBack: forcing lattice output in htk/HTKLVRec/HDecode.mod
+found 0 arcs
+nnodes 8 nlinks 7
+CheckLAlign: MODALIGN Sanity check failed! 1 laDur 0.65  dur 0.04
+Stats: nTokSet 6615
+Stats: TokPerSet 2.982011
+Stats: activePerFrame 32.438395
+Stats: activateNodePerFrame 51.911175
+Stats: deActivateNodePerFrame 51.896848
+
+File: data/mfc/20060221-1-005950.mfc
+
+ WARNING [-9999]  no token survived to sent end! in htk/HTKLVRec/HDecode.mod
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0 1400000      <s> -546.275513
+   2.  1400000 3500000 [A8BA][BBF2] -923.962036
+   3.  350000012800000 [B36F][ADD3] -4845.165039
+   4. 1280000019200000   [AC4F] -2570.901367
+   5. 1920000022500000 [A7DA][ADCC] -1490.875977
+   6. 2250000024900000 [ADE8][A47E] -1155.499023
+   7. 2490000027800000   [AC4F] -1564.498047
+   8. 2780000028700000        N -453.722656
+   9. 2870000030000000   [AC4F] -620.687500
+  10. 3000000031300000   [A45D] -613.916992
+  11. 3130000033900000   [B44E] -1353.163086
+  12. 3390000038900000   [A4F1] -2653.653320
+  13. 3890000042200000   NUMBER -1689.451172
+  14. 4220000044200000 [B36F][ADD3] -928.478516
+  15. 4420000046300000   EMPH_A -1069.876953
+  16. 4630000047300000   [AABA] -504.144531
+  17. 4730000049100000   [B773] -852.009766
+  18. 4910000049400000   [AABA] -137.228516
+ WARNING [-9999]  LatTraceBack: end node not active in htk/HTKLVRec/HDecode.mod
+ WARNING [-9999]  LatTraceBack: no active sil wordend nodes in htk/HTKLVRec/HDecode.mod
+ WARNING [-9999]  LatTraceBack: forcing lattice output in htk/HTKLVRec/HDecode.mod
+found 1 arcs
+nnodes 30 nlinks 36
+CheckLAlign: MODALIGN Sanity check failed! 1 laDur 0.68  dur 0.03
+CheckLAlign: MODALIGN Sanity check failed! 34 laDur 0.68  dur 0.03
+Stats: nTokSet 14042
+Stats: TokPerSet 2.576627
+Stats: activePerFrame 32.512500
+Stats: activateNodePerFrame 43.132143
+Stats: deActivateNodePerFrame 43.130357
+
+File: data/mfc/20060221-1-005960.mfc
+
+ WARNING [-9999]  no token survived to sent end! in htk/HTKLVRec/HDecode.mod
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0  700000      <s> -313.378693
+   2.   700000 2000000   [A8BA] -582.798584
+   3.  2000000 6500000 [A7DA][ADCC] -2054.614746
+   4.  6500000 8700000 [A440][ADD3] -1102.235107
+   5.  870000010200000     WORD -811.363037
+   6. 1020000013600000 [A655][A6EC] -1773.838379
+   7. 1360000017100000   [B873] -1821.421875
+   8. 1710000018800000   [A741] -893.516602
+   9. 1880000020700000   [A4A3] -1015.870117
+  10. 2070000022500000   [A5A6] -873.124023
+  11. 2250000028200000 [BBA1][B24D][B7A1] -2601.704102
+found 0 tokens in end state
+found 0 arcs
+nnodes 15 nlinks 15
+Stats: nTokSet 9629
+Stats: TokPerSet 1.947243
+Stats: activePerFrame 36.238095
+Stats: activateNodePerFrame 45.082540
+Stats: deActivateNodePerFrame 44.860317
+
+htk/HTKLVRec/HDecode.mod -A -T 1 -a 0.1 -s 1.0 -t 9.0 -z lat -q tvaldm -o M -l lat -i dev.rec -w data/lm.arpa.txt -H data/final.mmf -S data/small.scp data/lexicon.txt data/tiedlist 
+Reading dictionary from data/lexicon.txt
+Reading acoustic models...Read 2635 physical / 427426 logical HMMs
+lmla count 16686
+nprons 13294
+Reading language model from data/lm.arpa.txt
+File: data/mfc/20060221-1-005870.mfc
+
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0 4300000      <s> -418.439606
+   2.  4300000 8400000 [A670][AA47] -404.887360
+   3.  840000012400000 [A5A6][ADCC] -405.972961
+   4. 1240000029600000     </s> -1721.226685
+found 1 tokens in end state
+found 3 arcs
+nnodes 10 nlinks 14
+Stats: nTokSet 39058
+Stats: TokPerSet 2.420964
+Stats: activePerFrame 170.719595
+Stats: activateNodePerFrame 226.385135
+Stats: deActivateNodePerFrame 226.010135
+
+File: data/mfc/20060221-1-005880.mfc
+
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0 4300000      <s> -357.047974
+   2.  4300000 6900000 [A670][AA47] -261.387634
+   3.  690000010000000 [B7C6][B1BC] -331.436646
+   4. 1000000012900000 [A7DA][ADCC][AABA] -285.560608
+   5. 1290000014600000   [A5FD] -165.547241
+   6. 1460000025400000   [BCCB] -1136.554077
+   7. 2540000027500000   EMPH_A -212.597900
+   8. 2750000028700000     </s> -108.028076
+found 1 tokens in end state
+found 25 arcs
+nnodes 144 nlinks 1848
+Stats: nTokSet 81740
+Stats: TokPerSet 9.066088
+Stats: activePerFrame 308.710801
+Stats: activateNodePerFrame 283.428571
+Stats: deActivateNodePerFrame 283.087108
+
+File: data/mfc/20060221-1-005890.mfc
+
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0 1200000      <s> -112.547859
+   2.  120000018800000   [AC4F] -1744.092773
+   3. 1880000030700000 [B36F][AAF9][BDD2][AABA] -1115.826660
+   4. 3070000032400000   [A8EC] -165.152344
+   5. 3240000033800000   [BBA1] -146.679688
+   6. 3380000035600000 [B36F][ADD3] -183.878418
+   7. 3560000039000000 [B5EA][BD75] -350.535645
+   8. 3900000046400000 [A4BA][AE65] -762.611816
+   9. 4640000047800000   [A8D3] -145.577148
+  10. 4780000049600000   [AC4F] -176.319824
+  11. 4960000052900000   [BBA1] -298.466797
+  12. 5290000054900000     </s> -174.837891
+found 1 tokens in end state
+found 3 arcs
+nnodes 125 nlinks 296
+Stats: nTokSet 139495
+Stats: TokPerSet 6.889759
+Stats: activePerFrame 285.653916
+Stats: activateNodePerFrame 254.639344
+Stats: deActivateNodePerFrame 254.475410
+
+File: data/mfc/20060221-1-005900.mfc
+
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0 1200000      <s> -114.716125
+   2.  1200000 7800000 [A7DA][ADCC] -654.830566
+   3.  780000011600000 [A440][ADB1] -401.612610
+   4. 1160000016200000 [B0B5][B36F][ADD3] -463.412720
+   5. 1620000019300000   [A57C] -287.970947
+   6. 1930000025700000 [B36F][ADD3] -563.864258
+   7. 2570000028400000 [B36F][ADD3] -254.801025
+   8. 2840000032100000   THEORY -371.458740
+   9. 3210000034100000 [B36F][ADD3] -209.371826
+  10. 3410000037100000   [AABA] -262.826660
+  11. 3710000039100000   [AABA] -179.030518
+  12. 3910000042700000     </s> -272.949463
+found 1 tokens in end state
+found 13 arcs
+nnodes 47 nlinks 75
+Stats: nTokSet 116009
+Stats: TokPerSet 4.073201
+Stats: activePerFrame 285.651054
+Stats: activateNodePerFrame 234.948478
+Stats: deActivateNodePerFrame 234.772834
+
+File: data/mfc/20060221-1-005910.mfc
+
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0 3100000      <s> -263.487518
+   2.  3100000 5900000 [A7DA][ADCC] -264.832062
+   3.  5900000 9100000 [A4BA][AE65] -336.389221
+   4.  910000013000000 [A55D][AC41] -401.960754
+   5. 1300000016500000 [B27A][BDD7] -369.659912
+   6. 1650000021700000 [AABA][B3A1][A5F7] -504.866577
+   7. 2170000023500000   [B1B5] -186.496582
+   8. 2350000028200000 [A55D][AC41] -461.110352
+   9. 2820000032200000   [AC4F] -380.880859
+  10. 3220000039600000 [B04F][B16F] -724.023438
+  11. 3960000042600000 [A7DA][ADCC] -275.482666
+  12. 4260000047000000 [B36F][A8E2][ADD3] -447.845703
+  13. 4700000051100000 [ABDC][A668] -412.576172
+  14. 5110000054400000 [A4A3][A440] -336.309570
+  15. 5440000063000000     </s> -777.679688
+found 1 tokens in end state
+found 85 arcs
+nnodes 268 nlinks 638
+Stats: nTokSet 264334
+Stats: TokPerSet 7.208728
+Stats: activePerFrame 421.650794
+Stats: activateNodePerFrame 304.933333
+Stats: deActivateNodePerFrame 304.749206
+
+File: data/mfc/20060221-1-005920.mfc
+
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0 2800000      <s> -236.100677
+   2.  2800000 7100000 [B54D][ABE1][A94F] -425.805389
+   3.  710000010400000 [A7DA][ADCC] -319.430725
+   4. 1040000012500000   [B77C] -217.587402
+   5. 1250000016600000 [B171][C059] -433.727173
+   6. 1660000017300000   [A8BA] -74.400513
+   7. 1730000019600000   [C65A] -240.149780
+   8. 1960000021500000   [BFF9] -204.065186
+   9. 2150000028500000 [B67D][A96C] -620.336670
+  10. 2850000032700000 [B3CC][ABE1] -422.497070
+  11. 3270000037400000     </s> -377.651611
+found 1 tokens in end state
+found 4 arcs
+nnodes 54 nlinks 132
+Stats: nTokSet 118816
+Stats: TokPerSet 5.207321
+Stats: activePerFrame 347.299465
+Stats: activateNodePerFrame 282.042781
+Stats: deActivateNodePerFrame 281.737968
+
+File: data/mfc/20060221-1-005930.mfc
+
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0 4300000      <s> -375.063385
+   2.  4300000 8700000 [AB65][ADB1] -459.468781
+   3.  870000010600000   [BBA1] -197.613953
+   4. 1060000013200000 [A8E4][B9EA] -268.420898
+   5. 1320000016500000 [B751][AA6B] -335.799194
+   6. 1650000017300000   [A94F] -76.967896
+   7. 1730000024200000 [BAA9][AAF8] -656.334351
+   8. 2420000026300000   [ABE1] -230.094971
+   9. 2630000028200000   [A562] -192.591309
+  10. 2820000031500000 [BEC7][B4C1] -318.327881
+  11. 3150000033100000   [AC4F] -159.722412
+  12. 3310000037300000 [B669][A44A] -398.393066
+  13. 3730000043700000 [B36F][ADD3] -633.250732
+  14. 4370000044900000   [B44E] -127.578613
+  15. 4490000045800000   [AABA] -95.459961
+  16. 4580000055300000 [BDD2][C344] -948.472168
+  17. 5530000056800000   [B3A3] -159.746582
+  18. 5680000066300000   [B77C] -762.094727
+  19. 6630000069300000 [B1B5][C4B2] -310.967773
+  20. 6930000071400000   [A8EC] -205.520020
+  21. 7140000073600000     </s> -195.010742
+found 1 tokens in end state
+found 43 arcs
+nnodes 286 nlinks 1941
+Stats: nTokSet 193685
+Stats: TokPerSet 11.288350
+Stats: activePerFrame 290.995924
+Stats: activateNodePerFrame 267.302989
+Stats: deActivateNodePerFrame 267.063859
+
+File: data/mfc/20060221-1-005940.mfc
+
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0 2000000      <s> -180.253265
+   2.  2000000 7000000 [A65D][A6B9][A94F] -486.553009
+   3.  700000010200000 [A7DA][ADCC] -309.129272
+   4. 1020000012900000 [A46A][B7A7] -262.491699
+   5. 1290000015200000   [B4EE] -242.209595
+   6. 1520000017200000   [C65A] -210.997437
+   7. 1720000021500000 [BEC7][B2DF] -409.350586
+   8. 2150000024900000   [AC4F] -306.686768
+   9. 2490000034900000     </s> -951.408936
+found 1 tokens in end state
+found 31 arcs
+nnodes 108 nlinks 414
+Stats: nTokSet 67402
+Stats: TokPerSet 10.578440
+Stats: activePerFrame 215.217765
+Stats: activateNodePerFrame 198.535817
+Stats: deActivateNodePerFrame 198.269341
+
+File: data/mfc/20060221-1-005950.mfc
+
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0 1400000      <s> -114.433235
+   2.  1400000 3400000 [A8BA][BBF2] -187.545258
+   3.  3400000 7700000 [B36F][A8C7] -416.254059
+   4.  770000010900000 [A8E4][B9EA] -304.748535
+   5. 1090000019300000 [B44E][AC4F] -714.648315
+   6. 1930000022500000 [A7DA][ADCC] -303.858643
+   7. 2250000024900000 [ADE8][A47E] -246.165527
+   8. 2490000027400000   [C1BF] -249.643555
+   9. 2740000028700000   [AABA] -135.310303
+  10. 2870000033800000   [BC67] -521.095947
+  11. 3380000040000000 [BB79][ADB5][B342][B27A] -600.446533
+  12. 4000000041300000   [ADB1] -138.993164
+  13. 4130000042200000   [AABA] -86.240723
+  14. 4220000044100000 [B36F][ADD3] -187.184570
+  15. 4410000050000000 [AED6][A4DF][AABA] -566.482422
+  16. 5000000054600000 [B3A1][A5F7] -425.574707
+  17. 5460000056000000     </s> -116.719238
+found 1 tokens in end state
+found 2 arcs
+nnodes 106 nlinks 265
+Stats: nTokSet 113754
+Stats: TokPerSet 7.250127
+Stats: activePerFrame 211.378571
+Stats: activateNodePerFrame 180.057143
+Stats: deActivateNodePerFrame 179.910714
+
+File: data/mfc/20060221-1-005960.mfc
+
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0  700000      <s> -67.318977
+   2.   700000 2000000   [A8BA] -126.126869
+   3.  2000000 5300000 [A7DA][ADCC] -304.380432
+   4.  5300000 7400000 [A843][ADD3] -207.592957
+   5.  740000013300000 [B3A3][B77C] -608.305969
+   6. 1330000016800000   [B6B6] -361.049438
+   7. 1680000017900000        O -122.234741
+   8. 1790000022500000 [AABA][BFEC][AA6B] -476.569458
+   9. 2250000029300000 [BBA1][B24D][B7A1] -650.811035
+  10. 2930000031500000     </s> -170.424316
+found 1 tokens in end state
+found 1 arcs
+nnodes 18 nlinks 24
+Stats: nTokSet 72924
+Stats: TokPerSet 5.800943
+Stats: activePerFrame 247.222222
+Stats: activateNodePerFrame 222.853968
+Stats: deActivateNodePerFrame 222.631746
+
+htk/HTKLVRec/HDecode.mod -A -T 1 -a 0.3 -s 1.0 -t 9.0 -z lat -q tvaldm -o M -l lat -i dev.rec -w data/lm.arpa.txt -H data/final.mmf -S data/small.scp data/lexicon.txt data/tiedlist 
+Reading dictionary from data/lexicon.txt
+Reading acoustic models...Read 2635 physical / 427426 logical HMMs
+lmla count 16686
+nprons 13294
+Reading language model from data/lm.arpa.txt
+File: data/mfc/20060221-1-005870.mfc
+
+ WARNING [-9999]  no token survived to sent end! in htk/HTKLVRec/HDecode.mod
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0 4300000      <s> -1235.509033
+   2.  4300000 8800000 [A670][AA47] -1272.174072
+   3.  880000012300000 [A5A6][ADCC] -1005.034424
+   4. 1230000013400000   [A7E2] -358.060791
+   5. 1340000015000000   [A5A6] -473.755371
+   6. 1500000017200000   [A5A6] -652.860352
+   7. 1720000019500000   [B1BC] -694.466309
+   8. 1950000020300000   [A446] -231.672852
+   9. 2030000022700000 [AABA][B8DC] -737.498047
+ WARNING [-9999]  LatTraceBack: end node not active in htk/HTKLVRec/HDecode.mod
+ WARNING [-9999]  LatTraceBack: no active sil wordend nodes in htk/HTKLVRec/HDecode.mod
+ WARNING [-9999]  LatTraceBack: forcing lattice output in htk/HTKLVRec/HDecode.mod
+found 1 arcs
+nnodes 29 nlinks 46
+CheckLAlign: MODALIGN Sanity check failed! 1 laDur 0.92  dur 0.24
+CheckLAlign: MODALIGN Sanity check failed! 10 laDur 0.92  dur 0.24
+CheckLAlign: MODALIGN Sanity check failed! 40 laDur 0.92  dur 0.24
+CheckLAlign: MODALIGN Sanity check failed! 43 laDur 0.92  dur 0.24
+Stats: nTokSet 25471
+Stats: TokPerSet 2.507283
+Stats: activePerFrame 95.601351
+Stats: activateNodePerFrame 110.972973
+Stats: deActivateNodePerFrame 110.915541
+
+File: data/mfc/20060221-1-005880.mfc
+
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0 4300000      <s> -1052.658325
+   2.  4300000 7400000 [A670][AA47] -898.817871
+   3.  7400000 8600000   [A66E] -367.203003
+   4.  860000010000000   [BDD5] -407.202148
+   5. 1000000012900000 [A7DA][ADCC][AABA] -811.628906
+   6. 1290000014700000   [A5FD] -488.185791
+   7. 1470000017800000   [BCCB] -914.575928
+   8. 1780000019000000   [B4EE] -363.545410
+   9. 1900000022300000 [A9B9][A455] -969.647461
+  10. 2230000024000000   [A8AB] -489.197754
+  11. 2400000025800000   [A446] -546.321289
+  12. 2580000027500000   EMPH_A -498.194336
+  13. 2750000028700000     </s> -310.964844
+found 1 tokens in end state
+found 0 arcs
+nnodes 100 nlinks 1673
+Stats: nTokSet 27267
+Stats: TokPerSet 9.801738
+Stats: activePerFrame 115.637631
+Stats: activateNodePerFrame 132.216028
+Stats: deActivateNodePerFrame 131.968641
+
+File: data/mfc/20060221-1-005890.mfc
+
+ WARNING [-9999]  no token survived to sent end! in htk/HTKLVRec/HDecode.mod
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0  700000      <s> -178.205734
+   2.   700000 6900000 [B44E][BAE2] -1818.674561
+   3.  690000010400000   [A4A3] -995.890747
+   4. 1040000018600000   [B56F] -2517.565918
+   5. 1860000030600000 [B36F][AAF9][BDD2][AABA] -3250.918945
+   6. 3060000032300000   [A8EC] -453.483398
+   7. 3230000033800000   [A9D2] -435.643555
+   8. 3380000035600000 [B36F][ADD3] -524.626953
+   9. 3560000039200000 [B5EA][BD75] -1041.900391
+  10. 3920000039900000   [AABA] -203.902344
+  11. 3990000041100000   [A440] -344.636719
+  12. 4110000041700000   [A446] -203.266602
+  13. 4170000042000000   EMPH_A -97.900391
+ WARNING [-9999]  LatTraceBack: end node not active in htk/HTKLVRec/HDecode.mod
+ WARNING [-9999]  LatTraceBack: no active sil wordend nodes in htk/HTKLVRec/HDecode.mod
+ WARNING [-9999]  LatTraceBack: forcing lattice output in htk/HTKLVRec/HDecode.mod
+found 0 arcs
+nnodes 69 nlinks 154
+CheckLAlign: MODALIGN Sanity check failed! 1 laDur 1.31  dur 0.03
+Stats: nTokSet 42284
+Stats: TokPerSet 5.205491
+Stats: activePerFrame 82.238616
+Stats: activateNodePerFrame 89.799636
+Stats: deActivateNodePerFrame 89.797814
+
+File: data/mfc/20060221-1-005900.mfc
+
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0 1200000      <s> -331.585083
+   2.  1200000 5500000 [A7DA][ADCC] -1247.166748
+   3.  5500000 7900000   [A4A3] -707.141235
+   4.  790000011600000 [A440][ADB1] -1103.864502
+   5. 1160000013900000   [B0B5] -649.110107
+   6. 1390000016000000 [B36F][ADD3] -603.766113
+   7. 1600000019300000        C -872.461914
+   8. 1930000025600000 [B36F][ADD3] -1597.887695
+   9. 2560000028400000 [B36F][ADD3] -745.498535
+  10. 2840000033100000   SERIES -1372.832520
+  11. 3310000034000000   [ADD3] -262.896484
+  12. 3400000037100000   [AABA] -781.208008
+  13. 3710000039100000   [AABA] -508.952148
+  14. 3910000042700000     </s> -798.826172
+found 1 tokens in end state
+found 6 arcs
+nnodes 74 nlinks 207
+Stats: nTokSet 33391
+Stats: TokPerSet 7.204247
+Stats: activePerFrame 85.365340
+Stats: activateNodePerFrame 98.395785
+Stats: deActivateNodePerFrame 98.194379
+
+File: data/mfc/20060221-1-005910.mfc
+
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0 1300000      <s> -317.282196
+   2.  1300000 5900000 [A7DA][ADCC] -1214.275513
+   3.  5900000 7400000   [BDAC] -463.796509
+   4.  7400000 9100000   [C5FD] -494.860840
+   5.  910000013100000 [A55D][AC41] -1169.318848
+   6. 1310000014400000   [A741] -409.851318
+   7. 1440000015100000   [A440] -212.227051
+   8. 1510000016400000   [C3FE] -412.667480
+   9. 1640000017700000   [AABA] -390.628906
+  10. 1770000019600000   [B9CF] -547.311523
+  11. 1960000020800000   [AABA] -369.152832
+  12. 2080000023800000     NEED -886.184570
+  13. 2380000028200000 [A55D][AC41] -1238.315430
+  14. 2820000034000000 [B9EA][BBDA] -1600.569336
+  15. 3400000035100000   [AABA] -308.878906
+  16. 3510000037200000   [AE61] -569.023438
+  17. 3720000038100000   [AABA] -262.208984
+  18. 3810000039800000   [A8BA] -486.430664
+  19. 3980000042600000 [A7DA][ADCC] -705.717773
+  20. 4260000043700000   [B36F] -323.250000
+  21. 4370000047300000   [A8E2] -1035.792969
+  22. 4730000048000000   [ADD3] -215.616211
+  23. 4800000052600000   [A94F] -1412.997070
+  24. 5260000056200000   [A3A3] -940.750000
+  25. 5620000057800000   [A569] -501.768555
+  26. 5780000059800000      FIR -545.349609
+  27. 5980000063000000     </s> -721.261719
+found 1 tokens in end state
+found 0 arcs
+nnodes 118 nlinks 326
+Stats: nTokSet 62749
+Stats: TokPerSet 7.013148
+Stats: activePerFrame 105.052381
+Stats: activateNodePerFrame 108.357143
+Stats: deActivateNodePerFrame 108.142857
+
+File: data/mfc/20060221-1-005920.mfc
+
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0 2800000      <s> -692.682190
+   2.  2800000 7100000 [B54D][ABE1][A94F] -1214.870850
+   3.  710000010400000 [A7DA][ADCC] -914.948486
+   4. 1040000012400000   [B77C] -584.957031
+   5. 1240000014700000   [B171] -672.034180
+   6. 1470000016700000   [A457] -623.359863
+   7. 1670000017400000   [AABA] -204.302246
+   8. 1740000019300000   [B9C0] -578.854492
+   9. 1930000023600000 [B9EF][A4A3][B9EF] -1409.312012
+  10. 2360000028500000   [AC4F] -1194.219238
+  11. 2850000032700000 [B3CC][ABE1] -1201.417480
+  12. 3270000037400000     </s> -1107.415039
+found 1 tokens in end state
+found 33 arcs
+nnodes 96 nlinks 173
+Stats: nTokSet 36777
+Stats: TokPerSet 6.057264
+Stats: activePerFrame 112.569519
+Stats: activateNodePerFrame 132.727273
+Stats: deActivateNodePerFrame 132.425134
+
+File: data/mfc/20060221-1-005930.mfc
+
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0 1300000      <s> -303.420532
+   2.  1300000 4300000   EMPH_A -799.777222
+   3.  4300000 7100000   [AB65] -779.410645
+   4.  7100000 8900000   [A562] -569.448975
+   5.  890000012000000 [BEC7][B4C1] -891.538086
+   6. 1200000013100000   [AC4F] -320.589600
+   7. 1310000016500000 [C1BF][B8DC] -987.223633
+   8. 1650000018600000 [A8BA][BBF2] -615.206055
+   9. 1860000019400000   [A741] -240.836914
+  10. 1940000024300000   [B0F3] -1331.269043
+  11. 2430000026300000   [ABE1] -621.315918
+  12. 2630000028200000   [A562] -534.751953
+  13. 2820000031600000 [BEC7][B4C1] -921.881348
+  14. 3160000033100000   [AC4F] -419.212891
+  15. 3310000037200000 [B669][A44A] -1099.384766
+  16. 3720000043700000 [B36F][ADD3] -1854.541992
+  17. 4370000044900000   [B44E] -361.876953
+  18. 4490000045600000   [AABA] -203.333984
+  19. 4560000055300000 [BDD2][C344] -2801.294922
+  20. 5530000056800000   [B3A3] -448.670898
+  21. 5680000066300000   [B77C] -2228.343750
+  22. 6630000069300000 [B1B5][C4B2] -868.480469
+  23. 6930000071400000   [A8EC] -580.695312
+  24. 7140000073600000     </s> -563.408203
+found 1 tokens in end state
+found 14 arcs
+nnodes 215 nlinks 1752
+Stats: nTokSet 52287
+Stats: TokPerSet 11.573833
+Stats: activePerFrame 86.813859
+Stats: activateNodePerFrame 116.173913
+Stats: deActivateNodePerFrame 115.936141
+
+File: data/mfc/20060221-1-005940.mfc
+
+ WARNING [-9999]  no token survived to sent end! in htk/HTKLVRec/HDecode.mod
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0 2000000      <s> -526.668152
+   2.  2000000 7000000 [A65D][A6B9][A94F] -1388.023926
+   3.  700000010100000 [A7DA][ADCC] -853.223999
+   4. 1010000012900000 [A641][A8D3] -814.546631
+   5. 1290000015200000   [B4EE] -680.056396
+   6. 1520000017200000   [C65A] -591.074707
+   7. 1720000021500000 [BEC7][B2DF] -1154.394043
+   8. 2150000027000000   [AC4F] -1377.126953
+   9. 2700000029400000 [A4A3][AFE0] -733.645996
+  10. 2940000030200000       AT -238.004883
+ WARNING [-9999]  LatTraceBack: end node not active in htk/HTKLVRec/HDecode.mod
+ WARNING [-9999]  LatTraceBack: no active sil wordend nodes in htk/HTKLVRec/HDecode.mod
+ WARNING [-9999]  LatTraceBack: forcing lattice output in htk/HTKLVRec/HDecode.mod
+found 0 arcs
+nnodes 93 nlinks 301
+CheckLAlign: MODALIGN Sanity check failed! 1 laDur 0.54  dur 0.08
+CheckLAlign: MODALIGN Sanity check failed! 207 laDur 0.54  dur 0.08
+Stats: nTokSet 30230
+Stats: TokPerSet 8.379424
+Stats: activePerFrame 96.670487
+Stats: activateNodePerFrame 86.641834
+Stats: deActivateNodePerFrame 86.604585
+
+File: data/mfc/20060221-1-005950.mfc
+
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0 1400000      <s> -330.354431
+   2.  1400000 3400000 [A8BA][BBF2] -531.556519
+   3.  3400000 5400000   [B36F] -564.096619
+   4.  5400000 7700000   [B1B5] -665.385742
+   5.  7700000 9800000   [B5B9] -634.969238
+   6.  980000012700000 [A451][A445] -794.523682
+   7. 1270000019200000   [AC4F] -1562.955078
+   8. 1920000022500000 [A7DA][ADCC] -903.531738
+   9. 2250000024900000 [ADE8][A47E] -704.625000
+  10. 2490000027200000   [C1BF] -652.578613
+  11. 2720000028700000   [A8BA] -451.147461
+  12. 2870000032700000   [BC67] -1152.144043
+  13. 3270000039400000   [BBA1] -2190.444336
+  14. 3940000041300000     NONE -582.701172
+  15. 4130000042200000   [AABA] -240.004883
+  16. 4220000044200000 [B36F][ADD3] -562.250977
+  17. 4420000050000000 [AED6][A4DF][AABA] -1585.276367
+  18. 5000000054600000 [B3A1][A5F7] -1204.510742
+  19. 5460000056000000     </s> -334.933594
+found 1 tokens in end state
+found 2 arcs
+nnodes 65 nlinks 105
+Stats: nTokSet 38424
+Stats: TokPerSet 8.195477
+Stats: activePerFrame 76.619643
+Stats: activateNodePerFrame 76.544643
+Stats: deActivateNodePerFrame 76.360714
+
+File: data/mfc/20060221-1-005960.mfc
+
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0  700000      <s> -190.348877
+   2.   700000 2000000   [A8BA] -354.462585
+   3.  2000000 6200000 [A7DA][ADCC] -1160.454102
+   4.  6200000 7400000 [A440][ADD3] -356.403198
+   5.  7400000 9000000   [B3A3] -452.333740
+   6.  900000011500000   [B77C] -703.161133
+   7. 1150000013200000   [A6B3] -541.045410
+   8. 1320000015700000   [B35D] -716.777344
+   9. 1570000017900000       NO -668.629395
+  10. 1790000022500000 [AABA][BFEC][AA6B] -1351.310059
+  11. 2250000029300000 [BBA1][B24D][B7A1] -1855.541016
+  12. 2930000031500000     </s> -490.819336
+found 1 tokens in end state
+found 1 arcs
+nnodes 35 nlinks 65
+Stats: nTokSet 23058
+Stats: TokPerSet 6.691127
+Stats: activePerFrame 88.723810
+Stats: activateNodePerFrame 91.469841
+Stats: deActivateNodePerFrame 91.247619
+
+htk/HTKLVRec/HDecode.mod -A -T 1 -a 0.5 -s 1.0 -t 9.0 -z lat -q tvaldm -o M -l lat -i dev.rec -w data/lm.arpa.txt -H data/final.mmf -S data/small.scp data/lexicon.txt data/tiedlist 
+Reading dictionary from data/lexicon.txt
+Reading acoustic models...Read 2635 physical / 427426 logical HMMs
+lmla count 16686
+nprons 13294
+Reading language model from data/lm.arpa.txt
+File: data/mfc/20060221-1-005870.mfc
+
+ WARNING [-9999]  no token survived to sent end! in htk/HTKLVRec/HDecode.mod
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0 4300000      <s> -2052.578613
+   2.  4300000 8700000 [A670][AA47] -2052.261719
+   3.  870000012300000 [A5A6][ADCC] -1699.729980
+   4. 1230000013500000   [A7E2] -638.424805
+   5. 1350000016700000   [A5A6] -1617.159180
+   6. 1670000017400000   [AABA] -363.493164
+   7. 1740000020300000   FILTER -1545.321289
+   8. 2030000022700000 [AABA][B8DC] -1213.580078
+ WARNING [-9999]  LatTraceBack: end node not active in htk/HTKLVRec/HDecode.mod
+ WARNING [-9999]  LatTraceBack: no active sil wordend nodes in htk/HTKLVRec/HDecode.mod
+ WARNING [-9999]  LatTraceBack: forcing lattice output in htk/HTKLVRec/HDecode.mod
+found 2 arcs
+nnodes 24 nlinks 32
+CheckLAlign: MODALIGN Sanity check failed! 1 laDur 0.92  dur 0.24
+CheckLAlign: MODALIGN Sanity check failed! 13 laDur 0.92  dur 0.24
+CheckLAlign: MODALIGN Sanity check failed! 22 laDur 0.92  dur 0.24
+CheckLAlign: MODALIGN Sanity check failed! 24 laDur 0.92  dur 0.24
+CheckLAlign: MODALIGN Sanity check failed! 27 laDur 0.92  dur 0.24
+CheckLAlign: MODALIGN Sanity check failed! 30 laDur 0.80  dur 0.12
+Stats: nTokSet 14536
+Stats: TokPerSet 3.131948
+Stats: activePerFrame 54.351351
+Stats: activateNodePerFrame 69.878378
+Stats: deActivateNodePerFrame 69.844595
+
+File: data/mfc/20060221-1-005880.mfc
+
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0 4300000      <s> -1748.267944
+   2.  4300000 7400000 [A670][AA47] -1482.489624
+   3.  7400000 9700000 [A66E][AABA] -1152.104248
+   4.  970000010400000        A -338.745117
+   5. 1040000011100000        O -330.395020
+   6. 1110000013000000   [B652] -1007.824707
+   7. 1300000014800000   [A5FD] -807.137207
+   8. 1480000020200000   [BCCB] -2765.076172
+   9. 2020000024100000 [A7A8][C2F8] -1911.802734
+  10. 2410000025900000      LAP -932.546875
+  11. 2590000027500000   EMPH_A -783.515625
+  12. 2750000028700000     </s> -514.033203
+found 1 tokens in end state
+found 0 arcs
+nnodes 69 nlinks 899
+Stats: nTokSet 15921
+Stats: TokPerSet 9.853778
+Stats: activePerFrame 80.334495
+Stats: activateNodePerFrame 110.923345
+Stats: deActivateNodePerFrame 110.655052
+
+File: data/mfc/20060221-1-005890.mfc
+
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0  600000      <s> -246.609604
+   2.   600000 6900000 [B44E][BAE2] -3078.677979
+   3.  690000010400000   [A4A3] -1640.303711
+   4. 1040000014200000   [B56F] -1794.157227
+   5. 1420000015000000        A -391.476074
+   6. 1500000017000000   [A843] -1155.476562
+   7. 1700000023800000        A -3640.810547
+   8. 2380000024600000        B -410.024414
+   9. 2460000030600000   [AABA] -2545.380859
+  10. 3060000032300000   [A8EC] -745.369141
+  11. 3230000033800000   [A9D2] -714.439453
+  12. 3380000035600000 [B36F][ADD3] -863.434570
+  13. 3560000038300000 [BEC7][B4C1] -1310.769531
+  14. 3830000041000000   [BBA1] -1310.791016
+  15. 4100000043800000   [AE65] -1296.464844
+  16. 4380000045200000   [AABA] -687.597656
+  17. 4520000048500000    NOISE -1764.138672
+  18. 4850000049600000   [AC4F] -505.505859
+  19. 4960000052900000   [BBA1] -1413.189453
+  20. 5290000054900000     </s> -840.685547
+found 1 tokens in end state
+found 2 arcs
+nnodes 84 nlinks 185
+Stats: nTokSet 27815
+Stats: TokPerSet 5.402768
+Stats: activePerFrame 56.131148
+Stats: activateNodePerFrame 63.759563
+Stats: deActivateNodePerFrame 63.595628
+
+File: data/mfc/20060221-1-005900.mfc
+
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0 1200000      <s> -548.453979
+   2.  1200000 9100000 [A7DA][ADCC] -3922.120117
+   3.  910000011100000   [B5B9] -1031.303711
+   4. 1110000011700000   [A741] -324.620605
+   5. 1170000020500000   [B0B5] -4480.814941
+   6. 2050000021400000   [B9CF] -501.316406
+   7. 2140000026800000 [A6B3][AABA] -2475.549805
+   8. 2680000028400000   [ADD3] -691.774414
+   9. 2840000033200000  SERIOUS -2310.401367
+  10. 3320000034000000   [AABA] -393.044922
+  11. 3400000037100000   [AABA] -1288.830078
+  12. 3710000039100000   [AABA] -837.144531
+  13. 3910000042700000     </s> -1324.716797
+found 1 tokens in end state
+found 5 arcs
+nnodes 61 nlinks 104
+Stats: nTokSet 18132
+Stats: TokPerSet 5.871002
+Stats: activePerFrame 49.030445
+Stats: activateNodePerFrame 61.248244
+Stats: deActivateNodePerFrame 60.911007
+
+File: data/mfc/20060221-1-005910.mfc
+
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0 1300000      <s> -524.552185
+   2.  1300000 5900000 [A7DA][ADCC] -2008.287354
+   3.  5900000 7400000   [B0E1] -755.562256
+   4.  7400000 9100000   [C5FD] -810.451172
+   5.  910000011200000   [A8EC] -986.236328
+   6. 1120000013400000   [A778] -1133.034180
+   7. 1340000016500000 [B27A][BDD7] -1525.330078
+   8. 1650000022700000 [AABA][B3A1][A5F7] -2896.806152
+   9. 2270000023400000        A -368.901367
+  10. 2340000028200000 [A55D][AC41] -2213.669922
+  11. 2820000032200000   [AC4F] -1824.409180
+  12. 3220000036900000 [B04F][B16F] -2159.574219
+  13. 3690000037900000   [AD74] -494.226562
+  14. 3790000040000000        A -1034.742188
+  15. 4000000047100000     WIDE -3892.800781
+  16. 4710000048000000   [AABA] -454.697266
+  17. 4800000052700000   [A8BA] -2384.564453
+  18. 5270000056100000     NEED -1467.925781
+  19. 5610000058000000   [BE61] -942.814453
+  20. 5800000059800000      FIR -801.917969
+  21. 5980000063000000     </s> -1194.751953
+found 1 tokens in end state
+found 0 arcs
+nnodes 79 nlinks 337
+Stats: nTokSet 35161
+Stats: TokPerSet 5.515941
+Stats: activePerFrame 63.560317
+Stats: activateNodePerFrame 80.052381
+Stats: deActivateNodePerFrame 79.838095
+
+File: data/mfc/20060221-1-005920.mfc
+
+ WARNING [-9999]  no token survived to sent end! in htk/HTKLVRec/HDecode.mod
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0 2800000      <s> -1149.263550
+   2.  2800000 7100000 [B54D][ABE1][A94F] -2003.737427
+   3.  710000010600000 [A7DA][ADCC] -1613.347168
+   4. 1060000012400000   [B77C] -864.629395
+   5. 1240000016500000   [B171] -2058.971680
+   6. 1650000018400000 [A4B0][BBF2] -983.630859
+   7. 1840000019500000   [A94F] -558.724609
+   8. 1950000021400000 [A5A6][AABA] -976.640625
+   9. 2140000030400000  CASCADE -4323.460938
+ WARNING [-9999]  LatTraceBack: end node not active in htk/HTKLVRec/HDecode.mod
+ WARNING [-9999]  LatTraceBack: no active sil wordend nodes in htk/HTKLVRec/HDecode.mod
+ WARNING [-9999]  LatTraceBack: forcing lattice output in htk/HTKLVRec/HDecode.mod
+found 0 arcs
+nnodes 28 nlinks 42
+CheckLAlign: MODALIGN Sanity check failed! 1 laDur 1.59  dur 0.90
+CheckLAlign: MODALIGN Sanity check failed! 35 laDur 1.59  dur 0.90
+CheckLAlign: MODALIGN Sanity check failed! 40 laDur 1.59  dur 0.90
+Stats: nTokSet 19402
+Stats: TokPerSet 4.407638
+Stats: activePerFrame 53.732620
+Stats: activateNodePerFrame 54.446524
+Stats: deActivateNodePerFrame 54.443850
+
+File: data/mfc/20060221-1-005930.mfc
+
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0 1300000      <s> -501.480072
+   2.  1300000 4300000   EMPH_A -1318.792358
+   3.  4300000 7700000   [AB65] -1650.821289
+   4.  770000010500000 [A448][A8C6] -1424.733887
+   5. 1050000011900000   [A575] -779.246094
+   6. 1190000013100000   [BC67] -629.529785
+   7. 1310000016600000 [B16A][BDD5] -1735.883301
+   8. 1660000018600000 [A8BA][BBF2] -968.660645
+   9. 1860000019400000   [A94F] -393.796875
+  10. 1940000024000000   [A5A6] -2106.458008
+  11. 2400000026300000   [ABE1] -1160.133789
+  12. 2630000028200000   [A562] -876.355469
+  13. 2820000031600000 [BEC7][B4C1] -1514.215820
+  14. 3160000033100000   [AC4F] -688.466797
+  15. 3310000037200000 [B669][A44A] -1810.136719
+  16. 3720000043000000 [B36F][ADD3] -2661.830078
+  17. 4300000044700000   [ADD3] -931.943359
+  18. 4470000045600000   [A446] -427.892578
+  19. 4560000048600000 [A5A6][A575] -1566.351562
+  20. 4860000051700000   [ADB5] -1564.648438
+  21. 5170000055300000   [B8F2] -1616.474609
+  22. 5530000056800000   [B3A3] -737.773438
+  23. 5680000066300000   [B77C] -3694.152344
+  24. 6630000069300000 [B1B5][C4B2] -1425.583984
+  25. 6930000071400000   [A8EC] -955.603516
+  26. 7140000073600000     </s> -931.800781
+found 1 tokens in end state
+found 14 arcs
+nnodes 234 nlinks 944
+Stats: nTokSet 42707
+Stats: TokPerSet 11.585361
+Stats: activePerFrame 69.781250
+Stats: activateNodePerFrame 89.335598
+Stats: deActivateNodePerFrame 89.097826
+
+File: data/mfc/20060221-1-005940.mfc
+
+ WARNING [-9999]  no token survived to sent end! in htk/HTKLVRec/HDecode.mod
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0 2000000      <s> -873.083130
+   2.  2000000 7000000 [A65D][A6B9][A94F] -2289.494141
+   3.  700000010100000 [A7DA][ADCC] -1408.672852
+   4. 1010000012900000 [A641][A8D3] -1340.717285
+   5. 1290000015300000   [B4EE] -1166.684082
+   6. 1530000017200000   [C65A] -927.069336
+   7. 1720000027000000 [BEC7][A874] -4403.836914
+   8. 2700000028300000   [BCBD] -683.148438
+   9. 2830000029000000   [A446] -345.446289
+  10. 2900000030800000   [BA43] -823.816406
+  11. 3080000031400000   [AABA] -317.208984
+ WARNING [-9999]  LatTraceBack: end node not active in htk/HTKLVRec/HDecode.mod
+ WARNING [-9999]  LatTraceBack: no active sil wordend nodes in htk/HTKLVRec/HDecode.mod
+ WARNING [-9999]  LatTraceBack: forcing lattice output in htk/HTKLVRec/HDecode.mod
+found 3 arcs
+nnodes 106 nlinks 549
+CheckLAlign: MODALIGN Sanity check failed! 1 laDur 0.40  dur 0.06
+CheckLAlign: MODALIGN Sanity check failed! 522 laDur 0.40  dur 0.04
+CheckLAlign: MODALIGN Sanity check failed! 532 laDur 0.40  dur 0.04
+CheckLAlign: MODALIGN Sanity check failed! 534 laDur 0.40  dur 0.06
+CheckLAlign: MODALIGN Sanity check failed! 535 laDur 0.40  dur 0.06
+CheckLAlign: MODALIGN Sanity check failed! 546 laDur 0.40  dur 0.03
+CheckLAlign: MODALIGN Sanity check failed! 547 laDur 0.40  dur 0.03
+CheckLAlign: MODALIGN Sanity check failed! 548 laDur 0.40  dur 0.03
+Stats: nTokSet 16205
+Stats: TokPerSet 8.062388
+Stats: activePerFrame 54.123209
+Stats: activateNodePerFrame 59.025788
+Stats: deActivateNodePerFrame 58.931232
+
+File: data/mfc/20060221-1-005950.mfc
+
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0 1400000      <s> -546.275513
+   2.  1400000 3400000 [A8BA][BBF2] -875.567993
+   3.  340000012800000 [B36F][ADD3] -4892.016602
+   4. 1280000019200000   [AC4F] -2570.901367
+   5. 1920000022500000 [A7DA][ADCC] -1490.875977
+   6. 2250000024900000 [ADE8][A47E] -1161.282227
+   7. 2490000026900000   [A55B] -929.304688
+   8. 2690000028700000   [A8BA] -878.027344
+   9. 2870000032400000   [BC67] -1747.089844
+  10. 3240000033900000   [AC4F] -743.326172
+  11. 3390000035000000   [D7FD] -509.154297
+  12. 3500000038100000 [A4DE][A558] -1453.187500
+  13. 3810000042200000 [B8CC][ADB1][AABA] -1819.882812
+  14. 4220000044200000 [B36F][ADD3] -927.035156
+  15. 4420000050000000 [AED6][A4DF][AABA] -2613.064453
+  16. 5000000054600000 [B3A1][A5F7] -1983.291016
+  17. 5460000056000000     </s> -553.148438
+found 1 tokens in end state
+found 2 arcs
+nnodes 39 nlinks 56
+Stats: nTokSet 22215
+Stats: TokPerSet 8.131263
+Stats: activePerFrame 43.683929
+Stats: activateNodePerFrame 46.762500
+Stats: deActivateNodePerFrame 46.573214
+
+File: data/mfc/20060221-1-005960.mfc
+
+ WARNING [-9999]  no token survived to sent end! in htk/HTKLVRec/HDecode.mod
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0  700000      <s> -313.378693
+   2.   700000 2000000   [A8BA] -582.798584
+   3.  2000000 6400000 [A7DA][ADCC] -2004.080566
+   4.  6400000 7600000   [A6B3] -598.309082
+   5.  760000012600000 [B0B5][B5B9] -2453.000488
+   6. 1260000013400000   [ADD3] -459.444336
+   7. 1340000015800000   [AC4F] -1150.817383
+   8. 1580000018000000   [C25A] -1166.096680
+   9. 1800000019400000   [AABA] -600.185547
+  10. 1940000021100000   [A5A6] -897.357422
+  11. 2110000022500000   [A5A6] -684.809570
+  12. 2250000028200000 [BBA1][B24D][B7A1] -2601.881836
+found 0 tokens in end state
+found 0 arcs
+nnodes 24 nlinks 37
+Stats: nTokSet 13511
+Stats: TokPerSet 6.786396
+Stats: activePerFrame 54.749206
+Stats: activateNodePerFrame 67.276190
+Stats: deActivateNodePerFrame 67.053968
+
+htk/HTKLVRec/HDecode.mod -A -T 1 -a 0.1 -s 1.0 -t 11.0 -z lat -q tvaldm -o M -l lat -i dev.rec -w data/lm.arpa.txt -H data/final.mmf -S data/small.scp data/lexicon.txt data/tiedlist 
+Reading dictionary from data/lexicon.txt
+Reading acoustic models...Read 2635 physical / 427426 logical HMMs
+lmla count 16686
+nprons 13294
+Reading language model from data/lm.arpa.txt
+File: data/mfc/20060221-1-005870.mfc
+
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0 4300000      <s> -418.439606
+   2.  4300000 8400000 [A670][AA47] -404.887360
+   3.  840000012400000 [A5A6][ADCC] -402.496155
+   4. 1240000015000000 [A4A3][A66E] -277.335815
+   5. 1500000017200000   [A5A6] -231.433960
+   6. 1720000019500000   [B1BC] -244.575562
+   7. 1950000020300000   [A446] -83.662109
+   8. 2030000024600000 [AABA][B8DC] -449.588135
+   9. 2460000029600000     </s> -424.900146
+found 1 tokens in end state
+found 5 arcs
+nnodes 124 nlinks 433
+Stats: nTokSet 206457
+Stats: TokPerSet 9.437268
+Stats: activePerFrame 677.006757
+Stats: activateNodePerFrame 436.172297
+Stats: deActivateNodePerFrame 435.591216
+
+File: data/mfc/20060221-1-005880.mfc
+
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0 4300000      <s> -357.047974
+   2.  4300000 7000000 [A670][AA47] -271.782288
+   3.  700000010000000 [B65D][B1BC] -317.475708
+   4. 1000000012900000 [A7DA][ADCC][AABA] -285.560608
+   5. 1290000014600000   [A5FD] -165.547241
+   6. 1460000025400000   [BCCB] -1136.554199
+   7. 2540000027500000   EMPH_A -212.597900
+   8. 2750000028700000     </s> -108.028076
+found 1 tokens in end state
+found 53 arcs
+nnodes 359 nlinks 4597
+Stats: nTokSet 209049
+Stats: TokPerSet 11.619702
+Stats: activePerFrame 692.986063
+Stats: activateNodePerFrame 428.512195
+Stats: deActivateNodePerFrame 427.372822
+
+File: data/mfc/20060221-1-005890.mfc
+
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0  600000      <s> -53.888744
+   2.   60000018800000   [AC4F] -1802.728394
+   3. 1880000030700000 [B36F][AAF9][BDD2][AABA] -1115.826660
+   4. 3070000032400000   [A8EC] -165.152344
+   5. 3240000033800000   [BBA1] -146.679688
+   6. 3380000035600000 [B36F][ADD3] -183.878418
+   7. 3560000039000000 [B5EA][BD75] -350.535645
+   8. 3900000043700000 [A4BA][AE65] -461.115234
+   9. 4370000047800000 [A4A3][C0B3][B8D3] -421.222656
+  10. 4780000049600000   [AC4F] -175.790039
+  11. 4960000052900000   [BBA1] -298.326172
+  12. 5290000054900000     </s> -174.837891
+found 1 tokens in end state
+found 8 arcs
+nnodes 261 nlinks 988
+Stats: nTokSet 294312
+Stats: TokPerSet 11.728998
+Stats: activePerFrame 532.149362
+Stats: activateNodePerFrame 331.275046
+Stats: deActivateNodePerFrame 330.703097
+
+File: data/mfc/20060221-1-005900.mfc
+
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0 1200000      <s> -114.716125
+   2.  1200000 7800000 [A7DA][ADCC] -654.830566
+   3.  780000011600000 [A440][ADB1] -401.612610
+   4. 1160000016000000 [B0B5][B36F][ADD3] -440.762817
+   5. 1600000019200000   [A57C] -296.233398
+   6. 1920000025700000 [B36F][ADD3] -573.379150
+   7. 2570000028400000 [B36F][ADD3] -254.801025
+   8. 2840000032100000   THEORY -371.458740
+   9. 3210000034100000 [B36F][ADD3] -209.371826
+  10. 3410000037100000   [AABA] -262.826660
+  11. 3710000039100000   [AABA] -179.030518
+  12. 3910000042700000     </s> -272.949463
+found 1 tokens in end state
+found 21 arcs
+nnodes 180 nlinks 511
+Stats: nTokSet 237830
+Stats: TokPerSet 9.431691
+Stats: activePerFrame 552.358314
+Stats: activateNodePerFrame 343.894614
+Stats: deActivateNodePerFrame 343.555035
+
+File: data/mfc/20060221-1-005910.mfc
+
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0 3100000      <s> -263.487518
+   2.  3100000 5800000 [A7DA][ADCC] -253.626373
+   3.  5800000 9100000 [A4BA][AE65] -344.852600
+   4.  910000013000000 [A55D][AC41] -401.960754
+   5. 1300000016500000 [B27A][BDD7] -369.659912
+   6. 1650000021700000 [AABA][B3A1][A5F7] -504.866455
+   7. 2170000023500000   [B1B5] -186.152344
+   8. 2350000028200000 [A55D][AC41] -461.110352
+   9. 2820000034000000 [B9EA][BBDA] -558.173584
+  10. 3400000039000000 [AABA][B3A1][A5F7] -467.196533
+  11. 3900000039700000   [A94F] -80.677490
+  12. 3970000042600000 [A7DA][ADCC] -255.976807
+  13. 4260000045900000 [B36F][A8E2][ADD3] -334.491699
+  14. 4590000048700000 [B3A1][A4C0] -280.436035
+  15. 4870000051100000   [B3A3] -240.326660
+  16. 5110000056300000   [B77C] -469.667969
+  17. 5630000059800000    COVER -351.277832
+  18. 5980000063000000     </s> -248.062988
+found 1 tokens in end state
+found 0 arcs
+nnodes 384 nlinks 1678
+Stats: nTokSet 493418
+Stats: TokPerSet 11.773958
+Stats: activePerFrame 745.339683
+Stats: activateNodePerFrame 413.509524
+Stats: deActivateNodePerFrame 412.930159
+
+File: data/mfc/20060221-1-005920.mfc
+
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0 2800000      <s> -236.100677
+   2.  2800000 7100000 [B54D][ABE1][A94F] -425.805389
+   3.  710000010400000 [A7DA][ADCC] -319.430725
+   4. 1040000012500000   [B77C] -217.587402
+   5. 1250000014700000   [B171] -228.232056
+   6. 1470000017600000 [A9F1][A8EC] -306.123413
+   7. 1760000019600000   [C65A] -210.122803
+   8. 1960000023600000 [BFF9][B67D] -405.859497
+   9. 2360000028500000   [AC4F] -413.287598
+  10. 2850000032700000 [B3CC][ABE1] -422.549072
+  11. 3270000037400000     </s> -377.792725
+found 1 tokens in end state
+found 20 arcs
+nnodes 458 nlinks 3403
+Stats: nTokSet 304126
+Stats: TokPerSet 10.991984
+Stats: activePerFrame 798.692513
+Stats: activateNodePerFrame 421.483957
+Stats: deActivateNodePerFrame 420.842246
+
+File: data/mfc/20060221-1-005930.mfc
+
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0 4300000      <s> -375.063385
+   2.  4300000 7000000   [AB65] -264.252960
+   3.  7000000 8700000   [A562] -191.918579
+   4.  870000012000000 [BEC7][B4C1] -336.975159
+   5. 1200000013200000   [AC4F] -124.390869
+   6. 1320000016500000 [B751][AA6B] -335.948242
+   7. 1650000017300000   [A94F] -76.967896
+   8. 1730000024200000 [BAA9][AAF8] -656.334229
+   9. 2420000026300000   [ABE1] -230.094971
+  10. 2630000028000000   [A562] -172.207764
+  11. 2800000031500000 [BEC7][B4C1] -337.825928
+  12. 3150000033100000   [AC4F] -159.722412
+  13. 3310000037300000 [B669][A44A] -398.393066
+  14. 3730000042000000 [B36F][ADD3] -439.068115
+  15. 4200000043600000   [C249] -176.089355
+  16. 4360000044900000   [B44E] -133.314453
+  17. 4490000045600000   [AABA] -73.848145
+  18. 4560000051800000 [BDD2][C344] -632.138184
+  19. 5180000055300000   [B8F2] -331.642090
+  20. 5530000056800000   [B3A3] -159.972656
+  21. 5680000066300000   [B77C] -762.094727
+  22. 6630000069300000 [B1B5][C4B2] -310.967773
+  23. 6930000071400000   [A8EC] -205.520020
+  24. 7140000073600000     </s> -195.010742
+found 1 tokens in end state
+found 75 arcs
+nnodes 769 nlinks 7311
+Stats: nTokSet 440434
+Stats: TokPerSet 15.058283
+Stats: activePerFrame 593.171196
+Stats: activateNodePerFrame 371.000000
+Stats: deActivateNodePerFrame 370.669837
+
+File: data/mfc/20060221-1-005940.mfc
+
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0 2000000      <s> -180.253265
+   2.  2000000 7000000 [A65D][A6B9][A94F] -486.553009
+   3.  700000010100000 [A7DA][ADCC] -298.984924
+   4. 1010000012800000 [A46A][B7A7] -264.679993
+   5. 1280000015200000   [AB65] -237.345581
+   6. 1520000017100000   [C65A] -199.825562
+   7. 1710000021500000 [BEC7][B2DF] -419.222656
+   8. 2150000024900000   [AC4F] -306.686768
+   9. 2490000034900000     </s> -951.408936
+found 1 tokens in end state
+found 113 arcs
+nnodes 506 nlinks 4038
+Stats: nTokSet 188526
+Stats: TokPerSet 14.168932
+Stats: activePerFrame 528.034384
+Stats: activateNodePerFrame 327.031519
+Stats: deActivateNodePerFrame 326.383954
+
+File: data/mfc/20060221-1-005950.mfc
+
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0 1400000      <s> -114.433235
+   2.  1400000 3400000 [A8BA][BBF2] -187.545258
+   3.  3400000 7700000 [B36F][A8C7] -416.254059
+   4.  770000010900000 [A8E4][B9EA] -304.748535
+   5. 1090000019300000 [B44E][AC4F] -714.648315
+   6. 1930000022500000 [A7DA][ADCC] -303.858643
+   7. 2250000024900000 [ADE8][A47E] -246.165527
+   8. 2490000027400000   [C1BF] -249.643555
+   9. 2740000028700000   [AABA] -135.310303
+  10. 2870000033800000   [BC67] -521.095947
+  11. 3380000039700000 [BB79][ADB5][B342][B27A] -567.231201
+  12. 3970000041300000   [ADB1] -157.797363
+  13. 4130000042200000   [AABA] -86.240723
+  14. 4220000044100000 [B36F][ADD3] -187.184082
+  15. 4410000050000000 [AED6][A4DF][AABA] -566.482422
+  16. 5000000054600000 [B3A1][A5F7] -425.574707
+  17. 5460000056000000     </s> -116.719238
+found 1 tokens in end state
+found 4 arcs
+nnodes 132 nlinks 416
+Stats: nTokSet 217462
+Stats: TokPerSet 8.369651
+Stats: activePerFrame 394.298214
+Stats: activateNodePerFrame 250.221429
+Stats: deActivateNodePerFrame 250.026786
+
+File: data/mfc/20060221-1-005960.mfc
+
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0  700000      <s> -67.318977
+   2.   700000 2000000   [A8BA] -126.126869
+   3.  2000000 5200000 [A7DA][ADCC] -295.686890
+   4.  5200000 7400000 [A843][ADD3] -215.876007
+   5.  740000010500000 [B3A3][B77C] -312.204407
+   6. 1050000016500000 [B3A3][AC4F] -613.426392
+   7. 1650000018000000   [BFFD] -162.063599
+   8. 1800000019000000   [AABA] -93.004028
+   9. 1900000020800000   [A7E2] -186.654907
+  10. 2080000022500000   [A5A6] -172.474121
+  11. 2250000029300000 [BBA1][B24D][B7A1] -646.395020
+  12. 2930000031500000     </s> -170.565186
+found 1 tokens in end state
+found 1 arcs
+nnodes 113 nlinks 361
+Stats: nTokSet 136363
+Stats: TokPerSet 10.344272
+Stats: activePerFrame 428.469841
+Stats: activateNodePerFrame 290.549206
+Stats: deActivateNodePerFrame 290.276190
+
+htk/HTKLVRec/HDecode.mod -A -T 1 -a 0.3 -s 1.0 -t 11.0 -z lat -q tvaldm -o M -l lat -i dev.rec -w data/lm.arpa.txt -H data/final.mmf -S data/small.scp data/lexicon.txt data/tiedlist 
+Reading dictionary from data/lexicon.txt
+Reading acoustic models...Read 2635 physical / 427426 logical HMMs
+lmla count 16686
+nprons 13294
+Reading language model from data/lm.arpa.txt
+File: data/mfc/20060221-1-005870.mfc
+
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0 4300000      <s> -1235.509033
+   2.  4300000 8400000 [A670][AA47] -1159.320557
+   3.  840000012300000 [A5A6][ADCC] -1113.569336
+   4. 1230000013400000   [A7E2] -358.060791
+   5. 1340000015700000   [AE4D] -683.251709
+   6. 1570000017200000   [A5A6] -442.287598
+   7. 1720000019500000   [B1BC] -694.288086
+   8. 1950000020300000   [A446] -231.672852
+   9. 2030000025200000 [AABA][B8DC] -1450.066895
+  10. 2520000029600000     </s> -1092.913574
+found 1 tokens in end state
+found 1 arcs
+nnodes 63 nlinks 155
+Stats: nTokSet 57776
+Stats: TokPerSet 5.096493
+Stats: activePerFrame 189.888514
+Stats: activateNodePerFrame 173.537162
+Stats: deActivateNodePerFrame 172.952703
+
+File: data/mfc/20060221-1-005880.mfc
+
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0 4300000      <s> -1052.658325
+   2.  4300000 7100000 [A670][AA47] -806.260620
+   3.  710000010000000 [B65D][B1BC] -858.912109
+   4. 1000000012900000 [A7DA][ADCC][AABA] -810.995850
+   5. 1290000014600000   [A5FD] -463.913574
+   6. 1460000017700000   [BCCB] -898.154541
+   7. 1770000019000000   [B4EE] -390.042969
+   8. 1900000022300000 [A9B9][A455] -969.647461
+   9. 2230000024000000   [A8AB] -489.197754
+  10. 2400000025600000   [A446] -482.155762
+  11. 2560000027500000   EMPH_A -554.042969
+  12. 2750000028700000     </s> -310.964844
+found 1 tokens in end state
+found 1 arcs
+nnodes 143 nlinks 1800
+Stats: nTokSet 47535
+Stats: TokPerSet 10.877753
+Stats: activePerFrame 177.968641
+Stats: activateNodePerFrame 157.073171
+Stats: deActivateNodePerFrame 156.749129
+
+File: data/mfc/20060221-1-005890.mfc
+
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0  600000      <s> -150.249176
+   2.   60000010500000 [B36F][AC4F] -2785.310547
+   3. 1050000016600000   [A763] -1772.569580
+   4. 1660000020000000 [A9CE][AACC] -1037.909668
+   5. 2000000021800000   [ADCC] -545.500000
+   6. 2180000024000000   [A569] -616.250488
+   7. 2400000030600000   [AABA] -1699.161621
+   8. 3060000032300000   [A8EC] -454.095703
+   9. 3230000033800000   [A9D2] -435.784180
+  10. 3380000035600000 [B36F][ADD3] -524.626953
+  11. 3560000039000000 [B5EA][BD75] -983.755859
+  12. 3900000043800000 [A4BA][AE65] -1326.674805
+  13. 4380000045200000   [AABA] -417.651367
+  14. 4520000053500000  NATURAL -2588.166016
+  15. 5350000054900000     </s> -359.183594
+found 1 tokens in end state
+found 1 arcs
+nnodes 205 nlinks 1145
+Stats: nTokSet 92439
+Stats: TokPerSet 7.812179
+Stats: activePerFrame 163.142077
+Stats: activateNodePerFrame 121.196721
+Stats: deActivateNodePerFrame 120.695811
+
+File: data/mfc/20060221-1-005900.mfc
+
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0 1200000      <s> -331.585083
+   2.  1200000 5400000 [A7DA][ADCC] -1213.734131
+   3.  5400000 7800000   [A4A3] -692.173706
+   4.  780000011600000 [A440][ADB1] -1129.101562
+   5. 1160000016000000 [B0B5][B36F][ADD3] -1248.993408
+   6. 1600000019100000   [A57C] -816.950684
+   7. 1910000025600000 [B36F][ADD3] -1649.251953
+   8. 2560000028400000 [B36F][ADD3] -745.638672
+   9. 2840000032600000  SERIOUS -1223.124512
+  10. 3260000034000000   [ADD3] -406.158203
+  11. 3400000037100000   [AABA] -781.208008
+  12. 3710000039100000   [AABA] -508.952148
+  13. 3910000042700000     </s> -798.826172
+found 1 tokens in end state
+found 8 arcs
+nnodes 213 nlinks 1386
+Stats: nTokSet 58693
+Stats: TokPerSet 11.207912
+Stats: activePerFrame 133.466042
+Stats: activateNodePerFrame 114.519906
+Stats: deActivateNodePerFrame 114.044496
+
+File: data/mfc/20060221-1-005910.mfc
+
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0 3100000      <s> -774.269714
+   2.  3100000 5900000 [A7DA][ADCC] -756.617615
+   3.  5900000 9100000 [A4BA][AE65] -954.416382
+   4.  910000013100000 [A55D][AC41] -1168.658447
+   5. 1310000014400000   [A741] -409.851318
+   6. 1440000015800000 [A440][B8F4] -422.964355
+   7. 1580000016100000        A -103.199707
+   8. 1610000021700000 [AABA][B3A1][A5F7] -1568.579102
+   9. 2170000022600000   [C344] -271.855957
+  10. 2260000023500000   [A763] -266.272461
+  11. 2350000028200000 [A55D][AC41] -1315.096680
+  12. 2820000034000000 [B9EA][BBDA] -1600.568848
+  13. 3400000035200000   [AABA] -334.074219
+  14. 3520000037300000   [B9CF] -563.137695
+  15. 3730000038500000   [A4C0] -328.213867
+  16. 3850000039800000   [B9C0] -369.912109
+  17. 3980000042600000 [A7DA][ADCC] -709.192383
+  18. 4260000047100000 [B36F][A8E2][ADD3] -1302.745117
+  19. 4710000048700000   [A4C0] -455.642578
+  20. 4870000051100000   [B3A3] -677.768555
+  21. 5110000056200000   [B77C] -1311.141602
+  22. 5620000058100000      CAR -574.550781
+  23. 5810000059800000   [AABA] -493.500977
+  24. 5980000063000000     </s> -720.037109
+found 1 tokens in end state
+found 2 arcs
+nnodes 311 nlinks 1830
+Stats: nTokSet 119861
+Stats: TokPerSet 9.125037
+Stats: activePerFrame 184.192063
+Stats: activateNodePerFrame 147.666667
+Stats: deActivateNodePerFrame 147.250794
+
+File: data/mfc/20060221-1-005920.mfc
+
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0 2800000      <s> -692.682190
+   2.  2800000 7100000 [B54D][ABE1][A94F] -1214.870850
+   3.  710000010400000 [A7DA][ADCC] -914.948486
+   4. 1040000012400000   [B77C] -584.957031
+   5. 1240000014700000   [B171] -676.779053
+   6. 1470000016700000     FROM -608.358643
+   7. 1670000017300000   [A8BA] -173.107422
+   8. 1730000018800000   [B9C0] -457.237793
+   9. 1880000019600000   [A741] -249.839844
+  10. 1960000021200000   [B0B5] -488.810547
+  11. 2120000028500000 [B67D][A96C] -1861.142090
+  12. 2850000032700000 [B3CC][ABE1] -1201.366699
+  13. 3270000037400000     </s> -1107.274414
+found 1 tokens in end state
+found 44 arcs
+nnodes 85 nlinks 157
+Stats: nTokSet 53363
+Stats: TokPerSet 6.059611
+Stats: activePerFrame 146.235294
+Stats: activateNodePerFrame 121.588235
+Stats: deActivateNodePerFrame 120.917112
+
+File: data/mfc/20060221-1-005930.mfc
+
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0 1300000      <s> -303.420532
+   2.  1300000 4300000   EMPH_A -799.777222
+   3.  4300000 7000000   [AB65] -746.209595
+   4.  7000000 8700000   [A562] -532.956665
+   5.  870000012000000 [BEC7][B4C1] -946.799316
+   6. 1200000013100000   [AC4F] -320.589600
+   7. 1310000015300000   [C1BF] -627.423828
+   8. 1530000016500000   [A7E2] -354.708008
+   9. 1650000017300000   [A8BA] -212.403809
+  10. 1730000024200000 [BAA9][AAF8] -1875.700195
+  11. 2420000026300000   [ABE1] -648.482910
+  12. 2630000028100000   [A562] -503.071289
+  13. 2810000031600000 [BEC7][B4C1] -949.802734
+  14. 3160000033100000   [AC4F] -419.212891
+  15. 3310000037200000 [B669][A44A] -1099.384766
+  16. 3720000042200000 [B36F][ADD3] -1344.165039
+  17. 4220000044900000 [ACE3][A873] -798.862305
+  18. 4490000045600000   [AABA] -201.046875
+  19. 4560000050600000 [BDD2][C344] -1414.833008
+  20. 5060000055300000 [A7DA][ADCC] -1232.510742
+  21. 5530000056800000   [B3A3] -447.108398
+  22. 5680000066300000   [B77C] -2228.489258
+  23. 6630000069300000 [B1B5][C4B2] -868.480469
+  24. 6930000071400000   [A8EC] -580.695312
+  25. 7140000073600000     </s> -563.408203
+found 1 tokens in end state
+found 14 arcs
+nnodes 312 nlinks 2259
+Stats: nTokSet 92862
+Stats: TokPerSet 13.175895
+Stats: activePerFrame 134.138587
+Stats: activateNodePerFrame 121.910326
+Stats: deActivateNodePerFrame 121.582880
+
+File: data/mfc/20060221-1-005940.mfc
+
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0 2000000      <s> -526.668152
+   2.  2000000 7000000 [A65D][A6B9][A94F] -1388.023926
+   3.  700000010200000 [A7DA][ADCC] -885.312134
+   4. 1020000012900000 [A46A][B7A7] -739.070312
+   5. 1290000015200000   [B4EE] -683.273193
+   6. 1520000017100000   [C65A] -556.936035
+   7. 1710000021500000 [BEC7][B2DF] -1183.051758
+   8. 2150000027000000   [AC4F] -1377.126953
+   9. 2700000028400000   [A9F1] -423.758789
+  10. 2840000029000000   [A94F] -162.152832
+  11. 2900000030800000      MAN -499.947266
+  12. 3080000032900000       PO -589.726562
+  13. 3290000034900000     </s> -533.144531
+found 1 tokens in end state
+found 1 arcs
+nnodes 131 nlinks 972
+Stats: nTokSet 50161
+Stats: TokPerSet 10.721098
+Stats: activePerFrame 143.229226
+Stats: activateNodePerFrame 103.212034
+Stats: deActivateNodePerFrame 102.424069
+
+File: data/mfc/20060221-1-005950.mfc
+
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0 1400000      <s> -330.354431
+   2.  1400000 3400000 [A8BA][BBF2] -531.556519
+   3.  3400000 7700000 [B36F][A8C7] -1187.170166
+   4.  770000010900000 [A8E4][B9EA] -861.820557
+   5. 1090000019200000 [B44E][AC4F] -2049.230225
+   6. 1920000022500000 [A7DA][ADCC] -901.113281
+   7. 2250000024900000 [ADE8][A47E] -703.207031
+   8. 2490000026900000   [A55B] -565.864258
+   9. 2690000028700000   [A8BA] -534.878906
+  10. 2870000032200000   [BC67] -995.534180
+  11. 3220000033800000   [AC4F] -489.084961
+  12. 3380000039700000 [BB79][ADB5][B342][B27A] -1627.106445
+  13. 3970000041300000   [ADB1] -437.580078
+  14. 4130000042200000   [AABA] -239.452148
+  15. 4220000044100000 [B36F][ADD3] -531.777344
+  16. 4410000050000000 [AED6][A4DF][AABA] -1613.582031
+  17. 5000000054600000 [B3A1][A5F7] -1204.510742
+  18. 5460000056000000     </s> -334.933594
+found 1 tokens in end state
+found 4 arcs
+nnodes 100 nlinks 295
+Stats: nTokSet 58725
+Stats: TokPerSet 8.045756
+Stats: activePerFrame 109.678571
+Stats: activateNodePerFrame 84.335714
+Stats: deActivateNodePerFrame 83.892857
+
+File: data/mfc/20060221-1-005960.mfc
+
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0  700000      <s> -190.348877
+   2.   700000 2000000   [A8BA] -354.462585
+   3.  2000000 5300000 [A7DA][ADCC] -870.685242
+   4.  5300000 7400000 [A843][ADD3] -583.097900
+   5.  7400000 9000000   [B3A3] -452.079468
+   6.  900000011200000   [B77C] -609.677002
+   7. 1120000012300000   [ADD3] -355.118408
+   8. 1230000013200000   [A4AD] -277.599609
+   9. 1320000019000000 [B260][A44A][AABA] -1620.750732
+  10. 1900000020800000   [A7E2] -521.080078
+  11. 2080000022500000   [A5A6] -492.528320
+  12. 2250000029300000 [BBA1][B24D][B7A1] -1851.123047
+  13. 2930000031500000     </s> -490.959473
+found 1 tokens in end state
+found 1 arcs
+nnodes 97 nlinks 330
+Stats: nTokSet 32374
+Stats: TokPerSet 10.790912
+Stats: activePerFrame 103.600000
+Stats: activateNodePerFrame 91.403175
+Stats: deActivateNodePerFrame 91.133333
+
+htk/HTKLVRec/HDecode.mod -A -T 1 -a 0.5 -s 1.0 -t 11.0 -z lat -q tvaldm -o M -l lat -i dev.rec -w data/lm.arpa.txt -H data/final.mmf -S data/small.scp data/lexicon.txt data/tiedlist 
+Reading dictionary from data/lexicon.txt
+Reading acoustic models...Read 2635 physical / 427426 logical HMMs
+lmla count 16686
+nprons 13294
+Reading language model from data/lm.arpa.txt
+File: data/mfc/20060221-1-005870.mfc
+
+ WARNING [-9999]  no token survived to sent end! in htk/HTKLVRec/HDecode.mod
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0 4300000      <s> -2052.578613
+   2.  4300000 8700000 [A670][AA47] -2052.261719
+   3.  870000012300000 [A5A6][ADCC] -1699.729980
+   4. 1230000013400000   [A7E2] -586.003906
+   5. 1340000015800000   [AE4D] -1169.433105
+   6. 1580000017200000   [A5A6] -677.458496
+   7. 1720000019500000   [B1BC] -1143.335938
+   8. 1950000020300000   [A446] -379.607422
+   9. 2030000025600000 [AABA][B8DC] -2561.473633
+ WARNING [-9999]  LatTraceBack: end node not active in htk/HTKLVRec/HDecode.mod
+ WARNING [-9999]  LatTraceBack: no active sil wordend nodes in htk/HTKLVRec/HDecode.mod
+ WARNING [-9999]  LatTraceBack: forcing lattice output in htk/HTKLVRec/HDecode.mod
+found 3 arcs
+nnodes 64 nlinks 158
+CheckLAlign: MODALIGN Sanity check failed! 1 laDur 0.92  dur 0.53
+CheckLAlign: MODALIGN Sanity check failed! 59 laDur 0.92  dur 0.53
+CheckLAlign: MODALIGN Sanity check failed! 129 laDur 0.80  dur 0.41
+CheckLAlign: MODALIGN Sanity check failed! 133 laDur 0.80  dur 0.41
+CheckLAlign: MODALIGN Sanity check failed! 135 laDur 0.92  dur 0.53
+CheckLAlign: MODALIGN Sanity check failed! 139 laDur 0.92  dur 0.53
+CheckLAlign: MODALIGN Sanity check failed! 143 laDur 0.92  dur 0.53
+CheckLAlign: MODALIGN Sanity check failed! 146 laDur 0.92  dur 0.53
+CheckLAlign: MODALIGN Sanity check failed! 149 laDur 0.92  dur 0.53
+CheckLAlign: MODALIGN Sanity check failed! 152 laDur 0.92  dur 0.53
+CheckLAlign: MODALIGN Sanity check failed! 155 laDur 0.92  dur 0.53
+Stats: nTokSet 31285
+Stats: TokPerSet 4.357615
+Stats: activePerFrame 99.898649
+Stats: activateNodePerFrame 95.445946
+Stats: deActivateNodePerFrame 95.391892
+
+File: data/mfc/20060221-1-005880.mfc
+
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0 4300000      <s> -1748.267944
+   2.  4300000 7400000 [A670][AA47] -1482.489624
+   3.  7400000 8600000   [A66E] -600.417725
+   4.  860000010000000   [BDD5] -669.531738
+   5. 1000000012000000 [A7DA][ADCC] -891.015137
+   6. 1200000014700000 [A6B3][ADAD] -1257.287598
+   7. 1470000017600000   [BCCB] -1402.927734
+   8. 1760000019000000   [B4EE] -689.150391
+   9. 1900000022300000 [A9B9][A455] -1595.114258
+  10. 2230000024000000   [A8AB] -807.650391
+  11. 2400000025700000   [A446] -839.913086
+  12. 2570000027500000   EMPH_A -870.909180
+  13. 2750000028700000     </s> -513.965820
+found 1 tokens in end state
+found 0 arcs
+nnodes 102 nlinks 1079
+Stats: nTokSet 26863
+Stats: TokPerSet 9.323531
+Stats: activePerFrame 106.104530
+Stats: activateNodePerFrame 108.473868
+Stats: deActivateNodePerFrame 108.149826
+
+File: data/mfc/20060221-1-005890.mfc
+
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0  600000      <s> -246.609604
+   2.   600000 2000000   [B44E] -676.397644
+   3.  2000000 6800000 [A9D2][B16F] -2289.177246
+   4.  680000010400000   [A377] -1678.116699
+   5. 1040000011800000        A -733.177246
+   6. 1180000016500000   [A763] -2253.640137
+   7. 1650000018800000   [B6C0] -1244.213379
+   8. 1880000021100000 [B36F][BBF2] -1102.715820
+   9. 2110000024000000 [A741][A569][A548] -1467.281250
+  10. 2400000030600000   [AABA] -2806.955078
+  11. 3060000032300000   [A8EC] -745.228516
+  12. 3230000033800000   [A9D2] -714.439453
+  13. 3380000035600000 [B36F][ADD3] -863.436523
+  14. 3560000038600000 [BEC7][B4C1] -1454.970703
+  15. 3860000043800000 [A4BA][AE65] -2344.955078
+  16. 4380000045200000   [AABA] -687.597656
+  17. 4520000053500000  NATURAL -4272.142578
+  18. 5350000054900000     </s> -592.218750
+found 1 tokens in end state
+found 0 arcs
+nnodes 132 nlinks 449
+Stats: nTokSet 57058
+Stats: TokPerSet 5.780364
+Stats: activePerFrame 99.480874
+Stats: activateNodePerFrame 79.087432
+Stats: deActivateNodePerFrame 78.588342
+
+File: data/mfc/20060221-1-005900.mfc
+
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0 1200000      <s> -548.453979
+   2.  1200000 5400000 [A7DA][ADCC] -2011.687866
+   3.  5400000 7900000   [A4A3] -1203.908203
+   4.  7900000 9300000   [ADB5] -684.753662
+   5.  930000011600000   [ADB1] -1129.557129
+   6. 1160000015000000 [B0B5][AABA] -1671.336914
+   7. 1500000016000000   [ADD3] -454.680176
+   8. 1600000019100000        C -1350.890625
+   9. 1910000025600000 [B36F][ADD3] -2725.548828
+  10. 2560000028400000 [B36F][ADD3] -1227.142578
+  11. 2840000033200000  SERIOUS -2310.971680
+  12. 3320000034000000   [ADD3] -385.696289
+  13. 3400000037100000   [AABA] -1289.178711
+  14. 3710000039100000   [AABA] -838.699219
+  15. 3910000042700000     </s> -1324.716797
+found 1 tokens in end state
+found 7 arcs
+nnodes 170 nlinks 1927
+Stats: nTokSet 36118
+Stats: TokPerSet 11.047179
+Stats: activePerFrame 87.995316
+Stats: activateNodePerFrame 84.857143
+Stats: deActivateNodePerFrame 84.278689
+
+File: data/mfc/20060221-1-005910.mfc
+
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0 1300000      <s> -524.552185
+   2.  1300000 5800000 [A7DA][ADCC] -1954.770996
+   3.  5800000 7400000   [BDAC] -805.451416
+   4.  7400000 9100000   [C5FD] -811.970947
+   5.  910000013100000 [A55D][AC41] -1925.266113
+   6. 1310000014400000   [A741] -674.397461
+   7. 1440000015100000   [A440] -346.854980
+   8. 1510000016300000   [C3FE] -625.347168
+   9. 1630000019300000 [A8BA][BBF2][A668] -1511.657227
+  10. 1930000022600000 [B7C7][AABA] -1610.466797
+  11. 2260000023500000   [A763] -441.063477
+  12. 2350000028200000 [A55D][AC41] -2168.492188
+  13. 2820000034000000 [B9EA][BBDA] -2642.511719
+  14. 3400000035200000   [AABA] -550.554688
+  15. 3520000037300000   [B9CF] -923.296875
+  16. 3730000039900000 [A4C0][A8EC] -1199.857422
+  17. 3990000042600000 [A7DA][ADCC] -1117.021484
+  18. 4260000043700000   [B36F] -529.421875
+  19. 4370000047300000   [A8E2] -1706.355469
+  20. 4730000048000000   [ADD3] -355.253906
+  21. 4800000049600000   [ABE3] -798.062500
+  22. 4960000050600000        A -489.798828
+  23. 5060000052600000        O -1019.142578
+  24. 5260000056100000   [A440] -1472.443359
+  25. 5610000057800000       KA -832.511719
+  26. 5780000059600000   [A9CE] -900.562500
+  27. 5960000063000000     </s> -1284.863281
+found 1 tokens in end state
+found 17 arcs
+nnodes 205 nlinks 528
+Stats: nTokSet 62763
+Stats: TokPerSet 8.813345
+Stats: activePerFrame 102.823810
+Stats: activateNodePerFrame 90.339683
+Stats: deActivateNodePerFrame 89.926984
+
+File: data/mfc/20060221-1-005920.mfc
+
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0 2800000      <s> -1149.263550
+   2.  2800000 7100000 [B54D][ABE1][A94F] -2003.737427
+   3.  710000010500000 [A7DA][ADCC] -1561.399414
+   4. 1050000012400000   [B77C] -913.145996
+   5. 1240000014900000   [B171] -1223.077637
+   6. 1490000017000000    STAND -1071.255371
+   7. 1700000017300000        A -153.698242
+   8. 1730000019500000      MAN -1038.885254
+   9. 1950000021200000   [D549] -830.025391
+  10. 2120000028500000 [B67D][A96C] -3072.708984
+  11. 2850000032300000 [B3CC][ABE1] -1763.085938
+  12. 3230000033500000   [AABA] -600.465820
+  13. 3350000037400000     </s> -1454.290039
+found 1 tokens in end state
+found 49 arcs
+nnodes 142 nlinks 478
+Stats: nTokSet 35691
+Stats: TokPerSet 8.115491
+Stats: activePerFrame 97.930481
+Stats: activateNodePerFrame 81.965241
+Stats: deActivateNodePerFrame 81.256684
+
+File: data/mfc/20060221-1-005930.mfc
+
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0 1300000      <s> -501.480072
+   2.  1300000 4300000   EMPH_A -1318.792358
+   3.  4300000 7600000   [AB65] -1598.695312
+   4.  7600000 8800000   [A448] -607.982910
+   5.  880000010600000   [BBA1] -870.653320
+   6. 1060000012000000   [A3A3] -720.005371
+   7. 1200000013100000   [AC4F] -527.183105
+   8. 1310000015400000   [C1BF] -1080.713867
+   9. 1540000016500000   [A7E2] -534.166992
+  10. 1650000018600000 [A8BA][BBF2] -1010.939941
+  11. 1860000019400000   [A741] -393.711914
+  12. 1940000024000000   [B0F3] -2106.317383
+  13. 2400000026300000   [ABE1] -1158.023438
+  14. 2630000028100000   [A562] -823.451172
+  15. 2810000031600000 [BEC7][B4C1] -1560.432617
+  16. 3160000033100000   [AC4F] -688.466797
+  17. 3310000037200000 [B669][A44A] -1810.135742
+  18. 3720000042200000 [B36F][ADD3] -2215.322266
+  19. 4220000044900000 [ACE3][A873] -1315.832031
+  20. 4490000045600000   [AABA] -330.214844
+  21. 4560000050300000 [BDD2][C344] -2188.431641
+  22. 5030000055300000 [A7DA][ADCC] -2153.494141
+  23. 5530000056800000   [B3A3] -735.986328
+  24. 5680000066300000   [B77C] -3694.292969
+  25. 6630000069300000 [B1B5][C4B2] -1425.583984
+  26. 6930000071400000   [A8EC] -955.617188
+  27. 7140000073600000     </s> -931.794922
+found 1 tokens in end state
+found 14 arcs
+nnodes 296 nlinks 1791
+Stats: nTokSet 60741
+Stats: TokPerSet 15.279482
+Stats: activePerFrame 88.824728
+Stats: activateNodePerFrame 84.180707
+Stats: deActivateNodePerFrame 83.853261
+
+File: data/mfc/20060221-1-005940.mfc
+
+ WARNING [-9999]  no token survived to sent end! in htk/HTKLVRec/HDecode.mod
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0 2000000      <s> -873.083130
+   2.  2000000 7000000 [A65D][A6B9][A94F] -2289.494141
+   3.  700000010200000 [A7DA][ADCC] -1461.450195
+   4. 1020000012800000 [B5A5][B5A5] -1325.530273
+   5. 1280000015200000   [AB65] -1118.447266
+   6. 1520000017100000   [C65A] -914.160156
+   7. 1710000027000000 [BEC7][B2DF] -4451.280273
+   8. 2700000028400000   [A9F1] -691.145508
+   9. 2840000029000000   [A94F] -264.507812
+  10. 2900000030800000      MAN -815.853516
+  11. 3080000031400000   [A379] -299.409180
+ WARNING [-9999]  LatTraceBack: end node not active in htk/HTKLVRec/HDecode.mod
+ WARNING [-9999]  LatTraceBack: no active sil wordend nodes in htk/HTKLVRec/HDecode.mod
+ WARNING [-9999]  LatTraceBack: forcing lattice output in htk/HTKLVRec/HDecode.mod
+found 2 arcs
+nnodes 79 nlinks 652
+CheckLAlign: MODALIGN Sanity check failed! 1 laDur 0.40  dur 0.06
+CheckLAlign: MODALIGN Sanity check failed! 649 laDur 0.40  dur 0.06
+CheckLAlign: MODALIGN Sanity check failed! 651 laDur 0.40  dur 0.06
+Stats: nTokSet 25228
+Stats: TokPerSet 6.309061
+Stats: activePerFrame 68.905444
+Stats: activateNodePerFrame 52.074499
+Stats: deActivateNodePerFrame 52.028653
+
+File: data/mfc/20060221-1-005950.mfc
+
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0 1400000      <s> -546.275513
+   2.  1400000 3400000 [A8BA][BBF2] -875.567993
+   3.  340000011000000 [B36F][ADD3] -3924.183838
+   4. 1100000012700000   [A844] -810.978027
+   5. 1270000019200000   [AC4F] -2587.314941
+   6. 1920000022500000 [A7DA][ADCC] -1490.875977
+   7. 2250000024900000 [ADE8][A47E] -1161.282227
+   8. 2490000026900000   [A55B] -929.304688
+   9. 2690000028700000   [A8BA] -878.027344
+  10. 2870000032300000   [BC67] -1693.839844
+  11. 3230000033900000   [A568] -762.508789
+  12. 3390000037800000   [AABA] -2049.612305
+  13. 3780000038400000   [A5BD] -314.558594
+  14. 3840000042200000 [B8CC][ADB1][AABA] -1670.421875
+  15. 4220000044100000 [B36F][ADD3] -876.369141
+  16. 4410000050000000 [AED6][A4DF][AABA] -2660.099609
+  17. 5000000054600000 [B3A1][A5F7] -1983.291016
+  18. 5460000056000000     </s> -553.148438
+found 1 tokens in end state
+found 4 arcs
+nnodes 121 nlinks 418
+Stats: nTokSet 36383
+Stats: TokPerSet 13.060880
+Stats: activePerFrame 66.217857
+Stats: activateNodePerFrame 51.542857
+Stats: deActivateNodePerFrame 51.091071
+
+File: data/mfc/20060221-1-005960.mfc
+
+Transcription: 1-best hypothesis [1 lists]
+ List 1
+   1.        0  700000      <s> -313.378693
+   2.   700000 2000000   [A8BA] -582.798584
+   3.  2000000 6200000 [A7DA][ADCC] -1910.820068
+   4.  6200000 7400000 [A440][ADD3] -584.810791
+   5.  7400000 9000000   [B3A3] -742.728027
+   6.  900000011200000   [B77C] -1001.152832
+   7. 1120000012500000   [B94C] -655.787109
+   8. 1250000013200000   [A4AD] -372.616211
+   9. 1320000019000000 [B260][A44A][AABA] -2670.104004
+  10. 1900000020800000   [A7E2] -856.214844
+  11. 2080000022500000   [A5A6] -812.133789
+  12. 2250000029300000 [BBA1][B24D][B7A1] -3055.322266
+  13. 2930000031500000     </s> -811.361328
+found 1 tokens in end state
+found 1 arcs
+nnodes 79 nlinks 257
+Stats: nTokSet 19394
+Stats: TokPerSet 8.207590
+Stats: activePerFrame 66.333333
+Stats: activateNodePerFrame 58.463492
+Stats: deActivateNodePerFrame 58.209524
+

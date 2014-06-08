@@ -33,7 +33,7 @@ includedir = ${prefix}/include
 oldincludedir = /usr/include
 
 CC      = 	g++ -std=c++0x
-CFLAGS  := 	-DNO_LAT_LM -m32 -D_SVID_SOURCE -DOSS_AUDIO -D'ARCH="x86_64"' -w -I$(inc)
+CFLAGS  := 	-DNO_LAT_LM -m32 -D_SVID_SOURCE -DOSS_AUDIO -D'ARCH="x86_64"' -w -I$(inc) -I../others/
 LDFLAGS = 	-L/usr/X11R6/lib  -lm
 INSTALL = 	/usr/bin/install -c
 HTKLIB = $(inc)/HTKLiblv.a
