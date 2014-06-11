@@ -37,7 +37,7 @@ CFLAGS  := 	-DNO_LAT_LM -m32 -D_SVID_SOURCE -DOSS_AUDIO -D'ARCH="x86_64"' -w -I$
 LDFLAGS = 	-L/usr/X11R6/lib  -lm
 INSTALL = 	/usr/bin/install -c
 HTKLIB = $(inc)/HTKLiblv.a
-HEADER = HLVLM.h  HLVModel.h  HLVNet.h  HLVRec.h config.h
+HEADER = HLVLM.h  HLVModel.h  HLVNet.h  HLVRec.h config.h misc.h
 
 debug: CFLAGS+=-DDEBUG_TRACE
 debug: all

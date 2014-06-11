@@ -160,7 +160,6 @@ static char         sent_start[256];        /* sentence start word */
 static char         sent_end[256];          /* sentence end word */
 static char         unknown_w[256];         /* unknown word token */
 static ConfParam   *cParm[MAXGLOBS];        /* configuration script parameters */
-static int          nParm = 0;              /* total num params */
 static int          trace = 0;              /* trace setting */
 static UInt        *class_sort;	            /* Used to sort output alphabetically */
 static Boolean      pipe_logfile;           /* HShell file handling - using pipe? */
@@ -254,24 +253,22 @@ char *what_is_word(UInt id); /* In Cluster.c */
 /* ---------------- Process Command Line ------------------------- */
 
 /* See if any configuration parameters have been set for this tool */
-void SetConfParms(void)
-{
-   char b[256];
-   int  i;
+void SetConfParms(void) {
+  char b[256];
+  int  i;
+  /* total num params */
+  int nParm = GetConfig("CLUSTER", TRUE, cParm, MAXGLOBS);
+  if (nParm > 0) {
+    if (GetConfInt(cParm,nParm,"TRACE", &i))      trace = i;
+    if (GetConfStr(cParm,nParm,"STARTWORD", b))   strcpy(sent_start, b);
+    if (GetConfStr(cParm,nParm,"ENDWORD", b))     strcpy(sent_end, b);
+    if (GetConfStr(cParm,nParm,"UNKNOWNNAME", b)) strcpy(unknown_w, b);
 
-   nParm = GetConfig("CLUSTER", TRUE, cParm, MAXGLOBS);
-   if (nParm>0) {
-      if (GetConfInt(cParm,nParm,"TRACE", &i))      trace = i;
-      if (GetConfStr(cParm,nParm,"STARTWORD", b))   strcpy(sent_start, b);
-      if (GetConfStr(cParm,nParm,"ENDWORD", b))     strcpy(sent_end, b);
-      if (GetConfStr(cParm,nParm,"UNKNOWNNAME", b)) strcpy(unknown_w, b);
-      if (GetConfBool(cParm,nParm,"INCMAPRAW", &inCMapRaw)) {
-         inCMapRawTrap = TRUE;
-      }
-      if (GetConfBool(cParm,nParm,"OUTCMAPRAW", &outCMapRaw)) {
-         outCMapRawTrap = TRUE;
-      }
-   }
+    if (GetConfBool(cParm,nParm,"INCMAPRAW", &inCMapRaw))
+      inCMapRawTrap = TRUE;
+    if (GetConfBool(cParm,nParm,"OUTCMAPRAW", &outCMapRaw))
+      outCMapRawTrap = TRUE;
+  }
 }
 
 

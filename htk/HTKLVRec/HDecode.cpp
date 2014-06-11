@@ -67,83 +67,81 @@ char *hdecode_sccs_id = "$Id: HDecode.c,v 1.1.1.1 2006/10/11 09:54:55 jal58 Exp 
 #define T_ADP 00004		/* Adaptation */
 #define T_MEM 00010		/* Memory usage, start and finish */
 
-static int trace = 0;
+int trace = 0;
 
 /* -------------------------- Global Variables etc ---------------------- */
 
+char *langfn;		/* LM filename from commandline */
+char *dictfn;		/* dict filename from commandline */
+char *hmmListfn;		/* model list filename from commandline */
+char *hmmDir = NULL;     /* directory to look for HMM def files */
+char *hmmExt = NULL;     /* HMM def file extension */
 
-static char *langfn;		/* LM filename from commandline */
-static char *dictfn;		/* dict filename from commandline */
-static char *hmmListfn;		/* model list filename from commandline */
-static char *hmmDir = NULL;     /* directory to look for HMM def files */
-static char *hmmExt = NULL;     /* HMM def file extension */
+FileFormat ofmt = UNDEFF;	/* Label output file format */
+char *labDir = NULL;	/* output label file directory */
+char *labExt = "rec";	/* output label file extension */
+char *labForm = NULL;	/* output label format */
 
-static FileFormat ofmt = UNDEFF;	/* Label output file format */
-static char *labDir = NULL;	/* output label file directory */
-static char *labExt = "rec";	/* output label file extension */
-static char *labForm = NULL;	/* output label format */
+Boolean latRescore = FALSE; /* read lattice for each utterance and rescore? */
+char *latInDir = NULL;   /* lattice input directory */
+char *latInExt = "lat";  /* latttice input extension */
+char *latFileMask = NULL; /* mask for reading lattice */
 
-static Boolean latRescore = FALSE; /* read lattice for each utterance and rescore? */
-static char *latInDir = NULL;   /* lattice input directory */
-static char *latInExt = "lat";  /* latttice input extension */
-static char *latFileMask = NULL; /* mask for reading lattice */
+Boolean latGen = FALSE;  /* output lattice? */
+char *latOutDir = NULL;  /* lattice output directory */
+char *latOutExt = "lat"; /* latttice output extension */
+char *latOutForm = NULL;  /* lattice output format */
 
-static Boolean latGen = FALSE;  /* output lattice? */
-static char *latOutDir = NULL;  /* lattice output directory */
-static char *latOutExt = "lat"; /* latttice output extension */
-static char *latOutForm = NULL;  /* lattice output format */
+FileFormat dataForm = UNDEFF; /* data input file format */
 
-static FileFormat dataForm = UNDEFF; /* data input file format */
+// Vocab vocab;		/* wordlist or dictionary */
+// HMMSet hset;		/* HMM set */
+// FSLM *lm = NULL;         /* language model */
+LexNet *net = NULL;      /* Lexicon network of all required words/prons */
 
-// static Vocab vocab;		/* wordlist or dictionary */
-static HMMSet hset;		/* HMM set */
-// static FSLM *lm = NULL;         /* language model */
-static LexNet *net = NULL;      /* Lexicon network of all required words/prons */
+char *startWord = "<s>"; /* word used at start of network */
+LabId startLab;          /*   corresponding LabId */
+char *endWord = "</s>";  /* word used at end of network */
+LabId endLab;            /*   corresponding LabId */
 
-static char *startWord = "<s>"; /* word used at start of network */
-static LabId startLab;          /*   corresponding LabId */
-static char *endWord = "</s>";  /* word used at end of network */
-static LabId endLab;            /*   corresponding LabId */
+char *spModel = "sp";    /* model used as word end Short Pause */
+LabId spLab;             /*   corresponding LabId */
+char *silModel = "sil";  /* model used as word end Silence */
+LabId silLab;            /*   corresponding LabId */
 
-static char *spModel = "sp";    /* model used as word end Short Pause */
-static LabId spLab;             /*   corresponding LabId */
-static char *silModel = "sil";  /* model used as word end Silence */
-static LabId silLab;            /*   corresponding LabId */
+Boolean silDict = FALSE; /* does dict contain -/sp/sil variants with probs */
 
-static Boolean silDict = FALSE; /* does dict contain -/sp/sil variants with probs */
+LogFloat insPen = 0.0;   /* word insertion penalty */
 
-static LogFloat insPen = 0.0;   /* word insertion penalty */
+float acScale = 1.0;     /* acoustic scaling factor */
+float pronScale = 1.0;   /* pronunciation scaling factor */
+float lmScale = 1.0;     /* LM scaling factor */
 
-static float acScale = 1.0;     /* acoustic scaling factor */
-static float pronScale = 1.0;   /* pronunciation scaling factor */
-static float lmScale = 1.0;     /* LM scaling factor */
+int maxModel = 0;        /* max model pruning */
+LogFloat beamWidth = - LZERO;     /* pruning global beam width */
+LogFloat weBeamWidth = - LZERO;   /* pruning wordend beam width */
+LogFloat zsBeamWidth = - LZERO;   /* pruning z-s beam width */
+LogFloat relBeamWidth = - LZERO;  /* pruning relative beam width */
+LogFloat latPruneBeam = - LZERO;  /* lattice pruning beam width */
+LogFloat latPruneAPS = 0;;        /* lattice pruning arcs per sec limit */
 
-static int maxModel = 0;        /* max model pruning */
-static LogFloat beamWidth = - LZERO;     /* pruning global beam width */
-static LogFloat weBeamWidth = - LZERO;   /* pruning wordend beam width */
-static LogFloat zsBeamWidth = - LZERO;   /* pruning z-s beam width */
-static LogFloat relBeamWidth = - LZERO;  /* pruning relative beam width */
-static LogFloat latPruneBeam = - LZERO;  /* lattice pruning beam width */
-static LogFloat latPruneAPS = 0;;        /* lattice pruning arcs per sec limit */
+LogFloat fastlmlaBeam = - LZERO;  /* do fast LM la outside this beam */
 
-static LogFloat fastlmlaBeam = - LZERO;  /* do fast LM la outside this beam */
-
-static int nTok = 32;           /* number of different LMStates per HMM state */
-static Boolean useHModel = FALSE; /* use standard HModel OutP functions */
-static int outpBlocksize = 1;   /* number of frames for which outP is calculated in one go */
-static Observation *obs;        /* array of Observations */
+int nTok = 32;           /* number of different LMStates per HMM state */
+Boolean useHModel = FALSE; /* use standard HModel OutP functions */
+int outpBlocksize = 1;   /* number of frames for which outP is calculated in one go */
+Observation *obs;        /* array of Observations */
 
 /* transforms/adaptatin */
 /* information about transforms */
-static XFInfo xfInfo;
+XFInfo xfInfo;
 
 
 /* info for comparing scores from alignment of 1-best with search */
-static char *bestAlignMLF;      /* MLF with 1-best alignment */
+char *bestAlignMLF;      /* MLF with 1-best alignment */
 
 /* -------------------------- Heaps ------------------------------------- */
 
-// static MemHeap _modelHeap;
 // static MemHeap _netHeap;
 // static MemHeap _lmHeap;
 // static MemHeap _inputBufHeap;
@@ -172,101 +170,7 @@ struct _BestInfo {
    BestInfo *next;
 };
 
-class Vocabulary {
-  public:
-    Vocabulary() {}
-
-    void init(char* dict_fn) {
-      InitVocab (&_vocab);
-      if (ReadDict (dict_fn, &_vocab) < SUCCESS)
-	HError (9999, "Initialise: ReadDict failed");
-    }
-
-    void ConvertSilDict (LabId spLab, LabId silLab, LabId startLab, LabId endLab) {
-      ::ConvertSilDict(&_vocab, spLab, silLab, startLab, endLab);
-    }
-
-    void MarkAllProns () {
-      ::MarkAllProns(&_vocab);
-    }
-
-    void MarkAllWords () {
-      ::MarkAllWords(&_vocab);
-    }
-
-    void UnMarkAllWords () {
-      ::UnMarkAllWords(&_vocab);
-    }
-
-    void MarkAllWordsfromLat (Lattice* lat, Boolean silDict) {
-      ::MarkAllWordsfromLat(&_vocab, lat, silDict);
-    }
-
-    Vocab& get_vocab() {
-      return _vocab;
-    }
-
-  private:
-    Vocab _vocab;
-};
-
-class LanguageModel {
-  public:
-    LanguageModel(Vocabulary& vocab): lm(NULL), _vocab(vocab) {
-      CreateHeap (&_lmHeap, "LM heap", MSTAK, 1, 0,1000000, 10000000);
-    }
-
-    void loadFromFile(char* lm_fn) {
-      if (!lm_fn) 
-	HError (9999, "HDecode: no LM or lattice specified");
-      lm = CreateLM (&_lmHeap, lm_fn, startWord, endWord, &_vocab.get_vocab());
-    }
-
-    void loadFromLattice(char* lat_fn, Lattice* lat) {
-      lm = CreateLMfromLat (&_lmHeap, lat_fn, lat, &_vocab.get_vocab());
-    }
-
-    FSLM* get_lm() {
-      return lm;
-    }
-
-  private:
-    FSLM *lm;         /* language model */
-    MemHeap _lmHeap;
-
-    Vocabulary& _vocab;
-};
-
-class Decoder {
-  public:
-    Decoder(LanguageModel& lm, Vocabulary& vocab);
-    void init();
-    void recognize(char *fn);
-
-    BestInfo *CreateBestInfo (char *fn, HTime frameDur);
-
-    void PrintAlignBestInfo (BestInfo *bestInfo);
-    void AnalyseSearchSpace (BestInfo *bestInfo);
-
-
-    // ===== THIS function does NOT belongs here. Move it somewhere else. =====
-    void rescoreLattice(char* fn);
-
-  private:
-    LanguageModel& _lm;
-    Vocabulary& _vocab;
-
-    DecoderInst* _decInst;
-
-    MemHeap _modelHeap;
-    MemHeap _netHeap;
-    MemHeap _lmHeap;
-    MemHeap _inputBufHeap;
-    MemHeap _transHeap;
-    MemHeap _regHeap;
-};
-
-
+#include "misc.h"
 /* ---------------- Configuration Parameters ---------------------------- */
 
 static ConfParam *cParm[MAXGLOBS];
@@ -282,17 +186,22 @@ FILE *debug_stderr = stderr;
 
 /* ---------------- Process Command Line ------------------------- */
 
+char *mmf_fn = NULL;
+char *inXFormDir_fn = NULL;
+
 int main (int argc, char *argv[]) {
 
-  Vocabulary vocab;
-  LanguageModel languageModel(vocab);
-  Decoder decoder(languageModel, vocab);
-
+  // ===== Settings =====
   InitAll(argc, argv);
+  ParseCommandArguments();
+  SetConfParms();
+  
+  // ===== Create Vocabulary, LM, Lexicon, HMM, Decoder =====
+  Vocabulary vocab(dictfn);
+  LanguageModel languageModel(vocab);
+  HiddenMarkovModel hmm(hmmListfn, mmf_fn, inXFormDir_fn, hmmDir, hmmExt);
 
-  /* load models and initialise decoder */
-  vocab.init(dictfn);
-  decoder.init();
+  Decoder decoder(languageModel, vocab, hmm);
 
   /* load 1-best alignment */
   if (bestAlignMLF)
@@ -317,7 +226,7 @@ int main (int argc, char *argv[]) {
   }
 
   /* maybe output transforms for last speaker */
-  UpdateSpkrStats(&hset, &xfInfo, NULL); 
+  hmm.UpdateSpkrStats(&xfInfo, NULL);
 
   Exit(0);             /* maybe print config and exit */
   return 0;
@@ -393,66 +302,63 @@ void ReportUsage () {
 }
 
 
-// DecoderInst *Initialise (void) { }
-
-
 /**********  align best code  ****************************************/
 
 /* find the LN_MODEL lexnode following ln that has label lab
    step over LN_CON and LN_WORDEND nodes.
    return NULL if not found
 */
-BestInfo *FindLexNetLab (MemHeap *heap, LexNode *ln, LLink ll, HTime frameDur)
+BestInfo* Decoder::FindLexNetLab (MemHeap *heap, LexNode *ln, LLink ll, HTime frameDur)
 {
-   int i;
-   LexNode *follLN;
-   MLink m;
-   BestInfo *info, *next;
+  int i;
+  LexNode *follLN;
+  MLink m;
+  BestInfo *info, *next;
 
-   if (!ll->succ) {
-      info = (BestInfo*) New (heap, sizeof (BestInfo));
-      info->next = NULL;
-      info->ll = NULL;
-      info->ln = NULL;
-      info->start = info->end = 0;
-      return info;
-   }
-   
-   for (i = 0; i < ln->nfoll; ++i) {
-      follLN = ln->foll[i];
-      if (follLN->type == LN_MODEL) {
-         m = FindMacroStruct (&hset, 'h', follLN->data.hmm);
-         if (m->id == ll->labid) {
-            /*            printf ("found  %8.0f %8.0f %8s  %p\n", ll->start, ll->end, ll->labid->name, follLN); */
-            next = FindLexNetLab (heap, follLN, ll->succ, frameDur);
-            if (next) {
-               info = (BestInfo*) New (heap, sizeof (BestInfo));
-               info->next = next;
-               info->start = ll->start / (frameDur*1.0e7);
-               info->end = ll->end / (frameDur*1.0e7);
-               info->ll = ll;
-               info->ln = follLN;
-               return info;
-            }
-            /*            printf ("damn got 0 back searching for %8s\n", ll->labid->name); */
-         }
+  if (!ll->succ) {
+    info = (BestInfo*) New (heap, sizeof (BestInfo));
+    info->next = NULL;
+    info->ll = NULL;
+    info->ln = NULL;
+    info->start = info->end = 0;
+    return info;
+  }
+
+  for (i = 0; i < ln->nfoll; ++i) {
+    follLN = ln->foll[i];
+    if (follLN->type == LN_MODEL) {
+      m = _hmm.FindMacroStruct('h', follLN->data.hmm);
+      if (m->id == ll->labid) {
+	/*            printf ("found  %8.0f %8.0f %8s  %p\n", ll->start, ll->end, ll->labid->name, follLN); */
+	next = FindLexNetLab (heap, follLN, ll->succ, frameDur);
+	if (next) {
+	  info = (BestInfo*) New (heap, sizeof (BestInfo));
+	  info->next = next;
+	  info->start = ll->start / (frameDur*1.0e7);
+	  info->end = ll->end / (frameDur*1.0e7);
+	  info->ll = ll;
+	  info->ln = follLN;
+	  return info;
+	}
+	/*            printf ("damn got 0 back searching for %8s\n", ll->labid->name); */
       }
-      else {
-         /*         printf ("searching for %8s recursing\n", ll->labid->name); */
-         next = FindLexNetLab (heap, follLN, ll, frameDur);
-         if (next) {
-            info = (BestInfo*) New (heap, sizeof (BestInfo));
-            info->next = next;
-            info->start = info->end = ll->start / (frameDur*1.0e7);
-            info->ll = ll;
-            info->ln = follLN;
-            return info;
-         }
-         /*         printf ("damn got 0 back from recursion\n"); */
+    }
+    else {
+      /*         printf ("searching for %8s recursing\n", ll->labid->name); */
+      next = FindLexNetLab (heap, follLN, ll, frameDur);
+      if (next) {
+	info = (BestInfo*) New (heap, sizeof (BestInfo));
+	info->next = next;
+	info->start = info->end = ll->start / (frameDur*1.0e7);
+	info->ll = ll;
+	info->ln = follLN;
+	return info;
       }
-   }
-   
-   return NULL;
+      /*         printf ("damn got 0 back from recursion\n"); */
+    }
+  }
+
+  return NULL;
 }
 
 void InitAll(int argc, char *argv[]) {
@@ -479,9 +385,6 @@ void InitAll(int argc, char *argv[]) {
 
   if (!InfoPrinted () && NumArgs () == 0) ReportUsage ();
   if (NumArgs () == 0) Exit (0);
-
-  SetConfParms ();
-  ParseCommandArguments();
 }
 
 void ParseCommandArguments() {
@@ -627,7 +530,8 @@ void ParseCommandArguments() {
       case 'H':
 	 if (NextArg() != STRINGARG)
 	    HError (4119,"HDecode: MMF File name expected");
-	 AddMMF (&hset, GetStrArg()); 
+	 
+	 mmf_fn = GetStrArg();
 	 break;
       case 'T':
 	 trace = GetChkedInt (0, 1000, s);
@@ -661,7 +565,7 @@ void ParseCommandArguments() {
       case 'J':
          if (NextArg()!=STRINGARG)
             HError(4019,"HDecode: input transform directory expected");
-         AddInXFormDir(&hset,GetStrArg());
+	 inXFormDir_fn = GetStrArg();
          if (NextArg()==STRINGARG)
             xfInfo.inXFormExt = GetStrArg(); 
 	 if (NextArg() != SWITCHARG)
@@ -731,41 +635,17 @@ Boolean UpdateSpkrModels (char *fn) {
 
 // =======================================================
 
-Decoder::Decoder(LanguageModel& lm, Vocabulary& vocab): _lm(lm), _vocab(vocab), _decInst(NULL) {
-   /* init model heap & set early to support loading MMFs */
-   CreateHeap(&_modelHeap, "Model heap",  MSTAK, 1, 0.0, 100000, 800000 );
-   CreateHMMSet(&hset, &_modelHeap, TRUE); 
+Decoder::Decoder(LanguageModel& lm, Vocabulary& vocab, HiddenMarkovModel& hmm)
+  : _lm(lm), _vocab(vocab), _hmm(hmm), _decInst(NULL) {
+    this->init();
 }
 
 void Decoder::init() {
 
-   Boolean eSep;
-   Boolean modAlign;
-
    /* init Heaps */
    CreateHeap (&_netHeap, "Net heap", MSTAK, 1, 0,100000, 800000);
-   CreateHeap (&_lmHeap, "LM heap", MSTAK, 1, 0,1000000, 10000000);
+   // CreateHeap (&_lmHeap, "LM heap", MSTAK, 1, 0,1000000, 10000000);
    CreateHeap (&_transHeap,"Transcription heap",MSTAK,1,0,8000,80000);
-
-   /* Read dictionary */
-   if (trace & T_TOP)
-      printf ("Reading dictionary from %s\n", dictfn);
-
-   /* Read accoustic models */
-   if (trace & T_TOP)
-      printf ("Reading acoustic models...");
-
-   if (MakeHMMSet (&hset, hmmListfn) < SUCCESS) 
-      HError (4128, "Initialise: MakeHMMSet failed");
-   if (LoadHMMSet (&hset, hmmDir, hmmExt) < SUCCESS) 
-      HError (4128, "Initialise: LoadHMMSet failed");
-   
-   /* convert to INVDIAGC */
-   ConvDiagC (&hset, TRUE);
-   ConvLogWt (&hset);
-   
-   if (trace&T_TOP)
-      printf("Read %d physical / %d logical HMMs\n", hset.numPhyHMM, hset.numLogHMM);  
 
    /* process dictionary */
    startLab = GetLabId (startWord, FALSE);
@@ -796,7 +676,7 @@ void Decoder::init() {
          if (!spLab)
             HError (9999, "cannot find 'sp' model.");
 
-         spML = FindMacroName (&hset, 'l', spLab);
+         spML = _hmm.FindMacroName('l', spLab);
          if (!spML)
             HError (9999, "cannot find model for sp");
          spHMM = (HLink) spML->structure;
@@ -816,7 +696,7 @@ void Decoder::init() {
      _vocab.MarkAllWords();
 
       /* create network */
-      net = CreateLexNet (&_netHeap, &_vocab.get_vocab(), &hset, startWord, endWord, silDict);
+      net = CreateLexNet (&_netHeap, &_vocab.get_vocab(), &_hmm.get_hset(), startWord, endWord, silDict);
       
       /* Read language model */
       if (trace & T_TOP)
@@ -825,7 +705,7 @@ void Decoder::init() {
       _lm.loadFromFile(langfn);
    }
 
-   modAlign = FALSE;
+   Boolean modAlign = FALSE;
    if (latOutForm) {
       if (strchr (latOutForm, 'd'))
          modAlign = TRUE;
@@ -834,17 +714,18 @@ void Decoder::init() {
    }
 
    /* create Decoder instance */
-   _decInst = CreateDecoderInst (&hset, _lm.get_lm(), nTok, TRUE, useHModel, outpBlocksize,
+   _decInst = CreateDecoderInst (&_hmm.get_hset(), _lm.get_lm(), nTok, TRUE, useHModel, outpBlocksize,
                             bestAlignMLF ? TRUE : FALSE,
                             modAlign);
    
    /* create buffers for observations */
-   SetStreamWidths (hset.pkind, hset.vecSize, hset.swidth, &eSep);
+   Boolean eSep;
+   _hmm.SetStreamWidths(&eSep);
 
    obs = (Observation *) New (&gcheap, outpBlocksize * sizeof (Observation));
    for (int i = 0; i < outpBlocksize; ++i)
-      obs[i] = MakeObservation (&gcheap, hset.swidth, hset.pkind, 
-                                (hset.hsKind == DISCRETEHS), eSep);
+      obs[i] = MakeObservation (&gcheap, _hmm.get_hset().swidth, _hmm.get_hset().pkind, 
+                                (_hmm.get_hset().hsKind == DISCRETEHS), eSep);
 
    CreateHeap (&_inputBufHeap, "Input Buffer Heap", MSTAK, 1, 1.0, 80000, 800000);
 
@@ -857,7 +738,7 @@ void Decoder::init() {
    if (xfInfo.useOutXForm) {
       CreateHeap(&_regHeap,   "regClassStore",  MSTAK, 1, 0.5, 1000, 8000 );
       /* This initialises things - temporary hack - THINK!! */
-      CreateAdaptXForm(&hset, "tmp");
+      CreateAdaptXForm(&_hmm.get_hset(), "tmp");
 
       /* online adaptation not supported yet! */
    }
@@ -871,7 +752,8 @@ void Decoder::rescoreLattice(char* fn) {
   Lattice *lat;
 
   /* clear out previous LexNet, Lattice and LM structures */
-  ResetHeap (&_lmHeap);
+  _lm.ResetHeap();
+  // ResetHeap (&_lmHeap);
   ResetHeap (&_netHeap);
 
   if (latFileMask != NULL ) { /* support for rescoring lattoce masks */
@@ -890,7 +772,8 @@ void Decoder::rescoreLattice(char* fn) {
       HError (9999, "DoRecognition: Cannot open lattice file %s\n", latfn);
 
     /* #### maybe separate lattice heap? */
-    lat = ReadLattice (latF, &_lmHeap, &_vocab.get_vocab(), FALSE, FALSE);
+    lat = _lm.ReadLattice(latF, FALSE, FALSE);
+    // lat = ReadLattice (latF, &_lmHeap, &_vocab.get_vocab(), FALSE, FALSE);
     FClose (latF, isPipe);
     if (!lat)
       HError (9999, "DoRecognition: cannot read lattice file %s\n", latfn);
@@ -903,7 +786,7 @@ void Decoder::rescoreLattice(char* fn) {
   /* create network of all the words/prons marked (word->aux and pron->aux == 1) */
   if (trace & T_TOP)
     printf ("Creating network\n");
-  net = CreateLexNet (&_netHeap, &_vocab.get_vocab(), &hset, startWord, endWord, silDict);
+  net = CreateLexNet (&_netHeap, &_vocab.get_vocab(), &_hmm.get_hset(), startWord, endWord, silDict);
 
   /* create LM based on pronIds defined by CreateLexNet */
   if (trace & T_TOP)
@@ -930,7 +813,7 @@ void Decoder::recognize(char *fn) {
       and output transform creation */
    { 
       Boolean changed;
-      changed = UpdateSpkrStats(&hset, &xfInfo, fn);
+      changed = _hmm.UpdateSpkrStats(&xfInfo, fn);
    }
 
    startClock = clock();
@@ -944,10 +827,10 @@ void Decoder::recognize(char *fn) {
       HError (9999, "HDecode: Opening input failed");
    
    GetBufferInfo (parmBuf, &pbInfo);
-   if (pbInfo.tgtPK != hset.pkind)
+   if (pbInfo.tgtPK != _hmm.get_hset().pkind)
       HError (9999, "HDecode: Incompatible parm kinds %s vs. %s",
               ParmKind2Str (pbInfo.tgtPK, buf1),
-              ParmKind2Str (hset.pkind, buf2));
+              ParmKind2Str (_hmm.get_hset().pkind, buf2));
               
    if (latRescore)
      rescoreLattice(fn);
@@ -1139,7 +1022,7 @@ BestInfo* Decoder::CreateBestInfo (char *fn, HTime frameDur)
    
    ln = net->start;
    assert (ln->type == LN_MODEL);
-   m = FindMacroStruct (&hset, 'h', ln->data.hmm);
+   m = FindMacroStruct (&_hmm.get_hset(), 'h', ln->data.hmm);
    lnLabId = m->id;
    
    /* info for net start node */

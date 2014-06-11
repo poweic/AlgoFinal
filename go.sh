@@ -1,5 +1,6 @@
 #!/bin/bash -xe
-cd htk && make && cd -
+(cd htk && make && cd -) || (printf "\33[31m[Error]\33[0m failed to make htk\n"; exit -1)
+printf "\n\33[34mStart running...\33[0m\n"
 decoder=htk/HTKLVRec/HDecode.mod
 
 # INPUTS -- mfcc files to decode
