@@ -1,13 +1,13 @@
 class HiddenMarkovModel {
   public:
-    HiddenMarkovModel(string hmmList_fn, string mmf_fn, string inXFormDir_fn,
-	string hmmDir, string hmmExt) {
+    HiddenMarkovModel(char* hmmList_fn, char* mmf_fn, char* inXFormDir_fn,
+	char* hmmDir, char* hmmExt) {
 
       /* init model heap & set early to support loading MMFs */
       CreateHeap(&_modelHeap, "Model heap",  MSTAK, 1, 0.0, 100000, 800000 );
       CreateHMMSet(&_hset, &_modelHeap, TRUE); 
 
-      if (MakeHMMSet (&_hset, hmmList_fn.c_str()) < SUCCESS) 
+      if (MakeHMMSet (&_hset, hmmList_fn) < SUCCESS) 
 	HError (4128, "Initialise: MakeHMMSet failed");
 
       AddMMF (&_hset, mmf_fn); 
@@ -35,7 +35,7 @@ class HiddenMarkovModel {
       ::SetStreamWidths(_hset.pkind, _hset.vecSize, _hset.swidth, eSep);
     }
 
-    Boolean UpdateSpkrStats(XFInfo *xfinfo, const char *datafn) {
+    Boolean UpdateSpkrStats(XFInfo *xfinfo, char *datafn) {
       return ::UpdateSpkrStats(&_hset, xfinfo, datafn);
     }
 
@@ -55,11 +55,11 @@ class HiddenMarkovModel {
 
 class Vocabulary {
   public:
-    Vocabulary(string dict_fn) {
+    Vocabulary(char* dict_fn) {
       this->init(dict_fn);
     }
 
-    void init(string dict_fn) {
+    void init(char* dict_fn) {
 
       /* Read dictionary */
       if (trace & T_TOP)
@@ -104,13 +104,13 @@ class LanguageModel {
       CreateHeap (&_lmHeap, "LM heap", MSTAK, 1, 0,1000000, 10000000);
     }
 
-    void loadFromFile(string lm_fn) {
+    void loadFromFile(char* lm_fn) {
       if (!lm_fn) 
 	HError (9999, "HDecode: no LM or lattice specified");
       lm = CreateLM (&_lmHeap, lm_fn, startWord, endWord, &_vocab.get_vocab());
     }
 
-    void loadFromLattice(string lat_fn, Lattice* lat) {
+    void loadFromLattice(char* lat_fn, Lattice* lat) {
       lm = CreateLMfromLat (&_lmHeap, lat_fn, lat, &_vocab.get_vocab());
     }
 
@@ -137,9 +137,9 @@ class Decoder {
   public:
     Decoder(LanguageModel& lm, Vocabulary& vocab, HiddenMarkovModel& hmm);
     void init();
-    void recognize(string fn);
+    void recognize(char* fn);
 
-    BestInfo* CreateBestInfo (string fn, HTime frameDur);
+    BestInfo* CreateBestInfo (char* fn, HTime frameDur);
     BestInfo* FindLexNetLab (MemHeap *heap, LexNode *ln, LLink ll, HTime frameDur);
 
     void PrintAlignBestInfo (BestInfo *bestInfo);
@@ -147,7 +147,7 @@ class Decoder {
 
 
     // ===== THIS function does NOT belongs here. Move it somewhere else. =====
-    void rescoreLattice(string fn);
+    void rescoreLattice(char* fn);
 
   private:
     LanguageModel& _lm;
