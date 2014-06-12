@@ -558,7 +558,6 @@ void CleanDecoderInst (DecoderInst *dec)
    FreeLMCache (dec->lmCache);
 }
 
-
 /* NewTokSetArray
 
 */

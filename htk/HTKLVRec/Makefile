@@ -32,7 +32,7 @@ mandir = ${prefix}/share/man
 includedir = ${prefix}/include
 oldincludedir = /usr/include
 
-CC      = 	g++ -std=c++0x
+CC      = 	g++ -std=c++0x -g
 CFLAGS  := 	-DNO_LAT_LM -m32 -D_SVID_SOURCE -DOSS_AUDIO -D'ARCH="x86_64"' -w -I$(inc) -I../others/
 LDFLAGS = 	-L/usr/X11R6/lib  -lm
 INSTALL = 	/usr/bin/install -c
@@ -45,13 +45,11 @@ all: HDecode HDecode.mod
 
 
 # binaries
-HDecode: HDecode.orig.o HLVNet.orig.o HLVRec.orig.o HLVLM.orig.o HLVModel.orig.o $(HTKLIB)
-	$(CC) $(CFLAGS)	 -o HDecode HDecode.orig.o HLVNet.orig.o HLVRec.orig.o HLVLM.orig.o \
-	HLVModel.orig.o $(HTKLIB) $(LDFLAGS)
+HDecode: HDecode.orig.o HLVNet.orig.o HLVRec.orig.o HLVLM.orig.o HLVModel.orig.o misc.orig.o $(HTKLIB)
+	$(CC) $(CFLAGS)	 -o HDecode $^ $(LDFLAGS)
 
-HDecode.mod: HDecode.mod.o HLVNet.mod.o HLVRec.mod.o HLVLM.mod.o HLVModel.mod.o $(HTKLIB)
-	$(CC) $(CFLAGS)	 -o HDecode.mod HDecode.mod.o HLVNet.mod.o HLVRec.mod.o HLVLM.mod.o \
-	HLVModel.mod.o $(HTKLIB) $(LDFLAGS)
+HDecode.mod: HDecode.mod.o HLVNet.mod.o HLVRec.mod.o HLVLM.mod.o HLVModel.mod.o misc.mod.o $(HTKLIB)
+	$(CC) $(CFLAGS)	 -o HDecode.mod $^ $(LDFLAGS)
 
 # normal version object files
 HLVModel.orig.o: HLVModel.c $(HEADER)
@@ -75,7 +73,9 @@ HDecode.orig.o: HDecode.cpp $(HEADER)
 	$(CC) -c $(CFLAGS) $<
 	mv HDecode.o $@
 
-
+misc.orig.o: misc.cpp $(HEADER)
+	$(CC) -c $(CFLAGS) $<
+	mv misc.o $@
 
 # .mod version object files
 HLVModel.mod.o: HLVModel.c $(HEADER)
@@ -98,6 +98,10 @@ HLVRec.mod.o: HLVRec.c HLVRec-GC.c	HLVRec-LM.c	 HLVRec-misc.c	HLVRec-outP.c \
 HDecode.mod.o: HDecode.cpp $(HEADER)
 	$(CC) -c -DHDECODE_MOD $(CFLAGS) $<
 	mv HDecode.o $@
+
+misc.mod.o: misc.cpp $(HEADER)
+	$(CC) -c -DHDECODE_MOD $(CFLAGS) $<
+	mv misc.o $@
 
 
 # housekeeping rules

@@ -1,53 +1,62 @@
+#include "HShell.h"
+#include "HMem.h"
+#include "HMath.h"
+#include "HSigP.h"
+#include "HWave.h"
+#include "HLabel.h"
+#include "HAudio.h"
+#include "HParm.h"
+#include "HDict.h"
+#include "HModel.h"
+#include "HUtil.h"
+#include "HTrain.h"
+#include "HAdapt.h"
+#include "HNet.h"       /* for Lattice */
+#include "HLat.h"       /* for Lattice */
+
+#include "config.h"
+
+#include "HLVNet.h"
+#include "HLVRec.h"
+#include "HLVLM.h"
+
+#include <time.h>
+
+/* -------------------------- Trace Flags & Vars ------------------------ */
+
+#define T_TOP 00001		/* Basic progress reporting */
+#define T_OBS 00002		/* Print Observation */
+#define T_ADP 00004		/* Adaptation */
+#define T_MEM 00010		/* Memory usage, start and finish */
+
+/* linked list storing the info about the 1-best alignment read from BESTALIGNMLF 
+   one bestInfo struct per model */
+typedef struct _BestInfo BestInfo;
+struct _BestInfo {
+   int start;           /* frame numbers */
+   int end;
+   LexNode *ln;
+   LLink ll;           /* get rid of this? currently start/end are redundant */
+   BestInfo *next;
+};
+
 class HiddenMarkovModel {
   public:
-    HiddenMarkovModel(char* hmmList_fn, char* mmf_fn, char* inXFormDir_fn,
-	char* hmmDir, char* hmmExt) {
+    HiddenMarkovModel();
 
-      /* init model heap & set early to support loading MMFs */
-      CreateHeap(&_modelHeap, "Model heap",  MSTAK, 1, 0.0, 100000, 800000 );
-      CreateHMMSet(&_hset, &_modelHeap, TRUE); 
+    void init(char* hmmList_fn, char* mmf_fn, char* inXFormDir_fn,
+	char* hmmDir, char* hmmExt);
 
-      if (MakeHMMSet (&_hset, hmmList_fn) < SUCCESS) 
-	HError (4128, "Initialise: MakeHMMSet failed");
+    void SetStreamWidths(Boolean *eSep);
 
-      AddMMF (&_hset, mmf_fn); 
+    Boolean UpdateSpkrStats(XFInfo *xfinfo, char *datafn);
 
-      if (inXFormDir_fn)
-	AddInXFormDir(&_hset, inXFormDir_fn);
+    MLink FindMacroStruct(char type, Ptr structure);
 
-      /* Read accoustic models */
-      if (trace & T_TOP)
-	printf ("Reading acoustic models...");
+    MLink FindMacroName(char type, LabId id);
 
-      // hmmDir and hmmExt seems to be NULL
-      if (LoadHMMSet (&_hset, hmmDir, hmmExt) < SUCCESS) 
-	HError (4128, "Initialise: LoadHMMSet failed");
+    HMMSet& get_hset();
 
-      /* convert to INVDIAGC */
-      ::ConvDiagC (&_hset, TRUE);
-      ::ConvLogWt (&_hset);
-
-      if (trace&T_TOP)
-	printf("Read %d physical / %d logical HMMs\n", _hset.numPhyHMM, _hset.numLogHMM);  
-    }
-
-    void SetStreamWidths(Boolean *eSep) {
-      ::SetStreamWidths(_hset.pkind, _hset.vecSize, _hset.swidth, eSep);
-    }
-
-    Boolean UpdateSpkrStats(XFInfo *xfinfo, char *datafn) {
-      return ::UpdateSpkrStats(&_hset, xfinfo, datafn);
-    }
-
-    MLink FindMacroStruct(char type, Ptr structure) {
-      return ::FindMacroStruct (&_hset, type, structure);
-    }
-
-    MLink FindMacroName(char type, LabId id) {
-      return ::FindMacroName(&_hset, type, id);
-    }
-
-    HMMSet& get_hset() { return _hset; }
   private:
     MemHeap _modelHeap;
     HMMSet _hset;
@@ -55,87 +64,80 @@ class HiddenMarkovModel {
 
 class Vocabulary {
   public:
-    Vocabulary(char* dict_fn) {
-      this->init(dict_fn);
+    Vocabulary();
+
+    void init(char* dict_fn);
+
+    void Process();
+
+    void ConvertSilDict ();
+
+    void MarkAllProns ();
+
+    void MarkAllWords ();
+
+    void UnMarkAllWords ();
+
+    void MarkAllWordsfromLat (Lattice* lat);
+
+    void CheckForSkipInSpModel();
+
+    Vocab& get_vocab();
+
+    void set_start_word(char* str) {
+      startWord = str;
     }
 
-    void init(char* dict_fn) {
-
-      /* Read dictionary */
-      if (trace & T_TOP)
-	printf ("Reading dictionary from %s\n", dict_fn);
-
-      InitVocab (&_vocab);
-      if (ReadDict (dict_fn, &_vocab) < SUCCESS)
-	HError (9999, "Initialise: ReadDict failed");
-    }
-
-    void ConvertSilDict (LabId spLab, LabId silLab, LabId startLab, LabId endLab) {
-      ::ConvertSilDict(&_vocab, spLab, silLab, startLab, endLab);
-    }
-
-    void MarkAllProns () {
-      ::MarkAllProns(&_vocab);
-    }
-
-    void MarkAllWords () {
-      ::MarkAllWords(&_vocab);
-    }
-
-    void UnMarkAllWords () {
-      ::UnMarkAllWords(&_vocab);
-    }
-
-    void MarkAllWordsfromLat (Lattice* lat, Boolean silDict) {
-      ::MarkAllWordsfromLat(&_vocab, lat, silDict);
-    }
-
-    Vocab& get_vocab() {
-      return _vocab;
+    void set_end_word(char* str) {
+      endWord = str;
     }
 
   private:
     Vocab _vocab;
+
+  public:
+    char* dict_fn;
+
+    char *startWord; /* word used at start of network */
+    LabId startLab;  /*   corresponding LabId */
+    char *endWord;   /* word used at end of network */
+    LabId endLab;    /*   corresponding LabId */
+
+    char *spModel;   /* model used as word end Short Pause */
+    LabId spLab;     /*   corresponding LabId */
+    char *silModel;  /* model used as word end Silence */
+    LabId silLab;    /*   corresponding LabId */
+
+    Boolean silDict;
 };
 
 class LanguageModel {
   public:
-    LanguageModel(Vocabulary& vocab): lm(NULL), _vocab(vocab) {
-      CreateHeap (&_lmHeap, "LM heap", MSTAK, 1, 0,1000000, 10000000);
-    }
+    LanguageModel(Vocabulary& vocab);
 
-    void loadFromFile(char* lm_fn) {
-      if (!lm_fn) 
-	HError (9999, "HDecode: no LM or lattice specified");
-      lm = CreateLM (&_lmHeap, lm_fn, startWord, endWord, &_vocab.get_vocab());
-    }
+    void loadFromFile(char* lm_fn);
 
-    void loadFromLattice(char* lat_fn, Lattice* lat) {
-      lm = CreateLMfromLat (&_lmHeap, lat_fn, lat, &_vocab.get_vocab());
-    }
+    void loadFromLattice(char* lat_fn, Lattice* lat);
 
-    FSLM* get_lm() {
-      return lm;
-    }
+    FSLM* get_lm();
 
-    Lattice *ReadLattice(FILE *file, Boolean shortArc, Boolean add2Dict) {
-      return ::ReadLattice(file, &_lmHeap, &_vocab.get_vocab(), shortArc, add2Dict);
-    }
+    Lattice *ReadLattice(FILE *file, Boolean shortArc, Boolean add2Dict);
 
-    void ResetHeap() {
-      ::ResetHeap(&_lmHeap);
-    }
+    void ResetHeap();
 
   private:
     FSLM *lm;         /* language model */
     MemHeap _lmHeap;
 
     Vocabulary& _vocab;
+
+  public:
+    char *langfn;     /* LM filename from commandline */
 };
 
 class Decoder {
   public:
-    Decoder(LanguageModel& lm, Vocabulary& vocab, HiddenMarkovModel& hmm);
+    Decoder(LanguageModel& lm, Vocabulary& vocab, HiddenMarkovModel& hmm, XFInfo& xfInfo);
     void init();
     void recognize(char* fn);
 
@@ -153,6 +155,7 @@ class Decoder {
     LanguageModel& _lm;
     Vocabulary& _vocab;
     HiddenMarkovModel& _hmm;
+    XFInfo& _xfInfo;
 
     DecoderInst* _decInst;
 
@@ -161,5 +164,46 @@ class Decoder {
     MemHeap _inputBufHeap;
     MemHeap _transHeap;
     MemHeap _regHeap;
+  public:
+
+    LogFloat insPen;   /* word insertion penalty */
+
+    float acScale;     /* acoustic scaling factor */
+    float pronScale;   /* pronunciation scaling factor */
+    float lmScale;     /* LM scaling factor */
+
+    int maxModel;        /* max model pruning */
+    LogFloat beamWidth;     /* pruning global beam width */
+    LogFloat weBeamWidth;   /* pruning wordend beam width */
+    LogFloat zsBeamWidth;   /* pruning z-s beam width */
+    LogFloat relBeamWidth;  /* pruning relative beam width */
+    LogFloat latPruneBeam;  /* lattice pruning beam width */
+    LogFloat latPruneAPS;   /* lattice pruning arcs per sec limit */
+    LogFloat fastlmlaBeam;  /* do fast LM la outside this beam */
+
+    int nTok;		    /* number of different LMStates per HMM state */
+    Boolean useHModel;	    /* use standard HModel OutP functions */
+    int outpBlocksize;	    /* number of frames for which outP is calculated in one go */
+    Observation *obs;       /* array of Observations */
+
+    /* info for comparing scores from alignment of 1-best with search */
+    char *bestAlignMLF;     /* MLF with 1-best alignment */
+
+    FileFormat ofmt;	    /* Label output file format */
+    char *labDir;	    /* output label file directory */
+    char *labExt;	    /* output label file extension */
+    char *labForm;	    /* output label format */
+
+    Boolean latRescore;     /* read lattice for each utterance and rescore? */
+    char *latInDir;	    /* lattice input directory */
+    char *latInExt;	    /* latttice input extension */
+    char *latFileMask;	    /* mask for reading lattice */
+
+    Boolean latGen;	    /* output lattice? */
+    char *latOutDir;	    /* lattice output directory */
+    char *latOutExt;	    /* latttice output extension */
+    char *latOutForm;	    /* lattice output format */
+
+    FileFormat dataForm;    /* data input file format */
 };
 
