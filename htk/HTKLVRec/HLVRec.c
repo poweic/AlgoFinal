@@ -748,9 +748,7 @@ static void PruneTokSet (DecoderInst *dec, TokenSet *ts)
    deltaLimit = dec->relBeamWidth;
 #else   /* main beam pruning for reltoks */
    /* main and relative beam pruning */
-   deltaLimit = dec->beamLimit - ts->score;
-   if (dec->relBeamWidth > deltaLimit)
-      deltaLimit = dec->relBeamWidth;
+   deltaLimit = std::max(dec->beamLimit - ts->score, dec->relBeamWidth);
 #endif
    
    if (deltaLimit > 0) {        /* prune complete TokeSet */
@@ -764,8 +762,8 @@ static void PruneTokSet (DecoderInst *dec, TokenSet *ts)
    newN = 0;            /* number of relToks kept */
    for (i = 0, dest = tok = ts->relTok; i < ts->n; ++i, ++tok) {
       if (tok->delta > deltaLimit) {   /* keep */
-         if (dest != tok)
-            *dest = *tok;
+         //if (dest != tok)
+	 *dest = *tok;
          ++dest;
          ++newN;
       }

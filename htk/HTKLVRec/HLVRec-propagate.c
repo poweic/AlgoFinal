@@ -430,23 +430,23 @@ static void PropagateInternal (DecoderInst *dec, LexNodeInst *inst)
 #ifdef MODALIGN
 void UpdateModPaths (DecoderInst *dec, TokenSet *ts, LexNode *ln)
 {
+   if (ln->type == LN_CON)
+      return;
 
    ModendHyp *m;
    RelToken *tok;
    int i;
    
    /* don't accumulate info for CON nodes */
-   if (ln->type != LN_CON) {
-      /* #### optimise by sharing ModendHyp's between tokens with
-         same tok->modpath */
-      for (i = 0, tok = ts->relTok; i < ts->n; ++i, ++tok) {
-         m = (ModendHyp*) New (&dec->modendHypHeap, sizeof (ModendHyp));
-         m->frame = dec->frame;
-         m->ln = ln;
-         m->prev = tok->modpath;
-         
-         tok->modpath = m;
-      }
+   /* #### optimise by sharing ModendHyp's between tokens with
+      same tok->modpath */
+   for (i = 0, tok = ts->relTok; i < ts->n; ++i, ++tok) {
+      m = (ModendHyp*) New (&dec->modendHypHeap, sizeof (ModendHyp));
+      m->frame = dec->frame;
+      m->ln = ln;
+      m->prev = tok->modpath;
+
+      tok->modpath = m;
    }
 }
 #endif   
@@ -466,17 +466,16 @@ static void PropIntoNode (DecoderInst *dec, TokenSet *ts, LexNode *ln, Boolean u
          
    /* propagate tokens from ln's exit into follLN's entry state */
    MergeTokSet (dec, ts, &inst->ts[0], 0.0, TRUE);
-
-   if (updateLMLA) {
-      if (ln->type != LN_WORDEND && ln->lmlaIdx != 0)
-         UpdateLMlookahead (dec, ln);
+   
+   /* only update inst->best if no LMLA update necessary or already done! */
+   if (ln->type == LN_WORDEND || ln->lmlaIdx == 0){
+      inst->best = std::max(inst->ts[0].score, inst->best);
+      return;
    }
 
-   /* only update inst->best if no LMLA update necessary or already done! */
-   if (!(ln->type != LN_WORDEND && ln->lmlaIdx != 0) || updateLMLA) {
-      best = inst->ts[0].score;
-      if (best > inst->best)
-         inst->best = best;
+   if (updateLMLA){
+      UpdateLMlookahead (dec, ln);
+      inst->best = std::max(inst->ts[0].score, inst->best);
    }
 }
 
@@ -537,6 +536,7 @@ static void PropagateExternal (DecoderInst *dec, LexNodeInst *inst,
          PruneTokSet (dec, &inst->ts[i-1]);
    }
    /* prune exit state token set */
+   // the following two lines are not used in our L0 L1 test.
    if (exitTS->n > 0)
       PruneTokSet (dec, exitTS);
 
@@ -582,9 +582,7 @@ static void HandleWordend (DecoderInst *dec, LexNode *ln)
 
    /* main beam pruning for reltoks */
    /* main and relative beam pruning */
-   deltaLimit = dec->beamLimit - ts->score;
-   if (dec->relBeamWidth > deltaLimit)
-      deltaLimit = dec->relBeamWidth;
+   deltaLimit = std::max(dec->beamLimit - ts->score, dec->relBeamWidth);
 
    /* for each token i in set, take transition in LM
       recombine tokens in same LMState 
