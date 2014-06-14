@@ -135,7 +135,7 @@ LogFloat SOutP_ID_mix_Block(HMMSet *hset, int s, Observation *x, StreamElem *se)
 }
 
 #if 0           /* old OutPBlock()  copes with streams and non-diag outp's */
-static void OutPBlock (DecoderInst *dec, Observation **obsBlock, 
+static void OutPBlock (DecoderInst *_decInst, Observation **obsBlock, 
                        int n, HLink hmm, int state, float acScale, LogFloat *outP)
 {
    int i;
@@ -156,7 +156,7 @@ static void OutPBlock (DecoderInst *dec, Observation **obsBlock,
    if (S == 1 && !si->weights) {
       
       for (i = 0; i < n; ++i) {
-         outP[i] = OutP_lv (dec->si, hmm->svec[state].info->sIdx, &obsBlock[i]->fv[1][1]);
+         outP[i] = OutP_lv (_decInst->si, hmm->svec[state].info->sIdx, &obsBlock[i]->fv[1][1]);
 #if 1   /* sanity checking */
          {
             LogFloat soutp;
@@ -193,21 +193,21 @@ static void OutPBlock (DecoderInst *dec, Observation **obsBlock,
      caching version of OutP from HModel. This only caches only on a state 
      level, not on a mixture level. 
 */
-static LogFloat cOutP (DecoderInst *dec, Observation *x, HLink hmm, int state)
+LogFloat Decoder::cOutP (Observation *x, HLink hmm, int state)
 {
    int sIdx, n;
    LogFloat outP;
    OutPCache *cache;
 
-   assert (x == dec->obsBlock[0]);
+   assert (x == _decInst->obsBlock[0]);
 
-   cache = dec->outPCache;
+   cache = _decInst->outPCache;
    sIdx = hmm->svec[state].info->sIdx;
 
    assert (sIdx >= 0);
    assert (sIdx < cache->nStates);
    
-   n = dec->frame - cache->stateT[sIdx];
+   n = _decInst->frame - cache->stateT[sIdx];
 
    assert (n >= 0);
 
@@ -217,7 +217,7 @@ static LogFloat cOutP (DecoderInst *dec, Observation *x, HLink hmm, int state)
 #if 0
       /* the following is *very* expensive, it effectively disables the cache,
          use only for sanity checking! */
-      assert (outP == dec->acScale * OutP (x, hmm, state));
+      assert (outP == _decInst->acScale * OutP (x, hmm, state));
 #endif
    }
    else {
@@ -225,20 +225,20 @@ static LogFloat cOutP (DecoderInst *dec, Observation *x, HLink hmm, int state)
       if (!cache->mixOutP) {     /* don't bother caching mixtures */
          /* #### handle boundary case where we don't have cache->block obs left */
 
-         if (!dec->si->useHModel) 
-            OutPBlock (dec->si, &dec->obsBlock[0], cache->block,
-                       sIdx, dec->acScale, &cache->stateOutP[sIdx * cache->block]);
+         if (!_decInst->si->useHModel) 
+            OutPBlock (_decInst->si, &_decInst->obsBlock[0], cache->block,
+                       sIdx, _decInst->acScale, &cache->stateOutP[sIdx * cache->block]);
          else
-            OutPBlock_HMod (dec->si, &dec->obsBlock[0], cache->block,
-                            sIdx, dec->acScale, &cache->stateOutP[sIdx * cache->block],
-                            dec->frame);
+            OutPBlock_HMod (_decInst->si, &_decInst->obsBlock[0], cache->block,
+                            sIdx, _decInst->acScale, &cache->stateOutP[sIdx * cache->block],
+                            _decInst->frame);
             
-         cache->stateT[sIdx] = dec->frame;
+         cache->stateT[sIdx] = _decInst->frame;
          outP = cache->stateOutP[sIdx * cache->block];
 #if 0   /* sanity checking for OutPBlock */
          {
             LogFloat safe_outP;
-            safe_outP = dec->acScale * OutP (x, hmm, state);
+            safe_outP = _decInst->acScale * OutP (x, hmm, state);
             assert (fabs (outP - safe_outP) < 0.01);
          }
 #endif
@@ -247,8 +247,8 @@ static LogFloat cOutP (DecoderInst *dec, Observation *x, HLink hmm, int state)
          abort ();
          /*
 x      outP = OutP (x, hmm, state);
-x      dec->cacheOutP[sIdx] = outP;
-x      CACHE_FLAG_SET(dec, sIdx);
+x      _decInst->cacheOutP[sIdx] = outP;
+x      CACHE_FLAG_SET(_decInst, sIdx);
          */
       }
    }      

@@ -147,6 +147,84 @@ class Decoder {
     void PrintAlignBestInfo (BestInfo *bestInfo);
     void AnalyseSearchSpace (BestInfo *bestInfo);
 
+    //==== These functions are moved here by coldsheep 0613
+
+    // From propagate.c
+    void HandleWordend (LexNode *ln);
+    void PropagateExternal (LexNodeInst *inst, Boolean handleWE, Boolean wintTree);
+    void UpdateWordEndHyp (LexNodeInst *inst);
+    void AddPronProbs (TokenSet *ts, int var);
+    void MergeTokSet (TokenSet *src, TokenSet *dest, LogFloat score, Boolean prune);
+    void PropagateInternal (LexNodeInst *inst);
+    void PropIntoNode (TokenSet *ts, LexNode *ln, Boolean updateLMLA);
+#ifdef MODALIGN
+    void UpdateModPaths (TokenSet *ts, LexNode *ln);
+#endif
+    void HandleSpSkipLayer (LexNodeInst *inst);
+    void ProcessFrame (Observation **obsBlock, int nObs, AdaptXForm *xform);
+    void __collect_stats__ (TokenSet *instTS, int N); 
+    void OptimizedLeftToRightInternalPropagation(LexNodeInst *inst, TokenSet* instTS, int N, SMatrix &trP, HLink &hmm);
+
+    // From HLVRec-LM.c
+    LMTokScore LMLA_nocache (LMState lmState, int lmlaIdx);
+    LMCache* CreateLMCache (MemHeap *heap);
+    LMTokScore LMCacheLookaheadProb (LMState lmState, int lmlaIdx, Boolean fastlmla);
+    LMTokScore LMCacheTransProb (FSLM *lm, LMState src, PronId pronid, LMState *dest);
+    void UpdateLMlookahead(LexNode *ln);
+
+    // From HLVRec.c 3/7 are moved here
+    DecoderInst *CreateDecoderInst(HMMSet *hset, FSLM *lm, int nTok, Boolean latgen, 
+	  Boolean useHModel,
+	  int outpBlocksize, Boolean doPhonePost,
+	  Boolean modAlign);
+    void InitDecoderInst ( LexNet *net, HTime sampRate, LogFloat beamWidth, 
+	  LogFloat relBeamWidth, LogFloat weBeamWidth, LogFloat zsBeamWidth,
+	  int maxModel, 
+	  LogFloat insPen, float acScale, float pronScale, float lmScale,
+	  LogFloat fastlmlaBeam);
+    void CleanDecoderInst ();
+    TokenSet *NewTokSetArray(int N);
+    TokenSet *NewTokSetArrayVar(int N, Boolean isSil);
+
+    LexNodeInst *ActivateNode (LexNode *ln);
+    void DeactivateNode (LexNode *ln);
+    void PruneTokSet (TokenSet *ts);
+
+    // From outP.c
+    LogFloat cOutP (Observation *x, HLink hmm, int state);
+
+    // From GC.c
+    void GarbageCollectPaths ();
+
+    // Form HLVRec-misc.c
+    void CheckTokenSetOrder (TokenSet *ts);
+    void CheckTokenSetId (TokenSet *ts1, TokenSet *ts2);
+    WordendHyp *CombinePaths (RelToken *winner, RelToken *loser, LogFloat diff);
+    void Debug_Check_Score ();
+    void InitPhonePost ();
+    void CalcPhonePost ();
+    void AccumulateStats ();
+
+    // From traceback.c 13/18 are moved here
+    AltWordendHyp* FakeSEpath (RelToken *tok, Boolean useLM);
+    AltWordendHyp* BuildLatAltList (TokenSet *ts, Boolean useLM);
+    WordendHyp *BuildForceLat ();
+    WordendHyp* BuildLattice ();
+    Lattice* LatTraceBack (MemHeap *heap);
+    void PrintPath (WordendHyp *we);
+    void PrintTok(Token *tok);
+    void PrintRelTok(RelToken *tok);
+    void PrintTokSet (TokenSet *ts);
+    TokenSet* BestTokSet ();
+    Transcription* TraceBack(MemHeap *heap);
+    void LatTraceBackCount (WordendHyp *path, int *nnodes, int *nlinks);
+    void Paths2Lat (Lattice *lat, WordendHyp *path, int *na);
+#ifdef MODALIGN
+    LAlign* LAlignFromModpath (MemHeap *heap, ModendHyp *modpath, int wordStart, short *nLAlign);
+    LAlign *LAlignFromAltModpath (MemHeap *heap, ModendHyp *modpath, ModendHyp *mainModpath, int wordStart, short *nLAlign);
+    void PrintModPath (ModendHyp *m);
+    void CheckLAlign (Lattice *lat);
+#endif
 
     // ===== THIS function does NOT belongs here. Move it somewhere else. =====
     void rescoreLattice(char* fn);
@@ -205,5 +283,10 @@ class Decoder {
     char *latOutForm;	    /* lattice output format */
 
     FileFormat dataForm;    /* data input file format */
+    Boolean mergeTokOnly;   /* if merge token set with pruning */
+    AdaptXForm *inXForm;
+    float dynBeamInc;       /* dynamic beam increment for max model pruning */
+    int gcFreq;             /* run Garbage Collection every gcFreq frames */
+    Stats stats;            /* statistics about pruning etc. */
 };
 

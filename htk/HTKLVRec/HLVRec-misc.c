@@ -32,7 +32,7 @@
 
      check whether the relTokens are sorted by LMState order 
 */
-void CheckTokenSetOrder (DecoderInst *dec, TokenSet *ts)
+void Decoder::CheckTokenSetOrder (TokenSet *ts)
 {
    int i;
    RelToken *prevTok;
@@ -47,7 +47,7 @@ void CheckTokenSetOrder (DecoderInst *dec, TokenSet *ts)
 
    if (!ok) {
       printf ("XXXXX CheckTokenSetOrder \n");
-      PrintTokSet (dec, ts);
+      PrintTokSet (ts);
       abort();
    }
 }
@@ -57,7 +57,7 @@ void CheckTokenSetOrder (DecoderInst *dec, TokenSet *ts)
      check whether two TokenSets that have the same id are in fact equal, i.e.
      have the same set of RelToks
 */
-static void CheckTokenSetId (DecoderInst *dec, TokenSet *ts1, TokenSet *ts2)
+void Decoder::CheckTokenSetId (TokenSet *ts1, TokenSet *ts2)
 {
    int i1, i2;
    RelToken *tok1, *tok2;
@@ -68,7 +68,7 @@ static void CheckTokenSetId (DecoderInst *dec, TokenSet *ts1, TokenSet *ts2)
    assert (ts1 != ts2);
    assert (ts1->id == ts2->id);
 
-   if (ts2->score < dec->beamLimit || ts1->score < dec->beamLimit)
+   if (ts2->score < _decInst->beamLimit || ts1->score < _decInst->beamLimit)
       return;
 
 #if 0
@@ -87,9 +87,9 @@ static void CheckTokenSetId (DecoderInst *dec, TokenSet *ts1, TokenSet *ts2)
 #endif
 
    i1 = i2 = 0;
-   while (ts1->score + ts1->relTok[i1].delta < dec->beamLimit && i1 < ts1->n)
+   while (ts1->score + ts1->relTok[i1].delta < _decInst->beamLimit && i1 < ts1->n)
       ++i1;
-   while (ts2->score + ts2->relTok[i2].delta < dec->beamLimit && i2 < ts2->n)
+   while (ts2->score + ts2->relTok[i2].delta < _decInst->beamLimit && i2 < ts2->n)
       ++i2;
    
    while (i1 < ts1->n && i2 < ts2->n) {
@@ -103,22 +103,22 @@ static void CheckTokenSetId (DecoderInst *dec, TokenSet *ts1, TokenSet *ts2)
       ++i1;
       ++i2;
       
-      while (ts1->score + ts1->relTok[i1].delta < dec->beamLimit && i1 < ts1->n)
+      while (ts1->score + ts1->relTok[i1].delta < _decInst->beamLimit && i1 < ts1->n)
          ++i1;
-      while (ts2->score + ts2->relTok[i2].delta < dec->beamLimit && i2 < ts2->n)
+      while (ts2->score + ts2->relTok[i2].delta < _decInst->beamLimit && i2 < ts2->n)
          ++i2;
    };
    for ( ; i1 < ts1->n; ++i1)
-      if (ts1->score + ts1->relTok[i1].delta > dec->beamLimit)
+      if (ts1->score + ts1->relTok[i1].delta > _decInst->beamLimit)
          ok = FALSE;
    for ( ; i2 < ts2->n; ++i2)
-      if (ts2->score + ts2->relTok[i2].delta > dec->beamLimit)
+      if (ts2->score + ts2->relTok[i2].delta > _decInst->beamLimit)
          ok = FALSE;
 
    if (!ok) {
       printf ("XXXXX CheckTokenSetId  difference in tokensets \n");
-      PrintTokSet (dec, ts1);
-      PrintTokSet (dec, ts2);
+      PrintTokSet (ts1);
+      PrintTokSet (ts2);
       abort();
    }
 }
@@ -130,7 +130,7 @@ static void CheckTokenSetId (DecoderInst *dec, TokenSet *ts1, TokenSet *ts2)
 
      diff = T_l - T_w
 */
-static WordendHyp *CombinePaths (DecoderInst *dec, RelToken *winner, RelToken *loser, LogFloat diff)
+WordendHyp *Decoder::CombinePaths (RelToken *winner, RelToken *loser, LogFloat diff)
 {
    WordendHyp *weHyp;
    AltWordendHyp *alt, *newalt;
@@ -142,14 +142,14 @@ static WordendHyp *CombinePaths (DecoderInst *dec, RelToken *winner, RelToken *l
 
    /*   assert (winner->path->score > loser->path->score);  */
 
-   weHyp = (WordendHyp *) New (&dec->weHypHeap, sizeof (WordendHyp));
+   weHyp = (WordendHyp *) New (&_decInst->weHypHeap, sizeof (WordendHyp));
    *weHyp = *winner->path;
 
-   weHyp->frame = dec->frame;
+   weHyp->frame = _decInst->frame;
 
    p = &weHyp->alt;
    for (alt = winner->path->alt; alt; alt = alt->next) {
-      newalt = (AltWordendHyp *) New (&dec->altweHypHeap, sizeof (AltWordendHyp));
+      newalt = (AltWordendHyp *) New (&_decInst->altweHypHeap, sizeof (AltWordendHyp));
       *newalt = *alt;
       newalt->next = NULL;
       *p = newalt;
@@ -158,7 +158,7 @@ static WordendHyp *CombinePaths (DecoderInst *dec, RelToken *winner, RelToken *l
 
    /* add info from looser */
 
-   newalt = (AltWordendHyp *) New (&dec->altweHypHeap, sizeof (AltWordendHyp));
+   newalt = (AltWordendHyp *) New (&_decInst->altweHypHeap, sizeof (AltWordendHyp));
    newalt->prev = loser->path->prev;
    newalt->score = diff;
    newalt->lm = loser->path->lm;
@@ -173,8 +173,8 @@ static WordendHyp *CombinePaths (DecoderInst *dec, RelToken *winner, RelToken *l
       /* only add if in main Beam, otherwise we will prune 
          it anyway later on */
       /* should be latprunebeam? */
-      if (diff + alt->score > -dec->beamWidth) {
-         newalt = (AltWordendHyp *) New (&dec->altweHypHeap, sizeof (AltWordendHyp));
+      if (diff + alt->score > -_decInst->beamWidth) {
+         newalt = (AltWordendHyp *) New (&_decInst->altweHypHeap, sizeof (AltWordendHyp));
          *newalt = *alt;
          newalt->score = diff + alt->score;
          newalt->next = NULL;
@@ -259,7 +259,7 @@ void Debug_DumpNet (LexNet *net)
 
 
 #if 0
-void Debug_Dump_LMLA_hastab(DecoderInst *dec)
+void Debug_Dump_LMLA_hastab(DecoderInst *_decInst)
 {
    int i, n;
    LMLACacheEntry *e;
@@ -274,9 +274,9 @@ void Debug_Dump_LMLA_hastab(DecoderInst *dec)
       return;
    }
 
-   for (i = 0; i < dec->nLMLACacheBins; ++i) {
+   for (i = 0; i < _decInst->nLMLACacheBins; ++i) {
       n = 0;
-      for (e = dec->lmlaCache[i]; e; e = e->next)
+      for (e = _decInst->lmlaCache[i]; e; e = e->next)
          ++n;
       fprintf (debugFile, "LMLA %d %d\n", i, n);
    }
@@ -289,20 +289,20 @@ void Debug_Dump_LMLA_hastab(DecoderInst *dec)
 
 */
 
-void Debug_Check_Score (DecoderInst *dec)
+void Decoder::Debug_Check_Score ()
 {
    int l, j, N;
    LexNode *ln;
    LexNodeInst *inst;
    TokenSet *ts;
 
-   for (l = 0; l < dec->nLayers; ++l) {
+   for (l = 0; l < _decInst->nLayers; ++l) {
       int sumTok, maxTok, nTS;
       sumTok = maxTok = 0;
       nTS = 0;
-      for (inst = dec->instsLayer[l]; inst; inst = inst->next) {
+      for (inst = _decInst->instsLayer[l]; inst; inst = inst->next) {
 #if 0
-         if (inst->best < dec->beamLimit)
+         if (inst->best < _decInst->beamLimit)
             printf ("layer %d (LexNodeInst *) %p\n", l, inst);
 #endif
          ln = inst->node;
@@ -317,7 +317,7 @@ void Debug_Check_Score (DecoderInst *dec)
 #if 0
                for (k = 0; k < ts->n; ++k) {
                   rtok = &ts->relTok[k];
-                  if (ts->score + rtok->delta < dec->beamLimit) {
+                  if (ts->score + rtok->delta < _decInst->beamLimit) {
                      printf ("l %d *((LexNodeInst *) %p) *((TokenSet *) %p)\n", l, inst, ts);
                   }
                }
@@ -333,7 +333,7 @@ void Debug_Check_Score (DecoderInst *dec)
 
 /***************** phone posterior estimation *************************/
 
-void InitPhonePost (DecoderInst *dec)
+void Decoder::InitPhonePost ()
 {
    HMMScanState hss;
    HLink hmm;
@@ -341,11 +341,11 @@ void InitPhonePost (DecoderInst *dec)
    char buf[100];
    LabId phoneId;
 
-   NewHMMScan (dec->hset, &hss);
+   NewHMMScan (_decInst->hset, &hss);
    do {
       hmm = hss.hmm;
       assert (!hmm->hook);
-      m = FindMacroStruct (dec->hset, 'h', hmm);
+      m = FindMacroStruct (_decInst->hset, 'h', hmm);
       assert (strlen (m->id->name) < 100);
       strcpy (buf, m->id->name);
       TriStrip (buf);
@@ -355,29 +355,29 @@ void InitPhonePost (DecoderInst *dec)
    } while(GoNextHMM(&hss));
    EndHMMScan(&hss);
 
-   dec->nPhone = 0;
+   _decInst->nPhone = 0;
    /* count monophones -- #### make this more efficent! */
-   NewHMMScan (dec->hset, &hss);
+   NewHMMScan (_decInst->hset, &hss);
    do {
       hmm = hss.hmm;
       phoneId = (LabId) hmm->hook;
       if (!phoneId->aux) {
-         ++dec->nPhone;
-         phoneId->aux = (Ptr) dec->nPhone;
+         ++_decInst->nPhone;
+         phoneId->aux = (Ptr) _decInst->nPhone;
 
-         assert (dec->nPhone < 100);
-         dec->monoPhone[dec->nPhone] = phoneId;
+         assert (_decInst->nPhone < 100);
+         _decInst->monoPhone[_decInst->nPhone] = phoneId;
       }
    } while(GoNextHMM(&hss));
    EndHMMScan(&hss);
 
-   printf ("found %d monophones\n", dec->nPhone);
+   printf ("found %d monophones\n", _decInst->nPhone);
 
-   dec->phonePost = (LogDouble *) New (&gcheap, (dec->nPhone+1) * sizeof (LogDouble));
-   dec->phoneFreq = (int *) New (&gcheap, (dec->nPhone+1) * sizeof (int));
+   _decInst->phonePost = (LogDouble *) New (&gcheap, (_decInst->nPhone+1) * sizeof (LogDouble));
+   _decInst->phoneFreq = (int *) New (&gcheap, (_decInst->nPhone+1) * sizeof (int));
 }
 
-void CalcPhonePost (DecoderInst *dec)
+void Decoder::CalcPhonePost ()
 {
    int l, N, i, j;
    LexNodeInst *inst;
@@ -389,19 +389,19 @@ void CalcPhonePost (DecoderInst *dec)
    RelToken *tok;
    LogDouble sum;
 
-   phonePost = dec->phonePost;
-   phoneFreq = dec->phoneFreq;
-   for (i = 0; i <= dec->nPhone; ++i) {
+   phonePost = _decInst->phonePost;
+   phoneFreq = _decInst->phoneFreq;
+   for (i = 0; i <= _decInst->nPhone; ++i) {
       phonePost[i] = LZERO;
       phoneFreq[i] = 0;
    }
 
-   for (l = 0; l < dec->nLayers; ++l) {
-      for (inst = dec->instsLayer[l]; inst; inst = inst->next) {
+   for (l = 0; l < _decInst->nLayers; ++l) {
+      for (inst = _decInst->instsLayer[l]; inst; inst = inst->next) {
          if (inst->node->type == LN_MODEL) {
             phoneId = (LabId) inst->node->data.hmm->hook;
             phone = (int) phoneId->aux;
-            assert (phone >= 1 && phone <= dec->nPhone);
+            assert (phone >= 1 && phone <= _decInst->nPhone);
             
             N = inst->node->data.hmm->numStates;
             for (i = 1; i < N; ++i) {
@@ -416,13 +416,13 @@ void CalcPhonePost (DecoderInst *dec)
    }
 
    sum = LZERO;
-   for (i = 0; i <= dec->nPhone; ++i)
+   for (i = 0; i <= _decInst->nPhone; ++i)
       sum = LAdd (sum, phonePost[i]);
 #if 0
    printf ("sum %f\n", sum);
 #endif
    
-   for (i = 0; i <= dec->nPhone; ++i) {
+   for (i = 0; i <= _decInst->nPhone; ++i) {
       if (phonePost[i] > LSMALL) {
          phonePost[i] = phonePost[i] - sum;
 #if 0 
@@ -447,7 +447,7 @@ struct _LayerStats {
 
 typedef struct _LayerStats LayerStats;
 
-void AccumulateStats (DecoderInst *dec)
+void Decoder::AccumulateStats ()
 {
    MemHeap statsHeap;
    LayerStats *layerStats;
@@ -455,10 +455,10 @@ void AccumulateStats (DecoderInst *dec)
 
    CreateHeap (&statsHeap, "Token Stats Heap", MSTAK, 1, 1.5, 10000, 100000);
 
-   layerStats = (LayerStats *) New (&statsHeap, dec->nLayers * sizeof (LayerStats));
-   memset ((void *) layerStats, 0, dec->nLayers * sizeof (LayerStats));
+   layerStats = (LayerStats *) New (&statsHeap, _decInst->nLayers * sizeof (LayerStats));
+   memset ((void *) layerStats, 0, _decInst->nLayers * sizeof (LayerStats));
 
-   for (l = 0; l < dec->nLayers; ++l) {
+   for (l = 0; l < _decInst->nLayers; ++l) {
       layerStats[l].nInst = layerStats[l].nTS = layerStats[l].nTok = 0;
       layerStats[l].bestScore = LZERO;
       layerStats[l].worstScore = - LZERO;
@@ -475,9 +475,9 @@ void AccumulateStats (DecoderInst *dec)
       TokScore score;
       TokScore instBest;
 
-      for (l = 0; l < dec->nLayers; ++l) {
+      for (l = 0; l < _decInst->nLayers; ++l) {
          ls = &layerStats[l];
-         for (inst = dec->instsLayer[l]; inst; inst = inst->next) {
+         for (inst = _decInst->instsLayer[l]; inst; inst = inst->next) {
             ++ls->nInst;
             ln = inst->node;
 
@@ -511,7 +511,7 @@ void AccumulateStats (DecoderInst *dec)
                         ls->worstScore = score;
 #if 0   /* sanity check for Lat Rescore */                     
                      if (tok->path && tok->lmState != (Ptr) 0xfffffffe ) {
-                        assert (dec->net->pronlist[tok->path->pron]->word == 
+                        assert (_decInst->net->pronlist[tok->path->pron]->word == 
                                 ((FSLM_LatNode *) tok->lmState)->word);
                      }
 #endif

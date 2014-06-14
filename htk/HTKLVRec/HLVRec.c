@@ -54,6 +54,9 @@ char *hlvrec_vc_id = "$Id: HLVRec.c,v 1.1.1.1 2006/10/11 09:54:56 jal58 Exp $";
 
 #include <string.h>
 #include <assert.h>
+#include <misc.h>
+#include "HLVRec-propagate.c"
+#include "HLVRec-LM.c"
 
 #define PRUNE
 
@@ -106,22 +109,7 @@ static AdaptXForm *inXForm;
 /* HLVRec.c */
 
 void InitLVRec(void);
-DecoderInst *CreateDecoderInst(HMMSet *hset, FSLM *lm, int nTok, Boolean latgen, 
-                               Boolean useHModel,
-                               int outpBlocksize, Boolean doPhonePost,
-                               Boolean modAlign);
 static Boolean CheckLRTransP (SMatrix transP);
-void InitDecoderInst (DecoderInst *dec, LexNet *net, HTime sampRate, LogFloat beamWidth, 
-                      LogFloat relBeamWidth, LogFloat weBeamWidth, LogFloat zsBeamWidth,
-                      int maxModel, 
-                      LogFloat insPen, float acScale, float pronScale, float lmScale,
-                      LogFloat fastlmlaBeam);
-void CleanDecoderInst (DecoderInst *dec);
-static TokenSet *NewTokSetArray(DecoderInst *dec, int N);
-static TokenSet *NewTokSetArrayVar(DecoderInst *dec, int N, Boolean isSil);
-static LexNodeInst *ActivateNode (DecoderInst *dec, LexNode *ln);
-static void DeactivateNode (DecoderInst *dec, LexNode *ln);
-static void PruneTokSet (DecoderInst *dec, TokenSet *ts);
 void ReFormatTranscription(Transcription *trans,HTime frameDur,
                            Boolean states,Boolean models,Boolean triStrip,
                            Boolean normScores,Boolean killScores,
@@ -130,59 +118,27 @@ void ReFormatTranscription(Transcription *trans,HTime frameDur,
 
 /* HLVRec-propagate.c */
 static int winTok_cmp (const void *v1,const void *v2);
-static void MergeTokSet (DecoderInst *dec, TokenSet *src, TokenSet *dest, 
-                         LogFloat score, Boolean prune);
-static void PropagateInternal (DecoderInst *dec, LexNodeInst *inst);
-#ifdef MODALIGN
-void UpdateModPaths (DecoderInst *dec, TokenSet *ts, LexNode *ln);
-#endif
-static void PropIntoNode (DecoderInst *dec, TokenSet *ts, LexNode *ln, Boolean updateLMLA);
-static void PropagateExternal (DecoderInst *dec, LexNodeInst *inst, 
-                               Boolean handleWE, Boolean wintTree);
-static void HandleWordend (DecoderInst *dec, LexNode *ln);
-static void UpdateWordEndHyp (DecoderInst *dec, LexNodeInst *inst);
-static void AddPronProbs (DecoderInst *dec, TokenSet *ts, int var);
-void HandleSpSkipLayer (DecoderInst *dec, LexNodeInst *inst);
-void ProcessFrame (DecoderInst *dec, Observation **obsBlock, int nObs,
-                   AdaptXForm *xform);
 
 /* HLVRec-LM.c */
-static void UpdateLMlookahead(DecoderInst *dec, LexNode *ln);
-static LMCache *CreateLMCache (DecoderInst *dec, MemHeap *heap);
 static void FreeLMCache (LMCache *cache);
 static void ResetLMCache (LMCache *cache);
 static int LMCacheState_hash (LMState lmstate);
 LMNodeCache* AllocLMNodeCache (LMCache *cache, int lmlaIdx);
-static LMTokScore LMCacheTransProb (DecoderInst *dec, FSLM *lm, 
-                                    LMState src, PronId pronid, LMState *dest);
-LMTokScore LMLA_nocache (DecoderInst *dec, LMState lmState, int lmlaIdx);
-static LMTokScore LMCacheLookaheadProb (DecoderInst *dec, LMState lmState, 
-                                        int lmlaIdx, Boolean fastlmla);
-/* HLVRec-traceback.c */
-static void PrintPath (DecoderInst *dec, WordendHyp *we);
-static void PrintTok(DecoderInst *dec, Token *tok);
-static void PrintRelTok(DecoderInst *dec, RelToken *tok);
-static void PrintTokSet (DecoderInst *dec, TokenSet *ts);
-TokenSet *BestTokSet (DecoderInst *dec);
-Transcription *TraceBack(MemHeap *heap, DecoderInst *dec);
-static void LatTraceBackCount (DecoderInst *dec, WordendHyp *path, int *nnodes, int *nlinks);
-static void Paths2Lat (DecoderInst *dec, Lattice *lat, WordendHyp *path,
+static void PrintPath (DecoderInst *_decInst, WordendHyp *we);
+static void PrintTok(DecoderInst *_decInst, Token *tok);
+static void PrintRelTok(DecoderInst *_decInst, RelToken *tok);
+static void PrintTokSet (DecoderInst *_decInst, TokenSet *ts);
+TokenSet *BestTokSet (DecoderInst *_decInst);
+Transcription *TraceBack(MemHeap *heap, DecoderInst *_decInst);
+static void LatTraceBackCount (DecoderInst *_decInst, WordendHyp *path, int *nnodes, int *nlinks);
+static void Paths2Lat (DecoderInst *_decInst, Lattice *lat, WordendHyp *path,
                        int *na);
-Lattice *LatTraceBack (MemHeap *heap, DecoderInst *dec);
-#ifdef MODALIGN
-LAlign *LAlignFromModpath (DecoderInst *dec, MemHeap *heap,
-                           ModendHyp *modpath, int wordStart, short *nLAlign);
-LAlign *LAlignFromAltModpath (DecoderInst *dec, MemHeap *heap,
-                              ModendHyp *modpath, ModendHyp *mainModpath,
-                              int wordStart, short *nLAlign);
-void PrintModPath (DecoderInst *dec, ModendHyp *m);
-void CheckLAlign (DecoderInst *dec, Lattice *lat);
-#endif
-AltWordendHyp *FakeSEpath (DecoderInst *dec, RelToken *tok, Boolean useLM);
-WordendHyp *AltPathList2Path (DecoderInst *dec, AltWordendHyp *alt, PronId pron);
-WordendHyp *BuildLattice (DecoderInst *dec);
-AltWordendHyp *BuildLatAltList (DecoderInst *dec, TokenSet *ts, Boolean useLM);
-WordendHyp *BuildForceLat (DecoderInst *dec);
+Lattice *LatTraceBack (MemHeap *heap, DecoderInst *_decInst);
+AltWordendHyp *FakeSEpath (DecoderInst *_decInst, RelToken *tok, Boolean useLM);
+WordendHyp *AltPathList2Path (DecoderInst *_decInst, AltWordendHyp *alt, PronId pron);
+WordendHyp *BuildLattice (DecoderInst *_decInst);
+AltWordendHyp *BuildLatAltList (DecoderInst *_decInst, TokenSet *ts, Boolean useLM);
+WordendHyp *BuildForceLat (DecoderInst *_decInst);
 
 /* HLVRec-GC.c */
 #ifdef MODALIGN
@@ -195,34 +151,20 @@ static void SweepAltPaths (MemHeap *heap);
 #ifdef MODALIGN
 static void SweepModPaths (MemHeap *heap);
 #endif
-static void GarbageCollectPaths (DecoderInst *dec);
-
 
 /* HLVRec-outP.c */
 static void ResetOutPCache (OutPCache *cache);
 static OutPCache *CreateOutPCache (MemHeap *heap, HMMSet *hset, int block);
 LogFloat SOutP_ID_mix_Block(HMMSet *hset, int s, Observation *x, StreamElem *se);
-static LogFloat cOutP (DecoderInst *dec, Observation *x, HLink hmm, int state);
 void OutPBlock_HMod (StateInfo_lv *si, Observation **obsBlock, 
                      int n, int sIdx, float acScale, LogFloat *outP, int id);
 
-
 /* HLVRec-misc.c */
-void CheckTokenSetOrder (DecoderInst *dec, TokenSet *ts);
-static void CheckTokenSetId (DecoderInst *dec, TokenSet *ts1, TokenSet *ts2);
-static WordendHyp *CombinePaths (DecoderInst *dec, RelToken *winner, RelToken *loser, LogFloat diff);
 void Debug_DumpNet (LexNet *net);
-void Debug_Check_Score (DecoderInst *dec);
-void InitPhonePost (DecoderInst *dec);
-void CalcPhonePost (DecoderInst *dec);
-void AccumulateStats (DecoderInst *dec);
-
 
 /* --------------------------- Initialisation ---------------------- */
 
 
-#include "HLVRec-propagate.c"
-#include "HLVRec-LM.c"
 #include "HLVRec-traceback.c"
 #include "HLVRec-GC.c"
 #include "HLVRec-outP.c"
@@ -271,79 +213,79 @@ void InitLVRec(void)
 
 /* CreateDecoderInst
 
-     Create a new instance of the decoding engine. All state information is stored
+     Create a new instance of the _decInstoding engine. All state information is stored
      here. 
      #### Ideally instances should share other structures (i.e.
           LexNets) this is not implemented, yet.
 */
-DecoderInst *CreateDecoderInst(HMMSet *hset, FSLM *lm, int nTok, Boolean latgen, 
+DecoderInst* Decoder::CreateDecoderInst(HMMSet *hset, FSLM *lm, int nTok, Boolean latgen, 
                                Boolean useHModel,
                                int outpBlocksize, Boolean doPhonePost,
                                Boolean modAlign)
 {
-   DecoderInst *dec;
+   DecoderInst *_decInst;
    int i, N;
    char buf[MAXSTRLEN];
 
-   dec = (DecoderInst *) New (&recCHeap, sizeof (DecoderInst));
+   _decInst = (DecoderInst *) New (&recCHeap, sizeof (DecoderInst));
 
-   dec->lm = lm;
-   dec->hset = hset;
-   dec->useHModel = useHModel;
-   /*    dec->net = net; */
+   _decInst->lm = lm;
+   _decInst->hset = hset;
+   _decInst->useHModel = useHModel;
+   /*    _decInst->net = net; */
 
    /* create compact State info. This can change number of shared states! */
    /* #### this is ugly as we end up doing this twice, if we use adaptation! */
-   dec->si = ConvertHSet (&gcheap, hset, dec->useHModel);
+   _decInst->si = ConvertHSet (&gcheap, hset, _decInst->useHModel);
 
-   CreateHeap (&dec->heap, "Decoder Instance heap", MSTAK, 1, 1.5, 10000, 100000);
+   CreateHeap (&_decInst->heap, "Decoder Instance heap", MSTAK, 1, 1.5, 10000, 100000);
 
-   CreateHeap (&dec->nodeInstanceHeap, "Decoder NodeInstance heap", 
+   CreateHeap (&_decInst->nodeInstanceHeap, "Decoder NodeInstance heap", 
                MHEAP, sizeof (LexNodeInst), 1.5, 1000, 10000);
 
 
-   dec->nTok = nTok;
-   dec->latgen = latgen;
-   dec->nLayers = 0;
-   dec->instsLayer = NULL;
+   _decInst->nTok = nTok;
+   _decInst->latgen = latgen;
+   _decInst->nLayers = 0;
+   _decInst->instsLayer = NULL;
 
    /* alloc & init Heaps for TokenSets */
-   N = MaxStatesInSet (dec->hset);
-   dec->maxNStates = N;
+   N = MaxStatesInSet (_decInst->hset);
+   _decInst->maxNStates = N;
 
-   dec->tokSetHeap = (MemHeap *) New (&dec->heap, N * sizeof (MemHeap));
+   _decInst->tokSetHeap = (MemHeap *) New (&_decInst->heap, N * sizeof (MemHeap));
 
 
    /* #### make initial size of heap blocks smaller,
       or don't alloc unneeded ones in the first place (scan HMMSet) */
    for (i = 0; i < N; ++i) {
    sprintf (buf, "Decoder %d TokenSet heap", i+1);
-      CreateHeap (&dec->tokSetHeap[i], buf, 
+      CreateHeap (&_decInst->tokSetHeap[i], buf, 
                   MHEAP, (i+1) * sizeof (TokenSet), 9, 10, 5000);
    }   
 
-   dec->tempTS = (TokenSet **) New (&dec->heap, N * sizeof (TokenSet *));
+   _decInst->tempTS = (TokenSet **) New (&_decInst->heap, N * sizeof (TokenSet *));
 
 
    /* alloc Heap for RelToken arrays */
-   CreateHeap (&dec->relTokHeap, "Decoder RelToken array heap",
-               MHEAP, dec->nTok * sizeof (RelToken), 1, 1000, 5000);
+   CreateHeap (&_decInst->relTokHeap, "Decoder RelToken array heap",
+               MHEAP, _decInst->nTok * sizeof (RelToken), 1, 1000, 5000);
 
-   CreateHeap (&dec->lrelTokHeap, "Decoder RelToken array heap",
-               MHEAP, LAYER_SIL_NTOK_SCALE * dec->nTok * sizeof (RelToken), 1, 1000, 5000);   
+   CreateHeap (&_decInst->lrelTokHeap, "Decoder RelToken array heap",
+               MHEAP, LAYER_SIL_NTOK_SCALE * _decInst->nTok * sizeof (RelToken), 1, 1000, 5000);   
    
    /* alloc heap for word end hyps */
-   CreateHeap (&dec->weHypHeap, "WordendHyp heap", MHEAP, sizeof (WordendHyp), 
+   CreateHeap (&_decInst->weHypHeap, "WordendHyp heap", MHEAP, sizeof (WordendHyp), 
                1.0, 80000, 800000);
-   if (dec->latgen) {
-      CreateHeap (&dec->altweHypHeap, "AltWordendHyp heap", MHEAP, 
+   if (_decInst->latgen) {
+      CreateHeap (&_decInst->altweHypHeap, "AltWordendHyp heap", MHEAP, 
                   sizeof (AltWordendHyp), 1.0, 8000, 80000);
    }
 #ifdef MODALIGN
-   dec->modAlign = modAlign;
+   _decInst->modAlign = modAlign;
 
-   if (dec->modAlign) {
-      CreateHeap (&dec->modendHypHeap, "ModendHyp heap", MHEAP, 
+   if (_decInst->modAlign) {
+      CreateHeap (&_decInst->modendHypHeap, "ModendHyp heap", MHEAP, 
                   sizeof (ModendHyp), 1.0, 80000, 800000);
    }
 #else
@@ -353,21 +295,21 @@ DecoderInst *CreateDecoderInst(HMMSet *hset, FSLM *lm, int nTok, Boolean latgen,
 
    /* output probability cache */
 
-   dec->outPCache = CreateOutPCache (&dec->heap, dec->hset, outpBlocksize);
+   _decInst->outPCache = CreateOutPCache (&_decInst->heap, _decInst->hset, outpBlocksize);
 
    /* cache debug code */
 #if 0
-   printf (" %d %d \n", dec->hset->numStates, dec->nCacheFlags);
-   for (i = 0; i < dec->nCacheEntries; ++i)
-      printf ("i %d  cacheFlags %lu\n", i, dec->cacheFlags[i]);
+   printf (" %d %d \n", _decInst->hset->numStates, _decInst->nCacheFlags);
+   for (i = 0; i < _decInst->nCacheEntries; ++i)
+      printf ("i %d  cacheFlags %lu\n", i, _decInst->cacheFlags[i]);
 
-   for (i = 0; i < dec->hset->numStates; ++i) {
-      assert (!CACHE_FLAG_GET(dec,i));
-      CACHE_FLAG_SET(dec, i);
-      assert (CACHE_FLAG_GET(dec,i));
+   for (i = 0; i < _decInst->hset->numStates; ++i) {
+      assert (!CACHE_FLAG_GET(_decInst,i));
+      CACHE_FLAG_SET(_decInst, i);
+      assert (CACHE_FLAG_GET(_decInst,i));
    }
 
-   /*      printf ("i %d  C_G %lu\n", i, CACHE_FLAG_GET(dec,i)); */
+   /*      printf ("i %d  C_G %lu\n", i, CACHE_FLAG_GET(_decInst,i)); */
 #endif 
 
 
@@ -375,7 +317,7 @@ DecoderInst *CreateDecoderInst(HMMSet *hset, FSLM *lm, int nTok, Boolean latgen,
    {
       HMMScanState hss;
 
-      NewHMMScan(dec->hset,&hss);
+      NewHMMScan(_decInst->hset,&hss);
       do {
          /* #### should check each tidX only once! */
          /*     if (!IsSeenV(hss.hmm->transP)) { */
@@ -389,11 +331,11 @@ DecoderInst *CreateDecoderInst(HMMSet *hset, FSLM *lm, int nTok, Boolean latgen,
    }
 
    if (doPhonePost)
-      InitPhonePost (dec);
+      InitPhonePost ();
    else
-      dec->nPhone = 0;
+      _decInst->nPhone = 0;
 
-   return dec;
+   return _decInst;
 }
 
 /* CheckLRTransP
@@ -423,10 +365,10 @@ static Boolean CheckLRTransP (SMatrix transP)
 
 /* InitDecoderInst
 
-     Initialise previously created decoder instance. This needs to be
+     Initialise previously created _decInstoder instance. This needs to be
      called before each utterance.
 */
-void InitDecoderInst (DecoderInst *dec, LexNet *net, HTime sampRate, LogFloat beamWidth, 
+void Decoder::InitDecoderInst (LexNet *net, HTime sampRate, LogFloat beamWidth, 
                       LogFloat relBeamWidth, LogFloat weBeamWidth, LogFloat zsBeamWidth,
                       int maxModel, 
                       LogFloat insPen, float acScale, float pronScale, float lmScale,
@@ -434,146 +376,146 @@ void InitDecoderInst (DecoderInst *dec, LexNet *net, HTime sampRate, LogFloat be
 {       
    int i;
 
-   dec->net = net;
+   _decInst->net = net;
 
-   if (dec->nLayers) {
-      Dispose (&dec->heap,dec->instsLayer);
+   if (_decInst->nLayers) {
+      Dispose (&_decInst->heap,_decInst->instsLayer);
    }
 
    /* alloc InstsLayer start pointers */
-   dec->nLayers = net->nLayers;
-   dec->instsLayer = (LexNodeInst **) New (&dec->heap, net->nLayers * sizeof (LexNodeInst *));
+   _decInst->nLayers = net->nLayers;
+   _decInst->instsLayer = (LexNodeInst **) New (&_decInst->heap, net->nLayers * sizeof (LexNodeInst *));
 
    /* reset inst (i.e. reset pruning, etc.)
       purge all heaps
    */
 
-   ResetHeap (&dec->nodeInstanceHeap);
-   ResetHeap (&dec->weHypHeap);
-   if (dec->latgen)
-      ResetHeap (&dec->altweHypHeap);
+   ResetHeap (&_decInst->nodeInstanceHeap);
+   ResetHeap (&_decInst->weHypHeap);
+   if (_decInst->latgen)
+      ResetHeap (&_decInst->altweHypHeap);
 #ifdef MODALIGN
-   if (dec->modAlign)
-      ResetHeap (&dec->modendHypHeap);
+   if (_decInst->modAlign)
+      ResetHeap (&_decInst->modendHypHeap);
 #endif
-   ResetHeap (&dec->nodeInstanceHeap);
-   for (i = 0; i < dec->maxNStates; ++i) 
-      ResetHeap (&dec->tokSetHeap[i]);
-   ResetHeap (&dec->relTokHeap);
-   ResetHeap (&dec->lrelTokHeap);
+   ResetHeap (&_decInst->nodeInstanceHeap);
+   for (i = 0; i < _decInst->maxNStates; ++i) 
+      ResetHeap (&_decInst->tokSetHeap[i]);
+   ResetHeap (&_decInst->relTokHeap);
+   ResetHeap (&_decInst->lrelTokHeap);
 
    if (trace & T_MEM) {
       printf ("memory stats at start of recognition\n");
       PrintAllHeapStats ();
    }
 
-   dec->frame = 0;
-   dec->frameDur = sampRate / 1.0e7;
-   dec->maxModel = maxModel;
-   dec->beamWidth = beamWidth;
-   dec->weBeamWidth = weBeamWidth;
-   dec->zsBeamWidth = zsBeamWidth;
-   dec->curBeamWidth = dec->beamWidth;
-   dec->relBeamWidth = - relBeamWidth;
-   dec->beamLimit = LZERO;
+   _decInst->frame = 0;
+   _decInst->frameDur = sampRate / 1.0e7;
+   _decInst->maxModel = maxModel;
+   _decInst->beamWidth = beamWidth;
+   _decInst->weBeamWidth = weBeamWidth;
+   _decInst->zsBeamWidth = zsBeamWidth;
+   _decInst->curBeamWidth = _decInst->beamWidth;
+   _decInst->relBeamWidth = - relBeamWidth;
+   _decInst->beamLimit = LZERO;
 
    if (fastlmlaBeam < -LSMALL) {
-      dec->fastlmla = TRUE;
-      dec->fastlmlaBeam = - fastlmlaBeam;
+      _decInst->fastlmla = TRUE;
+      _decInst->fastlmlaBeam = - fastlmlaBeam;
    }
    else {
-      dec->fastlmla = FALSE;
-      dec->fastlmlaBeam = LZERO;
+      _decInst->fastlmla = FALSE;
+      _decInst->fastlmlaBeam = LZERO;
    }
 
-   dec->tokSetIdCount = 0;
+   _decInst->tokSetIdCount = 0;
 
-   dec->insPen = insPen;
-   dec->acScale = acScale;
-   dec->pronScale = pronScale;
-   dec->lmScale = lmScale;
+   _decInst->insPen = insPen;
+   _decInst->acScale = acScale;
+   _decInst->pronScale = pronScale;
+   _decInst->lmScale = lmScale;
 
-   dec->maxLMLA = dec->lmScale * maxLMLA;
+   _decInst->maxLMLA = _decInst->lmScale * maxLMLA;
 
-   /*      HRec computes interval of possible predecessor states j for each 
+   /*      HRec computes interval of possible pre_decInstessor states j for each 
       destination state i in each transition matrix (seIndexes).
    */
    
 
    /* alloc temp tokenset arrays for use in PropagateInternal */
-   for (i=1; i <= dec->maxNStates; ++i) 
-      dec->tempTS[i] = NewTokSetArrayVar (dec, i, TRUE);
+   for (i=1; i <= _decInst->maxNStates; ++i) 
+      _decInst->tempTS[i] = NewTokSetArrayVar (i, TRUE);
 
    /* alloc winTok array for MergeTokSet */
-   dec->winTok = (RelToken *) New (&dec->heap, LAYER_SIL_NTOK_SCALE * dec->nTok * sizeof (RelToken));
+   _decInst->winTok = (RelToken *) New (&_decInst->heap, LAYER_SIL_NTOK_SCALE * _decInst->nTok * sizeof (RelToken));
 
 
    /* init lists of active LexNode Instances  */
-   for (i = 0; i < dec->nLayers; ++i)
-      dec->instsLayer[i] = NULL;
+   for (i = 0; i < _decInst->nLayers; ++i)
+      _decInst->instsLayer[i] = NULL;
 
    /* deactivate all nodes */
-   for (i = 0; i < dec->net->nNodes; ++i) {
-      dec->net->node[i].inst = NULL;
+   for (i = 0; i < _decInst->net->nNodes; ++i) {
+      _decInst->net->node[i].inst = NULL;
 #ifdef COLLECT_STATS_ACTIVATION
-      dec->net->node[i].eventT = -1;
+      _decInst->net->node[i].eventT = -1;
 #endif
    }
 
-   ActivateNode (dec, dec->net->start);
-   dec->net->start->inst->ts[0].n = 1;
-   dec->net->start->inst->ts[0].score = 0.0;
-   dec->net->start->inst->ts[0].relTok[0] = startTok;
-   dec->net->start->inst->ts[0].relTok[0].lmState = LMInitial (dec->lm);
+   ActivateNode (_decInst->net->start);
+   _decInst->net->start->inst->ts[0].n = 1;
+   _decInst->net->start->inst->ts[0].score = 0.0;
+   _decInst->net->start->inst->ts[0].relTok[0] = startTok;
+   _decInst->net->start->inst->ts[0].relTok[0].lmState = LMInitial (_decInst->lm);
 
 #ifdef COLLECT_STATS
-   dec->stats.nTokSet = 0;
-   dec->stats.sumTokPerTS = 0;
-   dec->stats.nActive = 0;
-   dec->stats.nActivate = 0;
-   dec->stats.nDeActivate = 0;
-   dec->stats.nFrames = 0;
-   dec->stats.nLMlaCacheHit = 0;
-   dec->stats.nLMlaCacheMiss = 0;
+   _decInst->stats.nTokSet = 0;
+   _decInst->stats.sumTokPerTS = 0;
+   _decInst->stats.nActive = 0;
+   _decInst->stats.nActivate = 0;
+   _decInst->stats.nDeActivate = 0;
+   _decInst->stats.nFrames = 0;
+   _decInst->stats.nLMlaCacheHit = 0;
+   _decInst->stats.nLMlaCacheMiss = 0;
 #ifdef COLLECT_STATS_ACTIVATION
 
-   dec->stats.lnINF = 0;
+   _decInst->stats.lnINF = 0;
    {
       int i;
       for (i = 0; i <= STATS_MAXT; ++i)
-         dec->stats.lnDeadT[i] = dec->stats.lnLiveT[i] = 0;
+         _decInst->stats.lnDeadT[i] = _decInst->stats.lnLiveT[i] = 0;
    }
 #endif
 #endif
 
    /* LM lookahead cache */
-   dec->lmCache = CreateLMCache (dec, &dec->heap);
+   _decInst->lmCache = CreateLMCache (&_decInst->heap);
 
    /* invalidate OutP cache */
-   ResetOutPCache (dec->outPCache);
+   ResetOutPCache (_decInst->outPCache);
 }
 
-void CleanDecoderInst (DecoderInst *dec)
+void Decoder::CleanDecoderInst ()
 {
-   FreeLMCache (dec->lmCache);
+   FreeLMCache (_decInst->lmCache);
 }
 
 /* NewTokSetArray
 
 */
-static TokenSet *NewTokSetArray(DecoderInst *dec, int N)
+TokenSet *Decoder::NewTokSetArray(int N)
 {
    TokenSet *ts;
    int i;
 
-   ts= (TokenSet *) New (&dec->tokSetHeap[N-1], N * sizeof (TokenSet));
+   ts= (TokenSet *) New (&_decInst->tokSetHeap[N-1], N * sizeof (TokenSet));
 
    /* clear token set */
    for (i = 0; i < N; ++i) {
       ts[i].score = 0.0;
       ts[i].n = 0;
       ts[i].id = 0;             /* id=0 means empty TokSet */
-      ts[i].relTok = (RelToken *) New (&dec->relTokHeap, dec->nTok * sizeof (RelToken));
+      ts[i].relTok = (RelToken *) New (&_decInst->relTokHeap, _decInst->nTok * sizeof (RelToken));
    }
    return ts;
 }
@@ -583,19 +525,19 @@ static TokenSet *NewTokSetArray(DecoderInst *dec, int N)
    allocating rel token array for lex node, larger array size
    for silence layer nodes
 */
-static TokenSet *NewTokSetArrayVar(DecoderInst *dec, int N, Boolean isSil)
+TokenSet *Decoder::NewTokSetArrayVar(int N, Boolean isSil)
 {
    TokenSet *ts;
    int i;
 
-   ts= (TokenSet *) New (&dec->tokSetHeap[N-1], N * sizeof (TokenSet));
+   ts= (TokenSet *) New (&_decInst->tokSetHeap[N-1], N * sizeof (TokenSet));
 
    /* clear token set */
    for (i = 0; i < N; ++i) {
       ts[i].score = 0.0;
       ts[i].n = 0;
       ts[i].id = 0;             /* id=0 means empty TokSet */
-      ts[i].relTok = (isSil) ? (RelToken *) New (&dec->lrelTokHeap, LAYER_SIL_NTOK_SCALE * dec->nTok * sizeof (RelToken)) : (RelToken *) New (&dec->relTokHeap, dec->nTok * sizeof (RelToken));
+      ts[i].relTok = (isSil) ? (RelToken *) New (&_decInst->lrelTokHeap, LAYER_SIL_NTOK_SCALE * _decInst->nTok * sizeof (RelToken)) : (RelToken *) New (&_decInst->relTokHeap, _decInst->nTok * sizeof (RelToken));
    }
    return ts;
 }
@@ -606,29 +548,29 @@ static TokenSet *NewTokSetArrayVar(DecoderInst *dec, int N, Boolean isSil)
      Allocate and init new Instance for given node.
 
 */
-static LexNodeInst *ActivateNode (DecoderInst *dec, LexNode *ln)
+LexNodeInst* Decoder::ActivateNode (LexNode *ln)
 {
    LexNodeInst *inst;
    int N;               /* number of states in HMM for this node */
    int l;
 
 #ifdef COLLECT_STATS
-   ++dec->stats.nActivate;
+   ++_decInst->stats.nActivate;
 #endif
 #ifdef COLLECT_STATS_ACTIVATION
    if (ln->eventT != -1) {
       int t;
-      t = dec->frame - ln->eventT;
+      t = _decInst->frame - ln->eventT;
       if (t > STATS_MAXT)
          t = STATS_MAXT;
-      ++dec->stats.lnDeadT[t];
+      ++_decInst->stats.lnDeadT[t];
    }
-   ln->eventT = dec->frame;
+   ln->eventT = _decInst->frame;
 #endif
 
    assert (!ln->inst);
 
-   inst = (LexNodeInst *) New (&dec->nodeInstanceHeap, 0);
+   inst = (LexNodeInst *) New (&_decInst->nodeInstanceHeap, 0);
 
    inst->node = ln;
    ln->inst = inst;
@@ -647,26 +589,26 @@ static LexNodeInst *ActivateNode (DecoderInst *dec, LexNode *ln)
    }
 
    /* alloc N tokensets */
-/*    inst->ts = NewTokSetArray (dec, N);          /\*  size is  N * sizeof (TokenSet) *\/ */
+/*    inst->ts = NewTokSetArray (_decInst, N);          /\*  size is  N * sizeof (TokenSet) *\/ */
 
    inst->best = LZERO;
 
    /* add new instance to list of active nodes in the right place */
    /* find right layer */
-   l = dec->nLayers-1;
-   while (dec->net->layerStart[l] > ln) {
+   l = _decInst->nLayers-1;
+   while (_decInst->net->layerStart[l] > ln) {
       --l;
       assert (l >= 0);
    }
-   inst->ts = NewTokSetArrayVar (dec, N, (l == LAYER_SIL));          /*  size is  N * sizeof (TokenSet) */
+   inst->ts = NewTokSetArrayVar (N, (l == LAYER_SIL));          /*  size is  N * sizeof (TokenSet) */
 #ifdef DEBUG_TRACE
    if (trace & T_ACTIV)
-      printf ("allocating %d tokens in array for node in layer %d\n", ((l == LAYER_SIL) ? LAYER_SIL_NTOK_SCALE : 1) * dec->nTok, l);
+      printf ("allocating %d tokens in array for node in layer %d\n", ((l == LAYER_SIL) ? LAYER_SIL_NTOK_SCALE : 1) * _decInst->nTok, l);
 #endif
 
    /* add to linked list */
-   inst->next = dec->instsLayer[l];
-   dec->instsLayer[l] = inst;
+   inst->next = _decInst->instsLayer[l];
+   _decInst->instsLayer[l] = inst;
 
 #ifdef DEBUG_TRACE
    if (trace & T_ACTIV)
@@ -676,22 +618,22 @@ static LexNodeInst *ActivateNode (DecoderInst *dec, LexNode *ln)
    return (inst);
 }
 
-static void DeactivateNode (DecoderInst *dec, LexNode *ln)
+void Decoder::DeactivateNode (LexNode *ln)
 {
    int N, i, l;
 
 #ifdef COLLECT_STATS
-   ++dec->stats.nDeActivate;
+   ++_decInst->stats.nDeActivate;
 #endif
 #ifdef COLLECT_STATS_ACTIVATION
    if (ln->eventT != -1) {
       int t;
-      t = dec->frame - ln->eventT;
+      t = _decInst->frame - ln->eventT;
       if (t > STATS_MAXT)
          t = STATS_MAXT;
-      ++dec->stats.lnLiveT[t];
+      ++_decInst->stats.lnLiveT[t];
    }
-   ln->eventT = dec->frame;
+   ln->eventT = _decInst->frame;
 #endif
 
    assert (ln->inst);
@@ -711,18 +653,18 @@ static void DeactivateNode (DecoderInst *dec, LexNode *ln)
    
 #if 1
    /* find right layer */
-   l = dec->nLayers-1;
-   while (dec->net->layerStart[l] > ln) {
+   l = _decInst->nLayers-1;
+   while (_decInst->net->layerStart[l] > ln) {
       --l;
       assert (l >= 0);
    }
    for (i = 0; i < N; ++i) {
-      if (l == LAYER_SIL) Dispose (&dec->lrelTokHeap, ln->inst->ts[i].relTok);
-      else Dispose (&dec->relTokHeap, ln->inst->ts[i].relTok);
+      if (l == LAYER_SIL) Dispose (&_decInst->lrelTokHeap, ln->inst->ts[i].relTok);
+      else Dispose (&_decInst->relTokHeap, ln->inst->ts[i].relTok);
    }
 
-   Dispose (&dec->tokSetHeap[N-1], ln->inst->ts);
-   Dispose (&dec->nodeInstanceHeap, ln->inst);
+   Dispose (&_decInst->tokSetHeap[N-1], ln->inst->ts);
+   Dispose (&_decInst->nodeInstanceHeap, ln->inst);
 #endif
 
    ln->inst = NULL;
@@ -735,7 +677,7 @@ static void DeactivateNode (DecoderInst *dec, LexNode *ln)
 
      #### this is rather inefficient
 */
-static void PruneTokSet (DecoderInst *dec, TokenSet *ts)
+void Decoder::PruneTokSet (TokenSet *ts)
 {
    RelTokScore deltaLimit;
    RelToken *tok, *dest;
@@ -745,10 +687,10 @@ static void PruneTokSet (DecoderInst *dec, TokenSet *ts)
 
 #if 0
    /* only apply relative beam */
-   deltaLimit = dec->relBeamWidth;
+   deltaLimit = _decInst->relBeamWidth;
 #else   /* main beam pruning for reltoks */
    /* main and relative beam pruning */
-   deltaLimit = std::max(dec->beamLimit - ts->score, dec->relBeamWidth);
+   deltaLimit = std::max(_decInst->beamLimit - ts->score, _decInst->relBeamWidth);
 #endif
    
    if (deltaLimit > 0) {        /* prune complete TokeSet */
@@ -772,7 +714,7 @@ static void PruneTokSet (DecoderInst *dec, TokenSet *ts)
    /* #### could calculate newN from difference between dest and ts->tok */
    if (newN != ts->n) {         /* some RelToks got pruned! */
       ts->n = newN;
-      ts->id = ++dec->tokSetIdCount;
+      ts->id = ++_decInst->tokSetIdCount;
 
    }
 }
