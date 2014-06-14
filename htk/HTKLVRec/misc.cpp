@@ -193,7 +193,7 @@ Decoder::Decoder(LanguageModel& lm, Vocabulary& vocab, HiddenMarkovModel& hmm, X
     ofmt(UNDEFF), labDir(NULL), labExt("rec"), labForm(NULL), 
     latRescore(FALSE), latInDir(NULL), latInExt("lat"), latFileMask(NULL), 
     latGen(FALSE), latOutDir(NULL), latOutExt("lat"), latOutForm(NULL), 
-    dataForm(UNDEFF) {
+    dataForm(UNDEFF), mergeTokOnly(TRUE), gcFreq(100), dynBeamInc(1.3) {
 
       // Nothing to do now.
 }
@@ -382,7 +382,7 @@ void Decoder::recognize(char *fn) {
    if (zsBeamWidth > beamWidth)
       zsBeamWidth = beamWidth;
 
-   InitDecoderInst (_decInst, net, pbInfo.tgtSampRate, beamWidth, relBeamWidth,
+   InitDecoderInst (net, pbInfo.tgtSampRate, beamWidth, relBeamWidth,
                     weBeamWidth, zsBeamWidth, maxModel,
                     insPen, acScale, pronScale, lmScale, fastlmlaBeam);
 
@@ -400,10 +400,10 @@ void Decoder::recognize(char *fn) {
             obsBlock[i] = &obs[(frameProc + i) % outpBlocksize];
 
 #ifdef DEBUG_TRACE
-         fprintf(stdout, "\nProcessing frame %d :\n", frameProc);
+         // fprintf(stdout, "\nProcessing frame %d :\n", frameProc);
 #endif
          
-         ProcessFrame (_decInst, obsBlock, outpBlocksize, _xfInfo.inXForm);
+         ProcessFrame (obsBlock, outpBlocksize, _xfInfo.inXForm);
          if (bestAlignInfo)
             this->AnalyseSearchSpace (bestAlignInfo);
          ++frameProc;
@@ -419,7 +419,7 @@ void Decoder::recognize(char *fn) {
       for (i = 0; i < bs; ++i)
          obsBlock[i] = &obs[(frameProc + i) % outpBlocksize];
       
-      ProcessFrame (_decInst, obsBlock, bs, _xfInfo.inXForm);
+      ProcessFrame (obsBlock, bs, _xfInfo.inXForm);
       if (bestAlignInfo)
          this->AnalyseSearchSpace (bestAlignInfo);
       ++frameProc;
@@ -432,7 +432,7 @@ void Decoder::recognize(char *fn) {
    printf ("CPU time %f  utterance length %f  RT factor %f\n",
            cpuSec, frameN*_decInst->frameDur, cpuSec / (frameN*_decInst->frameDur));
 
-   trans = TraceBack (&_transHeap, _decInst);
+   trans = TraceBack (&_transHeap);
 
    /* save 1-best transcription */
    /* the following is from HVite.c */
@@ -457,7 +457,7 @@ void Decoder::recognize(char *fn) {
    }
 
    if (latGen) {
-      lat = LatTraceBack (&_transHeap, _decInst);
+      lat = LatTraceBack (&_transHeap);
 
       /* prune lattice */
       if (lat && latPruneBeam < - LSMALL) {
@@ -532,7 +532,7 @@ void Decoder::recognize(char *fn) {
 
    ResetHeap (&_inputBufHeap);
    ResetHeap (&_transHeap);
-   CleanDecoderInst (_decInst);
+   CleanDecoderInst ();
 }
 
 BestInfo* Decoder::CreateBestInfo (char *fn, HTime frameDur)

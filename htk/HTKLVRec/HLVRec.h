@@ -55,6 +55,7 @@ typedef struct _RelToken RelToken;      /* Info about partial hypothesis relativ
 typedef struct _WordendHyp WordendHyp;      /* records word level tracback */
 typedef struct _AltWordendHyp AltWordendHyp;/* records alternatives for lattice tracback */
 
+
 #ifdef MODALIGN
 typedef struct _ModendHyp ModendHyp;    /* records model level tracback */
 
@@ -64,7 +65,6 @@ struct _ModendHyp {             /* stores info about one model(end) */
    short frame;                 /* end frame number of this model */
 };
 #endif
-
 
 struct _RelToken {
    LMState lmState;
