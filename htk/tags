@@ -2108,7 +2108,7 @@ LLTC	HTKLib/HMath.h	/^   LLTC,          \/* L' part of Choleski decomposition *\
 LLTCOV	HTKLib/HModel.c	/^   DURATION, INVDIAGCOV, TRANSP, DPROB, LLTCOV, LLTCOVAR,$/;"	e	enum:__anon126	file:
 LLTCOVAR	HTKLib/HModel.c	/^   DURATION, INVDIAGCOV, TRANSP, DPROB, LLTCOV, LLTCOVAR,$/;"	e	enum:__anon126	file:
 LLink	HTKLib/HLabel.h	/^typedef struct _Label *LLink;$/;"	t	typeref:struct:_Label
-LMCACHE_NLA	HTKLVRec/HLVRec.h	255;"	d
+LMCACHE_NLA	HTKLVRec/HLVRec.h	260;"	d
 LMCache	HTKLVRec/HLVRec.h	/^typedef struct _LMCache LMCache;$/;"	t	typeref:struct:_LMCache
 LMCacheLA	HTKLVRec/HLVRec.h	/^typedef struct _LMCacheLA LMCacheLA;$/;"	t	typeref:struct:_LMCacheLA
 LMCacheLookaheadProb	HTKLVRec/HLVRec-LM.c	/^LMTokScore Decoder::LMCacheLookaheadProb (LMState lmState, int lmlaIdx, bool fastlmla)$/;"	f	class:Decoder
@@ -2129,8 +2129,8 @@ LMIdMapper	HTKLVRec/HLVLM.c	/^static LMId LMIdMapper(FSLM_ngram *nglm, char *w)$
 LMInfo	HLMLib/LPMerge.h	/^} LMInfo;$/;"	t	typeref:struct:__anon19
 LMInitial	HTKLVRec/HLVLM.c	/^LMState LMInitial (FSLM *lm)$/;"	f
 LMLACacheEntry	HTKLVRec/HLVRec.h	/^typedef  struct _LMLACacheEntry LMLACacheEntry;$/;"	t	typeref:struct:_LMLACacheEntry
-LMLA_CACHE_SIZE	HTKLVRec/HLVRec.h	188;"	d
-LMLA_HASH	HTKLVRec/HLVRec.h	189;"	d
+LMLA_CACHE_SIZE	HTKLVRec/HLVRec.h	193;"	d
+LMLA_HASH	HTKLVRec/HLVRec.h	194;"	d
 LMLA_nocache	HTKLVRec/HLVRec-LM.c	/^LMTokScore Decoder::LMLA_nocache (LMState lmState, int lmlaIdx)$/;"	f	class:Decoder
 LMLookAhead	HTKLVRec/HLVLM.c	/^LogFloat LMLookAhead (FSLM *lm, LMState src, PronId minPron, PronId maxPron)$/;"	f
 LMLookAhead_2gram	HTKLVRec/HLVLM.c	/^LogFloat LMLookAhead_2gram (FSLM *lm, LMState src, PronId minPron, PronId maxPron)$/;"	f
@@ -2490,7 +2490,6 @@ MMFIDMASK	HTKLib/HModel.c	/^   CLASS, XFORMWGTSET, CLASSXFORM, MMFIDMASK, PARAME
 MMFInfo	HTKLib/HModel.h	/^} MMFInfo;$/;"	t	typeref:struct:_MMFInfo
 MMIPrior	HTKTools/HMMIRest.c	/^static bool MMIPrior = FALSE;    \/* use MMI prior as I-smoothing prior *\/$/;"	v	file:
 MMITauI	HTKTools/HMMIRest.c	/^static float MMITauI = 0.0;        \/* I-smoothing tau for MMI prior in MPE training *\/$/;"	v	file:
-MMP_NBINS	HTKLVRec/HLVRec-propagate.c	1067;"	d	file:
 MODALIGN	HTKLVRec/config.h	56;"	d
 MODALIGN	HTKLVRec/config.h	59;"	d
 MOutP	HTKLib/HModel.c	/^LogFloat MOutP(Vector x, MixPDF *mp)$/;"	f
@@ -3518,7 +3517,7 @@ STACKSIZE	HTKTools/HSLab.c	144;"	d	file:
 STATE	HTKLib/HModel.c	/^   STATE, TMIX, MIXTURE, STREAM, SWEIGHTS,$/;"	e	enum:__anon126	file:
 STATE_KEY	HTKLib/HUtil.c	/^   TRANSP_KEY, STATE_KEY, DUR_KEY, WEIGHTS_KEY,$/;"	e	enum:__anon57	file:
 STATICPRIOR	HTKTools/HMMIRest.c	/^static bool STATICPRIOR = FALSE;$/;"	v	file:
-STATS_MAXT	HTKLVRec/HLVRec.h	156;"	d
+STATS_MAXT	HTKLVRec/HLVRec.h	161;"	d
 STLN_CON	HTKLVRec/HLVNet.c	/^  STLN_WORDEND, STLN_CON, STLN_MODEL$/;"	e	enum:_STLexNodeType	file:
 STLN_MODEL	HTKLVRec/HLVNet.c	/^  STLN_WORDEND, STLN_CON, STLN_MODEL$/;"	e	enum:_STLexNodeType	file:
 STLN_WORDEND	HTKLVRec/HLVNet.c	/^  STLN_WORDEND, STLN_CON, STLN_MODEL$/;"	e	enum:_STLexNodeType	file:
@@ -3981,8 +3980,8 @@ TMShowAccs	HTKLib/HTrain.c	/^void TMShowAccs(HMMSet *hset, int index)$/;"	f
 TMZeroAccs	HTKLib/HTrain.c	/^void TMZeroAccs(HMMSet *hset, int start, int end)$/;"	f
 TMixRec	HTKLib/HModel.h	/^} TMixRec;$/;"	t	typeref:struct:__anon114
 TNODE	HTKLib/HModel.c	/^   RCLASS=110, REGTREE, NODE, TNODE,$/;"	e	enum:__anon126	file:
-TOK_LMSTATE_EQ	HTKLVRec/HLVRec.h	122;"	d
-TOK_LMSTATE_LT	HTKLVRec/HLVRec.h	119;"	d
+TOK_LMSTATE_EQ	HTKLVRec/HLVRec.h	127;"	d
+TOK_LMSTATE_LT	HTKLVRec/HLVRec.h	124;"	d
 TPI	HTKLib/HMath.h	41;"	d
 TR	HTKTools/HHEd.c	/^                         LS , QS , TB , TR , AU , GQ , MD , ST , LT ,$/;"	e	enum:__anon144	file:
 TRANSP	HTKLib/HModel.c	/^   DURATION, INVDIAGCOV, TRANSP, DPROB, LLTCOV, LLTCOVAR,$/;"	e	enum:__anon126	file:
@@ -8223,6 +8222,7 @@ set_end_word	HTKLVRec/misc.h	/^    void set_end_word(char* str) {$/;"	f	class:Vo
 set_ids	HLMTools/Cluster.c	/^void set_ids(int start, int end, int unk)$/;"	f
 set_output_prefix	HLMTools/Cluster.c	/^void set_output_prefix(char *name)$/;"	f
 set_start_word	HTKLVRec/misc.h	/^    void set_start_word(char* str) {$/;"	f	class:Vocabulary
+set_we_tag	HTKLVRec/HLVRec.h	/^   void set_we_tag() {$/;"	f	struct:_RelToken
 setid	HLMTools/LGPrep.c	/^   int   setid;               \/* set index *\/$/;"	m	union:__anon26	file:
 setlist	HLMTools/LGPrep.c	/^   SetDef **setlist;          \/* array[0..MAX_SETS-1] of -> SetDef *\/$/;"	m	struct:__anon29	file:
 setup_all_counts	HLMTools/Cluster.c	/^void setup_all_counts(void)$/;"	f

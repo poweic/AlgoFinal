@@ -74,6 +74,11 @@ struct _RelToken {
 
    LMTokScore lmscore;          /* LM lookahead score for current word */
    WordendHyp *path;            /* word level path for traceback */
+
+   void set_we_tag() {
+     we_tag = (void *) ((long) we_tag | 1);
+   }
+
 #ifdef MODALIGN
    ModendHyp *modpath;          /* model level traceback */
 #endif

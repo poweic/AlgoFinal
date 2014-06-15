@@ -150,11 +150,13 @@ class Decoder {
     //==== These functions are moved here by coldsheep 0613
 
     // From propagate.c
+  
     void HandleWordend (LexNode *ln);
     void PropagateExternal (LexNodeInst *inst, bool handleWE, bool wintTree);
     void UpdateWordEndHyp (LexNodeInst *inst);
     void AddPronProbs (TokenSet *ts, int var);
     void MergeTokSet (TokenSet *src, TokenSet *dest, LogFloat score, bool prune);
+    void PropagateInternal ();
     void PropagateInternal (LexNodeInst *inst);
     void PropIntoNode (TokenSet *ts, LexNode *ln, bool updateLMLA);
 #ifdef MODALIGN
@@ -162,6 +164,12 @@ class Decoder {
 #endif
     void HandleSpSkipLayer (LexNodeInst *inst);
     void ProcessFrame (Observation **obsBlock, int nObs, AdaptXForm *xform);
+
+    void SetObservation (Observation **obsBlock, int nObs);
+    void WordEndBeamPruning (LexNodeInst* head, TokScore &beamLimit);
+    void ZSLayerBeamPruning (LexNodeInst* head, TokScore &beamLimit);
+    void RelaxBeamLimit ();
+
     void __collect_stats__ (TokenSet *instTS, int N); 
     void OptimizedLeftToRightInternalPropagation(LexNodeInst *inst, TokenSet* instTS, int N, SMatrix &trP, HLink &hmm);
 

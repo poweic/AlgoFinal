@@ -907,11 +907,12 @@ void Decoder::HandleSpSkipLayer (LexNodeInst *inst)
    }
 }
 
-inline TokScore findBestScore(LexNodeInst * head) {
+void Decoder::ZSLayerBeamPruning(LexNodeInst * head, TokScore& beamLimit) {
   TokScore bestScore = LZERO;
   for (; head; head = head->next )
     bestScore = std::max(bestScore, head->best);
-  return bestScore;
+
+  beamLimit = std::max(bestScore - _decInst->zsBeamWidth, _decInst->beamLimit);
 }
 
 
@@ -922,29 +923,7 @@ inline void eraseLinkedListNode(LexNodeInst* &head, LexNodeInst* prev, LexNodeIn
     head = inst->next;
 }
 
-/* ProcessFrame
-
-     Takes the observation vector and propatagets all tokens and
-     performs pruning as necessary.
-*/
-void Decoder::ProcessFrame (Observation **obsBlock, int nObs, AdaptXForm *xform) {
-   LexNodeInst *inst, *prev, *next;
-   TokScore beamLimit;
-   
-   inXForm = xform; /* sepcifies the transform to use */
-   
-   /* reset obs */
-   _decInst->obs = obsBlock[0];
-   _decInst->nObs = nObs;
-   for (int i = 0; i < nObs; ++i)
-      _decInst->obsBlock[i] = obsBlock[i];
-   _decInst->bestScore = LZERO;
-   _decInst->bestInst = NULL;
-   ++_decInst->frame;
-
-   if (_decInst->frame % gcFreq == 0)
-      GarbageCollectPaths ();
-
+void Decoder::PropagateInternal() {
    /* internal token propagation:
       order doesn't really matter, but we use the same as for external propagation */
    for (int l = 0; l < _decInst->nLayers; ++l) {
@@ -962,6 +941,92 @@ void Decoder::ProcessFrame (Observation **obsBlock, int nObs, AdaptXForm *xform)
 	 }
       }
    }
+}
+
+void Decoder::SetObservation(Observation **obsBlock, int nObs) {
+  _decInst->obs = obsBlock[0];
+  _decInst->nObs = nObs;
+  for (int i = 0; i < nObs; ++i)
+    _decInst->obsBlock[i] = obsBlock[i];
+  _decInst->bestScore = LZERO;
+  _decInst->bestInst = NULL;
+  ++_decInst->frame;
+}
+
+void Decoder::WordEndBeamPruning(LexNodeInst* head, TokScore &beamLimit) {
+  TokScore bestWEscore = LZERO;
+  LexNodeInst *next;
+
+  LexNodeInst* prev = NULL;
+  for (auto inst = head; inst; inst = next) {
+    next = inst->next;     /* store now, we might free inst below! */
+
+    if (inst->best < beamLimit) {  /* global main beam */
+      eraseLinkedListNode(head, prev, inst);
+      DeactivateNode (inst->node);
+    }
+    else {
+      HandleWordend (inst->node);
+      bestWEscore = std::max(bestWEscore, inst->best);
+      prev = inst;
+    }
+  }
+
+  beamLimit = std::max(bestWEscore - _decInst->weBeamWidth, _decInst->beamLimit); /* global beam is tighter */
+}
+
+void Decoder::RelaxBeamLimit() {
+
+   const size_t MMP_NBINS = 128;
+   if (_decInst->maxModel > 0) {
+      int hist[MMP_NBINS];
+
+      for (int i = 0; i < MMP_NBINS; ++i)
+         hist[i] = 0;
+      
+      int nModel = 0;
+      LogFloat binWidth = _decInst->curBeamWidth / MMP_NBINS;
+      /* fill histogram */
+      for (int l = 0; l < _decInst->nLayers; ++l) {
+         for (auto inst = _decInst->instsLayer[l]; inst; inst = inst->next) {
+            if (inst->best <= LSMALL)
+	      continue;
+
+	    int bin = (_decInst->bestScore - inst->best) / binWidth;
+	    if (bin < MMP_NBINS) {
+	      ++hist[bin];
+	      ++nModel;
+	    }
+         }
+      }
+      
+      if (nModel <= _decInst->maxModel) {
+         /* slowly increase beamWidth again */
+         _decInst->curBeamWidth *= dynBeamInc;
+         if (_decInst->curBeamWidth > _decInst->beamWidth)
+            _decInst->curBeamWidth = _decInst->beamWidth;
+      }
+   }
+
+   _decInst->beamLimit = _decInst->bestScore - _decInst->curBeamWidth;
+}
+
+/* ProcessFrame
+
+     Takes the observation vector and propatagets all tokens and
+     performs pruning as necessary.
+*/
+void Decoder::ProcessFrame (Observation **obsBlock, int nObs, AdaptXForm *xform) {
+   TokScore beamLimit;
+   
+   inXForm = xform; /* sepcifies the transform to use */
+   
+   /* reset obs */
+   SetObservation(obsBlock, nObs);
+
+   GarbageCollectPaths ();
+
+   PropagateInternal();
 
    /* now for all LN_MODEL nodes inst->best is set, this is used to determine 
       the lower beam limit */
@@ -975,51 +1040,29 @@ void Decoder::ProcessFrame (Observation **obsBlock, int nObs, AdaptXForm *xform)
       /* update word end time and score in tok->path when passing
          through the appropriate layer */
       if (l == _decInst->net->wordEndLayerId) {
-         for (inst = head; inst; inst = inst->next)
+         for (auto inst = head; inst; inst = inst->next)
             UpdateWordEndHyp (inst);
       }
 
-      /*** wordend beam pruning ***/
       beamLimit = _decInst->beamLimit;
-      if ((_decInst->weBeamWidth < _decInst->beamWidth) && (l == LAYER_WE)) {
-         TokScore bestWEscore = LZERO;
-
-         prev = NULL;
-         for (inst = head; inst; inst = next) {
-            next = inst->next;     /* store now, we might free inst below! */
-
-            if (inst->best < beamLimit) {  /* global main beam */
-	      eraseLinkedListNode(head, prev, inst);
-	      DeactivateNode (inst->node);
-	    }
-            else {
-               HandleWordend (inst->node);
-	       bestWEscore = std::max(bestWEscore, inst->best);
-               prev = inst;
-            }
-         }
-
-	 beamLimit = std::max(bestWEscore - _decInst->weBeamWidth, _decInst->beamLimit); /* global beam is tighter */
-      }
-      /* Z..S layer pruning */
-      else if ((_decInst->zsBeamWidth < _decInst->beamWidth) && (l == LAYER_ZS || l == LAYER_SA)) {
-         TokScore bestScore = findBestScore(head);
-	 beamLimit = std::max(bestScore - _decInst->zsBeamWidth, _decInst->beamLimit);
-      }
+      if ((_decInst->weBeamWidth < _decInst->beamWidth) && (l == LAYER_WE))
+	WordEndBeamPruning(head, beamLimit);
+      else if ((_decInst->zsBeamWidth < _decInst->beamWidth) && (l == LAYER_ZS || l == LAYER_SA))
+	ZSLayerBeamPruning(head, beamLimit);
 
       /* Due to the layer-by-layer structure inst->best values for
          LN_CON and LN_WORDEND nodes are set before they are examined
          for pruning purposes, although they were not available when the 
          beamlimit  was set.
       */
-      prev = NULL;
-      for (inst = head; inst; inst = next) {
-         next = inst->next;     /* store now, we might free inst below! */
+      LexNodeInst* prev = NULL, *next = NULL;
+      for (auto inst = head; inst; inst = next) {
+	 /* store now, we might free inst below! */
+         next = inst->next;     
          
-         if (inst->node->type != LN_WORDEND && inst->node->lmlaIdx != 0 &&
-             inst->ts->n > 0) {
-
-            if (inst->ts[0].score >= beamLimit)       /* don't bother if inst will be pruned anyway */
+         if (inst->node->type != LN_WORDEND && inst->node->lmlaIdx != 0 && inst->ts->n > 0) {
+	    /* don't bother if inst will be pruned anyway */
+            if (inst->ts[0].score >= beamLimit)       
                UpdateLMlookahead (inst->node);
 
 	    /* UpLMLA might have killed the entire TS, esp. in latlm */
@@ -1051,67 +1094,19 @@ void Decoder::ProcessFrame (Observation **obsBlock, int nObs, AdaptXForm *xform)
 	   if (H != _decInst->net->hmmSP) {
 	     int N = H->numStates;
 	     TokenSet *ts = &inst->ts[N-1];
-	     for (int i = 0; i < ts->n; ++i) {
-	       RelToken *tok = &ts->relTok[i];
-	       tok->we_tag = (void *) ((long) tok->we_tag | 1);
-	     }
+	     for (int i = 0; i < ts->n; ++i)
+	       ts->relTok[i].set_we_tag();
 	   }
 	 }
 
-	 PropagateExternal (inst, !(_decInst->weBeamWidth < _decInst->beamWidth) || (l == LAYER_SIL) || (l == LAYER_AB), l == LAYER_BY);
+	 bool handleWE = !(_decInst->weBeamWidth < _decInst->beamWidth) || (l == LAYER_SIL) || (l == LAYER_AB);
+	 PropagateExternal (inst, handleWE, l == LAYER_BY);
 
 	 prev = inst;
       } /* for inst */
    }    /* for layer */
-
-#define MMP_NBINS 128
-   if (_decInst->maxModel > 0) {
-      int bin, nhist, hist[MMP_NBINS];
-      LogFloat binWidth;
-      
-      binWidth = _decInst->curBeamWidth / MMP_NBINS;
-      nhist = 0;
-      for (int i = 0; i < MMP_NBINS; ++i)
-         hist[i] = 0;
-      
-      
-      /* fill histogram */
-      for (int l = 0; l < _decInst->nLayers; ++l) {
-         for (inst = _decInst->instsLayer[l]; inst; inst = inst->next) {
-            if (inst->best > LSMALL) { 
-               bin = (_decInst->bestScore - inst->best) / binWidth;
-               assert (bin >= 0);       /* best is either LZERO or <= _decInst->bestScore */
-               if (bin < MMP_NBINS) {
-                  ++hist[bin];
-                  ++nhist;
-               }
-            }
-         }
-      }
-      
-#if DEBUG_MMP
-      for (int i = 0; i < MMP_NBINS; ++i)
-         printf ("i %d  %d\n",  i, hist[i]);
-#endif
-
-      if (nhist > _decInst->maxModel) {
-         int nMod = 0;
-         int i = -1;
-         while (nMod < _decInst->maxModel) {
-            ++i;
-            assert (i < MMP_NBINS);
-            nMod += hist[i];
-         }
-      }
-      else {
-         /* slowly increase beamWidth again */
-         _decInst->curBeamWidth *= dynBeamInc;
-         if (_decInst->curBeamWidth > _decInst->beamWidth)
-            _decInst->curBeamWidth = _decInst->beamWidth;
-      }
-   }
-
-   _decInst->beamLimit = _decInst->bestScore - _decInst->curBeamWidth;
+  
+   this->RelaxBeamLimit();
 
 #ifdef COLLECT_STATS
    ++_decInst->stats.nFrames;
@@ -1119,7 +1114,6 @@ void Decoder::ProcessFrame (Observation **obsBlock, int nObs, AdaptXForm *xform)
 
    PI_LR = PI_GEN = 0;
    _decInst->outPCache->cacheHit = _decInst->outPCache->cacheMiss = 0;
-
    _decInst->lmCache->transHit = _decInst->lmCache->transMiss = 0;
    _decInst->lmCache->laHit = _decInst->lmCache->laMiss = 0;
 

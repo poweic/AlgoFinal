@@ -286,6 +286,9 @@ static void SweepModPaths (MemHeap *heap)
 */
 void Decoder::GarbageCollectPaths ()
 {
+   if (_decInst->frame % gcFreq != 0)
+     return;
+
    int i, l, N;
    LexNodeInst *inst;
    TokenSet *ts;
