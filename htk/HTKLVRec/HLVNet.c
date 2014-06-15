@@ -987,7 +987,7 @@ void AssignWEIds(TLexNet *tnet)
 }
 
 
-static void CreateCompLMLA (MemHeap *heap, LMlaTree *laTree, TLexNet *tnet)
+void CreateCompLMLA (MemHeap *heap, LMlaTree *laTree, TLexNet *tnet)
 {
    int i, nComp;
    TLexNode *ln;
@@ -1044,7 +1044,7 @@ static void CreateCompLMLA (MemHeap *heap, LMlaTree *laTree, TLexNet *tnet)
 /*
 
 */
-static void InitLMlaTree(LexNet *net, TLexNet *tnet)
+void InitLMlaTree(LexNet *net, TLexNet *tnet)
 {
    LMlaTree *laTree;
 
@@ -1478,148 +1478,6 @@ LexNet *CreateLexNet (MemHeap *heap, Vocab *voc, HMMSet *hset,
 
 
 /* -------------- vocab handling --------------- */
-
-bool CompareBasePron (Pron b, Pron p)
-{
-   int i;
-
-   if (p->nphones != b->nphones + 1)
-      return FALSE;
-   
-   for (i = 0; i < b->nphones; ++i)
-      if (p->phones[i] != b->phones[i])
-         return FALSE;
-   
-   return TRUE;
-}
-
-/*
-   ConvertSilDict
-
-     sort the prons into -/sp/sil order, i.e p->next = p_sp; p_sp->next = p_sil
-     and mark - prons.
-*/
-void ConvertSilDict (Vocab *voc, LabId spLab, LabId silLab, 
-                     LabId startLab, LabId endLab)
-{
-   int i, j, nPron, maxnPron;
-   Word word;
-   Pron p, *pSort;
-   LabId l;
-
-   maxnPron = 15;
-   pSort = (Pron *) New (&gcheap, maxnPron * sizeof (Pron));
-
-   /* iterate over all words */
-   for (i = 0; i < VHASHSIZE; i++)
-      for (word = voc->wtab[i]; word ; word = word->next) {
-         /* skip START/END words */
-         if (word->wordName == startLab || word->wordName == endLab || word->nprons == 0)
-            continue;
-
-         if ((word->nprons % 3) != 0)
-            HError (9999, "ConvertSilDict: word '%s' does not have -/sp/sil variants",
-                    word->wordName->name);
-
-         if (word->nprons  > maxnPron) {
-            Dispose (&gcheap, pSort);
-            maxnPron = word->nprons ;
-            pSort = (Pron *) New (&gcheap, maxnPron * sizeof (Pron));
-         }
-         nPron = 0;
-         for (j = 0; j < maxnPron; ++j)
-            pSort[j] = NULL;
-
-         /* find - variants */
-         for (p = word->pron; p; p = p->next) {
-            l = p->phones[p->nphones - 1];
-            if (l == spLab) 
-               p->aux = (Ptr) 2;
-            else if (l == silLab)
-               p->aux = (Ptr) 3;
-            else {
-               p->aux = (Ptr) 1;        /* mark pron for CreateLexNet !! */
-               pSort[nPron] = p;
-               pSort[nPron+1] = pSort[nPron+2] = NULL;
-               nPron += 3;
-               assert (nPron <= maxnPron);
-            }
-         }
-         assert (nPron == word->nprons);
-
-         /* sort sp/sil variants */
-         for (p = word->pron; p; p = p->next) {
-            if (p->aux > (Ptr) 1) {   /* ignore - variant */
-               for (j = 0; j < nPron; j += 3) {
-                  if (CompareBasePron (pSort[j], p)) {
-                     assert (j + (((int) p->aux) - 1) <= nPron);
-                     pSort [j + (((int) p->aux) - 1)] = p;
-                     p->aux = (Ptr) 0;  /* unmark pron for CreateLexNet !! */
-                     break;     /* next p */
-                  }
-               }
-            }
-         }
-
-         /* create linked list */
-         for (j = 0; j < nPron-1; ++j) {
-            pSort[j]->next = pSort[j+1];
-            if (!pSort[j])
-               HError (9999, "ConvertSilDict: word '%s' does not have -/sp/sil variants",
-                       word->wordName->name);
-         }
-         if (!pSort[nPron - 1])
-            HError (9999, "ConvertSilDict: word '%s' does not have -/sp/sil variants",
-                    word->wordName->name);
-         pSort[nPron-1]->next = NULL;
-         
-         word->pron = pSort[0];
-      } /* next word */
-   
-   Dispose (&gcheap, pSort);
-}
-
-/*
-   MarkAllProns
-
-     mark all prons for inclusion in LexNet
-*/
-void MarkAllProns (Vocab *voc)
-{
-   int i;
-   Word word;
-   Pron pron;
-
-   for (i = 0; i < VHASHSIZE; i++)
-      for (word = voc->wtab[i]; word ; word = word->next) {
-         /*          word->aux  = (Ptr) 1; */
-         for (pron = word->pron; pron ; pron = pron->next) {
-            pron->aux  = (Ptr) 1;
-         }
-      }
-}
-
-void MarkAllWords (Vocab *voc)
-{
-   int i;
-   Word word;
-
-   for (i = 0; i < VHASHSIZE; i++)
-      for (word = voc->wtab[i]; word ; word = word->next) {
-         word->aux  = (Ptr) 1;
-      }
-}
-
-void UnMarkAllWords (Vocab *voc)
-{
-   int i;
-   Word word;
-
-   for (i = 0; i < VHASHSIZE; i++)
-      for (word = voc->wtab[i]; word ; word = word->next) {
-         word->aux  = (Ptr) 0;
-      }
-}
 
 void MarkAllWordsfromLat (Vocab *voc, Lattice *lat, bool silDict)
 {

@@ -205,23 +205,26 @@ class TLexNet {
     LabId *lexP;
 
     /* the following all correspond to real nodes in the final LexNet */
-    int nlexAB;          /* hastable of A-B contexts */
-    TLexNode *lexABhash[LEX_CON_HASH_SIZE];
-    int nlexYZ;         /* hastable of Y-Z contexts */
-    TLexNode *lexYZhash[LEX_CON_HASH_SIZE];
-    int nlexZS;         /* hastable of Z - (A+'sil') contexts */
-    TLexNode *lexZShash[LEX_CON_HASH_SIZE];
-    int nlexSA;         /* hastable of (Z+'sil') - A contexts */
-    TLexNode *lexSAhash[LEX_CON_HASH_SIZE];
+    int nlexAB;
+    int nlexYZ;
+    int nlexZS;
+    int nlexSA;
+    int nNodeA;
+    int nNodeZ;
 
-    int nNodeA;         /* hastable of A LexNodes */
-    TLexNode *nodeAhash[LEX_MOD_HASH_SIZE];
-    int nNodeZ;         /* hastable of Z LexNodes */
-    TLexNode *nodeZhash[LEX_MOD_HASH_SIZE];
+    TLexNode *lexABhash[LEX_CON_HASH_SIZE];  /* hastable of A-B contexts */
+    TLexNode *lexYZhash[LEX_CON_HASH_SIZE];  /* hastable of Y-Z contexts */
+    TLexNode *lexZShash[LEX_CON_HASH_SIZE];  /* hastable of Z - (A+'sil') contexts */
+    TLexNode *lexSAhash[LEX_CON_HASH_SIZE];  /* hastable of (Z+'sil') - A contexts */
+    TLexNode *nodeAhash[LEX_MOD_HASH_SIZE];  /* hastable of A LexNodes */
+    TLexNode *nodeZhash[LEX_MOD_HASH_SIZE];  /* hastable of Z LexNodes */
 
-    int nNodeBY;         /* linked list of nodes in main prefix tree B -- Y */
+    /* linked list of nodes in main prefix tree B -- Y */
+    int nNodeBY;
     TLexNode *nodeBY;
-    int nNodeSIL;         /* linked list of silencs (sil/sp) nodes between ZS and SA */
+
+    /* linked list of silencs (sil/sp) nodes between ZS and SA */
+    int nNodeSIL;
     TLexNode *nodeSIL;
 
     int nNodesLayer[NLAYERS]; /* number of nodes in each layer */
@@ -267,46 +270,41 @@ struct _LMlaTree {
    CompLMlaNode *compNode;      /* [0..nCompNodes-1] arry of entries */
 };
 
-
 void InitLVNet(void);
 
 /* build lexicon network for recognition for Vocab and HMMSet */
-
-LexNet *CreateLexNet (MemHeap *heap, Vocab *voc, HMMSet *hset, 
-                      char *startWord, char *endWord, bool silDict);
+LexNet *CreateLexNet (MemHeap *heap, Vocab *voc, HMMSet *hset,
+    char *startWord, char *endWord, bool silDict);
+void InitLMlaTree(LexNet *net, TLexNet *tnet);
+LexNet *ConvertTLex2Lex (MemHeap *heap, TLexNet *tnet);
 
 TLexNode *NewTLexNodeMod (MemHeap *heap, TLexNet *net, int layerId, HLink hmm);
 TLexNode *NewTLexNodeWe  (MemHeap *heap, TLexNet *net, int layerId, Pron pron);
 TLexNode *NewTLexNodeCon (MemHeap *heap, TLexNet *net, int layerId, LabId lc, LabId rc);
 
-TLexConNode *FindAddTLCN (MemHeap *heap, TLexNet *net, int layerId, int *n, TLexConNode *lcnHashTab[], LabId lc, LabId rc);
-TLexNode *FindAddTLexNode (MemHeap *heap, TLexNet *net, int layerId, int *n, TLexNode *lnHashTab[], LexNodeType type , HLink hmm);
+TLexConNode *FindAddTLCN (MemHeap *heap, TLexNet *net, int layerId,
+    int *n, TLexConNode *lcnHashTab[], LabId lc, LabId rc);
+
+TLexNode *FindAddTLexNode (MemHeap *heap, TLexNet *net, int layerId,
+    int *n, TLexNode *lnHashTab[], LexNodeType type , HLink hmm);
+
 HLink FindTriphone (HMMSet *hset, LabId a, LabId b, LabId c);
 
 void AddLink (MemHeap *heap, TLexNode *start, TLexNode *end);
+
 TLexLink *FindHMMLink (TLexNode *ln, HLink hmm);
+int TraverseTree (TLexNode *ln, int start, int *lmlaCount);
+
 HLink FindHMM (HMMSet *hset, LabId id);
 void Handle1PhonePron (MemHeap *heap, TLexNet *net, Pron pron);
 TLexNode *CreateBoundary (MemHeap *heap, TLexNet *tnet, LabId labid, int modLayer, int weLayer);
 void CreateStartEnd (MemHeap *heap, TLexNet *tnet);
-int TraverseTree (TLexNode *ln, int start, int *lmlaCount);
 void AssignWEIds(TLexNet *tnet);
-static void CreateCompLMLA (MemHeap *heap, LMlaTree *laTree, TLexNet *tnet);
-static void InitLMlaTree(LexNet *net, TLexNet *tnet);
-LexNet *ConvertTLex2Lex (MemHeap *heap, TLexNet *tnet);
+void CreateCompLMLA (MemHeap *heap, LMlaTree *laTree, TLexNet *tnet);
 void WriteTLex (TLexNet *net, char *fn);
-LexNet *CreateLexNet (MemHeap *heap, Vocab *voc, HMMSet *hset,
-                      char *startWord, char *endWord, bool silDict);
-bool CompareBasePron (Pron b, Pron p);
 
-void ConvertSilDict (Vocab *voc, LabId spLab, LabId silLab, 
-                     LabId startLab, LabId endLab);
 
-void MarkAllProns (Vocab *vocab);
-void MarkAllWords (Vocab *vocab);
-void UnMarkAllWords (Vocab *vocab);
-void MarkAllWordsfromLat (Vocab *voc, Lattice *lat, bool silDict);
-
+void MarkAllWordsfromLat (Vocab* vocab, Lattice *lat, bool silDict);
 
 #ifdef __cplusplus
 }

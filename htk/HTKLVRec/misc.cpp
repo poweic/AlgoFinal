@@ -102,19 +102,19 @@ void Vocabulary::Process() {
 }
 
 void Vocabulary::ConvertSilDict () {
-  ::ConvertSilDict(&_vocab, spLab, silLab, startLab, endLab);
+  _vocab.ConvertSilDict(spLab, silLab, startLab, endLab);
 }
 
 void Vocabulary::MarkAllProns () {
-  ::MarkAllProns(&_vocab);
+  _vocab.MarkAllProns();
 }
 
 void Vocabulary::MarkAllWords () {
-  ::MarkAllWords(&_vocab);
+  _vocab.MarkAllWords();
 }
 
 void Vocabulary::UnMarkAllWords () {
-  ::UnMarkAllWords(&_vocab);
+  _vocab.UnMarkAllWords();
 }
 
 void Vocabulary::MarkAllWordsfromLat (Lattice* lat) {

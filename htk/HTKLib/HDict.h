@@ -40,6 +40,8 @@ extern "C" {
 typedef struct _DictEntry *Word;
 typedef struct _WordPron  *Pron;
 
+bool CompareBasePron (Pron b, Pron p);
+
 typedef struct _WordPron{   /* storage for each pronunciation */
    short pnum;     /* Pronunciation number 1..nprons */
    short nphones;  /* Number of phones in pronuciation */
@@ -59,7 +61,15 @@ typedef struct _DictEntry{
    void *aux;       /* hook used by HTK library modules for temp info */
 } DictEntry;
 
-typedef struct {
+class Vocab {
+public:
+   void MarkAllProns ();
+   void MarkAllWords ();
+   void UnMarkAllWords ();
+
+   void ConvertSilDict (LabId spLab, LabId silLab, LabId startLab, LabId endLab);
+
+public:
    int nwords;          /* total number of words */
    int nprons;          /* total number of prons */
    Word nullWord;       /* dummy null word/node */
@@ -69,7 +79,7 @@ typedef struct {
    MemHeap wordHeap;    /* for DictEntry structs  */
    MemHeap pronHeap;    /* for WordPron structs   */
    MemHeap phonesHeap;  /* for arrays of phones   */
-} Vocab;
+};
 
 
 void InitDict(void);
