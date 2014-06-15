@@ -280,9 +280,39 @@ void InitLVNet(void);
 LexNet *CreateLexNet (MemHeap *heap, Vocab *voc, HMMSet *hset, 
                       char *startWord, char *endWord, bool silDict);
 
+TLexNode *NewTLexNodeMod (MemHeap *heap, TLexNet *net, int layerId, HLink hmm);
+TLexNode *NewTLexNodeWe (MemHeap *heap, TLexNet *net, int layerId, Pron pron);
+TLexNode *NewTLexNodeCon (MemHeap *heap, TLexNet *net, int layerId, LabId lc, LabId rc);
+
+TLexConNode *FindAddTLCN (MemHeap *heap, TLexNet *net, int layerId, int *n, TLexConNode *lcnHashTab[], LabId lc, LabId rc);
+TLexNode *FindAddTLexNode (MemHeap *heap, TLexNet *net, int layerId, int *n, TLexNode *lnHashTab[], LexNodeType type , HLink hmm);
+HLink FindTriphone (HMMSet *hset, LabId a, LabId b, LabId c);
+
+void AddLink (MemHeap *heap, TLexNode *start, TLexNode *end);
+TLexLink *FindHMMLink (TLexNode *ln, HLink hmm);
+void CreateAnodes (MemHeap *heap, TLexNet *net);
+void CreateZnodes (MemHeap *heap, TLexNet *net);
+HLink FindHMM (HMMSet *hset, LabId id);
+void CreateSILnodes (MemHeap *heap, TLexNet *net);
+void Handle1PhonePron (MemHeap *heap, TLexNet *net, Pron pron);
+void CreateBYnodes (MemHeap *heap, TLexNet *net);
+TLexNode *CreateBoundary (MemHeap *heap, TLexNet *tnet, LabId labid, int modLayer, int weLayer);
+void CreateStartEnd (MemHeap *heap, TLexNet *tnet);
+int TraverseTree (TLexNode *ln, int start, int *lmlaCount);
+void AssignWEIds(TLexNet *tnet);
+static void CreateCompLMLA (MemHeap *heap, LMlaTree *laTree, TLexNet *tnet);
+static void InitLMlaTree(LexNet *net, TLexNet *tnet);
+LexNet *ConvertTLex2Lex (MemHeap *heap, TLexNet *tnet);
+void WriteTLex (TLexNet *net, char *fn);
+LexNet *CreateLexNet (MemHeap *heap, Vocab *voc, HMMSet *hset,
+                      char *startWord, char *endWord, bool silDict);
+bool CompareBasePron (Pron b, Pron p);
+
+void CollectPhoneStats (MemHeap *heap, TLexNet *net);
 
 void ConvertSilDict (Vocab *voc, LabId spLab, LabId silLab, 
                      LabId startLab, LabId endLab);
+
 void MarkAllProns (Vocab *vocab);
 void MarkAllWords (Vocab *vocab);
 void UnMarkAllWords (Vocab *vocab);

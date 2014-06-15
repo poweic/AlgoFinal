@@ -284,8 +284,34 @@ struct _LMCache {
    int transMiss;
    int laHit;
    int laMiss;
-};
 
+   void free() {
+     DeleteHeap(&nodeHeap);
+   }
+   
+   void reset() {
+     ResetHeap (&nodeHeap);
+     for (int i = 0; i < nNode; ++i)
+       node[i] = NULL;
+
+     transHit = transMiss = 0;
+     laHit = laMiss = 0;
+   }
+
+   LMNodeCache* alloc(int lmlaIdx) {
+     
+     LMNodeCache *n;
+
+     n = (LMNodeCache *) New (&nodeHeap, sizeof (LMNodeCache));
+     memset ((void *) n, 1, sizeof (LMNodeCache));  /* clear all src entries */
+     n->idx = lmlaIdx;
+     n->size = LMCACHE_NLA;
+     n->nextFree = n->nEntries = 0;
+
+     return n;
+
+   }
+};
 
 
 

@@ -38,48 +38,44 @@
 */
 void Decoder::UpdateLMlookahead(LexNode *ln)
 {
-   int i;
-   TokenSet *ts;
-   RelToken *tok;
-   unsigned int lmlaIdx;
-   LMTokScore lmscore;
-   RelTokScore bestDelta;
+  LMTokScore lmscore;
 
-   lmlaIdx = ln->lmlaIdx;
-   ts = ln->inst->ts;
+  TokenSet *ts = ln->inst->ts;
+  RelToken *tok	= ts->relTok;
+  RelTokScore bestDelta = LZERO;
+  unsigned int lmlaIdx = ln->lmlaIdx;
 
-   bestDelta = LZERO;
+  for (int i = 0; i < ts->n; ++i, ++tok) {
 
-   for (i = 0, tok = ts->relTok; i < ts->n; ++i, ++tok) {
+    if (!_decInst->fastlmla)
+      lmscore = LMCacheLookaheadProb (tok->lmState, lmlaIdx, FALSE);
+    else {    /* if we ever do fastLMLA, be careful as tok->lmscore might increase! */
+      lmscore = LMCacheLookaheadProb (tok->lmState, lmlaIdx, tok->delta < _decInst->fastlmlaBeam);
+      lmscore = std::min(lmscore, tok->lmscore);
+    }
 
-      if (!_decInst->fastlmla)
-         lmscore = LMCacheLookaheadProb (tok->lmState, lmlaIdx, FALSE);
-      else {    /* if we ever do fastLMLA, be careful as tok->lmscore might increase! */
-         lmscore = LMCacheLookaheadProb (tok->lmState, lmlaIdx, tok->delta < _decInst->fastlmlaBeam);
-	 lmscore = std::min(lmscore, tok->lmscore);
-      }
+    if (lmscore > LSMALL &&  tok->lmscore - lmscore > _decInst->maxLMLA)
+      lmscore = tok->lmscore - _decInst->maxLMLA;
 
-      if (lmscore > LSMALL &&  tok->lmscore - lmscore > _decInst->maxLMLA)
-         lmscore = tok->lmscore - _decInst->maxLMLA;
+    tok->delta += lmscore - tok->lmscore;     /* subtract previous lookahead */
+    bestDelta = std::max(bestDelta, tok->delta);
 
-      tok->delta += lmscore - tok->lmscore;     /* subtract previous lookahead */
-      bestDelta = std::max(bestDelta, tok->delta);
+    tok->lmscore = lmscore;   /* store current lookahead */
+  }
 
-      tok->lmscore = lmscore;   /* store current lookahead */
-   }
+  /* renormalise to new best score */
 
-   /* renormalise to new best score */
-
-   if (bestDelta > LSMALL) {
-      for (i = 0, tok = ts->relTok; i < ts->n; ++i, ++tok)
-         tok->delta -= bestDelta;
-      ts->score += bestDelta;
-   }
-   else {       /* short cut pruning for LMLA = LZERO */
-      ts->n = 0;
-      ts->score = LZERO;
-      ts->id = 0;
-   }
+  if (bestDelta > LSMALL) {
+    tok = ts->relTok;
+    for (int i = 0; i < ts->n; ++i, ++tok)
+      tok->delta -= bestDelta;
+    ts->score += bestDelta;
+  }
+  else {       /* short cut pruning for LMLA = LZERO */
+    ts->n = 0;
+    ts->score = LZERO;
+    ts->id = 0;
+  }
 }
 
 
@@ -104,54 +100,9 @@ LMCache* Decoder::CreateLMCache (MemHeap *heap)
    return cache;
 }
 
-static void FreeLMCache (LMCache *cache)
-{
-   DeleteHeap (&cache->nodeHeap);
-}
-
-static void ResetLMCache (LMCache *cache)
-{
-   int i;
-   
-   ResetHeap (&cache->nodeHeap);
-   for (i = 0; i < cache->nNode; ++i)
-      cache->node[i] = NULL;
-
-   cache->transHit = cache->transMiss = 0;
-   cache->laHit = cache->laMiss = 0;
-}
-
 static int LMCacheState_hash (LMState lmstate)
 {
    return ((unsigned int) lmstate % LMCACHE_NLA);
-}
-
-#if 0
-static int LMCacheTrans_hash (PronId pron)
-{
-   return ((unsigned int) pron % LMCACHE_NTRANS);
-}
-
-static int LMCacheLA_hash (int idx)
-{
-   return ((unsigned int) idx % LMCACHE_NLA);
-}
-#endif
-
-LMNodeCache* AllocLMNodeCache (LMCache *cache, int lmlaIdx)
-{
-   LMNodeCache *n;
-
-#if 0
-   printf ("new LMNodeCache %d\n", lmlaIdx);
-#endif
-   n = (LMNodeCache *) New (&cache->nodeHeap, sizeof (LMNodeCache));
-   memset ((void *) n, 1, sizeof (LMNodeCache));  /* clear all src entries */
-   n->idx = lmlaIdx;
-   n->size = LMCACHE_NLA;
-   n->nextFree = n->nEntries = 0;
-
-   return n;
 }
 
 /* LMCacheTransProb
@@ -161,49 +112,6 @@ LMNodeCache* AllocLMNodeCache (LMCache *cache, int lmlaIdx)
 LMTokScore Decoder::LMCacheTransProb (FSLM *lm, LMState src, PronId pronid, LMState *dest)
 {
    return _decInst->lmScale * LMTransProb (lm, src, pronid, dest);
-
-#if 0
-   LMCache *cache;
-   int hash;
-   LMStateCache *stateCache;
-   LMCacheTrans *entry;
-
-   cache = _decInst->lmCache;
-   hash = LMStateCache_hash (src);
-
-   for (stateCache = cache->state[hash]; stateCache; stateCache = stateCache->next)
-      if (stateCache->src == src)
-         break;
-   
-   if (stateCache) {  
-      /* touch this state */
-      stateCache->t = _decInst->frame;
-      
-      entry = &stateCache->trans[LMCacheTrans_hash (pronid)];
-      
-      if (entry->pronid == pronid) {
-         ++cache->transHit;
-         *dest = entry->dest;
-         return entry->prob;
-      }
-   }
-   else {
-      /* alloc new LMStateCache */
-      stateCache = AllocLMStateCache (cache, src);
-      stateCache->next = cache->state[hash];
-      cache->state[hash] = stateCache;
-
-      entry = &stateCache->trans[LMCacheTrans_hash (pronid)];
-   }
-
-   /* now entry points to the place to store the prob we are about to calulate */
-
-   ++cache->transMiss;
-   entry->pronid = pronid;
-   entry->prob = _decInst->lmScale * LMTransProb (lm, src, pronid, dest);
-   entry->dest = *dest;
-   return entry->prob;
-#endif
 }
 
 LMTokScore Decoder::LMLA_nocache (LMState lmState, int lmlaIdx)
@@ -267,9 +175,6 @@ LMTokScore Decoder::LMCacheLookaheadProb (LMState lmState, int lmlaIdx, bool fas
       }
       if (i < nodeCache->nEntries) {
          ++cache->laHit;
-#if 0         /* #### very expensive sanity check */
-         assert (entry->prob == LMLA_nocache (_decInst, lmState, lmlaIdx));
-#endif
          return entry->prob;
       }
       entry = &nodeCache->la[nodeCache->nextFree];
@@ -279,7 +184,7 @@ LMTokScore Decoder::LMCacheLookaheadProb (LMState lmState, int lmlaIdx, bool fas
    }
    else {
       /* alloc new LMNodeCache */
-      nodeCache = cache->node[lmlaIdx] = AllocLMNodeCache (cache, lmlaIdx);
+      nodeCache = cache->node[lmlaIdx] = cache->alloc(lmlaIdx);
 
       entry = &nodeCache->la[0];
    }

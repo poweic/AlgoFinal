@@ -34,29 +34,16 @@
 
 char *hlvrec_prop_vc_id = "$Id: HLVRec-propagate.c,v 1.1.1.1 2006/10/11 09:54:56 jal58 Exp $";
 
-
-static int winTok_cmp (const void *v1, const void *v2)
-{
-   RelToken **tok1,**tok2;
-
-   tok1 = (RelToken **) v1;
-   tok2 = (RelToken **) v2;
-   return ((int) ((*tok2)->delta - (*tok1)->delta));   /* reverse! i.e. largest first */
-}
-
 /* perform Bucket sort/Histogram pruning to reduce to _decInst->nTok tokens */
 void Decoder::TokSetBucketSortPruning(TokenSet *dest, const RelTokScore& deltaLimit,
     int nWinTok, RelToken* &winTok, TokScore &winScore) {
+
   const size_t NBINS = 64;
+
   int i, j;
 
-  int binLimit;
-
-  LogFloat binWidth, limit;
-
   dest->id = ++_decInst->tokSetIdCount;    /* #### new id always necessary? */
-
-  binWidth = deltaLimit * 1.001 / NBINS;   /* handle delta == deltaLimit case */
+  LogFloat binWidth = deltaLimit * 1.001 / NBINS;   /* handle delta == deltaLimit case */
 
   int n[NBINS] = {0};
 
@@ -69,7 +56,7 @@ void Decoder::TokSetBucketSortPruning(TokenSet *dest, const RelTokScore& deltaLi
     nTok += n[++i];
 
   if (nTok == _decInst->nTok) {
-    binLimit = i;
+    int binLimit = i;
 
     for (i = 0, j = 0; i < nWinTok; ++i) { 
       if ((int) (winTok[i].delta / binWidth) <= binLimit) {
@@ -83,7 +70,7 @@ void Decoder::TokSetBucketSortPruning(TokenSet *dest, const RelTokScore& deltaLi
     LogFloat bestDelta;
 
     /* do not include last bin */
-    limit = binWidth * i;
+    LogFloat limit = binWidth * i;
     nTok -= n[i]; 
 
     /* need to relax limit so that we get an extra (_decInst->nTok - nTok) tokens */
@@ -200,10 +187,7 @@ void Decoder::FindWinningToken(TokenSet *src, TokenSet *dest, LogFloat score,
      _decInst->nTok best tokens in different LM states.
 
 */
-void Decoder::MergeTokSet (TokenSet *src, TokenSet *dest, LogFloat score, bool prune) 
-{
-   int i, j;
-
+void Decoder::MergeTokSet (TokenSet *src, TokenSet *dest, LogFloat score, bool prune) {
    /* empty dest tokenset -> just copy src */
    if (dest->n == 0) {   
       *dest = *src;
@@ -283,74 +267,71 @@ void Decoder::__collect_stats__ (TokenSet *instTS, int N) {
 static int PI_LR = 0;
 static int PI_GEN = 0;
 
-void Decoder::OptLeftToRightPropagateInternal(LexNodeInst *inst, TokenSet* instTS, int N, SMatrix &trP, HLink &hmm) 
-{
+void Decoder::OptLeftToRightPropagateInternal(LexNodeInst *inst, TokenSet* instTS, int N, SMatrix &trP, HLink &hmm) {
 
-      PI_LR++;
-      LogFloat bestScore = LZERO;
-      
-      /* loop transition for state N-1 (which has no forward trans) */
-      instTS[N-2].score += trP[N-1][N-1];
+  PI_LR++;
+  LogFloat bestScore = LZERO;
 
-      for (int i = N-2; i >=2; --i) {             /* for all internal states, except N-1 */
-	 /* ts is an array of tokenSet ( of the type TokenSet* ) ,
-	  * starting from state 0 to stae N ( N = 5 typically ). */
-         TokenSet* ts = &instTS[i-1];
-         
-         if (ts->n > 0) {
-            /* propagate forward from state i */
+  /* loop transition for state N-1 (which has no forward trans) */
+  instTS[N-2].score += trP[N-1][N-1];
 
-            /* only propagate to next -- no skip!! ( i.e. i->i+1 no i->i+2 ) */
-            MergeTokSet (ts, ts+1 , trP[i][i+1], (!mergeTokOnly));
-            
-            /* loop transition */
-            ts->score += trP[i][i];
-         }
-      }
-      
-      /* entry transition i=1 -> j=2 */
-      if ((instTS[0].n > 0) && (trP[1][2] > LSMALL)) {
-         MergeTokSet (&instTS[0], &instTS[1], trP[1][2], (!mergeTokOnly));
-      }
-      
-      /* output probabilities */
-      for (int i = 2; i < N; ++i) {             /* for all internal states */
-         if (instTS[i-1].n > 0) {
-            LogFloat outP = cOutP (_decInst->obs, hmm, i);
-            instTS[i-1].score += outP;         /* only change top score */
-            if (instTS[i-1].score > bestScore)
-               bestScore = instTS[i-1].score;
-         }
-      }
-      inst->best = bestScore;
-      
-      instTS[0].n = 0;             /* clear entry state */
-      instTS[0].id = 0;
-      
-      instTS[N-1].n = 0;           /* clear exit state */
-      instTS[N-1].id = 0;
-      
-      /* exit transition i=N-1 -> j=N */
-      /* don't prune -- beam stil refers to last frame's scores, here we have 
-	 already added this frame's outP */
-      if (instTS[N-2].n > 0)
-         MergeTokSet (&instTS[N-2], &instTS[N-1], trP[N-1][N], FALSE);
-      
-      if (bestScore > _decInst->bestScore) {
-         _decInst->bestScore = bestScore;
-         _decInst->bestInst = inst;
-      }
-      
-      __collect_stats__(instTS, N);
+  for (int i = N-2; i >=2; --i) {             /* for all internal states, except N-1 */
+    /* ts is an array of tokenSet ( of the type TokenSet* ) ,
+     * starting from state 0 to stae N ( N = 5 typically ). */
+    TokenSet* ts = &instTS[i-1];
+
+    if (ts->n > 0) {
+      /* propagate forward from state i */
+
+      /* only propagate to next -- no skip!! ( i.e. i->i+1 no i->i+2 ) */
+      MergeTokSet (ts, ts+1 , trP[i][i+1], (!mergeTokOnly));
+
+      /* loop transition */
+      ts->score += trP[i][i];
+    }
+  }
+
+  /* entry transition i=1 -> j=2 */
+  if ((instTS[0].n > 0) && (trP[1][2] > LSMALL)) {
+    MergeTokSet (&instTS[0], &instTS[1], trP[1][2], (!mergeTokOnly));
+  }
+
+  /* output probabilities */
+  for (int i = 2; i < N; ++i) {             /* for all internal states */
+    if (instTS[i-1].n > 0) {
+      LogFloat outP = cOutP (_decInst->obs, hmm, i);
+      instTS[i-1].score += outP;         /* only change top score */
+      if (instTS[i-1].score > bestScore)
+	bestScore = instTS[i-1].score;
+    }
+  }
+  inst->best = bestScore;
+
+  instTS[0].n = 0;             /* clear entry state */
+  instTS[0].id = 0;
+
+  instTS[N-1].n = 0;           /* clear exit state */
+  instTS[N-1].id = 0;
+
+  /* exit transition i=N-1 -> j=N */
+  /* don't prune -- beam stil refers to last frame's scores, here we have 
+     already added this frame's outP */
+  if (instTS[N-2].n > 0)
+    MergeTokSet (&instTS[N-2], &instTS[N-1], trP[N-1][N], FALSE);
+
+  if (bestScore > _decInst->bestScore) {
+    _decInst->bestScore = bestScore;
+    _decInst->bestInst = inst;
+  }
+
+  __collect_stats__(instTS, N);
 }
 
 /* PropagateInternal
 
      Internal token propagation
 */
-void Decoder::PropagateInternal (LexNodeInst *inst)
-{
-   TokenSet *ts;
+void Decoder::PropagateInternal (LexNodeInst *inst) {
 
    LexNode *ln = inst->node;
    HLink hmm = ln->data.hmm;
@@ -364,7 +345,7 @@ void Decoder::PropagateInternal (LexNodeInst *inst)
    /* Main beam pruning: prune tokensets before propagation
       the beamLimit is the one found during the last frame */
    int i = 1;
-   for (ts = &instTS[0]; i < N; ++i, ++ts) {
+   for (auto ts = &instTS[0]; i < N; ++i, ++ts) {
       if (ts->score < _decInst->beamLimit) {
          ts->n = 0;
          ts->id = 0;
