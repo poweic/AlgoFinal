@@ -25,5 +25,5 @@ options="-A -T 1 -a $ac_scale -s 1.0 -t $beam -z lat -q tvaldm -o M"
 $decoder $options -l $lat_dir -i $rec_result -w $LM -H $AM -S $scp $lexicon $tiedlist >> $LOG
 
 sed -i "s%CPU time.*$%%g" $LOG 
-#testing/diff.sh $LOG testing/L2_test.log
+testing/diff.sh $LOG testing/L2_test.log
 #rm $LOG

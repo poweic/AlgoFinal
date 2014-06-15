@@ -156,6 +156,14 @@ class Decoder {
     void UpdateWordEndHyp (LexNodeInst *inst);
     void AddPronProbs (TokenSet *ts, int var);
     void MergeTokSet (TokenSet *src, TokenSet *dest, LogFloat score, bool prune);
+
+    void TokSetBucketSortPruning(TokenSet *dest, const RelTokScore& deltaLimit,
+	int nWinTok, RelToken* &winTok, TokScore &winScore);
+
+    void FindWinningToken(TokenSet *src, TokenSet *dest, LogFloat score,
+	RelTokScore srcCorr, RelTokScore destCorr, RelTokScore deltaLimit,
+	RelToken* &winTok, int &nWinTok, int* nWin);
+
     void PropagateInternal ();
     void PropagateInternal (LexNodeInst *inst);
     void PropIntoNode (TokenSet *ts, LexNode *ln, bool updateLMLA);
@@ -171,7 +179,7 @@ class Decoder {
     void RelaxBeamLimit ();
 
     void __collect_stats__ (TokenSet *instTS, int N); 
-    void OptimizedLeftToRightInternalPropagation(LexNodeInst *inst, TokenSet* instTS, int N, SMatrix &trP, HLink &hmm);
+    void OptLeftToRightPropagateInternal(LexNodeInst *inst, TokenSet* instTS, int N, SMatrix &trP, HLink &hmm);
 
     // From HLVRec-LM.c
     LMTokScore LMLA_nocache (LMState lmState, int lmlaIdx);

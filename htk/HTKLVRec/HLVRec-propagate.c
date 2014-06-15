@@ -44,6 +44,155 @@ static int winTok_cmp (const void *v1, const void *v2)
    return ((int) ((*tok2)->delta - (*tok1)->delta));   /* reverse! i.e. largest first */
 }
 
+/* perform Bucket sort/Histogram pruning to reduce to _decInst->nTok tokens */
+void Decoder::TokSetBucketSortPruning(TokenSet *dest, const RelTokScore& deltaLimit,
+    int nWinTok, RelToken* &winTok, TokScore &winScore) {
+  const size_t NBINS = 64;
+  int i, j;
+
+  int binLimit;
+
+  LogFloat binWidth, limit;
+
+  dest->id = ++_decInst->tokSetIdCount;    /* #### new id always necessary? */
+
+  binWidth = deltaLimit * 1.001 / NBINS;   /* handle delta == deltaLimit case */
+
+  int n[NBINS] = {0};
+
+  for (i = 0; i < nWinTok; ++i)
+    ++n[(int) (winTok[i].delta / binWidth)];
+
+  int nTok = 0;
+  i = -1;
+  while (nTok < _decInst->nTok)
+    nTok += n[++i];
+
+  if (nTok == _decInst->nTok) {
+    binLimit = i;
+
+    for (i = 0, j = 0; i < nWinTok; ++i) { 
+      if ((int) (winTok[i].delta / binWidth) <= binLimit) {
+	dest->relTok[j] = winTok[i];
+	++j;
+      }
+    }
+  }
+  else {
+    int nBetter;
+    LogFloat bestDelta;
+
+    /* do not include last bin */
+    limit = binWidth * i;
+    nTok -= n[i]; 
+
+    /* need to relax limit so that we get an extra (_decInst->nTok - nTok) tokens */
+    /* #### very simplistic implementation -- imporve? */
+
+    bestDelta = limit;
+    do {
+      limit = bestDelta;
+      bestDelta = LZERO;
+      nBetter = 0;
+      for (i = 0, j = 0; i < nWinTok; ++i) {
+	if (winTok[i].delta >= limit)
+	  ++nBetter;
+	else if (winTok[i].delta > bestDelta)
+	  bestDelta = winTok[i].delta;
+      }
+    } while (nBetter < _decInst->nTok);
+
+    /* multiple tokens with delta == limit ==> delete some */
+    if (nBetter > _decInst->nTok) {  
+      for (i = 0; nBetter > _decInst->nTok; ++i)
+	if (winTok[i].delta == limit) {
+	  winTok[i].delta = LZERO;
+	  --nBetter;
+	}
+    }
+
+    for (i = 0, j = 0; i < nWinTok; ++i) { 
+      if (winTok[i].delta >= limit) {
+	dest->relTok[j] = winTok[i];
+	++j;
+      }
+    }
+  }
+
+  dest->n = _decInst->nTok;
+  dest->score = winScore;
+
+}
+
+void Decoder::FindWinningToken(TokenSet *src, TokenSet *dest, LogFloat score,
+    RelTokScore srcCorr, RelTokScore destCorr, RelTokScore deltaLimit,
+    RelToken* &winTok, int &nWinTok, int* nWin) {
+
+  RelToken *srcTok = src->relTok, *destTok = dest->relTok;
+  int nSrcTok = src->n, nDestTok = dest->n;
+  int winLoc;
+  do {
+    if (TOK_LMSTATE_EQ(srcTok, destTok)) {
+      /* pick winner */
+      if (src->score + srcTok->delta + score > dest->score + destTok->delta) {
+	/* store srcTok */
+	winTok[nWinTok] = *srcTok;
+	winTok[nWinTok].delta += srcCorr + score;
+	winLoc = 0;
+      } else {
+	/* store destTok */
+	winTok[nWinTok] = *destTok;
+	winTok[nWinTok].delta += destCorr;
+	winLoc = 1;
+      }
+      ++srcTok;
+      --nSrcTok;
+      ++destTok;
+      --nDestTok;
+    } else if (TOK_LMSTATE_LT(srcTok, destTok)) {
+      /* store srcTok */
+      winTok[nWinTok] = *srcTok;
+      winTok[nWinTok].delta += srcCorr + score;
+      winLoc = 0;
+      ++srcTok;
+      --nSrcTok;
+    } else {
+      /* store destTok */
+      winTok[nWinTok] = *destTok;
+      winTok[nWinTok].delta += destCorr;
+      winLoc = 1;
+      ++destTok;
+      --nDestTok;
+    }
+
+    if (winTok[nWinTok].delta >= deltaLimit) {      /* keep or prune? */
+      ++nWinTok;
+      ++nWin[winLoc];
+    }
+
+  } while (nSrcTok != 0 && nDestTok != 0);
+
+  /* Add left overs to winTok set, only at most one of the two loops will
+   * actually do something */
+  for (int i = nSrcTok; i > 0; --i, ++srcTok) {
+    winTok[nWinTok] = *srcTok;
+    winTok[nWinTok].delta += srcCorr + score;
+    if (winTok[nWinTok].delta >= deltaLimit) {     /* keep or prune? */
+      ++nWinTok;
+      ++nWin[0];
+    }
+  }
+
+  for (int i = nDestTok; i > 0; --i, ++destTok) {
+    winTok[nWinTok] = *destTok;
+    winTok[nWinTok].delta += destCorr;
+    if (winTok[nWinTok].delta >= deltaLimit) {     /* keep or prune? */
+      ++nWinTok;
+      ++nWin[1];
+    }
+  }
+}
+
 /* MergeTokSet
 
      Merge TokenSet src into dest after adding score to all src scores
@@ -72,16 +221,8 @@ void Decoder::MergeTokSet (TokenSet *src, TokenSet *dest, LogFloat score, bool p
 #endif
    else {    /* expensive MergeTokSet, #### move into separate function */
       /* exploit & retain RelTok order (sorted by lmState?) */
-      int nWin[2], winLoc;
       TokScore winScore;
       RelTokScore srcCorr, destCorr, deltaLimit;
-
-      RelToken *winTok = _decInst->winTok;
-      int nWinTok = 0;
-
-      RelToken *srcTok = src->relTok, *destTok = dest->relTok;
-
-      int nSrcTok = src->n, nDestTok = dest->n;
 
       /* first go at sorted Tok merge, very explicit, no optimisation at all, yet! */
 
@@ -103,71 +244,14 @@ void Decoder::MergeTokSet (TokenSet *src, TokenSet *dest, LogFloat score, bool p
 
       /* find winning tokens */
       /* location where winnning toks came from: 0 == src, 1 == dest */
-      nWin[0] = nWin[1] = 0;    
-      do {
-         if (TOK_LMSTATE_EQ(srcTok, destTok)) {
-            /* pick winner */
-            if (src->score + srcTok->delta + score > dest->score + destTok->delta) {
-               /* store srcTok */
-               winTok[nWinTok] = *srcTok;
-               winTok[nWinTok].delta += srcCorr + score;
-               winLoc = 0;
-            } else {
-               /* store destTok */
-               winTok[nWinTok] = *destTok;
-               winTok[nWinTok].delta += destCorr;
-               winLoc = 1;
-            }
-            ++srcTok;
-            --nSrcTok;
-            ++destTok;
-            --nDestTok;
-         } else if (TOK_LMSTATE_LT(srcTok, destTok)) {
-            /* store srcTok */
-            winTok[nWinTok] = *srcTok;
-            winTok[nWinTok].delta += srcCorr + score;
-            winLoc = 0;
-            ++srcTok;
-            --nSrcTok;
-         } else {
-            /* store destTok */
-            winTok[nWinTok] = *destTok;
-            winTok[nWinTok].delta += destCorr;
-            winLoc = 1;
-            ++destTok;
-            --nDestTok;
-         }
-         
-         if (winTok[nWinTok].delta >= deltaLimit) {      /* keep or prune? */
-            ++nWinTok;
-            ++nWin[winLoc];
-         }
-
-      } while (nSrcTok != 0 && nDestTok != 0);
-
-      /* Add left overs to winTok set, only at most one of the two loops will
-       * actually do something */
-      for (i = nSrcTok; i > 0; --i, ++srcTok) {
-         winTok[nWinTok] = *srcTok;
-         winTok[nWinTok].delta += srcCorr + score;
-         if (winTok[nWinTok].delta >= deltaLimit) {     /* keep or prune? */
-            ++nWinTok;
-            ++nWin[0];
-         }
-      }
-
-      for (i = nDestTok; i > 0; --i, ++destTok) {
-         winTok[nWinTok] = *destTok;
-         winTok[nWinTok].delta += destCorr;
-         if (winTok[nWinTok].delta >= deltaLimit) {     /* keep or prune? */
-            ++nWinTok;
-            ++nWin[1];
-         }
-      }
+      RelToken *winTok = _decInst->winTok;
+      int nWinTok = 0;
+      int nWin[2] = {0, 0};
+      FindWinningToken(src, dest, score, srcCorr, destCorr, deltaLimit, winTok, nWinTok, nWin);
 
       if (nWinTok <= _decInst->nTok) {
          /* just copy */
-         for (i = 0; i < nWinTok; ++i)
+         for (int i = 0; i < nWinTok; ++i)
             dest->relTok[i] = winTok[i];
 
          dest->n = nWinTok;
@@ -180,82 +264,8 @@ void Decoder::MergeTokSet (TokenSet *src, TokenSet *dest, LogFloat score, bool p
          else
             dest->id = ++_decInst->tokSetIdCount;    /* new id */
 
-      } else {
-         /* perform Bucket sort/Histogram pruning to reduce to _decInst->nTok tokens */
-#define NBINS 64
-
-	 int binLimit;
-
-         LogFloat binWidth, limit;
-
-         dest->id = ++_decInst->tokSetIdCount;    /* #### new id always necessary? */
-
-         binWidth = deltaLimit * 1.001 / NBINS;   /* handle delta == deltaLimit case */
-
-         int n[NBINS] = {0};
-
-         for (i = 0; i < nWinTok; ++i)
-            ++n[(int) (winTok[i].delta / binWidth)];
-         
-         int nTok = 0;
-         i = -1;
-         while (nTok < _decInst->nTok)
-            nTok += n[++i];
-         
-         if (nTok == _decInst->nTok) {
-            binLimit = i;
-
-            for (i = 0, j = 0; i < nWinTok; ++i) { 
-               if ((int) (winTok[i].delta / binWidth) <= binLimit) {
-                  dest->relTok[j] = winTok[i];
-                  ++j;
-               }
-            }
-         }
-         else {
-            int nBetter;
-            LogFloat bestDelta;
-            
-            /* do not include last bin */
-            limit = binWidth * i;
-            nTok -= n[i]; 
-
-            /* need to relax limit so that we get an extra (_decInst->nTok - nTok) tokens */
-            /* #### very simplistic implementation -- imporve? */
-            
-            bestDelta = limit;
-            do {
-               limit = bestDelta;
-               bestDelta = LZERO;
-               nBetter = 0;
-               for (i = 0, j = 0; i < nWinTok; ++i) {
-                  if (winTok[i].delta >= limit)
-                     ++nBetter;
-		  else if (winTok[i].delta > bestDelta)
-		    bestDelta = winTok[i].delta;
-               }
-            } while (nBetter < _decInst->nTok);
-
-	    /* multiple tokens with delta == limit ==> delete some */
-            if (nBetter > _decInst->nTok) {  
-               for (i = 0; nBetter > _decInst->nTok; ++i)
-                  if (winTok[i].delta == limit) {
-                     winTok[i].delta = LZERO;
-                     --nBetter;
-                  }
-            }
-         
-            for (i = 0, j = 0; i < nWinTok; ++i) { 
-               if (winTok[i].delta >= limit) {
-                  dest->relTok[j] = winTok[i];
-                  ++j;
-               }
-            }
-         }
-
-         dest->n = _decInst->nTok;
-         dest->score = winScore;
-      }
+      } else 
+	TokSetBucketSortPruning(dest, deltaLimit, nWinTok, winTok, winScore);
    }
 }
 
@@ -273,7 +283,7 @@ void Decoder::__collect_stats__ (TokenSet *instTS, int N) {
 static int PI_LR = 0;
 static int PI_GEN = 0;
 
-void Decoder::OptimizedLeftToRightInternalPropagation(LexNodeInst *inst, TokenSet* instTS, int N, SMatrix &trP, HLink &hmm) 
+void Decoder::OptLeftToRightPropagateInternal(LexNodeInst *inst, TokenSet* instTS, int N, SMatrix &trP, HLink &hmm) 
 {
 
       PI_LR++;
@@ -340,7 +350,6 @@ void Decoder::OptimizedLeftToRightInternalPropagation(LexNodeInst *inst, TokenSe
 */
 void Decoder::PropagateInternal (LexNodeInst *inst)
 {
-   int i, j;
    TokenSet *ts;
 
    LexNode *ln = inst->node;
@@ -352,21 +361,23 @@ void Decoder::PropagateInternal (LexNodeInst *inst)
    assert (ln->type == LN_MODEL);               /* Model node */
    /* LM lookahead has already been updated in PropIntoNode() !!! */
 
-   /* main beam pruning: prune tokensets before propagation
+   /* Main beam pruning: prune tokensets before propagation
       the beamLimit is the one found during the last frame */
-   for (i = 1, ts = &instTS[0]; i < N; ++i, ++ts)
+   int i = 1;
+   for (ts = &instTS[0]; i < N; ++i, ++ts) {
       if (ts->score < _decInst->beamLimit) {
          ts->n = 0;
          ts->id = 0;
       }
+   }
 
    /* optimised version for L-R models */
    if (hmm->tIdx < 0) {
-      OptimizedLeftToRightInternalPropagation(inst, instTS, N, trP, hmm);
+      OptLeftToRightPropagateInternal(inst, instTS, N, trP, hmm);
       return;
    }
 
-   /* general (not left-to-right) PropagateInternal   */
+   /* General (not left-to-right) Propagate Internal   */
 
    /* temp storage for N tokensets  */
    TokenSet *tempTS = _decInst->tempTS[N];
@@ -376,7 +387,7 @@ void Decoder::PropagateInternal (LexNodeInst *inst)
    /* internal propagation; transition i -> j,  \forall 2 <= j <= N-1 */
 
    /* internal states */
-   for (j = 2; j < N; ++j) {
+   for (int j = 2; j < N; ++j) {
      tempTS[j-1].score = 0.0;
      tempTS[j-1].n = 0;
      tempTS[j-1].id = 0;
@@ -397,7 +408,7 @@ void Decoder::PropagateInternal (LexNodeInst *inst)
 
    /* internal states: copy temp array back and find best score */
    LogFloat bestScore = LZERO;
-   for (j = 1; j < N-1; ++j) {
+   for (int j = 1; j < N-1; ++j) {
      instTS[j] = tempTS[j]; // copy reltoks
 
      if (instTS[j].n > 0)
@@ -406,7 +417,7 @@ void Decoder::PropagateInternal (LexNodeInst *inst)
    inst->best = bestScore;
 
    /* exit state (j=N), merge directly into ints->ts */
-   j = N;
+   int j = N;
    instTS[j-1].n = 0;
    instTS[j-1].id = 0;
 
@@ -429,8 +440,7 @@ void Decoder::PropagateInternal (LexNodeInst *inst)
 }
 
 #ifdef MODALIGN
-void Decoder::UpdateModPaths (TokenSet *ts, LexNode *ln)
-{
+void Decoder::UpdateModPaths (TokenSet *ts, LexNode *ln) {
    if (ln->type == LN_CON)
       return;
 
@@ -557,7 +567,6 @@ void Decoder::PropagateExternal ( LexNodeInst *inst, bool handleWE, bool wintTre
 
 
 /* HandleWordend
-
      update traceback, add LM, update LM state, recombine tokens
 */
 void Decoder::HandleWordend (LexNode *ln)
