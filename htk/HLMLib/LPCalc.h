@@ -71,7 +71,7 @@ void InitBuildInfo(BuildInfo *bi);
     Setup structure to default values
 */
 
-Boolean FilterNGram(NGInputSet *inSet, UInt *gram, float *count, int nSize);
+bool FilterNGram(NGInputSet *inSet, UInt *gram, float *count, int nSize);
 /* 
     Read n-grams with words in word map 
 */

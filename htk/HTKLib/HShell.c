@@ -55,17 +55,17 @@ static int trace = 0;
 
 /* --------------------- Global Variables ------------------- */
 
-static Boolean infoPrinted = FALSE;      /* set when -A -B or -V is used */
-static Boolean abortOnError = FALSE;     /* causes HError to abort */
-static Boolean printVersionInfo = FALSE; /* request version info */
-static Boolean showConfig = FALSE;       /* show configuration params */
-static Boolean noNumEscapes = FALSE;     /* Prevent writing in \012 format */
-static Boolean natReadOrder = FALSE;     /* Preserve natural mach read order*/
-static Boolean natWriteOrder = FALSE;    /* Preserve natural mach write order*/
-static Boolean extendedFileNames = TRUE; /* allow extended file names */
+static bool infoPrinted = FALSE;      /* set when -A -B or -V is used */
+static bool abortOnError = FALSE;     /* causes HError to abort */
+static bool printVersionInfo = FALSE; /* request version info */
+static bool showConfig = FALSE;       /* show configuration params */
+static bool noNumEscapes = FALSE;     /* Prevent writing in \012 format */
+static bool natReadOrder = FALSE;     /* Preserve natural mach read order*/
+static bool natWriteOrder = FALSE;    /* Preserve natural mach write order*/
+static bool extendedFileNames = TRUE; /* allow extended file names */
 
 /* Global variable indicating VAX-order architecture for storing numbers */
-Boolean vaxOrder = FALSE;
+bool vaxOrder = FALSE;
 
 #define MAXEFS 5                        /* max num ext files to remember */
 
@@ -146,12 +146,12 @@ char * RegisterExtFileName(char *s)
    going back in time.  If the name is found and it occurs more
    than once, a warning is printed.
 */
-Boolean GetFileNameExt(char *logfn, char *actfn, long *st, long *en)
+bool GetFileNameExt(char *logfn, char *actfn, long *st, long *en)
 {
    int i, noccs;
    ExtFile *p;
-   Boolean found = FALSE;
-   Boolean ambiguous = FALSE;
+   bool found = FALSE;
+   bool ambiguous = FALSE;
 
    /* First count number of times logfn occurs in buffer */
    noccs = 0;
@@ -258,7 +258,7 @@ static void PrVInfo(char *s,char *sccs)
 }
 
 /* EXPORT->InfoPrinted: true if info printed by Shell */
-Boolean InfoPrinted(void)
+bool InfoPrinted(void)
 {
    VersionEntry *v;
 
@@ -300,7 +300,7 @@ static char *cfkmap[] = {
 };
 
 /* ReadConfName: read module or paramname field and cvt to ucase */
-static Boolean ReadConfName(Source *src, char *s)
+static bool ReadConfName(Source *src, char *s)
 {
    int i,c;
 
@@ -334,7 +334,7 @@ static ConfigEntry *FindConfEntry(char *user, char *name)
 
 /* NumHead: returns TRUE if the first two chars of a string 
             are ('+'|'-') digit | digit */
-static Boolean NumHead(char *s)
+static bool NumHead(char *s)
 {
    if (*s!='\0')
       if (isdigit((int) *s))
@@ -381,7 +381,7 @@ static ReturnStatus ReadConfigFile(char *fname)
    double x;
    Source src;
    ConfigEntry *e;
-   Boolean gotParam,hasUser;
+   bool gotParam,hasUser;
    char c,*s,buf[32],sbuf[MAXSTRLEN];
    char user[MAXSTRLEN],name[MAXSTRLEN],value[MAXSTRLEN];
    static int recurse = 0;
@@ -513,7 +513,7 @@ void PrintConfig(void)
 }
 
 /* EXPORT->GetConfig: return a list of selected config values */
-int GetConfig(char *user, Boolean incGlob, ConfParam **list, int max)
+int GetConfig(char *user, bool incGlob, ConfParam **list, int max)
 {
    ConfigEntry *e;
    int found = 0;
@@ -565,13 +565,13 @@ static int FindConfParm(ConfParam **list,int size,char *name,ConfKind kind)
 }
 
 /* EXPORT->HasConfParm: true if parameter exists with given name */
-Boolean HasConfParm(ConfParam **list, int size, char *name)
+bool HasConfParm(ConfParam **list, int size, char *name)
 {
    return (FindConfParm(list,size,name,AnyCKind) != -1);
 }
 
 /* EXPORT->GetConfStr: return string parameter with given name */
-Boolean GetConfStr(ConfParam **list,int size,char *name,char *str)
+bool GetConfStr(ConfParam **list,int size,char *name,char *str)
 {
    int i;
    
@@ -582,8 +582,8 @@ Boolean GetConfStr(ConfParam **list,int size,char *name,char *str)
    return FALSE;
 }
 
-/* EXPORT->GetConfBool: return Boolean parameter with given name */
-Boolean GetConfBool(ConfParam **list,int size,char *name, Boolean *b)
+/* EXPORT->GetConfBool: return bool parameter with given name */
+bool GetConfBool(ConfParam **list,int size,char *name, bool *b)
 {
    int i;
    
@@ -595,7 +595,7 @@ Boolean GetConfBool(ConfParam **list,int size,char *name, Boolean *b)
 }
 
 /* EXPORT->GetConfInt: return integer parameter with given name */
-Boolean GetConfInt(ConfParam **list,int size,char *name, int *ival)
+bool GetConfInt(ConfParam **list,int size,char *name, int *ival)
 {
    int i;
    
@@ -607,7 +607,7 @@ Boolean GetConfInt(ConfParam **list,int size,char *name, int *ival)
 }
 
 /* EXPORT->GetConfFlt: return float parameter with given name */
-Boolean GetConfFlt(ConfParam **list,int size,char *name, double *fval)
+bool GetConfFlt(ConfParam **list,int size,char *name, double *fval)
 {
    int i;
    
@@ -652,8 +652,8 @@ static char **arglist=defargs;/* actual arg list */
 static FILE *script = NULL;   /* script file if any */
 static int scriptcount = 0;   /* num words in script */
 static char scriptBuf[256];   /* buffer for current script arg */
-static Boolean scriptBufLoaded = FALSE;
-static Boolean wasQuoted;     /* true if next arg was quoted */
+static bool scriptBufLoaded = FALSE;
+static bool wasQuoted;     /* true if next arg was quoted */
 static ConfParam *cParm[MAXGLOBS];      /* config parameters */
 static int nParm = 0;
 
@@ -688,7 +688,7 @@ static char * ScriptWord(void)
 }
          
 /* GetNextArg: from either command line or script file */
-static char * GetNextArg(Boolean step)
+static char * GetNextArg(bool step)
 {
    char *s;
    
@@ -847,7 +847,7 @@ float GetChkedFlt(float min, float max, char * swtname)
 }
 
 /* EXPORT->GetIntEnvVar: get integer environment variable */
-Boolean GetIntEnvVar(char *envVar, int *value)
+bool GetIntEnvVar(char *envVar, int *value)
 {
    char *env;
    
@@ -888,7 +888,7 @@ static char *filtermap[] = {
 
 /* FilterSet: returns true and puts filter cmd in s if configuration
               parameter or environment variable set */
-static Boolean FilterSet(IOFilter filter, char *s)
+static bool FilterSet(IOFilter filter, char *s)
 {
    char *env;
  
@@ -922,11 +922,11 @@ static int maxTry = 1;
 #endif
 
 /* EXPORT->FOpen: return either a file or a pipe */
-FILE *FOpen(char *fname, IOFilter filter, Boolean *isPipe)
+FILE *FOpen(char *fname, IOFilter filter, bool *isPipe)
 {
    FILE *f;
    int i;
-   Boolean isInput;
+   bool isInput;
    char mode[8],cmd[1028];
 
    if (filter <= NoFilter){ /* then input */
@@ -963,7 +963,7 @@ FILE *FOpen(char *fname, IOFilter filter, Boolean *isPipe)
 }
 
 /* EXPORT->FClose: close the given file or pipe */
-void FClose(FILE *f, Boolean isPipe)
+void FClose(FILE *f, bool isPipe)
 {
 #ifndef NOPIPES
    if (isPipe){
@@ -1054,7 +1054,7 @@ void UnGetCh(int c, Source *src)
 }
 
 /* EXPORT->SkipLine: skip to next line in source */
-Boolean SkipLine(Source *src)
+bool SkipLine(Source *src)
 {
    int c;
    
@@ -1064,7 +1064,7 @@ Boolean SkipLine(Source *src)
 }
 
 /* EXPORT->ReadLine: read to next newline in source */
-Boolean ReadLine(Source *src,char *s)
+bool ReadLine(Source *src,char *s)
 {
    int c;
    
@@ -1121,7 +1121,7 @@ void SkipWhiteSpace(Source *src)
 /* EXPORT->ParseString: get next string from src and store it in s */
 char *ParseString(char *src, char *s)
 {
-   Boolean wasQuoted;
+   bool wasQuoted;
    int c,q;
 
    wasQuoted=FALSE; *s=0; q=0;
@@ -1156,7 +1156,7 @@ char *ParseString(char *src, char *s)
 }
 
 /* EXPORT->ReadString: get next string from src and store it in s */
-Boolean ReadString(Source *src, char *s){  
+bool ReadString(Source *src, char *s){  
   /* could be just: return ReadStringWithLen(src,s,MAXSTRLEN); but this is called often so do it like this.. */
    int i,c,n,q;
 
@@ -1201,7 +1201,7 @@ Boolean ReadString(Source *src, char *s){
 
 
 /* EXPORT->ReadStringWithLen: get next string from src and store it in s */
-Boolean ReadStringWithLen(Source *src, char *s, int buflen)
+bool ReadStringWithLen(Source *src, char *s, int buflen)
 {
    int i,c,n,q;
 
@@ -1246,7 +1246,7 @@ Boolean ReadStringWithLen(Source *src, char *s, int buflen)
 
 /* EXPORT->ReadRawString: get next raw string (i.e. word) from src and store it in s */
 /* ReadRawString: ie ignore normal HTK escaping */
-Boolean ReadRawString(Source *src, char *s)
+bool ReadRawString(Source *src, char *s)
 {
    int i,c;
 
@@ -1267,7 +1267,7 @@ Boolean ReadRawString(Source *src, char *s)
 /* EXPORT->WriteString: Write string s in readable format */
 void WriteString(FILE *f,char *s,char q)
 {
-   Boolean noSing,noDbl;
+   bool noSing,noDbl;
    int n;
    unsigned char *p;
 
@@ -1303,7 +1303,7 @@ void WriteString(FILE *f,char *s,char q)
 char *ReWriteString(char *s,char *dst, char q)
 {
    static char stat[MAXSTRLEN*4];
-   Boolean noSing,noDbl;
+   bool noSing,noDbl;
    int n;
    unsigned char *p,*d;
 
@@ -1341,7 +1341,7 @@ char *ReWriteString(char *s,char *dst, char q)
 }
 
 /* IsVAXOrder: returns true if machine has VAX ordered bytes */
-static Boolean IsVAXOrder(void)
+static bool IsVAXOrder(void)
 {
    short x, *px;
    unsigned char *pc;
@@ -1372,7 +1372,7 @@ void SwapShort(short *p)
 }
 
 /* EXPORT->ReadShort: read n short's from src in ascii or binary */
-Boolean RawReadShort(Source *src, short *s, int n, Boolean bin, Boolean swap)
+bool RawReadShort(Source *src, short *s, int n, bool bin, bool swap)
 {
    int j,k,count=0,x;
    short *p;
@@ -1400,7 +1400,7 @@ Boolean RawReadShort(Source *src, short *s, int n, Boolean bin, Boolean swap)
 }
 
 /* EXPORT->ReadInt: read n ints from src in ascii or binary */
-Boolean RawReadInt(Source *src, int *i, int n, Boolean bin, Boolean swap)
+bool RawReadInt(Source *src, int *i, int n, bool bin, bool swap)
 {
    int j,k,count=0;
    int *p;
@@ -1428,7 +1428,7 @@ Boolean RawReadInt(Source *src, int *i, int n, Boolean bin, Boolean swap)
 }
 
 /* EXPORT->ReadFloat: read n floats from src in ascii or binary */
-Boolean RawReadFloat(Source *src, float *x, int n, Boolean bin, Boolean swap)
+bool RawReadFloat(Source *src, float *x, int n, bool bin, bool swap)
 {
    int k,count=0,j;
    float *p;
@@ -1456,27 +1456,27 @@ Boolean RawReadFloat(Source *src, float *x, int n, Boolean bin, Boolean swap)
 }
 
 /* EXPORT->ReadShort: read n short's from src in ascii or binary */
-Boolean ReadShort(Source *src, short *s, int n, Boolean binary)
+bool ReadShort(Source *src, short *s, int n, bool binary)
 {
    return(RawReadShort(src,s,n,binary,(vaxOrder && !natReadOrder)));
 }
 
 /* EXPORT->ReadInt: read n ints from src in ascii or binary */
-Boolean ReadInt(Source *src, int *i, int n, Boolean binary)
+bool ReadInt(Source *src, int *i, int n, bool binary)
 {
    return(RawReadInt(src,i,n,binary,(vaxOrder && !natReadOrder)));
 }
 
 /* EXPORT->ReadFloat: read n floats from src in ascii or binary */
-Boolean ReadFloat(Source *src, float *x, int n, Boolean binary)
+bool ReadFloat(Source *src, float *x, int n, bool binary)
 {
    return(RawReadFloat(src,x,n,binary,(vaxOrder && !natReadOrder)));
 }
 
 /* EXPORT->KeyPressed: returns TRUE if input is pending on stdin */
-Boolean KeyPressed(int tWait)
+bool KeyPressed(int tWait)
 {
-   Boolean rtn=FALSE; 
+   bool rtn=FALSE; 
    char c[1];
      
 #ifdef UNIX
@@ -1586,7 +1586,7 @@ void HRError(int errcode, char *message, ...)
 /* ------------------- Output Routines ----------------------- */
 
 /* EXPORT->WriteShort: write n shorts to f */
-void WriteShort (FILE *f, short *s, int n, Boolean binary)
+void WriteShort (FILE *f, short *s, int n, bool binary)
 {
    int j,x;
    short *p;
@@ -1611,7 +1611,7 @@ void WriteShort (FILE *f, short *s, int n, Boolean binary)
 }
 
 /* EXPORT->WriteInt: write n ints to f */
-void WriteInt(FILE *f, int *i, int n, Boolean binary)
+void WriteInt(FILE *f, int *i, int n, bool binary)
 {
    int j;
    int *p;
@@ -1635,7 +1635,7 @@ void WriteInt(FILE *f, int *i, int n, Boolean binary)
 }
 
 /* EXPORT->WriteFloat: write n floats to f */
-void WriteFloat (FILE *f, float *x, int n, Boolean binary)
+void WriteFloat (FILE *f, float *x, int n, bool binary)
 {
    int j;
    float *p;
@@ -1784,7 +1784,7 @@ char * CounterFN(char *prefix, char* suffix, int count, int width, char *s)
 /* RMatch: recursively match s against pattern p, minplen
    is the min length string that can match p and
    numstars is the number of *'s in p */
-Boolean RMatch(char *s,char *p,int slen,int minplen,int numstars)
+bool RMatch(char *s,char *p,int slen,int minplen,int numstars)
 {
    if (slen==0 && minplen==0)
       return TRUE;
@@ -1803,7 +1803,7 @@ Boolean RMatch(char *s,char *p,int slen,int minplen,int numstars)
 }
 
 /* EXPORT->DoMatch: return TRUE if s matches pattern p */
-Boolean DoMatch(char *s, char *p)
+bool DoMatch(char *s, char *p)
 {
    int slen, minplen, numstars;
    char *q,c;
@@ -1820,10 +1820,10 @@ Boolean DoMatch(char *s, char *p)
    is the min length string that can match p and
    numstars is the number of *'s in p 
 	   spkr is next character of the spkr name */
-static Boolean SpRMatch(char *s,char *p,char *spkr,
+static bool SpRMatch(char *s,char *p,char *spkr,
 			int slen,int minplen,int numstars)
 {
-   Boolean match;
+   bool match;
    
    if (slen==0 && minplen==0)
       match=TRUE;
@@ -1848,7 +1848,7 @@ static Boolean SpRMatch(char *s,char *p,char *spkr,
 }
 
 /* EXPORT->MaskMatch: return spkr if s matches pattern p */
-Boolean MaskMatch(char *mask, char *spkr, char *str)
+bool MaskMatch(char *mask, char *spkr, char *str)
 {
    int spkrlen, slen, minplen, numstars;
    char *q,c;
@@ -1902,7 +1902,7 @@ ReturnStatus InitShell(int argc, char *argv[], char *ver, char *sccs)
 {
    char *fn;
    int i,j;
-   Boolean b;
+   bool b;
 
    argcount = 1; arglist = (char **) malloc(argc*sizeof(char *));
    arglist[0] = argv[0];

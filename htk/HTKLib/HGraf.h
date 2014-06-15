@@ -116,7 +116,7 @@ void TermHGraf(void);
 
 /* ------------------------ Event Handling --------------------------- */
 
-HEventRec HGetEvent(Boolean anyEvent, void (*action)(void));
+HEventRec HGetEvent(bool anyEvent, void (*action)(void));
 /* 
    Return next event in event queue.  If an action routine is
    supplied and there are no events pending, then that routine 
@@ -137,7 +137,7 @@ int HEventsPending(void);
    WIN32: returns 1 if (number` of events >= 1)
 */
 
-Boolean HMousePos(int *x, int *y);
+bool HMousePos(int *x, int *y);
 /* 
    Return mouse pos in x, y, returns TRUE if the pointer 
    is on the window 
@@ -148,7 +148,7 @@ Boolean HMousePos(int *x, int *y);
    to know the mouse position.
 */
 
-Boolean IsInRect(int x, int y, int x0, int y0, int x1, int y1);
+bool IsInRect(int x, int y, int x0, int y0, int x1, int y1);
 /*
    Return TRUE if the point (x,y) lies within the rectangle
    with top-left at (x0,y0) and bottom right at (x1,y1)
@@ -318,9 +318,9 @@ typedef short ButtonId;
 typedef struct _HButton { 
    int x, y, w, h;            /* size of button rectangle */
    HColour fg, bg;            /* colors */
-   Boolean lit;               /* if true, invert colors */
-   Boolean active;            /* if false, stipple gray */
-   Boolean toggle;            /* if true, clicking toggles state */
+   bool lit;               /* if true, invert colors */
+   bool active;            /* if false, stipple gray */
+   bool toggle;            /* if true, clicking toggles state */
    char *str;                 /* string in button */
    ButtonId id; 
    BtnLink next;
@@ -350,7 +350,7 @@ HButton *FindButton(HButton *btnlst, ButtonId key);
    FindButton: return a pointer to the button object with ButtonId.
 */
 
-void SetActive(HButton *btnlst, Boolean active);
+void SetActive(HButton *btnlst, bool active);
 /*
    SetActive: set the active field in each button object to active.
 */
@@ -360,7 +360,7 @@ HButton *CheckButtonList(HButton *btnlst, int x, int y);
    CheckButtonList: return a pointer to the button object which contains (x,y).
 */
 
-void SetButtonLit(HButton *btn, Boolean lit);
+void SetButtonLit(HButton *btn, bool lit);
 /*
    SetButtonLit: redraw the button object in inverse colours. 
 */

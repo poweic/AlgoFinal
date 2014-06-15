@@ -103,11 +103,11 @@ typedef UInt unigram;   /* Occurrence count */
 
 /* Global variables - defaults */
 static int         N = 1000;                /* Default number of classes */
-static Boolean     show_MLV=FALSE;          /* Show MLV after each change */
+static bool     show_MLV=FALSE;          /* Show MLV after each change */
 static char       *export_prefix="cluster"; /* Prefix of export filenames */
-static Boolean     unk_sep = FALSE;         /* Keep unknown word in its own class? */
-static Boolean     outCMapRaw = FALSE;      /* Output classes in raw mode */
-static Boolean     inCMapRaw = FALSE;       /* Input classes in raw mode */
+static bool     unk_sep = FALSE;         /* Keep unknown word in its own class? */
+static bool     outCMapRaw = FALSE;      /* Output classes in raw mode */
+static bool     inCMapRaw = FALSE;       /* Input classes in raw mode */
 
 /* Global variables - others */
 /* Used by core clusterer */
@@ -162,14 +162,14 @@ static char         unknown_w[256];         /* unknown word token */
 static ConfParam   *cParm[MAXGLOBS];        /* configuration script parameters */
 static int          trace = 0;              /* trace setting */
 static UInt        *class_sort;	            /* Used to sort output alphabetically */
-static Boolean      pipe_logfile;           /* HShell file handling - using pipe? */
+static bool      pipe_logfile;           /* HShell file handling - using pipe? */
 static int          rec_freq = 1000;        /* Frequency we write recovery files (0 = off) */
-static Boolean      verbose = FALSE;        /* Verbose file logging */
-static Boolean      write_logfile = TRUE;   /* Write a log file during execution */
+static bool      verbose = FALSE;        /* Verbose file logging */
+static bool      write_logfile = TRUE;   /* Write a log file during execution */
 static int          sort_order = SORT_WMAP; /* Order words are considered in */
 static int         *sort_uni;               /* Sort unigrams by count */
-static Boolean     outCMapRawTrap = FALSE;  /* Has this been changed by config file? */
-static Boolean     inCMapRawTrap = FALSE;   /* Has this been changed by config file? */
+static bool     outCMapRawTrap = FALSE;  /* Has this been changed by config file? */
+static bool     inCMapRawTrap = FALSE;   /* Has this been changed by config file? */
 
 /* ---------------- Function Prototypes -------------------------- */
 
@@ -662,7 +662,7 @@ static void do_one_iteration(int w_period, int start_word)
    UInt w, j, w_index;
    int to;
    FILE *file;
-   Boolean pipe_status;
+   bool pipe_status;
    int total_warnings=0;
 
    for (w=0; w<W; w++) {
@@ -860,7 +860,7 @@ void do_recovery(char *fname, int words)
    FILE *file;
    char *ptr;
    int   from;
-   Boolean pipe_status;
+   bool pipe_status;
    
    file = FOpen(fname, NoFilter, &pipe_status);
    check_file(file, fname, "do_recovery");
@@ -1119,7 +1119,7 @@ void export_classes(int recovery)
 {
    FILE *out;
    int   i, j, index;
-   Boolean pipe_status;
+   bool pipe_status;
 
    /* %.150s limits the length of the filename prefix to 150 characters */
    if (recovery) {
@@ -1232,7 +1232,7 @@ void import_classmap(char *fname, int numb_words)
    UInt      id;                 /* Word id */
    int       reassigned = 0;     /* Number of reassigned classes */
    int       unexpected = 0;     /* Number of unexpected lines trailing class descriptions */
-   Boolean   pipe_status;
+   bool   pipe_status;
 
    if (trace & T_FILE) {
       printf("Importing classmap '%s'\n", fname);
@@ -1440,7 +1440,7 @@ void write_word_probs(char *filename)
    FILE *out;
    int   i;   /* Loop counter */
    double probability;
-   Boolean pipe_status;
+   bool pipe_status;
 
    /* These files never use HTK escaping */
    
@@ -1492,7 +1492,7 @@ void write_word_counts(char *filename)
 {
    FILE *out;
    int   i;   /* Loop counter */
-   Boolean pipe_status;
+   bool pipe_status;
 
    /* These files never use HTK escaping */
 
@@ -1524,7 +1524,7 @@ void write_word_counts(char *filename)
 /* Specify whether to keep the unknown word in its own solo-member class or not */
 void classes_keep_unk_separate(int keep_separate)
 {
-   unk_sep = (Boolean) keep_separate;
+   unk_sep = (bool) keep_separate;
    start_class = unk_sep?3:2;
 }
 
@@ -1733,10 +1733,10 @@ int main(int argc, char *argv[])
    char *recover_from = NULL;
    char *write_classprobs = NULL;
    char *write_classcounts = NULL;
-   Boolean read_gram_files=FALSE; /* Has the user passed any gram files? */
-   Boolean set_classes = FALSE, loaded_map = FALSE; /* Check for -c and -l */
-   Boolean keep_unk_sep = FALSE; /* Was -k passed? */
-   Boolean passed_unk = FALSE; /* Unknown word was passed in */
+   bool read_gram_files=FALSE; /* Has the user passed any gram files? */
+   bool set_classes = FALSE, loaded_map = FALSE; /* Check for -c and -l */
+   bool keep_unk_sep = FALSE; /* Was -k passed? */
+   bool passed_unk = FALSE; /* Unknown word was passed in */
    int start_word_id, end_word_id, unknown_word_id;
    int numb_classes, min_classes;
    char *ptr, *ptr2; /* temp results */

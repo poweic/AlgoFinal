@@ -287,10 +287,10 @@ ReturnStatus WriteLattice(Lattice *lat, FILE *file, LatFormat form);
 */
 
 Lattice *ReadLattice(FILE *file, MemHeap *heap, Vocab *voc, 
-		     Boolean shortArc, Boolean add2Dict);
+		     bool shortArc, bool add2Dict);
 
 Lattice *ReadOneLattice(Source *src, MemHeap *heap, Vocab *voc, 
-                        Boolean shortArc, Boolean add2Dict);
+                        bool shortArc, bool add2Dict);
 /*
    Read lattice from file and creates a lattice in memory using heap.
    Word names in the lattice are mapped to the internal Word type
@@ -397,7 +397,7 @@ typedef struct {
    MemHeap *heap;     /* heap for allocating network */
    Vocab *vocab;      /* Dictionary from which words appear */
    Word nullWord;     /* Word for output when word==NULL */
-   Boolean teeWords;  /* True if any tee words are present */
+   bool teeWords;  /* True if any tee words are present */
    NetNode initial;   /* Initial (dummy) node */
    NetNode final;     /* Final (dummy) node */
    int numNode;
@@ -411,8 +411,8 @@ typedef struct hmmsetcxtinfo {
    HMMSet *hset;   /* HMMSet */
    int nc;         /* Number of contexts */
    int xc;         /* Number of cross word contexts */
-   Boolean sLeft;  /* Seen left context dependency */
-   Boolean sRight; /* Seen right context dependency */
+   bool sLeft;  /* Seen left context dependency */
+   bool sRight; /* Seen right context dependency */
    LabId *cxs;     /* Sorted array of labids indexed by context */
    int nci;        /* Number of context independent models */
    LabId *cis;     /* Sorted array of context independent labids */
@@ -500,7 +500,7 @@ Network *ExpandWordNet(MemHeap *heap,Lattice *lat,Vocab *voc,HMMSet *hset);
 
 /* --- Context handling stuff useful for general network building --- */
 
-HMMSetCxtInfo *GetHMMSetCxtInfo(HMMSet *hset, Boolean frcCxtInd);
+HMMSetCxtInfo *GetHMMSetCxtInfo(HMMSet *hset, bool frcCxtInd);
 /* 
    Create HMMSetCxtInfo for hset - possibly forced to be  CI.
 */
@@ -510,7 +510,7 @@ int GetHCIContext(HMMSetCxtInfo *hci,LabId labid);
    Search hci to find appropriate context number for labid
 */
 
-Boolean IsHCIContextInd(HMMSetCxtInfo *hci,LabId labid);
+bool IsHCIContextInd(HMMSetCxtInfo *hci,LabId labid);
 /* 
    Search hci to find if labid represents a context independent model
 */

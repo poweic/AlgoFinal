@@ -70,9 +70,9 @@ static int PHONE_BEAM=4; /* phones before & after...*/
 static float EXACTCORR_PRUNE= -8.5 /*0.0002*/; 
 
 static float latProbScale = 1.0; /* repeat of config also used in HFBLat.c */
-static Boolean PhoneMEE = TRUE;  /* repeat of config also used in HFBLat.c */
+static bool PhoneMEE = TRUE;  /* repeat of config also used in HFBLat.c */
 #ifdef SUPPORT_QUINPHONE
-static Boolean Quinphone = FALSE; /* repeat of config also used in HFBLat.c */
+static bool Quinphone = FALSE; /* repeat of config also used in HFBLat.c */
 #endif
 static float phnInsPen = 0.0;    /* repeat of config also used in HFBLat.c */
 static float InsCorrectness = -1;   /* repeat of config also used in HFBLat.c */
@@ -107,7 +107,7 @@ static int debug_bestcorr = 1000;
 
 
 
-Boolean IsNonSilArc(LArc *larc){ /*returns TRUE if this word is non SENT_START etc. */
+bool IsNonSilArc(LArc *larc){ /*returns TRUE if this word is non SENT_START etc. */
   return (larc->nAlign>1 || (larc->nAlign==1 && !IsSilence(larc->lAlign[0].label->name)));
 }
 int GetNumPhones(LArc *larc){ /*returns num phones in a word...*/
@@ -122,7 +122,7 @@ int GetNumPhones(LArc *larc){ /*returns num phones in a word...*/
     return i;
   }
 }
-Boolean NonSil_and_Quinphone_IsStartPhone(LArc *larc, int i){
+bool NonSil_and_Quinphone_IsStartPhone(LArc *larc, int i){
   if(!Quinphone){ 
     return (i < larc->nAlign-1 || !IsSilence(larc->lAlign[larc->nAlign-1].label->name)); /* not end phone or end phone is non-sil. */
   }
@@ -144,7 +144,7 @@ void AddTrans(MemHeap *x, CorrN *start, CorrN *end, float sc_lmlike){
 }
 
 
-Boolean GetBestCorrectness /*step correctness by 1 phone.*/
+bool GetBestCorrectness /*step correctness by 1 phone.*/
                         (float *_BestCorr, float *_BestCorrPart, int *_bestj, int i,
                         CorrN *cn_prev,
                         short int *minn_of_t,    /* lowest sausage position active at time t. */
@@ -161,14 +161,14 @@ Boolean GetBestCorrectness /*step correctness by 1 phone.*/
   int start= cn_prev->starti, end =  cn_prev->endi;
 
   if(!cn_prev->IsSilence){
-    Boolean CorrFullPhone = FALSE; /* counted against insertions. */
-    Boolean CorrPartialPhone = FALSE; /* not counted against insertions. */
+    bool CorrFullPhone = FALSE; /* counted against insertions. */
+    bool CorrPartialPhone = FALSE; /* not counted against insertions. */
     int nDel = 0;
     
     /* First see if same phone between "end" and i-1, if any.*/
     for(j=end+1;j<=i-1;j++){ /*probably empty loop. */
       int p;
-      Boolean Same=FALSE;
+      bool Same=FALSE;
       for(p=0;p<niphones[j];p++){
         int this_iphone = iphone[j][p];
         if(this_iphone==iphone_prev) Same = TRUE;
@@ -182,7 +182,7 @@ Boolean GetBestCorrectness /*step correctness by 1 phone.*/
     }
     for(j=MIN(i-1,end);j>=start;j--){ /* substitutions or correct phones. */
       int p;
-      Boolean Same=FALSE; 
+      bool Same=FALSE; 
       for(p=0;p<niphones[j];p++){
         int this_iphone = iphone[j][p];
         if(this_iphone==iphone_prev) Same = TRUE;
@@ -251,7 +251,7 @@ float DoCorrectness(FBLatInfo *fbInfo, MemHeap *mem, ArcInfo *ai, float prune,
                     int **iphone,            /* phone [0..N-1][0..niphones[n]-1] */
 		    unsigned char *nonempty, /* if TRUE then no null transition at that sausage position */
                     int T, int N, 
-                    float InsCorrectness, Boolean Quinphone, float pr_in){ 
+                    float InsCorrectness, bool Quinphone, float pr_in){ 
   HArc *a;  
   CorrN  *startNode = NULL, *endNode = NULL; 
 
@@ -764,7 +764,7 @@ void DoExactCorrectness(FBLatInfo *fbInfo, Lattice *lat){
 	for(j=0;j<larc->nAlign;j++){ 
 	  if(NonSil_and_Quinphone_IsStartPhone(larc,j)){ /* Is a starting phone... ( x_nnn_2 or some such, I think...), and is not silence. */
 	    int startT, endT;
-	    int nStates_quinphone, state_quinphone=0,x; Boolean Found=FALSE;
+	    int nStates_quinphone, state_quinphone=0,x; bool Found=FALSE;
 	    int local_iphone = GetNoContextPhone(larc->lAlign[j].label,&nStates_quinphone, &state_quinphone,NULL,NULL); 
 	    if(Quinphone && state_quinphone != 2) HError(1, "Quinphone problem... check code, may not be compat with this quinphone set.");
 	    for(x=0;x<niphones[startPos+p];x++)if(local_iphone==iphone[startPos+p][x]){ Found=TRUE; break; } 
@@ -818,7 +818,7 @@ void InitExactMPE(void)
 {
    int i;
    double f;
-   Boolean b;
+   bool b;
 
    Register(hexactmpe_version,hexactmpe_vc_id);
    nParm = GetConfig("HEXACTMPE", TRUE, cParm, MAXGLOBS);

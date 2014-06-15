@@ -104,9 +104,9 @@ static int trace = 0;
 
 /* --------------------- Global Variables ------------------- */
 
-static Boolean natReadOrder = FALSE;    /* Preserve natural read byte order*/
-static Boolean natWriteOrder = FALSE;   /* Preserve natural write byte order*/
-extern Boolean vaxOrder;                /* True if byteswapping needed to
+static bool natReadOrder = FALSE;    /* Preserve natural read byte order*/
+static bool natWriteOrder = FALSE;   /* Preserve natural write byte order*/
+extern bool vaxOrder;                /* True if byteswapping needed to
                                            preserve SUNSO */
 
 /* --------------------- Abstract Wave Type --------------------- */
@@ -114,7 +114,7 @@ extern Boolean vaxOrder;                /* True if byteswapping needed to
 typedef struct _Wave{   /* Internal wave file representation */
    MemHeap *mem;        /* memory heap for this wave rec */
    FileFormat fmt;      /* Format of associated source file */
-   Boolean isPipe;      /* Source is a pipe */
+   bool isPipe;      /* Source is a pipe */
    HTime sampPeriod;    /* Sample period in 100ns units */
    int  hdrSize;        /* Header size in bytes */
    long nSamples;       /* No of samples in data */
@@ -134,7 +134,7 @@ static int numParm = 0;
 void InitWave(void)
 {
    int i;
-   Boolean b;
+   bool b;
 
    Register(hwave_version,hwave_vc_id);
    numParm = GetConfig("HWAVE", TRUE, cParm, MAXGLOBS);
@@ -192,7 +192,7 @@ typedef enum _SrcOrder{
 
    
 /* MustSwap: true if reqd format must be byte swapped on this machine */
-static Boolean MustSwap(SrcOrder so)
+static bool MustSwap(SrcOrder so)
 {
    char bos[MAXSTRLEN];
    
@@ -328,7 +328,7 @@ static short a2l[]={
 
 /* NumberBytes: Returns number of bytes in file excluding header, if input
    is from a pipe then INT_MAX is returned */
-static long NumberBytes(FILE *f, int hSize, Boolean isPipe)
+static long NumberBytes(FILE *f, int hSize, bool isPipe)
 {
    long fileLen,pos;
 
@@ -467,7 +467,7 @@ static long GetTIMITHeaderInfo(FILE *f, Wave w, InputAction *ia)
 {
    TIMIThdr hdr;
    int n = sizeof hdr;
-   Boolean bSwap;
+   bool bSwap;
    
    if ((bSwap = MustSwap(VAXSO)))        /* TIMIT is VAX ordered */
       *ia = (InputAction) (*ia | DoBSWAP);
@@ -509,7 +509,7 @@ static long GetOGIHeaderInfo(FILE *f, Wave w, InputAction *ia)
 {
    OGIhdr hdr;
    int n = sizeof hdr;
-   Boolean bSwap;
+   bool bSwap;
    
    if((bSwap = MustSwap(SUNSO)))        /* OGI is SUN ordered */
       *ia = (InputAction) (*ia | DoBSWAP);
@@ -603,7 +603,7 @@ static void GetNISTSVal(FILE *f, char *s)
 static long GetNISTHeaderInfo(FILE *f, Wave w, InputAction *ia)
 {
    char token[100],*lab,byteFormat[100],sampCoding[100],buf[100];
-   Boolean interleaved = FALSE;
+   bool interleaved = FALSE;
    long nS,sR,sS, cC;
    long dataBytes;
    
@@ -721,7 +721,7 @@ static int GetShortPackBlock(char **inData, short **outData)
    unsigned char nSamp, nBits;
    unsigned char buf = '\0';
    int i,k;
-   Boolean negative;
+   bool negative;
    int charBits=0;  
    int numChar=0;
    
@@ -850,7 +850,7 @@ static long GetSDES1HeaderInfo(FILE *f, Wave w, InputAction *ia)
 {
    SDes1Header hdr;
    int n = sizeof hdr;
-   Boolean bSwap;
+   bool bSwap;
    
    if ((bSwap = MustSwap(UNKNOWNSO)))       /* User might know byte order */
       *ia = (InputAction) (*ia | DoBSWAP);
@@ -916,7 +916,7 @@ typedef struct {     /* SUNAU8 format header */
 static long GetSUNAU8HeaderInfo(FILE *f, Wave w, InputAction *ia)
 {
    int n;
-   Boolean bSwap;  
+   bool bSwap;  
    SunAU8Header hdr;
    
    n = sizeof(SunAU8Header);
@@ -998,7 +998,7 @@ static long GetAIFFHeaderInfo(FILE *f, Wave w, InputAction *ia)
    CommonChunk2 ch2, commchunk2;   
    int cn1 = 10; /* sizeof(long) + sizeof(long) + sizeof(short); */
    int cn2 = 6;  /* sizeof(long) + sizeof(short); */   
-   Boolean hasCC=FALSE, hasSC=FALSE;
+   bool hasCC=FALSE, hasSC=FALSE;
    const long fcid = 0x464f524d;  /* 'FORM' */
    const long ccid = 0x434f4d4d;  /* 'COMM' */
    const long scid = 0x53534e44;  /* 'SSND' */
@@ -1206,9 +1206,9 @@ void RetrieveESIGFieldList(HFieldList *fList)
 
 /* EXPORT->ReadEsignalHeader: Get header from Esignal file; return FALSE
    in case of failure. */
-Boolean ReadEsignalHeader(FILE *f, long *nSamp, long *sampP, short *sampS,
-                          short *kind, Boolean *bSwap, long *hdrS,
-                          Boolean isPipe)
+bool ReadEsignalHeader(FILE *f, long *nSamp, long *sampP, short *sampS,
+                          short *kind, bool *bSwap, long *hdrS,
+                          bool isPipe)
 {
    FieldList       list, list1;
    FieldSpec       *field;
@@ -1304,7 +1304,7 @@ static long GetESIGHeaderInfo(FILE *f, Wave w, InputAction *ia)
    long            nSamp, sampP;
    short           sampSize, kind;
    long            hdrS;
-   Boolean         bSwap;
+   bool         bSwap;
 
    if (!ReadEsignalHeader(f, &nSamp, &sampP, &sampSize,
                           &kind, &bSwap, &hdrS, w->isPipe))
@@ -1405,8 +1405,8 @@ typedef struct {              /* HTK File Header */
 } HTKhdr;
 
 /* EXPORT ReadHTKHeader: get header from HTK file, return false not HTK */
-Boolean ReadHTKHeader(FILE *f, long *nSamp, long *sampP, short *sampS, 
-                      short *kind, Boolean *bSwap)
+bool ReadHTKHeader(FILE *f, long *nSamp, long *sampP, short *sampS, 
+                      short *kind, bool *bSwap)
 {
    HTKhdr hdr;
    int n = sizeof hdr;
@@ -1435,7 +1435,7 @@ Boolean ReadHTKHeader(FILE *f, long *nSamp, long *sampP, short *sampS,
 /* GetHTKHeaderInfo: get HTK format header and check its a WAVEFORM file */
 static long GetHTKHeaderInfo(FILE *f, Wave w, InputAction *ia)
 {
-   Boolean bSwap;
+   bool bSwap;
    short kind,size;
    long sp;
    
@@ -1460,7 +1460,7 @@ static long GetHTKHeaderInfo(FILE *f, Wave w, InputAction *ia)
 
 /* EXPORT->WriteHTKHeader: Write header info to HTK file f */
 void WriteHTKHeader(FILE *f, long nSamp, long sampP, short sampS, 
-                    short kind, Boolean *bSwap)
+                    short kind, bool *bSwap)
 {
    HTKhdr hdr;
    int n = sizeof hdr;
@@ -1500,7 +1500,7 @@ Wave OpenWaveInput(MemHeap *x, char *fname, FileFormat fmt, HTime winDur,
    InputAction ia=(InputAction)0;      /* flags to enable conversions etc */
    long fBytes=0;         /* Num data bytes in file to load */
    HTime t;
-   Boolean isEXF;	  /* File name is extended */
+   bool isEXF;	  /* File name is extended */
    char actfile[MAXFNAMELEN]; /* actual file name */
    long stindex,enindex;  /* segment indices */
    int sampSize = 2;       
@@ -1755,7 +1755,7 @@ void PutWaveSample(Wave w, long nSamples, short *buf)
 ReturnStatus CloseWaveOutput(Wave w, FileFormat fmt, char *fname)
 {
    FILE *f;
-   Boolean isPipe;
+   bool isPipe;
    char buf[MAXSTRLEN];
 
    if ((f = FOpen(fname, WaveOFilter, &isPipe)) == NULL){   /* Open file */

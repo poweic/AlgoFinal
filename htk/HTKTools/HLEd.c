@@ -98,10 +98,10 @@ static LabId wbnd[MAXIW];           /* interword bndaries set via WB cmd */
 static LabId vbnd[MAXIV];           /* non-interwd bndaries set via NB cmd */
 static int nWB = 0;                 /* number of interword boundaries */
 static int nVB = 0;                 /* number of non-interword boundaries */
-static Boolean noBounds = FALSE;    /* suppress boundary times if TRUE */
-static Boolean triStrip = FALSE;    /* ignore triphone contexts in matching */
-static Boolean levSplit = FALSE;    /* Split levels into lists */
-static Boolean sortFirst = FALSE;   /* Sort on loading */
+static bool noBounds = FALSE;    /* suppress boundary times if TRUE */
+static bool triStrip = FALSE;    /* ignore triphone contexts in matching */
+static bool levSplit = FALSE;    /* Split levels into lists */
+static bool sortFirst = FALSE;   /* Sort on loading */
 static FileFormat ifmt=UNDEFF;      /* Label input file format */
 static FileFormat ofmt=UNDEFF;      /* Label output file format */
 static HTime minGap = 50000.0;      /* minimum interword gap */
@@ -367,7 +367,7 @@ LabId *GetContext(LabId name)
 }
 
 /* IsWBnd: return true if given id is an Interword boundary */
-Boolean IsWBnd(LabId id)
+bool IsWBnd(LabId id)
 {
    int i;
    
@@ -391,7 +391,7 @@ void PrintWBounds(void)
 }
 
 /* IsVBnd: return true if given id is a non-interword boundary */
-Boolean IsVBnd(LabId id)
+bool IsVBnd(LabId id)
 {
    int i;
    
@@ -840,7 +840,7 @@ void TrOpExit(int count)
 }
 
 /* IsSame: return true if given ids are identical */
-Boolean IsSame(LabId a, LabId b)
+bool IsSame(LabId a, LabId b)
 {
    char buf[MAXSTRLEN];
 
@@ -849,11 +849,11 @@ Boolean IsSame(LabId a, LabId b)
       strcpy(buf,a->name); TriStrip(buf); a = GetLabId(buf,TRUE);
       strcpy(buf,b->name); TriStrip(buf); b = GetLabId(buf,TRUE);
    }
-   return Boolean(a==b);
+   return bool(a==b);
 }
 
 /* IsInIdList: return true if id is in idlist */
-Boolean IsInIdList(LabId id, LabId *idlist)
+bool IsInIdList(LabId id, LabId *idlist)
 {
    if (id!=NULL)
       while (*idlist != NULL) {
@@ -913,7 +913,7 @@ int ReplaceOp(LabList *ll,LabId *args)
 }
 
 /* InContext: Match Context (lc-x+rc) against label l */
-Boolean InContext(LLink l, LabId *lc, LabId *rc, LabId item)
+bool InContext(LLink l, LabId *lc, LabId *rc, LabId item)
 {
    if (l->succ==NULL || l->pred==NULL)
       HError(1291,"InContext: trying to match sentinel");
@@ -1166,7 +1166,7 @@ LabId RightTriCxt(LLink l)
 
 /* TriPhonise: convert phone labels in transcription t to either
       left, right or triphone (ie both) contexts */
-int TriPhonise(LabList *ll,Boolean left, Boolean right, LabId stId, 
+int TriPhonise(LabList *ll,bool left, bool right, LabId stId, 
                LabId enId, char *cmd)
 {
    int count=0;
@@ -1405,7 +1405,7 @@ void EditFile(char *labfn)
          if (i->cmd.op != CHANGE || i==script) /* terminate any pending */
             ChangeOp(NULL, NULL);     /* sequence of CH(ange operations */
          if (i->cmd.op == TRIST)
-            triStrip = Boolean(!triStrip);
+            triStrip = bool(!triStrip);
          if (ll!=NULL)
             switch (i->cmd.op) {
             case FIND:

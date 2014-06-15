@@ -50,7 +50,7 @@ void InitGraf(void)
 */
 
 /* EXPORT->HGetEvent: return next relevant event in event queue */
-HEventRec HGetEvent(Boolean anyEvent, void (*action)(void))
+HEventRec HGetEvent(bool anyEvent, void (*action)(void))
 {
    HEventRec r={0,0,0,0,0};
    return r;
@@ -64,13 +64,13 @@ int HEventsPending(void)
 
 /* EXPORT->HMousePos: return mouse pos in x, y, returns TRUE if the pointer 
    is on the window */
-Boolean HMousePos(int *x, int *y)
+bool HMousePos(int *x, int *y)
 {
    return FALSE;
 }
 
 /* EXPORT: IsInRect: return TRUE iff (x,y) is in the rectangle (x0,y0,x1,y1) */ 
-Boolean IsInRect(int x, int y, int x0, int y0, int x1, int y1)
+bool IsInRect(int x, int y, int x0, int y0, int x1, int y1)
 {
    return FALSE;
 }
@@ -215,7 +215,7 @@ HButton *FindButton(HButton *btnlst, ButtonId key)
 }
 
 /* EXPORT->SetActive: set active field in button list */
-void SetActive(HButton *btnlst, Boolean active)
+void SetActive(HButton *btnlst, bool active)
 {
 }
 
@@ -226,7 +226,7 @@ HButton *CheckButtonList(HButton *btnlst, int x, int y)
 }
 
 /* EXPORT->SetButtonLit: show button press */
-void SetButtonLit(HButton *btn, Boolean lit)
+void SetButtonLit(HButton *btn, bool lit)
 {
 }
 

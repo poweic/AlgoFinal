@@ -64,24 +64,24 @@ ParmKind srcPK       = ANON;
 ParmKind tgtPK       = ANON;
 HTime srcSampRate    = 0.0;
 HTime tgtSampRate    = 0.0;
-Boolean saveAsVQ = FALSE;
+bool saveAsVQ = FALSE;
 int swidth0 = 1;
 
 static HTime st=0.0;            /* start of samples to copy */
 static HTime en=0.0;            /* end of samples to copy */
 static HTime xMargin=0.0;       /* margin to include around extracted labs */
-static Boolean stenSet=FALSE;   /* set if either st or en set */
+static bool stenSet=FALSE;   /* set if either st or en set */
 static int labstidx=0;          /* label start index (if set) */
 static int labenidx=0;          /* label end index (if set) */
 static int curstidx=0;          /* label start index (if set) */
 static int curenidx=0;          /* label end index (if set) */
 static int labRep=1;            /* repetition of named label */
 static int auxLab = 0;          /* auxiliary label to use (0==primary) */
-static Boolean chopF = FALSE;   /* set if we should truncate files/trans */
+static bool chopF = FALSE;   /* set if we should truncate files/trans */
 
 static LabId labName = NULL;    /* name of label to extract (if set) */
-static Boolean useMLF=FALSE;    /* set if we are saving to an mlf */
-static Boolean labF=FALSE;      /* set if we should  process label files too */
+static bool useMLF=FALSE;    /* set if we are saving to an mlf */
+static bool labF=FALSE;      /* set if we should  process label files too */
 static char *labDir = NULL;     /* label file directory */
 static char *outLabDir = NULL;  /* output label dir */
 static char *labExt = "lab";    /* label file extension */
@@ -126,7 +126,7 @@ void ReportUsage(void)
 void SetConfParms(void)
 {
    int i;
-   Boolean b;
+   bool b;
    char buf[MAXSTRLEN];
 
    nParm = GetConfig("HCOPY", TRUE, cParm, MAXGLOBS);
@@ -543,14 +543,14 @@ Wave ChopWave(Wave srcW, HTime start, HTime end, HTime sampRate)
 }
 
 /* IsWave: check config parms to see if target is a waveform */
-Boolean IsWave(char *srcFile)
+bool IsWave(char *srcFile)
 {
    FILE *f;
    long nSamp,sampP, hdrS;
    short sampS,kind;
-   Boolean isPipe,bSwap,isWave;
+   bool isPipe,bSwap,isWave;
    
-   isWave = Boolean(tgtPK == WAVEFORM);
+   isWave = bool(tgtPK == WAVEFORM);
    if (tgtPK == ANON){
       if ((srcFF == HTK || srcFF == ESIG) && srcFile != NULL){
          if ((f=FOpen(srcFile,WaveFilter,&isPipe)) == NULL)
@@ -568,7 +568,7 @@ Boolean IsWave(char *srcFile)
                       srcFile);             
             break;
          }
-         isWave = Boolean(kind == WAVEFORM);
+         isWave = bool(kind == WAVEFORM);
          FClose(f,isPipe);
       } else
          isWave = TRUE;
@@ -625,7 +625,7 @@ ParmBuf ChopParm(ParmBuf b, HTime start, HTime end, HTime sampRate)
    int stObs, endObs, nObs, i;
    HTime length;
    short swidth[SMAX];
-   Boolean eSep;
+   bool eSep;
    ParmBuf cb;
    Observation o;
    BufferInfo info;
@@ -669,7 +669,7 @@ HTime AppendParm(char *src)
    char bf1[MAXSTRLEN]; 
    char bf2[MAXSTRLEN]; 
    short swidth[SMAX];
-   Boolean eSep;
+   bool eSep;
    ParmBuf b, cb;
    Observation o;
    BufferInfo info;
@@ -704,7 +704,7 @@ HTime OpenParmFile(char *src)
    int i;
    ParmBuf b, cb;
    short swidth[SMAX];
-   Boolean eSep;
+   bool eSep;
    Observation o;
    BufferInfo info;
 

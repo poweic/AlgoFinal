@@ -56,7 +56,7 @@ size_t MRound(size_t size)
 
 static ConfParam *cParm[MAXGLOBS];       /* config parameters */
 static int numParm = 0;
-static Boolean protectStaks = FALSE;    /* enable stack protection */
+static bool protectStaks = FALSE;    /* enable stack protection */
 
 MemHeap gstack;   /* global MSTAK for general purpose use */
 MemHeap gcheap;   /* global CHEAP for general purpose use */
@@ -189,7 +189,7 @@ static void *GetElem(BlockP p, size_t elemSize, HeapType type)
 void InitMem(void)
 {
    int i;
-   Boolean b;
+   bool b;
    
    Register(hmem_version, hmem_vc_id);
    CreateHeap(&gstack, "Global Stack",  MSTAK, 1, 0.0, 100000, ULONG_MAX ); /* #### should be max size_t */
@@ -306,7 +306,7 @@ void *New(MemHeap *x,size_t size)
    void *q;
    BlockP newp;
    size_t num,bytes,*ip,chdr;
-   Boolean noSpace;
+   bool noSpace;
    Ptr *pp;
   
    if (x->elemSize <= 0)
@@ -402,7 +402,7 @@ Ptr CNew (MemHeap *x, size_t size)
 void Dispose(MemHeap *x, void *p)
 {
    BlockP head,cur,prev;
-   Boolean found=FALSE;
+   bool found=FALSE;
    ByteP bp;
    size_t size,chdr;
    size_t num,index, *ip;
@@ -794,7 +794,7 @@ STriMat CreateSTriMat(MemHeap *x,int size)
 }
 
 /* EXPORT->IsTriMat: True if matrix is lower triangular */
-Boolean IsTriMat(Matrix m)
+bool IsTriMat(Matrix m)
 {
    int i,n;
 
@@ -932,7 +932,7 @@ Ptr GetHook(Ptr m)
 }
 
 /* EXPORT->IsSeenV: return true if seen */
-Boolean IsSeenV(Ptr m)
+bool IsSeenV(Ptr m)
 {
    Ptr *p;
    int i;

@@ -40,7 +40,7 @@ typedef struct {
   int Q;              /* number of models in transcription */
   Transcription *tr;  /* current transcription */
 
-  Boolean twoDataFiles; /* Using two data files */
+  bool twoDataFiles; /* Using two data files */
   int S;              /* number of data streams */
   int T;              /* number of frames in utterance */
   ParmBuf pbuf;       /* parameter buffer */
@@ -88,7 +88,7 @@ typedef struct {
 
 /* structure storing the model set and a pointer to it's alpha-beta pass structure */
 typedef struct {
-  Boolean twoModels;  /* Enable two model reestimation */
+  bool twoModels;  /* Enable two model reestimation */
   HMMSet *up_hset;    /* set of HMMs to be re-estimated */
   HMMSet *al_hset;    /* HMMs to use for alignment */
                       /* these are equal unless 2 model reest */
@@ -122,7 +122,7 @@ void InitialiseForBack(FBInfo *fbInfo, MemHeap *x, HMMSet *set, UPDSet uset,
 void UseAlignHMMSet(FBInfo* fbInfo, MemHeap* x, HMMSet *al_hset);
 
 /* Initialise the utterance Information */
-void InitUttInfo(UttInfo *utt, Boolean twoFiles );
+void InitUttInfo(UttInfo *utt, bool twoFiles );
 
 /* GetInputObs: Get input Observations for t */
 void GetInputObs( UttInfo *utt, int t, HSetKind hsKind );
@@ -140,7 +140,7 @@ void InitUttObservations(UttInfo *utt, HMMSet *hset,
 			 char * datafn, int * maxmixInS);
 
 /* FBFile: apply forward-backward to given utterance */
-Boolean FBFile(FBInfo *fbInfo, UttInfo *utt, char * datafn);
+bool FBFile(FBInfo *fbInfo, UttInfo *utt, char * datafn);
 
 /* PrLog: print a log value */
 void PrLog(LogDouble x);

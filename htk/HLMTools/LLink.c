@@ -86,13 +86,13 @@ FILE *check_file(FILE *file, char *fname)
 int main(int argc, char *argv[])
 {
    char *s;
-   Boolean pipe_status, ps2, ps3;
+   bool pipe_status, ps2, ps3;
 #define MLL 1024
    char type[25], lineBuf[MLL];
    FILE *file, *write, *ng;
    char *wcFile, *ccFile, *outFile;
-   Boolean force_counts=FALSE, force_probs=FALSE, single_file=FALSE;
-   Boolean read_ok=FALSE;
+   bool force_counts=FALSE, force_probs=FALSE, single_file=FALSE;
+   bool read_ok=FALSE;
    int read;
    unsigned int *buffer;
 

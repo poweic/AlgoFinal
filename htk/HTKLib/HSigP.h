@@ -114,7 +114,7 @@ void Realft (Vector s);
 */
    
 void SpecModulus(Vector s, Vector m);
-void SpecLogModulus(Vector s, Vector m, Boolean invert);
+void SpecLogModulus(Vector s, Vector m, bool invert);
 void SpecPhase(Vector s, Vector m);
 /*
    On entry, s should hold n complex points; VectorSize(s)=n*2
@@ -129,8 +129,8 @@ typedef struct{
    long sampPeriod;     /* sample period */
    int fftN;            /* fft size */
    int klo,khi;         /* lopass to hipass cut-off fft indices */
-   Boolean usePower;    /* use power rather than magnitude */
-   Boolean takeLogs;    /* log filterbank channels */
+   bool usePower;    /* use power rather than magnitude */
+   bool takeLogs;    /* log filterbank channels */
    float fres;          /* scaled fft resolution */
    Vector cf;           /* array[1..pOrder+1] of centre freqs */
    ShortVec loChan;     /* array[1..fftN/2] of loChan index */
@@ -146,8 +146,8 @@ float Mel(int k, float fres);
 */
 
 FBankInfo InitFBank(MemHeap *x, int frameSize, long sampPeriod, int numChans,
-                    float lopass, float hipass, Boolean usePower, Boolean takeLogs,
-                    Boolean doubleFFT,
+                    float lopass, float hipass, bool usePower, bool takeLogs,
+                    bool doubleFFT,
                     float alpha, float warpLowCut, float warpUpCut);
 /*
    Initialise an FBankInfo record prior to calling Wave2FBank.
@@ -220,7 +220,7 @@ void FZeroMean(float *data, int vSize, int n, int step);
 */
 
 void AddRegression(float *data, int vSize, int n, int step, int offset, 
-                   int delwin, int head, int tail, Boolean simpleDiffs);
+                   int delwin, int head, int tail, bool simpleDiffs);
 /*
    Add regression vector at +offset from source vector.  
 
@@ -232,7 +232,7 @@ void AddRegression(float *data, int vSize, int n, int step, int offset,
 */
 
 void AddHeadRegress(float *data, int vSize, int n, int step, int offset, 
-                    int delwin, Boolean simpleDiffs);
+                    int delwin, bool simpleDiffs);
 /* 
    As for AddRegression, but deals with start case where there are no
    previous frames to regress over (assumes that there are at least
@@ -243,7 +243,7 @@ void AddHeadRegress(float *data, int vSize, int n, int step, int offset,
 */
 
 void AddTailRegress(float *data, int vSize, int n, int step, int offset, 
-                    int delwin, Boolean simpleDiffs);
+                    int delwin, bool simpleDiffs);
 /* 
    As for AddRegression, but deals with start case where there are no
    previous frames to regress over (assumes that there are at least

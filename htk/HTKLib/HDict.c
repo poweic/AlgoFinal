@@ -99,7 +99,7 @@ void DelWord(Vocab *voc, Word word)
 }
 
 /* EXPORT->GetWord: return word of given wordName */
-Word GetWord(Vocab *voc, LabId wordName, Boolean insert)
+Word GetWord(Vocab *voc, LabId wordName, bool insert)
 {
    int h;
    Word p;
@@ -351,7 +351,7 @@ static void Pad(FILE *f, int nSp, int minSp)
 ReturnStatus WriteDict(char *dictFn, Vocab *voc)
 {
    FILE *df;
-   Boolean isPipe,withOut,withProbs;
+   bool isPipe,withOut,withProbs;
    Word wid, *wlist;
    Pron thisPron;
    float prob;

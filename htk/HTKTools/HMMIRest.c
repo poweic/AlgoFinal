@@ -123,15 +123,15 @@ static int parMode   = -1;       /* enable one of the parallel modes */
 /* i.e.  0 for reestimation, 1,2,3... for accumulating .acc files. */
  
 
-static Boolean stats = FALSE;    /* enable statistics reports */
+static bool stats = FALSE;    /* enable statistics reports */
 static char * mmfFn  = NULL;     /* output MMF file, if any */
 static long int trace     = 1;        /* Trace level */
 
-static Boolean saveBinary = FALSE;  /* save output HMMs in binary  */
+static bool saveBinary = FALSE;  /* save output HMMs in binary  */
 
-static Boolean ML_MODE = FALSE;     /* when only one set of accs are supplied. */
-static Boolean MPE = FALSE;         /* when we are doing MPE/MWE. */
-static Boolean MMIPrior = FALSE;    /* use MMI prior as I-smoothing prior */
+static bool ML_MODE = FALSE;     /* when only one set of accs are supplied. */
+static bool MPE = FALSE;         /* when we are doing MPE/MWE. */
+static bool MMIPrior = FALSE;    /* use MMI prior as I-smoothing prior */
 static float MMITauI = 0.0;        /* I-smoothing tau for MMI prior in MPE training */
 
 static float E = 2.0;               /* constant used in BW updatel */
@@ -141,8 +141,8 @@ static float CWeights = 1.0;
 static float CTrans = 1.0;
 
 
-static Boolean MPEStoreML=FALSE;   /*  Set TRUE if we need to accumulate ML stats while doing MPE. */
-static Boolean THREEACCS = FALSE;  /*  Set TRUE if 3 sets of accs need to be stored (for MPE, or possibly for MMI-MAP) */
+static bool MPEStoreML=FALSE;   /*  Set TRUE if we need to accumulate ML stats while doing MPE. */
+static bool THREEACCS = FALSE;  /*  Set TRUE if 3 sets of accs need to be stored (for MPE, or possibly for MMI-MAP) */
 static int NumAccs;                /*  Set in Initialise() to  1 or 2 or 3. */
 
 static float ISmoothTau = 0.0;        /* I-smoothing: a h-crit-like thing.  Set to 100 for MMI or 50 for MPE, or 25 for MWE. */
@@ -150,8 +150,8 @@ static float ISmoothTau = 0.0;        /* I-smoothing: a h-crit-like thing.  Set 
 /* If unset and ISmoothTau is set, try setting these to 1/10 the occupancy for ISmoothTau. */
 static float ISmoothTauTrans = 0.0;
 static float ISmoothTauWeights = 0.0;
-static Boolean ISmoothTauTransSet=FALSE;
-static Boolean ISmoothTauWeightsSet=FALSE;
+static bool ISmoothTauTransSet=FALSE;
+static bool ISmoothTauWeightsSet=FALSE;
 
 /* R.E. priors: */
 static float PriorTau = 0.0;         /* tau value [e.g. 10,25] for use in discriminative MAP with -Hprior option. */
@@ -161,7 +161,7 @@ static float PriorTauWeights = 0.0;
 static float PriorTauTrans = 0.0;
 
 
-static Boolean twoDataFiles = FALSE; /* For training using two data files, probably never needed & code not tested. */
+static bool twoDataFiles = FALSE; /* For training using two data files, probably never needed & code not tested. */
 
 static float MinOcc = 10;              /* Minimum numerator (ML) occupancy for a Gaussian to be updated */
 static float MinOccTrans = 10;         /* Minimum numerator (ML) occupancy for a transition row */
@@ -177,7 +177,7 @@ static float hcrit = 1.0; /* Scale on denominator (MMI) part. Not really useful.
 static float varFloorPercent = 0;
 static float varSmooth = 0;
 
-static Boolean useLLF = FALSE;          /* use directory based LLF files instead of individual lattices */
+static bool useLLF = FALSE;          /* use directory based LLF files instead of individual lattices */
 /* Global non-config variables */
 
 
@@ -195,7 +195,7 @@ static int L;                        /* number of logical HMM's */
 static int P;                        /* number of physical HMM's */
 static HMMSet hset;                  /* Set of HMMs to be re-estimated */
 static HMMSet hset_prior;            /* Usually uninitialised, except for MMI-MAP/MPE-MAP */
-Boolean hset_prior_initialised = FALSE;
+bool hset_prior_initialised = FALSE;
 static char *hset_prior_dir = NULL;
 
 static FBLatInfo  fbInfo;            /* Structure for discriminative forward-backward. */
@@ -226,7 +226,7 @@ static double TotalCorr=0;
 static XFInfo xfInfo;
 
 /* static prior */
-static Boolean STATICPRIOR = FALSE;
+static bool STATICPRIOR = FALSE;
 
 /* ------------------ Process Command Line -------------------------- */
    
@@ -235,7 +235,7 @@ static Boolean STATICPRIOR = FALSE;
 void SetConfParms(void)
 {
    int i;
-   Boolean b;
+   bool b;
    double f;
    char buf[MAXSTRLEN];
   
@@ -254,15 +254,15 @@ void SetConfParms(void)
       if (GetConfFlt(cParm,nParm,"E",&f)) E = f;
       if (GetConfFlt(cParm,nParm,"DFACTOROCC",&f)) E = f; /*Back-compat. */
       if (GetConfFlt(cParm,nParm,"HCRIT",&f)) hcrit = f;
-      if (GetConfBool(cParm,nParm,"MPE",&b)){  MPE = b; THREEACCS = Boolean(MPE && MPEStoreML); }
-      if (GetConfBool(cParm,nParm,"MWE",&b)){  MPE = b; THREEACCS = Boolean(MPE && MPEStoreML); } /* "MWE" has identical effects here but differs in HFBLat.c */
-      if (GetConfBool(cParm,nParm,"MEE",&b)){  MPE = b; THREEACCS = Boolean(MPE && MPEStoreML); } /* Back-compat. */
+      if (GetConfBool(cParm,nParm,"MPE",&b)){  MPE = b; THREEACCS = bool(MPE && MPEStoreML); }
+      if (GetConfBool(cParm,nParm,"MWE",&b)){  MPE = b; THREEACCS = bool(MPE && MPEStoreML); } /* "MWE" has identical effects here but differs in HFBLat.c */
+      if (GetConfBool(cParm,nParm,"MEE",&b)){  MPE = b; THREEACCS = bool(MPE && MPEStoreML); } /* Back-compat. */
       if (GetConfBool(cParm,nParm,"MLE",&b)){  ML_MODE=TRUE; THREEACCS=FALSE; 
       uFlagsMLE =  UPDSet(UPMEANS|UPVARS|UPTRANS|UPMIXES); }
       if (GetConfBool(cParm,nParm,"MMIPRIOR",&b)){  MMIPrior = b;}
       if (GetConfFlt(cParm,nParm,"MMITAUI",&f)){ MMITauI = f;}
-      if (GetConfFlt(cParm,nParm,"ISMOOTHTAU",&f)){ ISmoothTau = f; MPEStoreML=TRUE; THREEACCS = Boolean(MPE && MPEStoreML); }
-      if (GetConfFlt(cParm,nParm,"ICRITOCC",  &f)){ ISmoothTau = f; MPEStoreML=TRUE; THREEACCS = Boolean(MPE && MPEStoreML); } /*back-compat. */
+      if (GetConfFlt(cParm,nParm,"ISMOOTHTAU",&f)){ ISmoothTau = f; MPEStoreML=TRUE; THREEACCS = bool(MPE && MPEStoreML); }
+      if (GetConfFlt(cParm,nParm,"ICRITOCC",  &f)){ ISmoothTau = f; MPEStoreML=TRUE; THREEACCS = bool(MPE && MPEStoreML); } /*back-compat. */
 
       if (GetConfFlt(cParm,nParm,"ISMOOTHTAUT",&f)){ ISmoothTauTrans = f; ISmoothTauTransSet=TRUE; }
       if (GetConfFlt(cParm,nParm,"ISMOOTHTAUW",&f)){ ISmoothTauWeights = f; ISmoothTauWeightsSet=TRUE; }
@@ -677,7 +677,7 @@ int main(int argc, char *argv[])
          }
       } else {
          /*parMode not zero -> load data files & align..*/
-         Boolean isPipe;
+         bool isPipe;
        
          if(NextArg() != STRINGARG)
             HError(2319,"HERest: data file name expected");
@@ -772,7 +772,7 @@ int main(int argc, char *argv[])
             }
          
             { /*apply F-B*/
-               Boolean DoCorrectSentence,DoRecogLattice;
+               bool DoCorrectSentence,DoRecogLattice;
                int CorrIndex,RecogIndex1, RecogIndex2;
                DoCorrectSentence = !MPE || (MPE&&MPEStoreML);
                DoRecogLattice = !ML_MODE;
@@ -800,7 +800,7 @@ int main(int argc, char *argv[])
                   int i,j; 
                   for(i=0;i<nDenLats;i++) FBLatAddLattice(&fbInfo, denLats[i]);
                   for(i=0;i<nNumLats;i++){
-                     Boolean UseLat = TRUE; 
+                     bool UseLat = TRUE; 
                      for(j=0;j<nDenLats;j++) if (LatInLat(numLats[i],denLats[j])) UseLat=FALSE; /*  Don't add redundant num lattices. */
                      if(UseLat){ if(trace&T_TOP) printf("[+num]");  FBLatAddLattice(&fbInfo, numLats[i]); }
                   }
@@ -1130,7 +1130,7 @@ void FloorDProbs(ShortVec mixes, int M, float floor)
 
 
 
-Boolean SolveQuadratic(double a, double b, double c, double *ans1, double *ans2){
+bool SolveQuadratic(double a, double b, double c, double *ans1, double *ans2){
    double temp;
 
    if(a==0){ /* bx + c = 0 --> x = -c/b */
@@ -1277,7 +1277,7 @@ float GiveMixD(MixPDF *mp, int stream, int priortype){
 }
 
 
-Boolean UpdateGauss(int stream, MixPDF *mp){
+bool UpdateGauss(int stream, MixPDF *mp){
    float D;
    int k;
    /* 3rd set of occs only required in MPE case where ML update has been specified for certain parms.. */
@@ -1288,7 +1288,7 @@ Boolean UpdateGauss(int stream, MixPDF *mp){
    Vector minV = vFloor[stream]; /*!The vFloor for this stream [vFloor a global var.]*/
    VaAcc *va1,*va2,*va3;
    MuAcc *ma1,*ma2,*ma3;
-   Boolean mixFloored=FALSE;
+   bool mixFloored=FALSE;
 
    cov = mp->cov; /*type Covariance. */
    va1 = (VaAcc*) GetHook(cov.var);
@@ -1383,7 +1383,7 @@ void UpdateWeightsAndTrans(void){
 static void FixHMMForICrit();
 
 
-static void FixWeightsForICrit(float Tau, Boolean THREEACCS){
+static void FixWeightsForICrit(float Tau, bool THREEACCS){
    HMMScanState hss;
    NewHMMScan(&hset,&hss); 
    while(GoNextStream(&hss,FALSE)){
@@ -1397,7 +1397,7 @@ static void FixWeightsForICrit(float Tau, Boolean THREEACCS){
    EndHMMScan(&hss); 
 }
 
-static void FixTransForICrit(float Tau, Boolean THREEACCS){
+static void FixTransForICrit(float Tau, bool THREEACCS){
    HMMScanState hss;
    NewHMMScan(&hset,&hss); 
    do{
@@ -1468,7 +1468,7 @@ static void GetMMIAccMix(int stream, MixPDF *mp)
 }
 
 
-static void _FixHMMForICrit(float Tau, Boolean THREEACCS){
+static void _FixHMMForICrit(float Tau, bool THREEACCS){
    /* Normally both Mu and Var occupancy will be identical. */
    HMMScanState hss;
    NewHMMScan(&hset,&hss); 
@@ -1512,7 +1512,7 @@ static void _FixHMMForICrit(float Tau, Boolean THREEACCS){
 }
 
 
-void AddPriorsFromPriorHMM(int dst_index, float Tau, float K, Boolean IsMMI, float ISmoothTau){
+void AddPriorsFromPriorHMM(int dst_index, float Tau, float K, bool IsMMI, float ISmoothTau){
    /* Normally both Mu and Var occupancy will be identical. */
    HMMScanState hss, hss_prior;
    NewHMMScan(&hset,&hss); NewHMMScan(&hset_prior,&hss_prior); 
@@ -1595,7 +1595,7 @@ static void SmoothTransFromPriorHMM(int index, float Tau){
 
 
 static void FixHMMForICrit(){
-   Boolean ISmoothingDone=FALSE;
+   bool ISmoothingDone=FALSE;
 
    if(PriorTau>0||PriorK>0||PriorK>0||PriorTauTrans>0) {
      if(!hset_prior_initialised)  HError(-1, "Config indicates that you intend to use a prior model (-Hprior), but none supplied.");

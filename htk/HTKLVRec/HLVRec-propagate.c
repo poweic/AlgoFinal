@@ -51,7 +51,7 @@ static int winTok_cmp (const void *v1, const void *v2)
      _decInst->nTok best tokens in different LM states.
 
 */
-void Decoder::MergeTokSet (TokenSet *src, TokenSet *dest, LogFloat score, Boolean prune) 
+void Decoder::MergeTokSet (TokenSet *src, TokenSet *dest, LogFloat score, bool prune) 
 {
    int i, j;
 
@@ -455,7 +455,7 @@ void Decoder::UpdateModPaths (TokenSet *ts, LexNode *ln)
 /* PropIntoNode
      Propagate tokenset into entry state of LexNode, activating as necessary
 */
-void Decoder::PropIntoNode (TokenSet *ts, LexNode *ln, Boolean updateLMLA)
+void Decoder::PropIntoNode (TokenSet *ts, LexNode *ln, bool updateLMLA)
 {
    LexNodeInst *inst;
    TokScore best;
@@ -485,7 +485,7 @@ void Decoder::PropIntoNode (TokenSet *ts, LexNode *ln, Boolean updateLMLA)
      External token propagation. Activate following nodes if necessary and propagate 
      token set into their entry states.
 */
-void Decoder::PropagateExternal ( LexNodeInst *inst, Boolean handleWE, Boolean wintTree)
+void Decoder::PropagateExternal ( LexNodeInst *inst, bool handleWE, bool wintTree)
 {
    LexNode *ln, *follLN;
    int i, N;
@@ -928,15 +928,15 @@ inline void eraseLinkedListNode(LexNodeInst* &head, LexNodeInst* prev, LexNodeIn
      performs pruning as necessary.
 */
 void Decoder::ProcessFrame (Observation **obsBlock, int nObs, AdaptXForm *xform) {
-   int i;
    LexNodeInst *inst, *prev, *next;
    TokScore beamLimit;
    
    inXForm = xform; /* sepcifies the transform to use */
    
+   /* reset obs */
    _decInst->obs = obsBlock[0];
    _decInst->nObs = nObs;
-   for (i = 0; i < nObs; ++i)
+   for (int i = 0; i < nObs; ++i)
       _decInst->obsBlock[i] = obsBlock[i];
    _decInst->bestScore = LZERO;
    _decInst->bestInst = NULL;
@@ -955,7 +955,7 @@ void Decoder::ProcessFrame (Observation **obsBlock, int nObs, AdaptXForm *xform)
 	     break;
 	   case LN_CON:	    /* Context or Wordend node */
 	   case LN_WORDEND:
-	      /* clear tokenset in preparation for external propagation*/
+	     /* clear tokenset in preparation for external propagation*/
 	     inst->ts[0].n = 0;
 	     inst->best = LZERO;
 	     break;
@@ -1066,12 +1066,12 @@ void Decoder::ProcessFrame (Observation **obsBlock, int nObs, AdaptXForm *xform)
 
 #define MMP_NBINS 128
    if (_decInst->maxModel > 0) {
-      int i, bin, nhist, hist[MMP_NBINS];
+      int bin, nhist, hist[MMP_NBINS];
       LogFloat binWidth;
       
       binWidth = _decInst->curBeamWidth / MMP_NBINS;
       nhist = 0;
-      for (i = 0; i < MMP_NBINS; ++i)
+      for (int i = 0; i < MMP_NBINS; ++i)
          hist[i] = 0;
       
       
@@ -1090,13 +1090,13 @@ void Decoder::ProcessFrame (Observation **obsBlock, int nObs, AdaptXForm *xform)
       }
       
 #if DEBUG_MMP
-      for (i = 0; i < MMP_NBINS; ++i)
+      for (int i = 0; i < MMP_NBINS; ++i)
          printf ("i %d  %d\n",  i, hist[i]);
 #endif
 
       if (nhist > _decInst->maxModel) {
          int nMod = 0;
-         i = -1;
+         int i = -1;
          while (nMod < _decInst->maxModel) {
             ++i;
             assert (i < MMP_NBINS);

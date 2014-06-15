@@ -118,8 +118,8 @@ typedef struct _SegStoreRec{
    MemHeap *mem;        /* memory for this seg store */
    int segLen;          /* blkSize for each segment */
    Observation o;       /* used as an 'i/o channel' to segstore */
-   Boolean hasfv;
-   Boolean hasvq;
+   bool hasfv;
+   bool hasvq;
    Sequence fvSegs;     /* each seg is a sequence of fv[SMAX] */
    Sequence vqSegs;     /* each seg is a sequence of vq[SMAX] */
 }SegStoreRec;
@@ -171,7 +171,7 @@ typedef struct {  /* auxiliary info for each cluster */
 
 typedef struct {
    MemHeap *x;     /* memheap holding this set */
-   Boolean isTree; /* true if tree clustered */
+   bool isTree; /* true if tree clustered */
    int numClust;   /* num cluster nodes */
    CovKind ck;     /* type of covariance if any */
    Cluster *cl;    /* array[1..numClust]of Cluster */
@@ -315,7 +315,7 @@ double ScaleAccs(HMMSet *hset, float weight);
    Scales all the accumulators.  Returns summed occupancy.
 */
 
-extern Boolean strmProj;
+extern bool strmProj;
 /* 
    Controls whether an  stream projection transform is generated.
    Not elegant, but saves multiple config specifications etc.

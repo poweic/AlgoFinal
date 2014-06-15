@@ -328,7 +328,7 @@ static void UpdateVars(HMMSet *hset, int px, HLink hmm)
    MixtureElem *me;
    Vector mean,var;
    Covariance cov;
-   Boolean mixFloored,shared;
+   bool mixFloored,shared;
    
    N = hmm->numStates;
    se = hmm->svec+2; 

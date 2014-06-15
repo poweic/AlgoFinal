@@ -78,8 +78,8 @@ static Vocab     *voc   = NULL;          /* the defining word list */
 static dictList  *dList = NULL;          /* list of dictionaries */
 static char      *outDictFn = NULL;      /* dictionary to write */
 static char      *uniFn = NULL;          /* unigram file name */
-static Boolean   firstOnly = FALSE;      /* Only use first dictionary with pron */
-static Boolean   remDup = TRUE;          /* Don't add duplicate prons */
+static bool   firstOnly = FALSE;      /* Only use first dictionary with pron */
+static bool   remDup = TRUE;          /* Don't add duplicate prons */
 
 
 /* ---------------- Configuration Parameters --------------------- */

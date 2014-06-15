@@ -95,7 +95,7 @@ static unsigned long black, white;
 static Visual        *theVisual;
 static XEvent        report;
 static XSizeHints    hints;
-static Boolean       winCreated = FALSE;
+static bool       winCreated = FALSE;
 
 static int colours[MAX_COLOURS];
 static int greys[MAX_GREYS];
@@ -214,11 +214,11 @@ static void DecodeKeyPress(XKeyEvent *xkev, HEventRec *hev)
 }
 
 /* EXPORT->HGetEvent: return next relevant event in event queue */
-HEventRec HGetEvent(Boolean anyEvent, void (*action)(void))
+HEventRec HGetEvent(bool anyEvent, void (*action)(void))
 {
    XEvent xev;
    HEventRec hev;
-   Boolean found,dummy;
+   bool found,dummy;
 
    XFlush(theDisp); found = FALSE;
    do {
@@ -283,18 +283,18 @@ int HEventsPending(void)
 
 /* EXPORT->HMousePos: return mouse pos in x, y, returns TRUE if 
    the pointer is on the window */
-Boolean HMousePos(int *x, int *y)
+bool HMousePos(int *x, int *y)
 {
    Window root,child;
    int rx,ry;
    unsigned int keys;
 
-   return (Boolean)
+   return (bool)
       XQueryPointer(theDisp, theWindow, &root, &child, &rx, &ry, x, y, &keys);
 }
 
 /* EXPORT: IsInRect: return TRUE iff (x,y) is in the rectangle (x0,y0,x1,y1) */ 
-Boolean IsInRect(int x, int y, int x0, int y0, int x1, int y1)
+bool IsInRect(int x, int y, int x0, int y0, int x1, int y1)
 {
    return (x >= x0 && x<=x1 && y >= y0 && y <= y1);
 }
@@ -584,7 +584,7 @@ void HDumpGraf(char *fname)
 /* ------------------ Timer routines  ------------------ */
 
 #ifdef USE_TIMER
-static Boolean timerDone;
+static bool timerDone;
 
 static void AlarmOn(void)
 {
@@ -717,7 +717,7 @@ HButton *FindButton(HButton *btnlst, ButtonId key)
 }
 
 /* EXPORT->SetActive: set active field in button list */
-void SetActive(HButton *btnlst, Boolean active)
+void SetActive(HButton *btnlst, bool active)
 {
    HButton *btnptr;
 
@@ -737,7 +737,7 @@ HButton *CheckButtonList(HButton *btnlst, int x, int y)
 }
 
 /* EXPORT->SetButtonLit: show button press */
-void SetButtonLit(HButton *btn, Boolean lit)
+void SetButtonLit(HButton *btn, bool lit)
 {
    if (btn->lit != lit){
       btn->lit = lit;
@@ -749,7 +749,7 @@ void SetButtonLit(HButton *btn, Boolean lit)
 ButtonId TrackButtons(HButton *btnlist, HEventRec hev)
 {
    HButton *pressed, *released;
-   Boolean done;
+   bool done;
 
    pressed = CheckButtonList(btnlist, hev.x, hev.y);
    if (pressed != NULL){

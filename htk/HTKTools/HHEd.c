@@ -97,8 +97,8 @@ static char * hmmDir = NULL;     /* directory to look for hmm def files */
 static char * hmmExt = NULL;     /* hmm def file extension */
 static char * newDir = NULL;     /* directory to store new hmm def files */
 static char * newExt = NULL;     /* extension of new edited hmm files */
-static Boolean noAlias = FALSE;  /* set to zap all aliases in hmmlist */
-static Boolean inBinary = FALSE; /* set to save models in binary */
+static bool noAlias = FALSE;  /* set to zap all aliases in hmmlist */
+static bool inBinary = FALSE; /* set to save models in binary */
 static char * mmfFn  = NULL;     /* output MMF file, if any */
 static int  cmdTrace    = 0;     /* trace level from command line */
 static int  trace    = 0;        /* current trace level */
@@ -117,33 +117,33 @@ static MixtureElem *joinSet;           /* current join Mix Set */
 static int nJoins;                     /* current num mixs in joinSet */
 static int joinSize=0;                 /* number of mixes in a joined pdf */
 static float joinFloor;                /* join mix weight floor (* MINMIX) */
-static Boolean badGC = FALSE;          /* set TRUE if gConst out of date */
+static bool badGC = FALSE;          /* set TRUE if gConst out of date */
 static float meanGC,stdGC;             /* mean and stdev of GConst */
-static Boolean occStatsLoaded = FALSE; /* set when RO/LS has loaded occ stats */
+static bool occStatsLoaded = FALSE; /* set when RO/LS has loaded occ stats */
 static float outlierThresh = -1.0;     /* outlier threshold set by RO cmd */
 
 static int thisCommand;                /* index of current command */
 static int lastCommand=0;              /* index of previous command */
-static Boolean equivState = TRUE;      /* TRUE if states can be equivalent */
+static bool equivState = TRUE;      /* TRUE if states can be equivalent */
                                        /*  but not identical */
-static Boolean useModelName = TRUE;    /* Use base-phone name as tree name */
-static Boolean saveHMMSet   = TRUE;    /* Save the HMMSet */
+static bool useModelName = TRUE;    /* Use base-phone name as tree name */
+static bool saveHMMSet   = TRUE;    /* Save the HMMSet */
 
 /* ---------------- Configuration Parameters --------------------- */
 
 static ConfParam *cParm[MAXGLOBS];
 static int nParm = 0;            /* total num params */
-static Boolean treeMerge = TRUE; /* After tree spltting merge leaves */
+static bool treeMerge = TRUE; /* After tree spltting merge leaves */
 static char tiedMixName[MAXSTRLEN] = "TM"; /* Tied mixture base name */
 static char mmfIdMask[MAXSTRLEN] = "*"; /* MMF Id Mask for baseclass */
-static Boolean useLeafStats = TRUE; /* Use leaf stats to init macros */
-static Boolean applyVFloor = TRUE; /* apply modfied varFloors to vars in model set */ 
+static bool useLeafStats = TRUE; /* Use leaf stats to init macros */
+static bool applyVFloor = TRUE; /* apply modfied varFloors to vars in model set */ 
 
 /* ------------------ Process Command Line -------------------------- */
 
 void SetConfParms(void)
 {
-   Boolean b;
+   bool b;
    int i;
 
    nParm = GetConfig("HHED", TRUE, cParm, MAXGLOBS);
@@ -381,7 +381,7 @@ void TraceQuestion(char *cmd, QLink q)
 char *ParseAlpha(char *src, char *s)
 {
    static char term[]=".,)";      /* Special string terminators */
-   Boolean wasQuoted;
+   bool wasQuoted;
    int c,q=0;
 
    wasQuoted=FALSE;
@@ -455,7 +455,7 @@ void LoadQuestion(char *qName, ILink ilist, char *pattern)
 }
 
 /* QMatch: return true if given name matches question */
-Boolean QMatch(char *name, QLink q)
+bool QMatch(char *name, QLink q)
 {
    IPat *ip;
    
@@ -639,7 +639,7 @@ void ZapAliases(void)
 }
 
 /* EquivMix: return TRUE if both states are identical */
-Boolean EquivMix(MixPDF *a, MixPDF *b)
+bool EquivMix(MixPDF *a, MixPDF *b)
 {
    if (a->mean != b->mean ||
        a->cov.var != b->cov.var ) return FALSE;
@@ -647,7 +647,7 @@ Boolean EquivMix(MixPDF *a, MixPDF *b)
 }
 
 /* EquivStream: return TRUE if both streams are identical */
-Boolean EquivStream(StreamElem *a, StreamElem *b)
+bool EquivStream(StreamElem *a, StreamElem *b)
 {
    int m,M;
    MixtureElem *mea,*meb;
@@ -667,7 +667,7 @@ Boolean EquivStream(StreamElem *a, StreamElem *b)
 }
 
 /* EquivState: return TRUE if both states are identical (only CONT) */
-Boolean EquivState(StateInfo *a, StateInfo *b, int S)
+bool EquivState(StateInfo *a, StateInfo *b, int S)
 {
    int s;
    StreamElem *stea,*steb;
@@ -682,7 +682,7 @@ Boolean EquivState(StateInfo *a, StateInfo *b, int S)
 }
 
 /* EquivHMM: return TRUE if both given hmms are identical */
-Boolean EquivHMM(HMMDef *a, HMMDef *b)
+bool EquivHMM(HMMDef *a, HMMDef *b)
 {
    int i;
    StateInfo *ai,*bi;
@@ -895,13 +895,13 @@ TriMat ChopTriMat(TriMat mat, int i, int j, int k)
 }
 
 /* SplitStreams: split streams of given HMM as per swidth info */
-void SplitStreams(HMMSet *hset,StateInfo *si,Boolean simple,Boolean first)
+void SplitStreams(HMMSet *hset,StateInfo *si,bool simple,bool first)
 {
    int j,s,S,m,M,width,V,next;
    StreamElem *ste,*oldste;
    MixtureElem *me,*oldme;
    MixPDF *mp, *oldmp;
-   Boolean hasN;
+   bool hasN;
    int epos[4];
    int eposIdx;
    
@@ -1708,7 +1708,7 @@ typedef struct _CRec *CLink;
 typedef struct _CRec{
    ILink item;                  /* a single item in this cluster (group) */
    int idx;                     /* index of this item */
-   Boolean ans;                 /* answer to current question */
+   bool ans;                 /* answer to current question */
    short state;                 /* state of clink */
    CLink next;                  /* next item in group */
 }CRec;
@@ -2225,7 +2225,7 @@ float MixMergeCost(MixtureElem *me1,MixtureElem *me2)
    
 /* MergeMix: merge components p and q from given stream elem.  If inPlace
    overwrite existing components, otherwise create new mix component */
-void MergeMix(StreamElem *ste,int p,int q, Boolean inPlace)
+void MergeMix(StreamElem *ste,int p,int q, bool inPlace)
 {
    float w1,w2,m,v,p0,p1,p2,v1k,v2k;
    int vs,k;
@@ -2281,7 +2281,7 @@ void MergeMix(StreamElem *ste,int p,int q, Boolean inPlace)
 /* DownMixSingle
    replace the mixture with a single Gaussian
  */
-void DownMixSingle(StreamElem *ste,Boolean inPlace)
+void DownMixSingle(StreamElem *ste,bool inPlace)
 {
     int k,i,vs;
     float w;
@@ -2334,7 +2334,7 @@ void DownMixSingle(StreamElem *ste,Boolean inPlace)
 /* DownMix: merge mixtures in stream to maxMix. If inPlace then existing
    mean and variance vectors will be overwritten.  Otherwise, new vectors
    are created for changed components */
-void DownMix(char *hname, StreamElem *ste, int maxMix, Boolean inPlace)
+void DownMix(char *hname, StreamElem *ste, int maxMix, bool inPlace)
 {
    int i,j,m,p,q,oldM,k,V;
    float bc,mc;
@@ -2399,7 +2399,7 @@ typedef struct _Node {          /* Tree Node */
    float tProb;                 /* likelihood of total cluster */
    float sProb;                 /* likelihood of split cluster */
    QLink quest;                 /* question used to do split */
-   Boolean ans;                 /* TRUE = yes, FALSE = no */
+   bool ans;                 /* TRUE = yes, FALSE = no */
    short snum;
    MLink macro;                 /* macro used for tie */
    struct _Node *parent;        /* parent of this node */
@@ -2420,7 +2420,7 @@ typedef struct _Tree{           /* A tree */
 
 static Tree *treeList = NULL;   /* list of trees */
 static AccSum yes,no;           /* global accs for yes - no branches */
-static float occs[2];           /* array[Boolean]of occupation counts */
+static float occs[2];           /* array[bool]of occupation counts */
 static float  cprob;            /* complete likelihood at current node */
 static int numTreeClust;        /* number of clusters in tree */
 
@@ -2590,7 +2590,7 @@ float AccSumProb(AccSum *acc)
 
 /* IncSumSqr: add sums and sqrs from given state into yes or no depending
    on value of ans */
-void IncSumSqr(StateInfo *si, Boolean ans, AccSum *no, AccSum *yes, int l)
+void IncSumSqr(StateInfo *si, bool ans, AccSum *no, AccSum *yes, int l)
 {
    AccSum *acc,*tacc;
    int k;
@@ -2795,7 +2795,7 @@ float MergeCost(Node *a, Node *b, CLink atail)
 /* MergeNode: find the as yet unseen node which when merged with
    given node gives smallest reduction in LogL.  If this reduction
    is less than threshold, merge the nodes and return TRUE */
-Boolean MergeNode(Node *node, float threshold)
+bool MergeNode(Node *node, float threshold)
 {
    Node *p, *min;
    CLink ctail;
@@ -2882,7 +2882,7 @@ void TieLeafNodes(Tree *tree, char *macRoot)
    SVector vf[SMAX];
    SVector mean, var;
    int l=0;
-   Boolean vfSet=FALSE; 
+   bool vfSet=FALSE; 
 
    if (trace & T_CLUSTERS) printf("\n Nodes for %s\n",macRoot);
    if (useLeafStats) { 
@@ -3119,7 +3119,7 @@ Ptr AssignStructure(LabId id, int state)
    LabId tid;
    Tree *tree;
    Node *node;
-   Boolean isYes;
+   bool isYes;
    MLink m;
    
    /* First find Tree to use */
@@ -3594,7 +3594,7 @@ STriMat DupSTriMat(STriMat m)
 }
 
 /* DupMixPDF: return a Dup of given MixPDF */
-MixPDF *DupMixPDF(MixPDF *s, Boolean frc)
+MixPDF *DupMixPDF(MixPDF *s, bool frc)
 {
    MixPDF *t;                   /* the target */
    int vSize;
@@ -3644,7 +3644,7 @@ MixtureElem *DupStream(StreamElem *ste)
 }
 
 /* DupState: return a Dup of given State */
-StateInfo *DupState(StateInfo *si, Boolean frc)
+StateInfo *DupState(StateInfo *si, bool frc)
 {
    StateInfo *t;                /* the target */
    StreamElem *tste,*sste;
@@ -3947,7 +3947,7 @@ void MakeTriCommand(void)
 /* ----------------- AT/RT - Add/Remove Transition Command ---------------- */
 
 /* EditTransMat: add/rem a transition in list of transP */
-void EditTransMat(Boolean adding)
+void EditTransMat(bool adding)
 {
    ILink t,ilist = NULL;        /* list of items to tie */
    char type = 't';             /* type of items must be t */
@@ -3970,7 +3970,7 @@ void EditTransMat(Boolean adding)
          printf("\nRT %d %d {}\n Removing transitions from transP\n",i,j);
       fflush(stdout);
    }
-   PItemList(&ilist,&type,hset,&source, Boolean(trace&T_ITM));
+   PItemList(&ilist,&type,hset,&source, bool(trace&T_ITM));
    if (ilist == NULL) {
       HError(-2631,"EditTransMat: No trans mats to edit!");
       return;
@@ -4044,7 +4044,7 @@ void MixUpCommand(void)
    }
    if (hset->hsKind==TIEDHS || hset->hsKind==DISCRETEHS)
       HError(2640,"MixUpCommand: MixUp only possible for continuous models");
-   PItemList(&ilist,&type,hset,&source, Boolean(trace&T_ITM));
+   PItemList(&ilist,&type,hset,&source, bool(trace&T_ITM));
    if (ilist == NULL) {
       HError(-2631,"MixUpCommand: No mixtures to increase!");
       return;
@@ -4108,7 +4108,7 @@ void TieCommand(void)
    ChkedAlpha("TI macro name",macName);
    if (strlen(macName) > 20 )
       HError(-2639,"TieCommand: %s is rather long for a macro name!",macName);
-   PItemList(&ilist,&type,hset,&source,Boolean(trace&T_ITM));
+   PItemList(&ilist,&type,hset,&source,bool(trace&T_ITM));
    if (trace & (T_BID | T_MAC)) {
       printf("\nTI %s {}\n Tie items\n",macName);
       fflush(stdout);
@@ -4139,7 +4139,7 @@ void MakeIntoMacrosCommand(void)
    }
    if (strlen(macName) > 20 )
       HError(-2639,"MakeIntoMacrosCommand: %s is rather long for a macro name!",macName);
-   PItemList(&ilist,&type,hset,&source, Boolean(trace&T_ITM));
+   PItemList(&ilist,&type,hset,&source, bool(trace&T_ITM));
    if (type=='p' || type=='h')
       HError(2640,"MakeIntoMacros: Cannot convert PDFs or HMMs into macro");
    for (i=ilist;i;i=i->next) {
@@ -4186,7 +4186,7 @@ void UntieCommand(void)
       printf("\nUT {}\n Untie previously tied structures\n");
       fflush(stdout);
    }
-   PItemList(&ilist,&type,hset,&source,Boolean(trace&T_ITM));
+   PItemList(&ilist,&type,hset,&source,bool(trace&T_ITM));
    if (ilist==NULL) {
       HError(-2631,"UntieCommand: No items to untie");
       return;
@@ -4236,7 +4236,7 @@ void JoinSizeCommand(void)
    is done.  If nCluster is set then clustering
    converges when the required number is reached
    otherwise a threshold for ming is used */
-void ClusterCommand(Boolean nCluster)
+void ClusterCommand(bool nCluster)
 {
    ILink ilist = NULL;          /* list of items to tie */
    char type = ' ';             /* type of items to tie */
@@ -4263,7 +4263,7 @@ void ClusterCommand(Boolean nCluster)
    if (strlen(macName) > 20 )
       HError(-2639,"ClusterCommand: %s is rather long for a macro name",
              macName);
-   PItemList(&ilist,&type,hset,&source,Boolean(trace&T_ITM));
+   PItemList(&ilist,&type,hset,&source,bool(trace&T_ITM));
    if (ilist==NULL) {
       HError(-2631,"ClusterCommand: No items to cluster for %s\n",macName);
       return;
@@ -4292,7 +4292,7 @@ void LoadStatsCommand(void)
       printf(" Loading state occupation stats\n");
       fflush(stdout);
    }
-   LoadStatsFile(statfile, hset, Boolean(trace & T_BID));
+   LoadStatsFile(statfile, hset, bool(trace & T_BID));
    occStatsLoaded = TRUE;
 }
 
@@ -4328,7 +4328,7 @@ void RemOutliersCommand(void)
       if (occStatsLoaded)
          HError(-2655,"RemOutliersCommand: Stats already loaded");
       else
-         LoadStatsFile(statfile,hset,Boolean(trace&T_BID));
+         LoadStatsFile(statfile,hset,bool(trace&T_BID));
       occStatsLoaded = TRUE;
    }
 }
@@ -4343,7 +4343,7 @@ void CompactCommand(void)
    MLink q;
    HLink hmm;
    int h;
-   Boolean seenMean,seenVar;
+   bool seenMean,seenVar;
    char fn[255];
    
    ChkedAlpha("CO hmmlist file name",fn);  /* get name of new hmm list */
@@ -4417,7 +4417,7 @@ void CompactCommand(void)
 /* ------------------ SS - SplitStream Command ------------------ */
 
 /* SplitStreamCommand: split input vectors into n independent data streams */
-void SplitStreamCommand(Boolean userWidths)
+void SplitStreamCommand(bool userWidths)
 {
    int s,next,S,V,ewidth,vchk,i,nedit=0;
    int epos[4];
@@ -4427,7 +4427,7 @@ void SplitStreamCommand(Boolean userWidths)
    short swidth[SMAX];
    ParmKind pk;
    Vector vf[SMAX],v;
-   Boolean simple=TRUE,vfSet,hasE,hasN,hasD,hasA,has0;
+   bool simple=TRUE,vfSet,hasE,hasN,hasD,hasA,has0;
 
    S = ChkedInt("No. streams",2,SMAX-1);
    V = hset->vecSize;  pk = hset->pkind;
@@ -4457,7 +4457,7 @@ void SplitStreamCommand(Boolean userWidths)
       hasE= HasEnergy(pk); has0 = HasZeroc(pk);
       if (hasE && has0)
          HError(2641,"SplitStreamCommand: Source data cant have _0 and _E");
-      hasE = Boolean(hasE | has0);     /* dont care which it is any more */
+      hasE = bool(hasE | has0);     /* dont care which it is any more */
       if (!hasD && !hasE)
          HError(2641,"SplitStreamCommand: Source data must have _D or _E");
       if (S==2) {
@@ -4499,7 +4499,7 @@ void SplitStreamCommand(Boolean userWidths)
          printf("\n");
          fflush(stdout);
       }
-      simple = Boolean(!hasE || (swidth[S]<2) || (S==2) || (hasA && S==3)) ;
+      simple = bool(!hasE || (swidth[S]<2) || (S==2) || (hasA && S==3)) ;
    }
    
    /* Get varFloor */
@@ -4527,7 +4527,7 @@ void SplitStreamCommand(Boolean userWidths)
    /* Do Splitting */
    NewHMMScan(hset,&hss);
    while(GoNextState(&hss,FALSE)) {
-      SplitStreams(hset,hss.si,simple,Boolean(nedit==0));
+      SplitStreams(hset,hss.si,simple,bool(nedit==0));
       if (trace & (T_SIZ | T_DET)) {
          if (nedit==0) printf(" For model.state["),hmm=NULL;
          if (hmm!=hss.hmm)
@@ -5024,7 +5024,7 @@ void QuestionCommand(void)
 
    ChkedAlpha("QS question name",qName);
    /* get copy of original item list whilst parsing it */
-   pattern=PItemList(&ilist,&type,hset,&source,Boolean(trace&T_ITM));
+   pattern=PItemList(&ilist,&type,hset,&source,bool(trace&T_ITM));
    if (trace & T_QST) {
       printf("\nQS %s %s Define question\n",qName,pattern);
       fflush(stdout);
@@ -5065,7 +5065,7 @@ void TreeBuildCommand(void)
    if (strlen(macName) > 20 )
       HError(-2639,"TreeBuildCommand: %s is rather long for a macro name",
              macName);
-   PItemList(&ilist,&type,hset,&source, Boolean(trace&T_ITM));
+   PItemList(&ilist,&type,hset,&source, bool(trace&T_ITM));
    if (ilist==NULL) {
       HError(-2631,"TreeBuildCommand: No items to cluster for %s\n",macName);
       return;
@@ -5440,7 +5440,7 @@ void MixDownCommand(void)
       HError(2640,"MixDownCommand: MixDown only possible for continuous models");
 
    /* get itemlist */
-   PItemList(&ilist,&type,hset,&source,Boolean(trace&T_ITM));
+   PItemList(&ilist,&type,hset,&source,bool(trace&T_ITM));
    if (ilist == NULL) {
       HError(-2631,"MixDownCommand: No mixtures to decrease!");
       return;
@@ -6094,7 +6094,7 @@ RegNode *FindBestTerminal(RegNode *t, float *score, int vSize, RegNode *best)
 
 
 int BuildRegClusters(RegNode *rtree, int vSize, int nTerminals, 
-                     Boolean nonSpeechNode) 
+                     bool nonSpeechNode) 
 {
   RegNode *t;
   RNode *ch1, *ch2, *n, *r;   /* temporary children */  
@@ -6184,7 +6184,7 @@ void RegClassesCommand(void)
   ILink ilist=NULL;            /* list of items that are non-speech sounds */
   int nTerminals, vSize, nNodes;   
   FILE *f;
-  Boolean isPipe;
+  bool isPipe;
 
   nTerminals = ChkedInt("Maximum number of terminal nodes is 256",0,256);
   ChkedAlpha("RC regression trees identifier",buf);         
@@ -6202,7 +6202,7 @@ void RegClassesCommand(void)
   while(ch!=EOF && isspace((int) ch));
   UnGetCh(ch,&source);
   if (ch != '\n')
-    PItemList(&ilist,&type,hset,&source,Boolean(trace&T_ITM));
+    PItemList(&ilist,&type,hset,&source,bool(trace&T_ITM));
 
   regTree = InitRegTree(hset, &vSize, ilist);
   if (ilist != NULL) 

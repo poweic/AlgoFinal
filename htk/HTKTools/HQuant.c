@@ -76,10 +76,10 @@ ClusterSet *cs[SMAX];              /* stores vector clusters */
 CovKind ck = NULLC;                /* determines distance metric */
 Vector mean[SMAX];                 /* Global stream mean  */
 Covariance cov[SMAX];              /* Global stream covariance  */
-Boolean widthSet = FALSE;          /* true if width of any stream is set */
+bool widthSet = FALSE;          /* true if width of any stream is set */
 
 static Observation obs;             /* storage for observations  */
-static Boolean globClustVar = FALSE;/*Output global variance of data to
+static bool globClustVar = FALSE;/*Output global variance of data to
                                       codebook in place of individual vars*/
 
 /* ------------- Process Command Line and Check Data ------------ */
@@ -418,7 +418,7 @@ void Initialise(char *datafn)
 {
    ParmBuf pbuf;
    int s;
-   Boolean eSep;
+   bool eSep;
 
    CreateHeap(&iStack,"inBuf",     MSTAK, 1, 0.5, 100000, LONG_MAX);
    CreateHeap(&dStack,"seqStack",  MSTAK, 1, 0.5, 100000, LONG_MAX);

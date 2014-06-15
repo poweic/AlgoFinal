@@ -95,11 +95,11 @@ static WordMap   *tgtVoc = NULL;    /* target vocabulary */
 static WordMap   wlist;             /* restricting the word list */
 static ShiftReg  stdBuf;            /* used for normal N-gram processing */
 
-static Boolean pruneWords = FALSE;    /* prune input text according to word list */
-static Boolean saveFiles = TRUE;      /* save intermediate files */ 
-static Boolean htkEscape = TRUE;      /* string escaping for output word map */
-static Boolean mapUpdated;            /* used optimise sort/saving */
-static Boolean processText = TRUE;    /* generate model from raw text data */
+static bool pruneWords = FALSE;    /* prune input text according to word list */
+static bool saveFiles = TRUE;      /* save intermediate files */ 
+static bool htkEscape = TRUE;      /* string escaping for output word map */
+static bool mapUpdated;            /* used optimise sort/saving */
+static bool processText = TRUE;    /* generate model from raw text data */
 static char *defMapName = "LAdapt";   /* map name */
 
 static LabId unkId = NULL;                   /* OOV marker */
@@ -177,8 +177,8 @@ int main(int argc, char *argv[])
    char sBuf[256],fmt[256];
 
    void       Initialise(void);
-   void       ProcessText(char *fn,Boolean lastFile);
-   Boolean    Exists(char *fn);
+   void       ProcessText(char *fn,bool lastFile);
+   bool    Exists(char *fn);
    BackOffLM *CombineModels(MemHeap *heap,LMInfo *lmi,int nLModel,int nSize,WordMap *wl) ;
 
    InitShell(argc,argv,ladapt_version,ladapt_vc_id);
@@ -339,7 +339,7 @@ int main(int argc, char *argv[])
 /* ------------------------ Initialisation ----------------------- */
 
 /* Exists:  return true if given file exists */
-Boolean Exists(char *fn)
+bool Exists(char *fn)
 {
    FILE *f;
    
@@ -397,7 +397,7 @@ void Initialise(void)
 /* ----------------- NGram Counting Routines -------------------- */
 
 /* CompressBuffer: and save if necessary or mustSave is TRUE */
-void CompressBuffer(NGBuffer *ngb, Boolean mustSave)
+void CompressBuffer(NGBuffer *ngb, bool mustSave)
 {
    float compx;
 
@@ -451,11 +451,11 @@ void PutShiftRegister(LabId id, ShiftReg *sr)
 }
 
 /* ProcessText: read text files line by line and count ngrams */
-void ProcessText(char *fn, Boolean lastFile)
+void ProcessText(char *fn, bool lastFile)
 {
    FILE *f;
    LabId id;
-   Boolean isPipe;
+   bool isPipe;
    char word[256];
 
    if (trace&T_TOP) 

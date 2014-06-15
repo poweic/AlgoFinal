@@ -145,19 +145,19 @@ typedef enum {
 } VolType;
 
 static VolType volType = v_peak;
-static Boolean lineOut = TRUE;
-static Boolean phonesOut = TRUE;
-static Boolean speakerOut = FALSE;
-static Boolean lineIn = TRUE;
-static Boolean micIn = FALSE;
+static bool lineOut = TRUE;
+static bool phonesOut = TRUE;
+static bool speakerOut = FALSE;
+static bool lineIn = TRUE;
+static bool micIn = FALSE;
 
-static volatile Boolean stopSignalled;
+static volatile bool stopSignalled;
 
 typedef enum { ADS_INIT, ADS_OPEN, ADS_SAMPLING, 
                ADS_STOPPED, ADS_CLOSED } AudioDevStatus;
 
 typedef struct {       /* circular buffer */
-   Boolean isActive;     /* true if in use */
+   bool isActive;     /* true if in use */
    short *data;          /* actual data buffer */
    int inx,outx;         /* in/out indices - wrap modulo size */
    int used,size;        /* used in data, size of data */
@@ -256,7 +256,7 @@ typedef struct _AudioOut {
    /* -- Machine Independent Part -- */
    MemHeap *mem;             /* memory heap for this audio rec */
    float vol;                /* current volume */
-   Boolean isActive;         /* true when device active */
+   bool isActive;         /* true when device active */
    /* -- Machine Dependent Part -- */
 #ifdef MMAPI_AUDIO
    MMRESULT mmError;
@@ -339,7 +339,7 @@ static int TrimSampFreq(int f)
 
 #ifdef OSS_AUDIO
 /* IsVAXOrder: returns true if machine has VAX ordered bytes */
-static Boolean IsVAXOrder(void)
+static bool IsVAXOrder(void)
 {
    short x, *px;
    unsigned char *pc;
@@ -402,13 +402,13 @@ void *mmeAllocBuffer(size_t size)
    return(ptr);
 }
 
-Boolean mmeFreeMem(void *ptr)
+bool mmeFreeMem(void *ptr)
 {
    ptr=GlobalFree(ptr);
    return(TRUE);
 }
 
-Boolean mmeFreeBuffer(void *ptr)
+bool mmeFreeBuffer(void *ptr)
 {
    ptr=GlobalFree(ptr);
    return(TRUE);
@@ -420,7 +420,7 @@ void mmeProcessCallbacks(void)
 void mmeWaitForCallbacks(void)
 {
 }
-Boolean mmeCheckForCallbacks(void)
+bool mmeCheckForCallbacks(void)
 {
    return(FALSE);
 }
@@ -1871,7 +1871,7 @@ static void SetVol(AudioOut a, float volume)
 void InitAudio(void)
 {
    int i;
-   Boolean b;
+   bool b;
 
    Register(haudio_version,haudio_vc_id);
    numParm = GetConfig("HAUDIO", TRUE, cParm, MAXGLOBS);
@@ -1979,8 +1979,8 @@ void PlayReplayBuffer(AudioOut ao, AudioIn ai)
 
 static AudioIn sigAudio;  /* Globals used for signalling */
 static int sigNum=NULLSIG;
-static volatile Boolean waitForSigH;
-static volatile Boolean alreadyFilling;
+static volatile bool waitForSigH;
+static volatile bool alreadyFilling;
 static int nz=0;
 
 /* ProtectedFillBufferFromAudio:  Read samples from audio, try to 
@@ -2014,7 +2014,7 @@ static void ProtectedFillBufferFromAudio(AudioIn a,int min)
 }
 
 /* StopAudioNow: stop the audio device immediately */
-static void StopAndFlushAudio(AudioIn a, Boolean deferred)
+static void StopAndFlushAudio(AudioIn a, bool deferred)
 {
    if (trace&T_TOP)
       printf("HAudio: stopping audio input %s\n",deferred?"deferred":"");

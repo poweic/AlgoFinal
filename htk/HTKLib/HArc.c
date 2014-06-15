@@ -64,9 +64,9 @@ static int nParm = 0;
 
 /*  LMSCALE and WDPEN here can override ones in lattice. Perhaps delete this.  */
 static float LMSCALE = 0;
-static Boolean IsLMScale = FALSE;
+static bool IsLMScale = FALSE;
 static float WDPEN = 0;
-static Boolean IsWdPen = FALSE;
+static bool IsWdPen = FALSE;
 static float FRAMEDUR = 0; 
 static int debug=0;
 
@@ -75,7 +75,7 @@ static int debug=0;
 #define MIN(a,b) ((a)<(b) ? (a):(b))
 
 
-Boolean StackInitialised=FALSE;
+bool StackInitialised=FALSE;
 static MemHeap tempArcStack;                  /* for temporary structures. */
 
 
@@ -130,7 +130,7 @@ ArcList *ConsArcList(MemHeap *mem, HArc *h, ArcList *t){
 }
 
 
-float Depth(ArcInfo *aInfo, Boolean All){
+float Depth(ArcInfo *aInfo, bool All){
    float maxTime=0.0, totalTime=0.0;
    HArc *arc;
    for(arc=aInfo->start;arc;arc=arc->foll){
@@ -305,7 +305,7 @@ void SortArcs( ArcInfo *aInfo )
 }
 
 
-Boolean BackTransitions(ArcInfo *aInfo){ /* a check, should never happen */
+bool BackTransitions(ArcInfo *aInfo){ /* a check, should never happen */
    HArc *a;
    ArcTrans *at;
    for(a=aInfo->start;a;a=a->foll)
@@ -517,7 +517,7 @@ void AttachMPEInfo(ArcInfo *aInfo){  /* attach the "mpe" structure to the arcs. 
 }
 
 
-Boolean SameArcs(LArc *a1, LArc *a2){ /*word arcs have same times & phones */
+bool SameArcs(LArc *a1, LArc *a2){ /*word arcs have same times & phones */
    int seg;
    if(a1->nAlign!=a2->nAlign) return FALSE;
    if(a1->start->time!=a2->start->time) return FALSE;
@@ -527,7 +527,7 @@ Boolean SameArcs(LArc *a1, LArc *a2){ /*word arcs have same times & phones */
    return TRUE; 
 }
 
-Boolean LatInLatRec(LNode *n1, LNode *n2){
+bool LatInLatRec(LNode *n1, LNode *n2){
 
    if(n1->foll==NULL && n2->foll==NULL){
       return TRUE; /*Path found.*/
@@ -544,7 +544,7 @@ Boolean LatInLatRec(LNode *n1, LNode *n2){
     
       for(n1FollArc=n1->foll;n1FollArc;n1FollArc=n1FollArc->farc){ /*For each following arc.  This could make the time exponential, were it not for
                                                                      the code above (if(n1->pred->parc!=NULL) return TRUE). */
-         Boolean ThisIsOK = FALSE;
+         bool ThisIsOK = FALSE;
          newn1 = n1FollArc->end;
       
          for(la = n2->foll;la;la=la->farc){
@@ -559,7 +559,7 @@ Boolean LatInLatRec(LNode *n1, LNode *n2){
    }
 }
 
-Boolean LatInLat(Lattice *numLat, Lattice *denLat){
+bool LatInLat(Lattice *numLat, Lattice *denLat){
    return LatInLatRec(numLat->lnodes+0, denLat->lnodes+0);
 }
 

@@ -45,7 +45,7 @@ char *hrec_vc_id = "$Id: HRec.c,v 1.1.1.1 2006/10/11 09:54:58 jal58 Exp $";
 #define SANITY
 
 static int trace=0;
-static Boolean forceOutput=FALSE;
+static bool forceOutput=FALSE;
 
 const Token null_token={LZERO,0.0,NULL,NULL};
 
@@ -79,7 +79,7 @@ struct align
    LogDouble like;      /* Likelihood upon entering state/model end */
    int frame;           /* Frame number upon entering state/model end */
    
-   Boolean used;        /* Reference to struct by current inst */
+   bool used;        /* Reference to struct by current inst */
    int usage;           /* Times struct ref'd (by align or path) */
 
    Align *link;         /* Next align in list */
@@ -137,8 +137,8 @@ struct _NetInst
    LogFloat wdlk;       /* Max likelihood of t=0 path to word end node */
    LogFloat max;        /* Likelihood for pruning of instance */
 
-   Boolean pxd;         /* External propagation done this frame */
-   Boolean ooo;         /* Instance potentially out of order */
+   bool pxd;         /* External propagation done this frame */
+   bool ooo;         /* Instance potentially out of order */
 
 #ifdef SANITY
    int ipos;
@@ -159,7 +159,7 @@ struct psetinfo
    HMMSet *hset;            /* HMM Set for recognition */
 
    int max;                 /* Max states in HMM set */
-   Boolean mixShared;
+   bool mixShared;
    int nsp;
    PreComp *sPre;           /* Array[1..nsp] State PreComps */
    int nmp;
@@ -184,8 +184,8 @@ struct precinfo {
    PSetInfo *psi;           /* HMMSet information */
    Network *net;            /* Recognition network */
    int nToks;               /* Maximum tokens to propagate (0==1) */
-   Boolean models;          /* Keep track of model history */
-   Boolean states;          /* Keep track of state history */
+   bool models;          /* Keep track of model history */
+   bool states;          /* Keep track of state history */
 
    float scale;             /* LM (Net probs) scale factor */
    LogFloat wordpen;        /* Word insertion penalty */
@@ -262,7 +262,7 @@ static int nParm = 0;
 void InitRec(void)
 {
    int i;
-   Boolean b;
+   bool b;
 
    Register(hrec_version,hrec_vc_id);
    nParm = GetConfig("HREC", TRUE, cParm, MAXGLOBS);
@@ -1758,7 +1758,7 @@ static void qcksrtM(float *array,int l,int r,int M)
 }
 
 /* EXPORT->InitVRecInfo: initialise ready for recognition */
-VRecInfo *InitVRecInfo(PSetInfo *psi,int nToks,Boolean models,Boolean states)
+VRecInfo *InitVRecInfo(PSetInfo *psi,int nToks,bool models,bool states)
 {
    VRecInfo *vri;
    PreComp *pre;
@@ -2164,7 +2164,7 @@ static void MarkBack(LNode *ln,int *nn)
    ln->n=(*nn)++;
 }
 
-static Boolean WordMatch(NBestEntry *cmp,NBestEntry *ans)
+static bool WordMatch(NBestEntry *cmp,NBestEntry *ans)
 {
    if (cmp==ans) return(TRUE);
    else if (cmp==NULL || ans==NULL) return(FALSE);
@@ -2187,7 +2187,7 @@ Transcription *TranscriptionFromLattice(MemHeap *heap,Lattice *lat,int N)
    LAlign *lal;
    LogFloat lm,modlk;
    double score,like,start,end;
-   Boolean states,models;
+   bool states,models;
    int i,j,n,nAux,*order;
    int nexp=0,nent=0;
 
@@ -2367,10 +2367,10 @@ Transcription *TranscriptionFromLattice(MemHeap *heap,Lattice *lat,int N)
 
 /* EXPORT->FormatTranscription: Format transcription prior to output */
 void FormatTranscription(Transcription *trans,HTime frameDur,
-                         Boolean states,Boolean models,Boolean triStrip,
-                         Boolean normScores,Boolean killScores,
-                         Boolean centreTimes,Boolean killTimes,
-                         Boolean killWords,Boolean killModels)
+                         bool states,bool models,bool triStrip,
+                         bool normScores,bool killScores,
+                         bool centreTimes,bool killTimes,
+                         bool killWords,bool killModels)
 {
    LabList *ll;
    LLink lab;

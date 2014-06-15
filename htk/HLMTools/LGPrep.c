@@ -137,12 +137,12 @@ static char *ruleFN  = NULL;        /* file containing edit rules */
 static char *omapFN  = NULL;        /* output word map filename */
 static char *imapFN  = NULL;        /* input word map filename */
 static char *txtsrc  = NULL;        /* gram file text source descriptor */
-static Boolean gbGen = TRUE;        /* flag to enable GBase generation */
-static Boolean forceCnts = FALSE;   /* force the output of word counts */
-static Boolean htkEscape = TRUE;    /* default escaping */
-static Boolean tagSentStart = FALSE;/* tag senetence start words with _ */
+static bool gbGen = TRUE;        /* flag to enable GBase generation */
+static bool forceCnts = FALSE;   /* force the output of word counts */
+static bool htkEscape = TRUE;    /* default escaping */
+static bool tagSentStart = FALSE;/* tag senetence start words with _ */
 static WordMap wmap;                /* word map for this corpus */
-static Boolean mapUpdated;          /* used optimise sort/saving */
+static bool mapUpdated;          /* used optimise sort/saving */
 static RuleSet rset;                /* rule set if any */
 static ShiftReg stdBuf;             /* used for normal N-gram processing */
 static ShiftReg posBuf;             /* N-grams from edited text */
@@ -158,7 +158,7 @@ static int wordnum = 0;
 /* ---------------- Prototype functions -------------------------- */
 
 void Initialise(void);
-void ProcessText(char *fn, Boolean lastFile);
+void ProcessText(char *fn, bool lastFile);
 
 /* ---------------- Process Command Line ------------------------- */
 
@@ -344,7 +344,7 @@ char * NextWord(char *s, char *word)
 /* ----------------- Pattern Match/Replace Data Routines -------------- */
 
 /* InSet: return TRUE if wdid is in wset */
-Boolean InSet(SetDef *wset, LabId wdid)
+bool InSet(SetDef *wset, LabId wdid)
 {
    int i;
 
@@ -402,7 +402,7 @@ void ReadRuleDef(char *s, RuleSet *rset)
    RuleDef *x;
    char buf[256];
    float f;
-   Boolean inPat = TRUE;
+   bool inPat = TRUE;
    
    x = (RuleDef *)New(&(rset->mem),sizeof(RuleDef));
    x->next = NULL;
@@ -469,7 +469,7 @@ void ReadRuleSet(char *fn, RuleSet *rset)
 {
    Source src;
    char buf[1024], *s;
-   Boolean infile;
+   bool infile;
    
    if (InitSource(fn,&src,NoFilter)==FAIL) {
       HError(16010, "ReadRuleSet: Can't read rule set from '%s'", fn);
@@ -533,7 +533,7 @@ void PrintRuleSet(RuleSet *rset)
 /* ------------------------ Initialisation ----------------------- */
 
 /* Exists:  return true if given file exists */
-Boolean Exists(char *fn)
+bool Exists(char *fn)
 {
    FILE *f;
    
@@ -589,7 +589,7 @@ void Initialise(void)
 /* ----------------- NGram Counting Routines -------------------- */
 
 /* CompressBuffer: and save if necessary or mustSave is TRUE */
-void CompressBuffer(NGBuffer *ngb, Boolean mustSave)
+void CompressBuffer(NGBuffer *ngb, bool mustSave)
 {
    float compx;
 
@@ -654,7 +654,7 @@ void PutShiftRegister(LabId id, ShiftReg *sr)
 /* -------------------- Editing Routines ------------------------- */
 
 /* MatchRule: return true if given rule matches editBuf */
-Boolean MatchRule(RuleDef *r)
+bool MatchRule(RuleDef *r)
 {
    int i,j;
    
@@ -735,12 +735,12 @@ void SendToEditBuffer(LabId id)
 /* -------------------------- Input Text ------------------------- */
 
 /* ProcessText: read text files line by line and count ngrams */
-void ProcessText(char *fn, Boolean lastFile)
+void ProcessText(char *fn, bool lastFile)
 {
    FILE *f;
    LabId id;
    char sbuf[1024],*word;
-   Boolean isPipe,wasSentStart;
+   bool isPipe,wasSentStart;
 
    if (trace&T_TOP) 
       printf("Reading source text file %s\n",(fn==NULL) ? "<stdin>" : fn);

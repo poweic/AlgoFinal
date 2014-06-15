@@ -75,7 +75,7 @@ void ReportUsage(void)
 int main(int argc, char *argv[])
 {
    char *s;
-   Boolean pipe_status;
+   bool pipe_status;
    FILE *file;
    char *wmFile, *wmName;
    char *escape="RAW";

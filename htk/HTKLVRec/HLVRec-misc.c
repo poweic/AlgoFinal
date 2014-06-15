@@ -36,7 +36,7 @@ void Decoder::CheckTokenSetOrder (TokenSet *ts)
 {
    int i;
    RelToken *prevTok;
-   Boolean ok = TRUE;
+   bool ok = TRUE;
 
    prevTok = &ts->relTok[0];
    for (i = 1; i < ts->n; ++i) {
@@ -61,7 +61,7 @@ void Decoder::CheckTokenSetId (TokenSet *ts1, TokenSet *ts2)
 {
    int i1, i2;
    RelToken *tok1, *tok2;
-   Boolean ok=TRUE;
+   bool ok=TRUE;
 
    abort ();    /* need to convert to use TOK_LMSTATE_ */
 
@@ -210,7 +210,7 @@ void Debug_DumpNet (LexNet *net)
    TokenSet *ts;
    RelToken *rtok;
    FILE *debugFile;
-   Boolean isPipe;
+   bool isPipe;
    static char *debug_net_fn = "net.dump";
 
    debugFile = FOpen (debug_net_fn, NoOFilter, &isPipe);
@@ -265,7 +265,7 @@ void Debug_Dump_LMLA_hastab(DecoderInst *_decInst)
    LMLACacheEntry *e;
 
    FILE *debugFile;
-   Boolean isPipe;
+   bool isPipe;
    static char *debug_net_fn = "lmla_cache.dump";
 
    debugFile = FOpen (debug_net_fn, NoOFilter, &isPipe);

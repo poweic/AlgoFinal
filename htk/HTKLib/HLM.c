@@ -52,7 +52,7 @@ static int trace=0;
 
 #define LN10 2.30258509299404568 /* Defined to save recalculating it */
 
-static Boolean rawMITFormat = FALSE;    /* Don't use HTK quoting and escapes */
+static bool rawMITFormat = FALSE;    /* Don't use HTK quoting and escapes */
 
 
 static ConfParam *cParm[MAXGLOBS];      /* config parameters */
@@ -61,7 +61,7 @@ static int nParm = 0;
 /* EXPORT->InitLM: initialise configuration parameters */
 void InitLM(void)
 {
-   Boolean b;
+   bool b;
    int i;
 
    Register(hlm_version,hlm_vc_id);
@@ -114,7 +114,7 @@ static int GetInt(void)
 }
 
 /* GetFLoat: read float from input stream */
-static float GetFloat(Boolean bin)
+static float GetFloat(bool bin)
 {
    float x;
    char buf[100];
@@ -156,7 +156,7 @@ static int hvs[]= { 165902236, 220889002, 32510287, 117809592,
                     165902236, 220889002, 32510287, 117809592 };
 
 /* EXPORT->GetNEntry: Access specific NGram entry indexed by ndx */
-NEntry *GetNEntry(NGramLM *nglm,lmId ndx[NSIZE],Boolean create)
+NEntry *GetNEntry(NGramLM *nglm,lmId ndx[NSIZE],bool create)
 {
    NEntry *ne;
    unsigned int hash;
@@ -367,7 +367,7 @@ NGramLM *CreateBoNGram(LModel *lm,int vocSize, int counts[NSIZE])
 #define BIN_ARPA_INT_LMID 2
 
 /* ReadNGrams: read n grams list from file */
-static int ReadNGrams(NGramLM *nglm,int n,int count, Boolean bin)
+static int ReadNGrams(NGramLM *nglm,int n,int count, bool bin)
 {
    float prob;
    LabId wdid;
@@ -490,7 +490,7 @@ static void ReadBoNGram(LModel *lm,char *fn)
 {
    NGramLM *nglm;
    int i,j,k,counts[NSIZE+1];
-   Boolean ngBin[NSIZE+1];
+   bool ngBin[NSIZE+1];
    char buf[MAXSTRLEN+1],syc[64];
    char ngFmtCh;
 
@@ -548,7 +548,7 @@ static void WriteBoNGram(LModel *lm,char *fn,int flags)
    int i,k;
    FILE *file;
    NGramLM *nglm;
-   Boolean isPipe;
+   bool isPipe;
 
    nglm = lm->data.ngram;
    file=FOpen(fn,LangModOFilter,&isPipe);
@@ -701,7 +701,7 @@ static void WriteMatBigram(LModel *lm,char *fn,int flags)
    const float epsilon = 0.000001;
    MatBiLM *matbi;
    FILE *file;
-   Boolean isPipe;
+   bool isPipe;
    Vector v;
    double x,y;
    int i,j,rep;

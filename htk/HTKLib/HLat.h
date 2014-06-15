@@ -81,7 +81,7 @@ void FixBadLat (Lattice *lat);
 
 void FixPronProbs (Lattice *lat, Vocab *voc);
 
-Boolean LatTopSort (Lattice *lat, LNode **topOrder);
+bool LatTopSort (Lattice *lat, LNode **topOrder);
 
 void LatAttachInfo (MemHeap *heap, size_t size, Lattice *lat);
 void LatDetachInfo (MemHeap *heap, Lattice *lat);
@@ -99,9 +99,9 @@ void ApplyNGram2LabLat(Lattice *lat, LModel *lm);
 Lattice *GetLattice (char *fn, char *path, char *ext,
                      /* arguments of ReadLattice() below */
                      MemHeap *heap, Vocab *voc, 
-                     Boolean shortArc, Boolean add2Dict);
+                     bool shortArc, bool add2Dict);
 
-Lattice *MergeLatNodesArcs(Lattice *lat, MemHeap *heap, Boolean mergeFwd);
+Lattice *MergeLatNodesArcs(Lattice *lat, MemHeap *heap, bool mergeFwd);
 
 void ApplyWPNet2LabLat(Lattice *lat, Lattice *wdNet);
 

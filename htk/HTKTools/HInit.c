@@ -77,9 +77,9 @@ static float epsilon = 1.0E-4;      /* convergence criterion */
 static float minVar  = 1.0E-2;      /* minimum variance */
 static float mixWeightFloor=0.0;    /*Floor for mixture/discrete prob weights*/
 static int minSeg    = 3;           /* min segments to train a model */
-static Boolean  newModel = TRUE;    /* enable initial uniform segmentation */
-static Boolean saveBinary = FALSE;  /* save output in binary  */
-static Boolean firstTime = TRUE;    /* Flag used to enable InitSegStore */
+static bool  newModel = TRUE;    /* enable initial uniform segmentation */
+static bool saveBinary = FALSE;  /* save output in binary  */
+static bool firstTime = TRUE;    /* Flag used to enable InitSegStore */
 static FileFormat dff=UNDEFF;       /* data file format */
 static FileFormat lff=UNDEFF;       /* label file format */
 static char *hmmfn;                 /* HMM definition file name (& part dir)*/
@@ -367,11 +367,11 @@ void Initialise(void)
 void InitSegStore(BufferInfo *info)
 {
    Observation obs;
-   Boolean eSep;
+   bool eSep;
 
    SetStreamWidths(info->tgtPK,info->tgtVecSize,hset.swidth,&eSep);
    obs = MakeObservation(&gstack,hset.swidth,info->tgtPK,
-                         Boolean(hset.hsKind==DISCRETEHS),eSep);
+                         bool(hset.hsKind==DISCRETEHS),eSep);
    segStore = CreateSegStore(&segmentStack,obs,10);
    firstTime = FALSE;
 }
@@ -1035,7 +1035,7 @@ void UpMeans(int i, int s, int m, int size, MuAcc *ma, Vector mean)
 /* UpVars: update variances, apply correction if covariance is 
            not shared */
 void UpVars(int i, int s, int m, int size, VaAcc *va, Vector oldMean,
-            Vector newMean, Boolean shared, MixPDF *mp)
+            Vector newMean, bool shared, MixPDF *mp)
 {
    int j,k;
    float x,y,z;
@@ -1123,7 +1123,7 @@ void UpdateParameters(void)
    MuAcc *ma = NULL;
    VaAcc *va;
    TrAcc *ta;
-   Boolean hFound = FALSE,shared;
+   bool hFound = FALSE,shared;
 
    NewHMMScan(&hset,&hss);
    do if (hmmLink == hss.hmm){
@@ -1150,7 +1150,7 @@ void UpdateParameters(void)
                   if (!IsSeenV(hss.mp->cov.var)) {
                      if (uFlags&UPVARS) {
                         va = (VaAcc *)GetHook(hss.mp->cov.var);
-                        shared = Boolean(GetUse(hss.mp->cov.var) > 1);
+                        shared = bool(GetUse(hss.mp->cov.var) > 1);
                         UpVars(hss.i,hss.s,hss.m,size,va,ma->mu,hss.mp->mean,
                                shared,hss.mp);
                      }
@@ -1192,7 +1192,7 @@ IntVec *CreateMixes(MemHeap *x,int segLen)
 void EstimateModel(void)
 {
    LogFloat totalP,newP,delta;
-   Boolean converged = FALSE;
+   bool converged = FALSE;
    int i,iter,numSegs,segLen;    
    IntVec states;  /* array[1..numSegs] of State */
    IntVec *mixes;  /* array[1..S][1..numSegs] of MixComp */
@@ -1219,7 +1219,7 @@ void EstimateModel(void)
       /* Update parameters or quit */
       newP /= (float)numSegs;
       delta = newP - totalP;
-      converged = Boolean((iter>1) && (fabs(delta) < epsilon));
+      converged = bool((iter>1) && (fabs(delta) < epsilon));
       if (!converged)
          UpdateParameters();
       totalP = newP;

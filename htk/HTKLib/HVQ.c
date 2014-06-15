@@ -66,7 +66,7 @@ static CovKind CKCheck(CovKind ck)
                 that it is same, return NULL if not found */
 static VQTable FindVQTable(char * tabFN, short magic)
 {
-   Boolean found=FALSE;
+   bool found=FALSE;
    VQTable p;
       
    for (p=vqList; p!=NULL && !found; p=p->next)

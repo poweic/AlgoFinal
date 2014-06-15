@@ -149,7 +149,7 @@ static void InitialiseMerge(MemHeap *heap, MergeInfo *mi)
 {
    int i,j,nw;
    LMInfo *li;
-   Boolean inLM;
+   bool inLM;
    LabId  lid, *lip;
    NameId nid, *nip;
    int nWords, nLModel;
@@ -240,7 +240,7 @@ static int MergeFE(MergeInfo *mi, FLEntry **context, FLEntry **srcFE, int lev)
 
    LMInfo *li;
    int ndx;
-   Boolean inLM;
+   bool inLM;
    BackOffLM *lm;
    UInt feId[LM_NSIZE];
    int i,j,l,nse,nfe,*la,total;

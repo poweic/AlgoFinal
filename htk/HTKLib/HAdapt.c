@@ -143,16 +143,16 @@ static MemHeap pobcaStack; /* parent obscache */
 static XFormKind xKind     = MLLRMEAN;  /* Transform Kind to be created */
 
 /* also have the option of storing a model set for each of the speakers */
-static Boolean saveSpkrModels = FALSE;
+static bool saveSpkrModels = FALSE;
 
 /* The xform config variable information */
 static float minOccThresh = 0.0;       /* minimum occupancy to accumulate stats to estimate xform */
-static Boolean useBias = TRUE;         /* whether a bias is to be estimated for the xform */
-static Boolean storeMInfo = TRUE;      /* whether original model information  is to be stored */
-static Boolean keepXFormDistinct = TRUE;
-static Boolean swapXForms = FALSE;     /* swap the transforms around after generating transform */
-static Boolean mllrCov2CMLLR= FALSE;   /* apply mllrcov transforms as cmllr transform */ 
-static Boolean mllrDiagCov = FALSE;    /* perform diagonal covariance adaptation */
+static bool useBias = TRUE;         /* whether a bias is to be estimated for the xform */
+static bool storeMInfo = TRUE;      /* whether original model information  is to be stored */
+static bool keepXFormDistinct = TRUE;
+static bool swapXForms = FALSE;     /* swap the transforms around after generating transform */
+static bool mllrCov2CMLLR= FALSE;   /* apply mllrcov transforms as cmllr transform */ 
+static bool mllrDiagCov = FALSE;    /* perform diagonal covariance adaptation */
 
 static IntVec enableBlockAdapt = NULL;
 
@@ -198,25 +198,25 @@ static AccCache *headac = NULL;
 static float semiTiedFloorScale = 0.1;
 static int maxSemiTiedIter = 10;
 static char *semiTiedMacro = NULL;
-static Boolean semiTied2InputXForm = FALSE;
-static Boolean semiTiedVFloor = TRUE;
+static bool semiTied2InputXForm = FALSE;
+static bool semiTiedVFloor = TRUE;
 static int numNuisanceDim = 0;
 static TriMat *avCov = NULL;
-static Boolean staticSemiTied = FALSE;
-static Boolean initNuisanceFR = TRUE;
-static Boolean initNuisanceFRIdent = FALSE;
-static Boolean saveSemiTiedBinary = FALSE;
+static bool staticSemiTied = FALSE;
+static bool initNuisanceFR = TRUE;
+static bool initNuisanceFRIdent = FALSE;
+static bool saveSemiTiedBinary = FALSE;
 
 /* specifies whether the transforms change the model variances */
-static Boolean covarChanged = FALSE;
-static Boolean covarPChanged = FALSE;
+static bool covarChanged = FALSE;
+static bool covarPChanged = FALSE;
 
 /*------------------------------------------------------------------------*/
 /*    Support Routines for determining internal structures required       */
 /*    Note: these only act on the transform NOT any parents.              */
 /*------------------------------------------------------------------------*/
 
-static Boolean AccAdaptMean(AdaptXForm *xform)
+static bool AccAdaptMean(AdaptXForm *xform)
 {
    /* Currently always true */
    if (xform->xformSet->xkind == SEMIT) 
@@ -225,7 +225,7 @@ static Boolean AccAdaptMean(AdaptXForm *xform)
       return (TRUE);
 }
 
-static Boolean AccAdaptVar(AdaptXForm *xform)
+static bool AccAdaptVar(AdaptXForm *xform)
 {
   XFormKind xkind = xform->xformSet->xkind;
   if ( (xkind == CMLLR) || (xkind == MLLRCOV) || (mllrDiagCov)) 
@@ -234,7 +234,7 @@ static Boolean AccAdaptVar(AdaptXForm *xform)
     return (FALSE);
 }
 
-static Boolean AccAdaptBaseTriMat(AdaptXForm *xform)
+static bool AccAdaptBaseTriMat(AdaptXForm *xform)
 {
   XFormKind xkind = xform->xformSet->xkind;
   if ( (xkind == CMLLR) || (xkind == MLLRCOV)) 
@@ -243,25 +243,25 @@ static Boolean AccAdaptBaseTriMat(AdaptXForm *xform)
     return (FALSE);
 }
 
-Boolean HardAssign(AdaptXForm *xform)
+bool HardAssign(AdaptXForm *xform)
 {
    AdaptKind akind = xform->akind;
    return ((akind == TREE) || (akind == BASE));
 }
 
-static Boolean StoreObsCache(AdaptXForm *xform)
+static bool StoreObsCache(AdaptXForm *xform)
 {
    XFormKind xkind = xform->xformSet->xkind;
    return ((xkind == CMLLR)  || (xkind == MLLRCOV) || (xkind == SEMIT));
 }
 
-static Boolean StoreAdaptMean(AdaptXForm *xform)
+static bool StoreAdaptMean(AdaptXForm *xform)
 {
    XFormKind xkind = xform->xformSet->xkind;
    return ((xkind == MLLRMEAN) || (xkind == MLLRCOV));
 }
 
-static Boolean StoreAdaptCov(AdaptXForm *xform)
+static bool StoreAdaptCov(AdaptXForm *xform)
 {
    XFormKind xkind = xform->xformSet->xkind;
    return (xkind == MLLRVAR);
@@ -326,7 +326,7 @@ static IntVec ParseConfIntVec(MemHeap *x, char *inbuf)
 void InitAdapt (XFInfo *xfinfo) 
 {
    int i;
-   Boolean b;
+   bool b;
    double d;
    char buf[MAXSTRLEN];
   
@@ -620,7 +620,7 @@ static AccCache *GetPAAccCache(MixPDF *mp)
 static MInfo *CreateMInfo(MemHeap *x, MixPDF *mp, AdaptXForm *xform)
 {
    MInfo *mi;
-   Boolean adaptMean, adaptCov;
+   bool adaptMean, adaptCov;
    AdaptXForm *xf;
    int size;
 
@@ -692,9 +692,9 @@ static void SetMInfo(HMMSet *hset, AdaptXForm *xform)
    hset->attMInfo = TRUE;
 }
 
-static Boolean CompareMInfo(HMMSet *hset, AdaptXForm *xform)
+static bool CompareMInfo(HMMSet *hset, AdaptXForm *xform)
 {
-   Boolean adaptMean, adaptCov;
+   bool adaptMean, adaptCov;
    AdaptXForm *xf;
    HMMScanState hss;
    MixPDF *mp;
@@ -732,7 +732,7 @@ static Boolean CompareMInfo(HMMSet *hset, AdaptXForm *xform)
 */
 static void UpdateMInfo(HMMSet *hset, AdaptXForm *xform)
 {
-   Boolean adaptMean, adaptCov;
+   bool adaptMean, adaptCov;
    AdaptXForm *xf;
    int size;
    HMMScanState hss;
@@ -831,10 +831,10 @@ static void AttachXFormInfo(HMMSet *hset)
    hset->attXFormInfo = TRUE;
 }
 
-static Boolean CompareXFormInfo(AdaptXForm *xform1, AdaptXForm *xform2)
+static bool CompareXFormInfo(AdaptXForm *xform1, AdaptXForm *xform2)
 {
    AdaptXForm *xf1, *xf2;
-   Boolean valid=FALSE;
+   bool valid=FALSE;
 
    if (xform1 == xform2) return TRUE;
    xf1 = xform1; xf2 = xform2;
@@ -852,7 +852,7 @@ static Boolean CompareXFormInfo(AdaptXForm *xform1, AdaptXForm *xform2)
 
 /* --------------- handling the AInfo structure ------------------ */
 
-static void SetAInfo(HMMSet *hset, AdaptXForm *xform, Boolean parent)
+static void SetAInfo(HMMSet *hset, AdaptXForm *xform, bool parent)
 {
    BaseClass *bclass;
    MixPDF *mp;
@@ -1162,9 +1162,9 @@ void ResetAccCache(void)
    }
 }
 
-static Boolean XFormModCovar(AdaptXForm *xform)
+static bool XFormModCovar(AdaptXForm *xform)
 {
-  Boolean isModified = FALSE;
+  bool isModified = FALSE;
 
   while (xform != NULL){
     if (StoreAdaptCov(xform)){
@@ -1182,7 +1182,7 @@ static void AccBaseTriMat(HMMSet *hset, double Lr, Vector svec, MixPDF *mp, int 
    /* TriMat m; */
    Vector covar;
    RegAcc *regAcc;
-   Boolean resetMixPDF = FALSE;
+   bool resetMixPDF = FALSE;
   
    if (((hset->parentXForm == NULL) && (hset->curXForm == NULL) ) || (hset->parentXForm == hset->curXForm))  {
       /* There's nothing to be done as model set the same */
@@ -1544,11 +1544,11 @@ static float SetNodeOcc(RegNode *node, BaseClass *bclass)
    return node->nodeOcc;
 }
 
-static Boolean ParseNode(RegNode *node, AdaptXForm *xform, 
+static bool ParseNode(RegNode *node, AdaptXForm *xform, 
 			 RegTree *rtree, IntVec classes)
 {
    int b,c,size;
-   Boolean genXForm;
+   bool genXForm;
    IntVec lclasses;
 
    void GenXForm(RegNode *node, AdaptXForm *xform, IntVec classes);  
@@ -1582,7 +1582,7 @@ static Boolean ParseNode(RegNode *node, AdaptXForm *xform,
    return genXForm;
 }
 
-static Boolean ParseTree(RegTree *rtree, AdaptXForm *xform)
+static bool ParseTree(RegTree *rtree, AdaptXForm *xform)
 {
    int c;
    IntVec classes;
@@ -2019,7 +2019,7 @@ static ObsCache *CreateObsCache(MemHeap *heap, ObsCache **headoc, int size)
 }
   
 
-static void SetObsCache(AdaptXForm *xform, Boolean parent)
+static void SetObsCache(AdaptXForm *xform, bool parent)
 {
    MixPDF *mp;
    BaseClass *bclass;
@@ -2429,7 +2429,7 @@ static void EstMLLRMeanXForm(AccStruct *accs, LinXForm *xf)
    SVector bias;
    int i,j,k,dim;
    int cnti,b,bsize;
-   Boolean uBias;
+   bool uBias;
 
    bias = xf->bias; 
    if (bias==NULL) uBias = FALSE;
@@ -2593,7 +2593,7 @@ static void InitCMLLRXForm(AccStruct *accs, DVector W, DVector bias)
   DMatrix invG,u,v,lG;
   int i,k,dim,ldim;
   int cnt, cnti,b,bsize;
-  Boolean uBias;
+  bool uBias;
   double alpha, likeNew, likeOld;
   DVector tvec,tW,w,iW,lK;
   DVector cofact;
@@ -2672,7 +2672,7 @@ static void EstCMLLRXForm(AccStruct *accs, LinXForm *xf)
   int i,j,k,dim;
   int iter;
   int cnt, cnti,b,bsize;
-  Boolean uBias;
+  bool uBias;
   double alpha, likeNew, likeOld;
   double det=0.0,tdet;
   DVector W, iniW, tvec, iniA;
@@ -3669,7 +3669,7 @@ void GenXForm(RegNode *node, AdaptXForm *xform, IntVec classes)
    Dispose(&gstack,accs);
 }
 
-static Boolean GenClassXForm(BaseClass *bclass, AdaptXForm *xform)
+static bool GenClassXForm(BaseClass *bclass, AdaptXForm *xform)
 {
   AccStruct *accs;
   int b;
@@ -3809,7 +3809,7 @@ static void MatrixMult(Matrix m1, Matrix m2, Matrix m)
    FreeMatrix(&gstack,mat);
 }
 
-static Boolean CompBlockSizes(IntVec blocks1, IntVec blocks2)
+static bool CompBlockSizes(IntVec blocks1, IntVec blocks2)
 {
    int nblock1, nblock2;
    int i;
@@ -4304,10 +4304,10 @@ InputXForm *AdaptXForm2InputXForm(HMMSet *hset, AdaptXForm *xform)
    return ixform;
 }
 
-Boolean GenAdaptXForm(HMMSet *hset, AdaptXForm* xform)
+bool GenAdaptXForm(HMMSet *hset, AdaptXForm* xform)
 {
    AdaptKind akind;
-   Boolean genXForm = FALSE;
+   bool genXForm = FALSE;
 
    akind = xform->akind;
    switch(akind) {
@@ -4349,7 +4349,7 @@ AdaptXForm *GetMLLRDiagCov(AdaptXForm *xform)
    at each speaker boundary, returns TRUE when the output speaker
    has changed
 */
-Boolean UpdateSpkrStats(HMMSet *hset, XFInfo *xfinfo, char *datafn)
+bool UpdateSpkrStats(HMMSet *hset, XFInfo *xfinfo, char *datafn)
 {
    char newFn[MAXSTRLEN];
    char newMn[MAXSTRLEN];
@@ -4359,8 +4359,8 @@ Boolean UpdateSpkrStats(HMMSet *hset, XFInfo *xfinfo, char *datafn)
    static char cinspkr[MAXSTRLEN];
    static char cpaspkr[MAXSTRLEN];
    static int nspkr = 0;
-   Boolean resetHMMSet = FALSE, maskMatch;
-   Boolean spkrChange = FALSE;
+   bool resetHMMSet = FALSE, maskMatch;
+   bool spkrChange = FALSE;
 
    if (!((hset->hsKind == PLAINHS) || (hset->hsKind == SHAREDHS))
        && (xfinfo->useOutXForm || xfinfo->useInXForm || xfinfo->usePaXForm )) {

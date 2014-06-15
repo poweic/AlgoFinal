@@ -68,13 +68,13 @@ int NumLMHdrFields(LMFileHdr hdr);
    Return number of fields in hdr.
 */
 
-char * GetLMHdrStr(char *name, LMFileHdr hdr, Boolean ucase);
+char * GetLMHdrStr(char *name, LMFileHdr hdr, bool ucase);
 /*
    Return the str value of header field name.  If ucase then
    upper case it first. Returns NULL if name not defined in hdr.
 */
 
-Boolean GetLMHdrInt(char *name, int *value, LMFileHdr hdr);
+bool GetLMHdrInt(char *name, int *value, LMFileHdr hdr);
 /*
    Store the int value of header field name in value.  Returns 
    false if name not defined in hdr or value not interpretable as
@@ -88,7 +88,7 @@ void UpperCase(char *s);
     Convert s to upper case
 */
 
-Boolean BlankString(char *s);
+bool BlankString(char *s);
 /*
    Return true if s is blank 
 */
@@ -118,7 +118,7 @@ HashTab *CreateHashTable(int hashSize, char *description);
    Create and initialise a hash table 
 */
 
-NameId GetNameId(HashTab *htab, char *name, Boolean insert);
+NameId GetNameId(HashTab *htab, char *name, bool insert);
 /*
    Query/insert name into hash table
 */

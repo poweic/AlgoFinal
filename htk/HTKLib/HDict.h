@@ -126,7 +126,7 @@ void ShowDict(Vocab *voc);
 */
 
 
-Word GetWord(Vocab *voc, LabId wordName, Boolean insert);
+Word GetWord(Vocab *voc, LabId wordName, bool insert);
 /* 
    Return the Word with name wordName from Vocab voc.  If
    insert and wordName not in voc, then a new entry is

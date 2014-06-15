@@ -68,7 +68,7 @@ char *hfb_vc_id = "$Id: HFB.c,v 1.1.1.1 2006/10/11 09:54:57 jal58 Exp $";
 static int trace         =  0;
 static int skipstartInit = -1;
 static int skipendInit   = -1;
-static Boolean alCompLevel = FALSE;   /* align model at component level */
+static bool alCompLevel = FALSE;   /* align model at component level */
 
 static ConfParam *cParm[MAXGLOBS];      /* config parameters */
 static int nParm = 0;
@@ -82,8 +82,8 @@ static struct {
 
 } pruneSetting = { NOPRUNE, 0.0, NOPRUNE, 10.0 };
 
-static Boolean pde = FALSE;  /* partial distance elimination */
-static Boolean sharedMix = FALSE; /* true if shared mixtures */
+static bool pde = FALSE;  /* partial distance elimination */
+static bool sharedMix = FALSE; /* true if shared mixtures */
 
 /* ------------------------- Min HMM Duration -------------------------- */
 
@@ -214,7 +214,7 @@ void InitFB(void)
    int m;
    int i;
    double d;
-   Boolean b;
+   bool b;
 
    Register(hfb_version,hfb_vc_id);
 
@@ -333,7 +333,7 @@ void UseAlignHMMSet(FBInfo* fbInfo, MemHeap* x, HMMSet *al_hset)
 }
 
 /* Initialise the utterance memory requirements */
-void InitUttInfo( UttInfo *utt, Boolean twoFiles )
+void InitUttInfo( UttInfo *utt, bool twoFiles )
 {
    CreateHeap(&utt->transStack,"transStore",MSTAK, 1, 0.5, 1000,  10000);
    CreateHeap(&utt->dataStack,"dataStore",MSTAK, 1, 0.5, 1000,  10000);
@@ -419,7 +419,7 @@ static void SetOcct(HLink hmm, int q, Vector occt, Vector *occa,
 
 
 /* NonSkipRegion: returns true if t is not in the skip region */
-static Boolean NonSkipRegion(int skipstart, int skipend, int t)
+static bool NonSkipRegion(int skipstart, int skipend, int t)
 {
    return skipstart<1 || t<skipstart || t>skipend;
 }
@@ -999,7 +999,7 @@ static void Setotprob(AlphaBeta *ab, FBInfo *fbInfo, ParmBuf pbuf,
    PruneInfo *p;
    int skipstart, skipend;
    HMMSet *hset;
-   Boolean seenState=FALSE;
+   bool seenState=FALSE;
    
    hset = fbInfo->al_hset;
    skipstart = fbInfo->skipstart;
@@ -1299,7 +1299,7 @@ static LogDouble SetBeta(AlphaBeta *ab, FBInfo *fbInfo, UttInfo *utt)
 
 /* CheckData: check data file consistent with HMM definition */
 static void CheckData(HMMSet *hset, char *fn, BufferInfo *info, 
-                      Boolean twoDataFiles) 
+                      bool twoDataFiles) 
 {
    if (info->tgtVecSize!=hset->vecSize)
       HError(7350,"CheckData: Vector size in %s[%d] is incompatible with hset [%d]",
@@ -1318,7 +1318,7 @@ static void ResetStacks(AlphaBeta *ab)
 }
 
 /* StepBack: Step utterance from T to 1 calculating Beta matrix*/
-static Boolean StepBack(FBInfo *fbInfo, UttInfo *utt, char * datafn)
+static bool StepBack(FBInfo *fbInfo, UttInfo *utt, char * datafn)
 {
    LogDouble lbeta;
    LogDouble pruneThresh;
@@ -1426,7 +1426,7 @@ static void UpTranParms(FBInfo *fbInfo, HLink hmm, int t, int q,
 static void UpMixParms(FBInfo *fbInfo, int q, HLink hmm, HLink al_hmm,
                        Observation ot, Observation ot2, 
                        int t, DVector aqt, DVector aqt1, DVector bqt, int S,
-                       Boolean twoDataFiles, LogDouble pr)
+                       bool twoDataFiles, LogDouble pr)
 {
    int i,s,j,k,kk,m=0,mx,M=0,N,vSize;
    Vector mu_jm,var,mean=NULL,invk,otvs;
@@ -1446,7 +1446,7 @@ static void UpMixParms(FBInfo *fbInfo, int q, HLink hmm, HLink al_hmm,
    MuAcc *ma;
    VaAcc *va;
    WtAcc *wa = NULL;
-   Boolean mmix=FALSE;  /* TRUE if multiple mixture */
+   bool mmix=FALSE;  /* TRUE if multiple mixture */
    float wght=0.0;
    /* variables for 2-model reestimation */
    Vector comp_prob=NULL;        /* array[1..M] of Component probability */
@@ -1884,7 +1884,7 @@ void InitUttObservations(UttInfo *utt, HMMSet *al_hset,
 {
 
    BufferInfo info, info2;
-   Boolean eSep;
+   bool eSep;
    int s, i;
 
    if (utt->twoDataFiles)
@@ -1920,9 +1920,9 @@ void InitUttObservations(UttInfo *utt, HMMSet *al_hset,
 
 
 /* FBFile: apply forward-backward to given utterance */
-Boolean FBFile(FBInfo *fbInfo, UttInfo *utt, char * datafn)
+bool FBFile(FBInfo *fbInfo, UttInfo *utt, char * datafn)
 {
-   Boolean success;
+   bool success;
 
    if ((success = StepBack(fbInfo,utt,datafn)))
       StepForward(fbInfo,utt);

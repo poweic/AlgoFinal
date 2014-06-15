@@ -52,8 +52,8 @@ static int trace = 0;
 static ConfParam *cParm[MAXGLOBS];      /* config parameters */
 static int nParm = 0;
 
-static Boolean outCMapRaw = FALSE;       /* Output file in raw mode */
-static Boolean inCMapRaw = FALSE;        /* Read input files in raw mode */
+static bool outCMapRaw = FALSE;       /* Output file in raw mode */
+static bool inCMapRaw = FALSE;        /* Read input files in raw mode */
 
 static int  unkndx  = DEF_UNKNOWNID;         /* ndx of (hdrless) unk class */
 static LabId unkid  = NULL;	             /* name of (hdrless) unk class */
@@ -65,7 +65,7 @@ static char  unkStr[256] = DEF_UNKNOWNNAME;  /* name of (hdrless) unk class */
 void InitCMap(void)
 {
    int i;
-   Boolean b;
+   bool b;
    char buf[100];
 
    Register(lcmap_version,lcmap_vc_id);
@@ -181,7 +181,7 @@ static void SetClassWords(ClassEntry *ce, WordMap *wmap, int nItem, LabId *cword
 
 /* LoadClass: load and store a single class from src */
 static void LoadClass(ClassMap *cm, Source *src, LabId clname, int clndx, 
-                 int clsize, Boolean inClass)
+                 int clsize, bool inClass)
 {
    int i,nItem;
    LabId *cword;
@@ -210,7 +210,7 @@ static void LoadMapData(Source *src, ClassMap *cm, int entries)
    char buf[MAXSTRLEN],*fn;
    LabId id;
    int i,ibuf[2],ndx,nents;
-   Boolean inClass=FALSE;
+   bool inClass=FALSE;
 
    fn = src->name;
    if (cm->hdrless) {
@@ -266,7 +266,7 @@ static void WriteMapHeader(FILE *f, ClassMap *cm)
 }
 
 /* OutString: output given id in appropriate esc mode to f */
-static void OutString(FILE *f, Boolean htkEsc, LabId id)
+static void OutString(FILE *f, bool htkEsc, LabId id)
 {
    if (!htkEsc || outCMapRaw)
       fprintf(f, "%s", id->name);
@@ -275,7 +275,7 @@ static void OutString(FILE *f, Boolean htkEsc, LabId id)
 }
 
 /* WriteClassMap: Write given class map to file f */
-static void WriteClassMap(FILE *f, ClassMap *cm, Boolean debug)
+static void WriteClassMap(FILE *f, ClassMap *cm, bool debug)
 {
    ClassEntry *ce;
    int i,h;
@@ -352,7 +352,7 @@ void CreateClassMap(char *fn, ClassMap *c, WordMap *w)
 void SaveClassMap(char *fn, ClassMap *c)
 {
    FILE *f;
-   Boolean isPipe;
+   bool isPipe;
    
    f = FOpen(fn,LCMapOFilter,&isPipe);
    if (f==NULL)
@@ -370,7 +370,7 @@ void ShowClassMap(ClassMap *c)
 
 
 /* EXPORT->MakeNewClass: create new class and return index */
-ClassEntry *MakeNewClass(ClassMap *c, LabId id, int clndx, Boolean inClass)
+ClassEntry *MakeNewClass(ClassMap *c, LabId id, int clndx, bool inClass)
 {  
    int h;
    ClassEntry *ce;
@@ -512,7 +512,7 @@ void GetClassMembers(ClassMap *c, int clndx, int *words)
 }
 
 /* EXPORT->IsAnInClass: true if class is a regular 'inClass' set */
-Boolean IsAnInClass(ClassMap *c, int clndx)
+bool IsAnInClass(ClassMap *c, int clndx)
 {
    ClassEntry *ce;
 
@@ -523,7 +523,7 @@ Boolean IsAnInClass(ClassMap *c, int clndx)
 }
 
 /* EXPORT->IsClassMember: true if word is in class */
-Boolean IsClassMember(ClassMap *c, int clndx, int wdndx)
+bool IsClassMember(ClassMap *c, int clndx, int wdndx)
 {   
    ClassEntry *ce;
 

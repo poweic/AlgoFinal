@@ -114,7 +114,7 @@ struct _StateInfo_lv {
    size_t invVarOffset;         /* 4 + nDim * floatsPerMix*/
 
    HMMSet *hset;
-   Boolean useHModel;
+   bool useHModel;
    StateInfo **si;              /* pointers to HModel:StateInfos  for USEHMODEL=T */
 };
 
@@ -145,7 +145,7 @@ struct _StateInfo_lv {
 
 
 
-StateInfo_lv *ConvertHSet(MemHeap *heap, HMMSet *hset, Boolean useHModel);
+StateInfo_lv *ConvertHSet(MemHeap *heap, HMMSet *hset, bool useHModel);
 LogFloat OutP_lv (StateInfo_lv *si,  unsigned short s, float *x);
 void OutPBlock (StateInfo_lv *si, Observation **obsBlock, 
                 int n, int sIdx, float acScale, LogFloat *outP);

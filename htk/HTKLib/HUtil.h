@@ -30,7 +30,7 @@ extern "C" {
 
 typedef struct{   /* HMMSet Scan State */
    HMMSet *hset;     /* HMM set */
-   Boolean isCont;   /* true PLAINHS or SHAREDHS */
+   bool isCont;   /* true PLAINHS or SHAREDHS */
    int h;            /* current mtab slot */
    MLink mac;        /* current macro */
    HLink hmm;        /* -> current hmm */
@@ -58,26 +58,26 @@ void InitUtil(void);
 void ResetUtilItemList();
 
 /* EXPORT->SetParsePhysicalHMM: only parse physical HMMs */
-void SetParsePhysicalHMM(Boolean parse);
+void SetParsePhysicalHMM(bool parse);
 
 /* ---------------- General Purpose Routines ----------------- */
 
-SVector CloneSVector(MemHeap *hmem, SVector s, Boolean sharing);
-SMatrix CloneSMatrix(MemHeap *hmem, SMatrix s, Boolean sharing);
-STriMat CloneSTriMat(MemHeap *hmem, STriMat s, Boolean sharing);
+SVector CloneSVector(MemHeap *hmem, SVector s, bool sharing);
+SMatrix CloneSMatrix(MemHeap *hmem, SMatrix s, bool sharing);
+STriMat CloneSTriMat(MemHeap *hmem, STriMat s, bool sharing);
 
-MixPDF *CloneMixPDF(HMMSet *hset, MixPDF *s, Boolean sharing);
-MixtureVector CloneStream(HMMSet *hset, StreamElem *ste, Boolean sharing);
-StateInfo *CloneState(HMMSet *hset, StateInfo *ssi, Boolean sharing);
+MixPDF *CloneMixPDF(HMMSet *hset, MixPDF *s, bool sharing);
+MixtureVector CloneStream(HMMSet *hset, StreamElem *ste, bool sharing);
+StateInfo *CloneState(HMMSet *hset, StateInfo *ssi, bool sharing);
 
-void CloneHMM(HLink src, HLink tgt, Boolean sharing);
+void CloneHMM(HLink src, HLink tgt, bool sharing);
 /*
    The src HMM is copied into tgt HMMDef which must already exist.  
    If sharing, then any macros are simply shared, otherwise the complete 
    structure is copied.
 */
 
-void ConvDiagC(HMMSet *hset, Boolean convData);
+void ConvDiagC(HMMSet *hset, bool convData);
 /*
   Converts all the HMMs in the HMMSet hset to the INVDIAGC from DIAGC
   or vice versa. If convData is TRUE then each variance element is
@@ -115,7 +115,7 @@ void EndHMMScan(HMMScanState *hss);
    call resets all nUse fields back to their normal state
 */ 
 
-Boolean GoNextHMM(HMMScanState *hss);
+bool GoNextHMM(HMMScanState *hss);
 /*
    Move to the next physical HMM definition.  On normal completion,
    the scan record is set to reference the first mix of the first
@@ -124,7 +124,7 @@ Boolean GoNextHMM(HMMScanState *hss);
    hss.hmm is NULL.
 */
 
-Boolean GoNextState(HMMScanState *hss, Boolean noSkip);
+bool GoNextState(HMMScanState *hss, bool noSkip);
 /*
    Move to the next unseen state and mark it seen.  If current state
    is unseen then nothing happens except that state is marked as seen.
@@ -135,7 +135,7 @@ Boolean GoNextState(HMMScanState *hss, Boolean noSkip);
    as soon as all states in current HMM have been seen.
 */
 
-Boolean GoNextStream(HMMScanState *hss, Boolean noSkip);
+bool GoNextStream(HMMScanState *hss, bool noSkip);
 /*
    Move to next unseen stream (StreamElem) and mark it seen.  If
    current state is unseen then nothing happens except that stream is
@@ -146,7 +146,7 @@ Boolean GoNextStream(HMMScanState *hss, Boolean noSkip);
    as soon as all streams in current state have been seen.
 */
 
-Boolean GoNextMix(HMMScanState *hss, Boolean noSkip);
+bool GoNextMix(HMMScanState *hss, bool noSkip);
 /*
    Move to next as yet unseen mixture (MixtureElem).  When all
    mixtures of all HMMs have been seen, GoNextMix returns false and
@@ -187,7 +187,7 @@ void FreeItems(ILink *list);
 
 typedef struct {		/* Defines a set of integers */
    int nMembers;		/* cardinality of set */
-   Boolean *set;		/* array[1..nMembers] of Boolean */
+   bool *set;		/* array[1..nMembers] of bool */
 }IntSet;
 
 IntSet CreateSet(int size);
@@ -199,8 +199,8 @@ void FreeSet(IntSet s);
 */
 
 void AddMember(IntSet s, int x);
-Boolean IsMember(IntSet s, int x);
-Boolean IsFullSet(IntSet s);
+bool IsMember(IntSet s, int x);
+bool IsFullSet(IntSet s);
 void ClearSet(IntSet s);
 void SetSet(IntSet s);
 
@@ -240,7 +240,7 @@ void SetSet(IntSet s);
 */
 
 char *PItemList(ILink *ilist, char *type, HMMSet *h,
-		Source *s, Boolean itrace);
+		Source *s, bool itrace);
 
 /* 
    Parse source s and convert into itemlist ilist and type holding
@@ -267,7 +267,7 @@ void ResetHooks(HMMSet *hset,char *what);
 
 /* ------------------- Load Statistics File  --------------------- */
 
-void LoadStatsFile(char *statfile,HMMSet *hset,Boolean otrace);
+void LoadStatsFile(char *statfile,HMMSet *hset,bool otrace);
 /*
    Load the statistics file output by HERest into state hooks
 */

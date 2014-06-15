@@ -210,7 +210,7 @@ int main(int argc, char *argv[])
 /* ------------------------ Initialisation ----------------------- */
 
 /* Exists:  return true if given file exists */
-Boolean Exists(char *fn)
+bool Exists(char *fn)
 {
    FILE *f;
    

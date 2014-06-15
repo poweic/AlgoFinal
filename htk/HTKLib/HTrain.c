@@ -68,9 +68,9 @@ static ConfParam *cParm[MAXGLOBS];      /* config parameters */
 static int nParm = 0;
 static int maxIter = 10;               /* max num cluster iterations */
 static int minClustSize = 3;           /* min num vectors in cluster */
-static Boolean ldBinary = TRUE;        /* load/dump in binary */
+static bool ldBinary = TRUE;        /* load/dump in binary */
 
-Boolean strmProj = FALSE; 
+bool strmProj = FALSE; 
 
 #define DoPreComps(hsKind) (hsKind==SHAREDHS||hsKind==PLAINHS)
 
@@ -78,7 +78,7 @@ Boolean strmProj = FALSE;
 void InitTrain(void)
 {
    int i;
-   Boolean b;
+   bool b;
 
    Register(htrain_version,htrain_vc_id);
    nParm = GetConfig("HTRAIN", TRUE, cParm, MAXGLOBS);
@@ -710,7 +710,7 @@ static int NumTreeNodes(int nc)
 
 /* InitClustering: create the cluster set data structure */
 static void InitClustering(MemHeap *x, Sequence vpool, int nc,
-                           Boolean treeCluster, CovKind distck, CovKind clusck, Covariance distcov)
+                           bool treeCluster, CovKind distck, CovKind clusck, Covariance distcov)
 {
    int i,numClust;
    Vector v;
@@ -765,7 +765,7 @@ ClusterSet *FlatCluster(MemHeap *x, Sequence vpool, int nc,
 {
    int i,c,cc,ce,iter,repairCount;
    float oldCost,newCost;
-   Boolean converged;
+   bool converged;
    
    InitClustering(x,vpool,nc,FALSE,dck,cck,dcov);
    if (trace&T_CGE)

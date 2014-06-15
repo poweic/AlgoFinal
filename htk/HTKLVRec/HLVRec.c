@@ -79,16 +79,16 @@ static int nParm = 0;
 
 static LogFloat maxLMLA = -LZERO; /* maximum jump in LM lookahead per model */
 
-static Boolean buildLatSE = FALSE;/* build lat from single tok in SENTEND node */
+static bool buildLatSE = FALSE;/* build lat from single tok in SENTEND node */
 
-static Boolean forceLatOut = TRUE;/* always output lattice, even when no token survived */
+static bool forceLatOut = TRUE;/* always output lattice, even when no token survived */
 
 static int gcFreq = 100;          /* run Garbage Collection every gcFreq frames */
 
-static Boolean pde = FALSE;      /* partial distance elimination */
+static bool pde = FALSE;      /* partial distance elimination */
 
-static Boolean useOldPrune = FALSE;     /* backward compatibility for max model and reltok pruning etc. */
-static Boolean mergeTokOnly = TRUE;     /* if merge token set with pruning */
+static bool useOldPrune = FALSE;     /* backward compatibility for max model and reltok pruning etc. */
+static bool mergeTokOnly = TRUE;     /* if merge token set with pruning */
 static float maxLNBeamFlr = 0.8;        /* maximum percentile of glogal beam for max model pruning */
 static float dynBeamInc = 1.3;          /* dynamic beam increment for max model pruning */
 #define LAYER_SIL_NTOK_SCALE 6          /* SIL layer re-adjust token set size e.g. 6 */
@@ -109,12 +109,12 @@ static AdaptXForm *inXForm;
 /* HLVRec.c */
 
 void InitLVRec(void);
-static Boolean CheckLRTransP (SMatrix transP);
+static bool CheckLRTransP (SMatrix transP);
 void ReFormatTranscription(Transcription *trans,HTime frameDur,
-                           Boolean states,Boolean models,Boolean triStrip,
-                           Boolean normScores,Boolean killScores,
-                           Boolean centreTimes,Boolean killTimes,
-                           Boolean killWords,Boolean killModels);
+                           bool states,bool models,bool triStrip,
+                           bool normScores,bool killScores,
+                           bool centreTimes,bool killTimes,
+                           bool killWords,bool killModels);
 
 /* HLVRec-propagate.c */
 static int winTok_cmp (const void *v1,const void *v2);
@@ -134,10 +134,10 @@ static void LatTraceBackCount (DecoderInst *_decInst, WordendHyp *path, int *nno
 static void Paths2Lat (DecoderInst *_decInst, Lattice *lat, WordendHyp *path,
                        int *na);
 Lattice *LatTraceBack (MemHeap *heap, DecoderInst *_decInst);
-AltWordendHyp *FakeSEpath (DecoderInst *_decInst, RelToken *tok, Boolean useLM);
+AltWordendHyp *FakeSEpath (DecoderInst *_decInst, RelToken *tok, bool useLM);
 WordendHyp *AltPathList2Path (DecoderInst *_decInst, AltWordendHyp *alt, PronId pron);
 WordendHyp *BuildLattice (DecoderInst *_decInst);
-AltWordendHyp *BuildLatAltList (DecoderInst *_decInst, TokenSet *ts, Boolean useLM);
+AltWordendHyp *BuildLatAltList (DecoderInst *_decInst, TokenSet *ts, bool useLM);
 WordendHyp *BuildForceLat (DecoderInst *_decInst);
 
 /* HLVRec-GC.c */
@@ -176,7 +176,7 @@ void InitLVRec(void)
 {
    double f;
    int i;
-   Boolean b;
+   bool b;
    
    Register (hlvrec_version, hlvrec_vc_id);
    nParm = GetConfig("HLVREC", TRUE, cParm, MAXGLOBS);
@@ -218,10 +218,10 @@ void InitLVRec(void)
      #### Ideally instances should share other structures (i.e.
           LexNets) this is not implemented, yet.
 */
-DecoderInst* Decoder::CreateDecoderInst(HMMSet *hset, FSLM *lm, int nTok, Boolean latgen, 
-                               Boolean useHModel,
-                               int outpBlocksize, Boolean doPhonePost,
-                               Boolean modAlign)
+DecoderInst* Decoder::CreateDecoderInst(HMMSet *hset, FSLM *lm, int nTok, bool latgen, 
+                               bool useHModel,
+                               int outpBlocksize, bool doPhonePost,
+                               bool modAlign)
 {
    DecoderInst *_decInst;
    int i, N;
@@ -342,7 +342,7 @@ DecoderInst* Decoder::CreateDecoderInst(HMMSet *hset, FSLM *lm, int nTok, Boolea
 
      determine wheter transition matrix is left-to-right, i.e. no backward transitions
 */
-static Boolean CheckLRTransP (SMatrix transP)
+static bool CheckLRTransP (SMatrix transP)
 {
    int r,c,N;
 
@@ -525,7 +525,7 @@ TokenSet *Decoder::NewTokSetArray(int N)
    allocating rel token array for lex node, larger array size
    for silence layer nodes
 */
-TokenSet *Decoder::NewTokSetArrayVar(int N, Boolean isSil)
+TokenSet *Decoder::NewTokSetArrayVar(int N, bool isSil)
 {
    TokenSet *ts;
    int i;
@@ -724,10 +724,10 @@ void Decoder::PruneTokSet (TokenSet *ts)
 
 /* EXPORT->FormatTranscription: Format transcription prior to output */
 void ReFormatTranscription(Transcription *trans,HTime frameDur,
-                         Boolean states,Boolean models,Boolean triStrip,
-                         Boolean normScores,Boolean killScores,
-                         Boolean centreTimes,Boolean killTimes,
-                         Boolean killWords,Boolean killModels)
+                         bool states,bool models,bool triStrip,
+                         bool normScores,bool killScores,
+                         bool centreTimes,bool killTimes,
+                         bool killWords,bool killModels)
 {
    LabList *ll;
    LLink lab;

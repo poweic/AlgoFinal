@@ -79,7 +79,7 @@ struct path
    int frame;           /* Time (frame) of boundary (end of word) */
    Align *align;        /* State/model traceback for this word */
 
-   Boolean used;        /* Reference to struct by current inst */
+   bool used;        /* Reference to struct by current inst */
    int usage;           /* Times struct ref'd (by next path) */
 
    Path *link;          /* Next path in list */
@@ -92,7 +92,7 @@ struct vrecinfo
 {
    MemHeap heap;            /* General storage CHEAP (inc vri) */
    HTime frameDur;          /* Sample rate (to convert frame to time) */
-   Boolean noTokenSurvived; /* Set when no valid final token produced */
+   bool noTokenSurvived; /* Set when no valid final token produced */
 
    /* Pruning thresholds - setable every frame */
 
@@ -151,7 +151,7 @@ void FreePSetInfo(PSetInfo *psi);
    initialised
 */
 
-VRecInfo *InitVRecInfo(PSetInfo *psi,int nToks,Boolean models,Boolean states);
+VRecInfo *InitVRecInfo(PSetInfo *psi,int nToks,bool models,bool states);
 /* 
    Initialise a recognition engine attached to a particular HMMSet
    that will use nToks tokens per state and also perform alignment
@@ -203,10 +203,10 @@ Transcription *TranscriptionFromLattice(MemHeap *heap,Lattice *lat,int N);
 */
 
 void FormatTranscription(Transcription *trans,HTime frameDur,
-                         Boolean states,Boolean models,Boolean triStrip,
-                         Boolean normScores,Boolean killScores,
-                         Boolean centreTimes,Boolean killTimes,
-                         Boolean killWords,Boolean killModels);
+                         bool states,bool models,bool triStrip,
+                         bool normScores,bool killScores,
+                         bool centreTimes,bool killTimes,
+                         bool killWords,bool killModels);
 /*
    Format a label transcription prior to calling LSave
 */

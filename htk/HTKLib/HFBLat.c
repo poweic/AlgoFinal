@@ -81,21 +81,21 @@ float _exp(float x){
 static float minFrwdP = 10.0;            /* mix prune threshold */
 static int trace     =  1;            /* Trace level */
 
-static Boolean PhoneMEE = TRUE;      /*IMPORTANT*/           /* If true and the MPE routines are called, do MPE, else MWE (word level) */
-static Boolean CalcAsError = FALSE;   /* if TRUE, new way of calc'ing error... */ 
-static Boolean PhoneMEEUseContext = FALSE;                  /*Compare phones-in-context.  I doubt you would want this true, anyway it makes little difference.*/
-static Boolean ExactCorrectness=FALSE; /*IMPORTANT*/         /* Do 'exact' version of MPE/MWE, not using approximation.  This is slightly better for
+static bool PhoneMEE = TRUE;      /*IMPORTANT*/           /* If true and the MPE routines are called, do MPE, else MWE (word level) */
+static bool CalcAsError = FALSE;   /* if TRUE, new way of calc'ing error... */ 
+static bool PhoneMEEUseContext = FALSE;                  /*Compare phones-in-context.  I doubt you would want this true, anyway it makes little difference.*/
+static bool ExactCorrectness=FALSE; /*IMPORTANT*/         /* Do 'exact' version of MPE/MWE, not using approximation.  This is slightly better for
                                                                 e.g. Wall Street Journal and BN, you may have to tune InsCorrectness (e.g, -0.9), but its
                                                                 worse for Switchboard.  See also configs in HFBExactMPE, if this is TRUE. */
-static Boolean DoingFourthAcc=FALSE;    /* Indicate currently it is doing MPE with MMI prior */
+static bool DoingFourthAcc=FALSE;    /* Indicate currently it is doing MPE with MMI prior */
 static int add_index = 999;   /* additional index for discriminative training: 3 for MPE with MMI prior */
 static float InsCorrectness = -1;                            /* Correctness of an inserted phone.  Can be tuned, it affects recognition insertion rate.
                                                                 E.g. InsCorrectness = -0.85 will increase insertions upon testing, relative to default = -1. */
-static Boolean NoSilence = FALSE;                      /* If TRUE, then (in non-exact MPE) the silences are omitted from the reference transcription
+static bool NoSilence = FALSE;                      /* If TRUE, then (in non-exact MPE) the silences are omitted from the reference transcription
                                                           when calculating approximated correctness.  It works better with the default setting (with 
                                                           silence included in reference). */
 #ifdef SUPPORT_QUINPHONE  /*defined in .h*/
-static Boolean Quinphone = FALSE;            /* Set this TRUE if this is a quinphone model set.  The code for quinphones depends on the naming conventions 
+static bool Quinphone = FALSE;            /* Set this TRUE if this is a quinphone model set.  The code for quinphones depends on the naming conventions 
                                                 used for quinphones, i.e. silence & sp with single models named sil_0 and sp_0, and phone models with 3 
                                                 models per phone, named e.g. ax_2_134 ax_3_141 ax_4_102, so the states are numbered 2,3,4.  sil_{2,3,4}_* would work too.  */
 
@@ -321,7 +321,7 @@ static void SetCorrectness(FBLatInfo *fbInfo, Lattice *numLat){
             else {  /* do the calculation for all of the 'representative' arcs, all other arcs are the same
                        as one of the 'representative' arcs and the correctness is copied. */ 
                int quinphone_nstates, quinphone_state;
-               Boolean ZeroCorrectness=FALSE;
+               bool ZeroCorrectness=FALSE;
                LabId phone = a->phone;
                int iphone, iotherphone; /*as ints..*/
                int i_start, i_end,i;
@@ -427,7 +427,7 @@ static void SetCorrectness(FBLatInfo *fbInfo, Lattice *numLat){
    Dispose(&fbInfo->tempStack, correctArc);
 }
 
-float GetFinalError(float curr_total, float curr_corr, Boolean hyp_is_sil){  /* re the "CALCASERROR" option, other version of approx MPE. */
+float GetFinalError(float curr_total, float curr_corr, bool hyp_is_sil){  /* re the "CALCASERROR" option, other version of approx MPE. */
   float ins=0,sub,del=0;
   if(hyp_is_sil){ del= curr_total; return del; /* All phones [i.e. non-silence phones ] are insertions if hyp is silence. */ }
   else {
@@ -444,7 +444,7 @@ float GetFinalError(float curr_total, float curr_corr, Boolean hyp_is_sil){  /* 
 }
 
 /* re the "CALCASERROR" option, other version of approx MPE. */
-float GetLowestNegError(int tStart, int tEnd, int tCurr, float curr_corr, float curr_total,  CorrectArcList **correctArc, int iphone, int *compute_count, Boolean hyp_is_sil){
+float GetLowestNegError(int tStart, int tEnd, int tCurr, float curr_corr, float curr_total,  CorrectArcList **correctArc, int iphone, int *compute_count, bool hyp_is_sil){
   float best = -100,tmp;
   int currBegin,currEnd;
   float proportion;
@@ -614,7 +614,7 @@ static void SetCorrectnessAsError(FBLatInfo *fbInfo, Lattice *numLat){    /* re 
             else {  /* do the calculation for all of the 'representative' arcs, all other arcs are the same
                        as one of the 'representative' arcs and the correctness is copied. */ 
                int quinphone_nstates, quinphone_state;
-               Boolean ZeroCorrectness=FALSE;
+               bool ZeroCorrectness=FALSE;
                LabId phone = a->phone;
                int iphone; /*as ints..*/
                int i_start, i_end;
@@ -1018,7 +1018,7 @@ typedef struct{
    float scaledOcc; /*for MEE.*/
 } MixOcc;
 
-Boolean CachingInitialised = FALSE;
+bool CachingInitialised = FALSE;
 MemHeap cacheMixoccHeap;
 
 /* Following variables relate to caching of mixture occupation probabilities. */
@@ -1207,7 +1207,7 @@ static double UpMixParms(int q, HLink hmm, int t, DVector aqt,
    MixPDF *mp=NULL;
    WtAcc *wa, *wammi=NULL;
    PreComp *pMix;
-   Boolean mmix=FALSE;  /* TRUE if multiple mixture */
+   bool mmix=FALSE;  /* TRUE if multiple mixture */
    float wght=0;
    float mee_acc_scale =   fbInfo->AccScale * (fbInfo->MPE? fbInfo->aInfo->ac[q].mpe_occscale: 1 ),
       abs_mee_acc_scale = fabs(mee_acc_scale); int local_accindx = (mee_acc_scale > 0 ? fbInfo->num_index : fbInfo->den_index);
@@ -1454,7 +1454,7 @@ static void StepForward()
 
 
 static  char buf1[255];
-static  Boolean eSep;
+static  bool eSep;
 
  
 void GetTimes(LArc *larc, int i, int *start, int *end){ /* get start & end times for a lattice arc.  Frame
@@ -1524,7 +1524,7 @@ int MPE_GetFileLen(Lattice *lat){
 void FBLatClearUp(FBLatInfo *fbInfo); 
 
 void FBLatFirstPass(FBLatInfo *_fbInfo, FileFormat dff, char * datafn, char *datafn2, Lattice *MPECorrLat){
-   int q,T2=0; Boolean MPE;
+   int q,T2=0; bool MPE;
   
    fbInfo = _fbInfo;
    if(fbInfo->InUse) FBLatClearUp(fbInfo); 
@@ -1799,7 +1799,7 @@ void InitFBLat(void)
 {
    int iter,i;
    double f;
-   Boolean b;
+   bool b;
 
    Register(hfblat_version,hfblat_vc_id);
 
@@ -1843,7 +1843,7 @@ void InitFBLat(void)
 void InitialiseFBInfo(FBLatInfo *fbInfo,
 		     HMMSet *hset, 
 		      UPDSet uflags, 
-                      Boolean twoDataFiles)
+                      bool twoDataFiles)
 {
    int s;
 
@@ -1897,7 +1897,7 @@ void FBLatClearUp(FBLatInfo *fbInfo){
 
 /* Function to support MPE with MMIPrior */
 /* EXPORT-> SetDoingFourthAcc: Indicate whether it is currently storing MMI statistics */
-void SetDoingFourthAcc(Boolean DO, int indx){
+void SetDoingFourthAcc(bool DO, int indx){
    DoingFourthAcc = DO;
    add_index = indx;
 }

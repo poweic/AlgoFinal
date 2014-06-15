@@ -67,7 +67,7 @@ extern "C" {
 typedef struct _MMFInfo *MILink;
 
 typedef struct _MMFInfo{
-   Boolean isLoaded;       /* true if contents are loaded */
+   bool isLoaded;       /* true if contents are loaded */
    char *fName;            /* MMF file name */
    int fidx;               /* MMF file index */
    MILink next;            /* next external file name in list */
@@ -199,7 +199,7 @@ typedef struct RegTree {
   int numTNodes;       /* number of terminal nodes in tree */
   BaseClass *bclass;   /* baseclass associated with this regression tree */
   RegNode *root;       /* pointer to the root node of the tree */
-  Boolean valid;       /* is it valid to generate a transform at the root node */
+  bool valid;       /* is it valid to generate a transform at the root node */
                        /* handles multiple stream adaptation issues */
   float thresh;        /* split threshold to determine stopping in tree */
   char *fname;         /* filename of where the regTree was loaded */
@@ -208,9 +208,9 @@ typedef struct RegTree {
 /* ----------------- Transform Definition -------------------- */
 
 typedef struct {       /* occupancy is always used */
-  Boolean accSum;      /* accumulate the sum of the observations */
-  Boolean accSumSq;    /* accumulate sum-squared (diag) of the observations */
-  Boolean accBTriMat;  /* accumulate weighted outer-product of observations */
+  bool accSum;      /* accumulate the sum of the observations */
+  bool accSumSq;    /* accumulate sum-squared (diag) of the observations */
+  bool accBTriMat;  /* accumulate weighted outer-product of observations */
   RegTree regTree;     /* the regression tree used for transform */
 } XFormAccInfo;
 
@@ -257,7 +257,7 @@ typedef struct {
   char* mmfIdMask;     /* mask of model sets that appropriate for */
   char *fname;         /* filename of where the input xform was loaded */
   ParmKind pkind;      /* parameter kind for xform to be applied to */
-  Boolean preQual;     /* is this applied prior to qualifiers? */
+  bool preQual;     /* is this applied prior to qualifiers? */
   LinXForm *xform;     /* actual transform to be applied */
   int nUse;            /* usage counter */
 } InputXForm;
@@ -296,7 +296,7 @@ typedef struct _PtrMap {   /* used for finding macros via ptr's */
 
 typedef struct _HMMSet{
    MemHeap *hmem;          /* memory heap for this HMM Set */   
-   Boolean *firstElem;     /* first element added to hmem during MakeHMMSet*/
+   bool *firstElem;     /* first element added to hmem during MakeHMMSet*/
    char *hmmSetId;         /* identifier for the hmm set */
    MILink mmfNames;        /* List of external file names */
    int numLogHMM;          /* Num of logical HMM's */
@@ -305,8 +305,8 @@ typedef struct _HMMSet{
    int numMacros;          /* num macros used in this set */
    MLink * mtab;           /* Array[0..MACHASHSIZE-1]OF MLink */
    PtrMap ** pmap;         /* Array[0..PTRHASHSIZE-1]OF PtrMap* */
-   Boolean allowTMods;     /* true if HMMs can have Tee Models */
-   Boolean optSet;         /* true if global options have been set */
+   bool allowTMods;     /* true if HMMs can have Tee Models */
+   bool optSet;         /* true if global options have been set */
    short vecSize;          /* dimension of observation vectors */
    short swidth[SMAX];     /* [0]=num streams,[i]=width of stream i */
    ParmKind pkind;         /* kind of obs vector components */
@@ -325,14 +325,14 @@ typedef struct _HMMSet{
    short projSize;         /* dimension of vector to update */
 
    /* Adaptation information accumulates */
-   Boolean attRegAccs;   /* have the set of accumulates been attached */
-   Boolean attXFormInfo; /* have the set of adapt info been attached */
-   Boolean attMInfo;     /* have the set of adapt info been attached */
+   bool attRegAccs;   /* have the set of accumulates been attached */
+   bool attXFormInfo; /* have the set of adapt info been attached */
+   bool attMInfo;     /* have the set of adapt info been attached */
    AdaptXForm *curXForm;
    AdaptXForm *parentXForm;
    
    /* Added to support LogWgts */
-   Boolean logWt;       /* Component weights are stored as Logs */
+   bool logWt;       /* Component weights are stored as Logs */
 
    /* Added to support delayed loading of the semi-tied transform */
    char *semiTiedMacro;  /* macroname of semi-tied transform */
@@ -385,7 +385,7 @@ MLink FindMacroStruct(HMMSet *hset, char type, Ptr structure);
    requests are fast.
 */
 
-Boolean HasMacros(HMMSet *hset, char * types);
+bool HasMacros(HMMSet *hset, char * types);
 /*
    Returns true if shared structure macros (other than regular
    hmmdefs) have been used in any HMM in set.  If types is not NULL,
@@ -424,7 +424,7 @@ void PrintHSetProfile(FILE *f, HMMSet *hset);
       CreateHMMSet {AddMMF} (MakeHMMSet | MakeOneHMM) LoadHMMSet
 */
 
-void CreateHMMSet(HMMSet *hset, MemHeap *heap, Boolean allowTMods);
+void CreateHMMSet(HMMSet *hset, MemHeap *heap, bool allowTMods);
 /* 
    Create a HMMSet using given heap.  This routine simply
    initialises the basic HMMSet structure. It must be followed by
@@ -477,7 +477,7 @@ void SaveInOneFile(HMMSet *hset, char *fname);
    the entire HMM set in a single file.
 */
 
-ReturnStatus SaveHMMSet(HMMSet *hset, char *hmmDir, char *hmmExt, char *macroExt, Boolean binary);
+ReturnStatus SaveHMMSet(HMMSet *hset, char *hmmDir, char *hmmExt, char *macroExt, bool binary);
 /*
    Store the given HMM set.  Each HMM def and macro is stored in the
    same file as it was loaded from except that if hmmDir is specified
@@ -499,7 +499,7 @@ ReturnStatus SaveHMMList(HMMSet *hset, char *fname);
 /* When scanning HMM sets, it is convenient to mark certain objects
    as "seen".  The nUse and nMix fields are used for this.  If either
    is -ve then the attached object seen. */
-Boolean IsSeen(int flag);
+bool IsSeen(int flag);
 /*
    return true if flag is set (ie. -ve)
 */
@@ -573,7 +573,7 @@ LogFloat SOutP(HMMSet *hset, int s, Observation *x, StreamElem *se);
    Return Mixture log output probability for given vector x.  
 */
 
-Boolean PDEMOutP(Vector otvs, MixPDF *mp, LogFloat *mixp, LogFloat xwtdet);
+bool PDEMOutP(Vector otvs, MixPDF *mp, LogFloat *mixp, LogFloat xwtdet);
 LogFloat MOutP(Vector x, MixPDF *mp);
 LogFloat IDOutP(Vector x, int vecSize, MixPDF *mp);
 short DProb2Short(float p);
@@ -626,16 +626,16 @@ float MixWeight(HMMSet *hset, float weight);
 InputXForm *LoadInputXForm(HMMSet *hset, char* macroname, char* fname);
 
 /* EXPORT->SaveInputXForm: outputs an individual transform */
-void SaveInputXForm(HMMSet *hset, InputXForm *xf, char *fname, Boolean binary);
+void SaveInputXForm(HMMSet *hset, InputXForm *xf, char *fname, bool binary);
 
 /* EXPORT->LoadOneXForm: loads, or returns, the specified transform */
 AdaptXForm *LoadOneXForm(HMMSet *hset, char* macroname, char* fname);
 
 /* EXPORT->SaveOneXForm: outputs an individual transform */
-void SaveOneXForm(HMMSet *hset, AdaptXForm *xform, char *fname, Boolean binary);
+void SaveOneXForm(HMMSet *hset, AdaptXForm *xform, char *fname, bool binary);
 
 /* EXPORT->SaveAllXForms: outputs all generated transforms */
-void SaveAllXForms(HMMSet *hset, char *fname, Boolean binary);
+void SaveAllXForms(HMMSet *hset, char *fname, bool binary);
 
 /* EXPORT->LoadBaseClass: loads, or returns, the specified baseclass */
 BaseClass *LoadBaseClass(HMMSet *hset, char* macroname, char *fname);

@@ -61,7 +61,7 @@ static LabId bStartId=NULL;         /* id of start bracket */
 static LabId bEndId=NULL;           /* id of end bracket */
 
 static LabId unknownId;             /* id of unknown label in ngram */
-static Boolean zapUnknown = FALSE;  /* zap unknown symbols from bigram */
+static bool zapUnknown = FALSE;  /* zap unknown symbols from bigram */
 
 MemHeap buildStack;
 
@@ -105,7 +105,7 @@ int main(int argc, char *argv[])
    char *wordListFn,*latFn,*ipFn=NULL;
    LModel *bigramLm;
    BuildType bType = unknown;
-   Boolean saveLatBin = FALSE;
+   bool saveLatBin = FALSE;
    LatFormat format = HLAT_LMLIKE;
    Lattice *lat,*ipLat;
    Vocab voc;
@@ -115,7 +115,7 @@ int main(int argc, char *argv[])
    Lattice *ProcessBiGram(MemHeap *latHeap, Vocab *voc, LModel *biLM);
    void SaveLattice(Lattice *lat, char *latFn, LatFormat format);
    Lattice *LoadLattice(MemHeap *latHeap, char *latFn, Vocab *voc,
-                        Boolean shortArc);
+                        bool shortArc);
    Lattice *ProcessWordPair(MemHeap *latHeap, Vocab *voc, char *fn);
 
    if(InitShell(argc,argv,hbuild_version,hbuild_vc_id)<SUCCESS)
@@ -269,7 +269,7 @@ int main(int argc, char *argv[])
 void SaveLattice(Lattice *lat, char *latFn, LatFormat format)
 {
    FILE *latf;
-   Boolean isPipe;
+   bool isPipe;
 
    if (trace & T_TOP)
       printf("Saving lattice to file %s\n",latFn);
@@ -282,10 +282,10 @@ void SaveLattice(Lattice *lat, char *latFn, LatFormat format)
 
 /* Load a lattice from file latFn  */
 Lattice *LoadLattice(MemHeap *latHeap, char *latFn, Vocab *voc,
-                     Boolean shortArc)
+                     bool shortArc)
 {
    FILE *latf;
-   Boolean isPipe;
+   bool isPipe;
    Lattice *lat;
 
    if ( (latf = FOpen(latFn,NetFilter,&isPipe)) == NULL)
@@ -377,8 +377,8 @@ Lattice *ProcessBoBiGram(MemHeap *latHeap, Vocab *voc, NGramLM *nLM)
    lmId ndx[NSIZE+1];  
    int i,j,k;
    Lattice *lat;
-   Boolean enterFound=FALSE;
-   Boolean exitFound=FALSE;
+   bool enterFound=FALSE;
+   bool exitFound=FALSE;
 
    if (nLM->nsize > 2)
       HError(3030,"ProcessBoBiGram: Not BiGram LM: Order = %d",nLM->nsize);
@@ -568,17 +568,17 @@ typedef struct {
 
 /* SkipHeader: skip comments at top of file */
 /*             and return true if not eof   */
-Boolean SkipHeader(FILE *f)
+bool SkipHeader(FILE *f)
 {
    int ch;
-   Boolean inComment;
+   bool inComment;
    
    ch = getc(f);        /* skip leading space */
    while (ch != EOF && isspace(ch))
       ch = getc(f);
    if (ch == '/') {
       ch = getc(f);      
-      inComment = Boolean((ch == '*'));
+      inComment = bool((ch == '*'));
       if (!inComment)
          HError(3040,"SkipHeader: / char illegal if not in comment or delimiter");  
       else
@@ -586,7 +586,7 @@ Boolean SkipHeader(FILE *f)
             ch = getc(f);
             if (ch == '*') {
                ch = getc(f);
-               inComment = Boolean((ch != '/'));
+               inComment = bool((ch != '/'));
             }
          }
    }     
@@ -599,7 +599,7 @@ Boolean SkipHeader(FILE *f)
 }
 
 /* SkipSpacesEoln: skip white to eoln return true if not eof */
-Boolean SkipSpacesEoln(FILE *f)
+bool SkipSpacesEoln(FILE *f)
 {
    int ch;
 
@@ -636,7 +636,7 @@ void ReadWPGrammar(WPGrammar *wpg, Vocab * voc, char *gramFn)
    int ch;
    Word newWord;
    GramEntry *newGram = NULL;
-   Boolean newEntry;
+   bool newEntry;
    WordFllr *wdfllr; 
    Word sentEnd;   
 
@@ -650,7 +650,7 @@ void ReadWPGrammar(WPGrammar *wpg, Vocab * voc, char *gramFn)
       HError(3040,"ReadWPGrammar: Unexpected eof while reading %s", gramFn);
    do {
       ch = getc(gf);
-      newEntry = Boolean((ch == '>'));
+      newEntry = bool((ch == '>'));
       if (wpg->nwords == 0 && !newEntry)
          HError(3040,"ReadWPGrammar: > expected while reading %s", gramFn);
       if (!ReadLabel(gf,buf)) {

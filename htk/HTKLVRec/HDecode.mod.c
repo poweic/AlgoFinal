@@ -80,11 +80,11 @@ static char *labDir = NULL;	/* output label file directory */
 static char *labExt = "rec";	/* output label file extension */
 static char *labForm = NULL;	/* output label format */
 
-static Boolean latRescore = FALSE; /* read lattice for each utterance and rescore? */
+static bool latRescore = FALSE; /* read lattice for each utterance and rescore? */
 static char *latInDir = NULL;   /* lattice input directory */
 static char *latInExt = "lat";  /* latttice input extension */
 
-static Boolean latGen = FALSE;  /* output lattice? */
+static bool latGen = FALSE;  /* output lattice? */
 static char *latOutDir = NULL;  /* lattice output directory */
 static char *latOutExt = "lat"; /* latttice output extension */
 static char *latOutForm = NULL;  /* lattice output format */
@@ -106,7 +106,7 @@ static LabId spLab;             /*   corresponding LabId */
 static char *silModel = "sil";  /* model used as word end Silence */
 static LabId silLab;            /*   corresponding LabId */
 
-static Boolean silDict = FALSE; /* does dict contain -/sp/sil variants with probs */
+static bool silDict = FALSE; /* does dict contain -/sp/sil variants with probs */
 
 static LogFloat insPen = 0.0;   /* word insertion penalty */
 
@@ -125,7 +125,7 @@ static LogFloat latPruneAPS = 0;;        /* lattice pruning arcs per sec limit *
 static LogFloat fastlmlaBeam = - LZERO;  /* do fast LM la outside this beam */
 
 static int nTok = 32;           /* number of different LMStates per HMM state */
-static Boolean useHModel = FALSE; /* use standard HModel OutP functions */
+static bool useHModel = FALSE; /* use standard HModel OutP functions */
 static int outpBlocksize = 1;   /* number of frames for which outP is calculated in one go */
 static Observation *obs;        /* array of Observations */
 
@@ -151,7 +151,7 @@ void SetConfParms (void);
 void ReportUsage (void);
 DecoderInst *Initialise (void);
 void DoRecognition (DecoderInst *dec, char *fn);
-Boolean UpdateSpkrModels (char *fn);
+bool UpdateSpkrModels (char *fn);
 
 /* ---------------- Configuration Parameters ---------------------------- */
 
@@ -174,7 +174,7 @@ SetConfParms (void)
 {
    int i;
    double f;
-   Boolean b;
+   bool b;
    char buf[MAXSTRLEN];
 
    nParm = GetConfig ("HDECODE", TRUE, cParm, MAXGLOBS);
@@ -547,8 +547,8 @@ DecoderInst *Initialise (void)
 {
    int i;
    DecoderInst *dec;
-   Boolean eSep;
-   Boolean modAlign;
+   bool eSep;
+   bool modAlign;
 
    /* init Heaps */
    CreateHeap (&netHeap, "Net heap", MSTAK, 1, 0,100000, 800000);
@@ -913,7 +913,7 @@ void DoRecognition (DecoderInst *dec, char *fn)
    /* This handles the initial input transform, parent transform setting
       and output transform creation */
    { 
-      Boolean changed;
+      bool changed;
 
       changed = UpdateSpkrStats(&hset, &xfInfo, fn);
 
@@ -943,7 +943,7 @@ void DoRecognition (DecoderInst *dec, char *fn)
       /* read lattice and create LM */
       char latfn[MAXSTRLEN];
       FILE *latF;
-      Boolean isPipe;
+      bool isPipe;
       Lattice *lat;
 
       /* clear out previous LexNet, Lattice and LM structures */
@@ -1078,7 +1078,7 @@ void DoRecognition (DecoderInst *dec, char *fn)
       if (lat) {
          char latfn[MAXSTRLEN];
          char *p;
-         Boolean isPipe;
+         bool isPipe;
          FILE *file;
          LatFormat form;
          
@@ -1157,7 +1157,7 @@ void LoadFVTrans (char *fn, BlockMatrix *transMat)
    int blockSize, bs, i;
    short nblocks;
    char buf[MAXSTRLEN];
-   Boolean binary = FALSE;
+   bool binary = FALSE;
    
    InitSource (fn, &src, NoFilter);
 
@@ -1204,12 +1204,12 @@ void FVTransModels (HMMSet *hset, BlockMatrix transMat)
 
      apply speaker specific transforms
 */
-Boolean UpdateSpkrModels (char *fn)
+bool UpdateSpkrModels (char *fn)
 {
    char spkrName[MAXSTRLEN] = "";
    char fvTransFN[MAXSTRLEN] = "";
    char mllrTransFN[MAXSTRLEN] = "";
-   Boolean changed = FALSE;
+   bool changed = FALSE;
    
    /* full-variance transform: apply to means & feature space */
    if (!MaskMatch (spkrPat, spkrName, fn))
@@ -1255,7 +1255,7 @@ Boolean UpdateSpkrModels (char *fn)
    return changed;
 }
 #else
-Boolean UpdateSpkrModels (char *fn)
+bool UpdateSpkrModels (char *fn)
 {
    HError (1, "MLLR or FV transforms not supported");
    return FALSE;

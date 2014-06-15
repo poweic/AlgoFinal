@@ -58,8 +58,8 @@ static HFONT theFont   = NULL;      /* Current font for text output */
 
 /* ------------ stuff that application keeps track of ------------*/
 
-static Boolean winCreated    = FALSE;               /* prevent duplicate windows */
-static Boolean WritingToMeta = FALSE;               /* TRUE if spooling to a metafile */
+static bool winCreated    = FALSE;               /* prevent duplicate windows */
+static bool WritingToMeta = FALSE;               /* TRUE if spooling to a metafile */
 static unsigned char colours[MAX_COLOURS][3];    /* r,g,b */
 static unsigned char greys[MAX_GREYS];
 static int   dispDEEP,dispWIDE,dispHIGH;
@@ -108,12 +108,12 @@ void InitGraf(void)
 }
 
 /* EXPORT->HGetEvent: return next relevant event in event queue */
-HEventRec HGetEvent(Boolean anyEvent, void (*action)(void))
+HEventRec HGetEvent(bool anyEvent, void (*action)(void))
 {
    HEventRec r={0,0,0,0,0};
    static KeyType SavedKeyType;
    MSG msg;
-   Boolean hasEvent = FALSE;
+   bool hasEvent = FALSE;
    HWND WindowHandle = (anyEvent) ? NULL : theWindow;
 
    do {
@@ -223,7 +223,7 @@ HEventRec HGetEvent(Boolean anyEvent, void (*action)(void))
 /* This doesn't seem to be supported in Win32. It is possible        */
 /* to see if the queue is empty, but there is no way to see if       */
 /* there is just one event or if there are many. This function       */
-/* should probably return a Boolean value. Currently it returns 1    */
+/* should probably return a bool value. Currently it returns 1    */
 /* if there are one or more events pending, and 0 if there are none. */
 int HEventsPending(void)
 {
@@ -245,16 +245,16 @@ int HEventsPending(void)
 /* mouse is outside the window still really do belong to our window, if the   */
 /* event has been directed to our application.                                */
 
-Boolean HMousePos(int *x, int *y)
+bool HMousePos(int *x, int *y)
 {
    *x = MousePos.x;
    *y = MousePos.y;
-   return (Boolean) IsInRect(*x,*y,ClientRect.left,ClientRect.top,
+   return (bool) IsInRect(*x,*y,ClientRect.left,ClientRect.top,
                              ClientRect.right,ClientRect.bottom);
 }
 
 /* EXPORT: IsInRect: return TRUE iff (x,y) is in the rectangle (x0,y0,x1,y1) */ 
-Boolean IsInRect(int x, int y, int x0, int y0, int x1, int y1)
+bool IsInRect(int x, int y, int x0, int y0, int x1, int y1)
 {
    return (x >= x0 && x<=x1 && y >= y0 && y <= y1);
 }
@@ -1011,7 +1011,7 @@ HButton *FindButton(HButton *btnlst, ButtonId key)
 }
 
 /* EXPORT->SetActive: set active field in button list */
-void SetActive(HButton *btnlst, Boolean active)
+void SetActive(HButton *btnlst, bool active)
 {
    HButton *btnptr;
      
@@ -1032,7 +1032,7 @@ HButton *CheckButtonList(HButton *btnlst, int x, int y)
 }
 
 /* EXPORT->SetButtonLit: show button press */
-void SetButtonLit(HButton *btn, Boolean lit)
+void SetButtonLit(HButton *btn, bool lit)
 {
    if (btn->lit != lit){
       btn->lit = lit;
@@ -1044,7 +1044,7 @@ void SetButtonLit(HButton *btn, Boolean lit)
 ButtonId TrackButtons(HButton *btnlist, HEventRec hev)
 {
    HButton *pressed, *released;
-   Boolean done;
+   bool done;
      
    pressed = CheckButtonList(btnlist, hev.x, hev.y);
    if (pressed != NULL){

@@ -119,7 +119,7 @@ MatBiLM *CreateMatBigram(LModel *lm,int nw);
    Create matrix bigram language models of specified size.
 */
 
-NEntry *GetNEntry(NGramLM *nglm,lmId ndx[NSIZE],Boolean create);
+NEntry *GetNEntry(NGramLM *nglm,lmId ndx[NSIZE],bool create);
 /*
    Find [create] ngram entry for word histories ...ndx[1] ndx[0].
 */

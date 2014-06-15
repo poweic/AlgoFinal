@@ -85,8 +85,8 @@ static char * outDir = NULL;     /* output macro file directory, if any */
 static int  maxIter  = 20;       /* max iterations in parameter estimation */
 static float epsilon = 1.0E-4;   /* convergence criterion */
 static int minSeg    = 3;        /* min segments to train a model */
-static Boolean firstTime = TRUE; /* Flag used to enable InitSegStore */
-static Boolean saveBinary = FALSE;  /* save output in binary  */
+static bool firstTime = TRUE; /* Flag used to enable InitSegStore */
+static bool saveBinary = FALSE;  /* save output in binary  */
 static FileFormat dff=UNDEFF;    /* data file format */
 static FileFormat lff=UNDEFF;    /* label file format */
 static float minVar  = 0.0;      /* minimum variance */
@@ -98,7 +98,7 @@ static UPDSet uFlags = (UPDSet) (UPMEANS|UPVARS|UPTRANS|UPMIXES);     /* update 
 static int  trace    = 0;        /* Trace level */
 static ConfParam *cParm[MAXGLOBS];   /* configuration parameters */
 static int nParm = 0;               /* total num params */
-static Boolean segReject = TRUE; /* Enable short train segment rejection */
+static bool segReject = TRUE; /* Enable short train segment rejection */
 
 
 /* Global Data Structures */
@@ -140,7 +140,7 @@ void SetConfParms(void)
 {
    int i;
    double d;
-   Boolean b;
+   bool b;
 
    nParm = GetConfig("HREST", TRUE, cParm, MAXGLOBS);
    if (nParm>0) {
@@ -445,7 +445,7 @@ void CheckData(char *fn, BufferInfo info)
 void InitSegStore(BufferInfo *info)
 {
    Observation obs;
-   Boolean eSep;
+   bool eSep;
 
    SetStreamWidths(info->tgtPK,info->tgtVecSize,hset.swidth,&eSep);
    obs = MakeObservation(&gstack,hset.swidth,info->tgtPK,
@@ -1182,8 +1182,8 @@ void RestMean(Vector mean, int vSize)
 
 /* RestCoVar: reestimate the given covariance and return FALSE
               if any diagonal component == 0.0 */
-Boolean RestCoVar(MixPDF *mp, int vSize, Vector minV,
-                  Vector oldMean, Vector newMean, Boolean shared)
+bool RestCoVar(MixPDF *mp, int vSize, Vector minV,
+                  Vector oldMean, Vector newMean, bool shared)
 {
    int k,l;
    VaAcc *va;
@@ -1230,7 +1230,7 @@ void RestStream(int state, int s, StreamElem *se, int vSize)
    MixtureElem *me;
    MixPDF *mp;
    MuAcc *ma;
-   Boolean shared;
+   bool shared;
    float wght;
 
    if (trace&(T_WRE|T_MRE|T_VRE))

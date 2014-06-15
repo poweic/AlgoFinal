@@ -48,7 +48,7 @@ typedef struct clEntry { /* class map entry */
    LabId id;		   /* name of class id->aux points here */
    int ndx;                /* index of class */
    int size;               /* size of class */
-   Boolean inClass;	   /* "in class" class */
+   bool inClass;	   /* "in class" class */
    struct clEntry *next;   /* next class in list */
 } ClassEntry;
 
@@ -59,8 +59,8 @@ typedef struct clEntry { /* class map entry */
 
 typedef struct {   	       /* Class Map - hash table of ClassEntrys */
    MemHeap mem;    	     	/* memory heap for this class map */
-   Boolean hdrless;	     	/* if true, nentries is size of unk class */
-   Boolean htkEsc;              /* has HTK escaping */
+   bool hdrless;	     	/* if true, nentries is size of unk class */
+   bool htkEsc;              /* has HTK escaping */
    int entries;    	     	/* total classes (or unk entries) in map */
    char *name;     	     	/* name of class map */
    char *lang;     	     	/* language */
@@ -92,7 +92,7 @@ void ShowClassMap(ClassMap *c);
    Print the contents of class map c
 */
 
-ClassEntry *MakeNewClass(ClassMap *c, LabId id, int clndx, Boolean inClass);
+ClassEntry *MakeNewClass(ClassMap *c, LabId id, int clndx, bool inClass);
 /*
    Create a new class called name, add it to the class list.
    If clndx is -ve a new index is allocated otherwise clndx is used.
@@ -127,13 +127,13 @@ void GetClassMembers(ClassMap *c, int clndx, int *words);
    provided by the caller.
 */
 
-Boolean IsAnInClass(ClassMap *c, int clndx);
+bool IsAnInClass(ClassMap *c, int clndx);
 /*
    Returns true if given class is a regular 'inClass' set
    rather than a complement 'notinClass' set.
 */
 
-Boolean IsClassMember(ClassMap *c, int clndx, int wdndx);
+bool IsClassMember(ClassMap *c, int clndx, int wdndx);
 /*
    Returns true if given word is a member of the given class.
 */

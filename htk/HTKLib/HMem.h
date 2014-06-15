@@ -82,7 +82,7 @@ typedef struct {
    size_t totUsed;      /*  total #elems used        total #bytes used    */
    size_t totAlloc;     /*  total #elems alloc'ed    total #bytes alloc'd */
    BlockP heap;         /*               linked list of blocks            */
-   Boolean protectStk;  /*  MSTAK only, prevents disposal below Stack Top */
+   bool protectStk;  /*  MSTAK only, prevents disposal below Stack Top */
 }MemHeap;
 
 /* ---------------------- Alignment Issues -------------------------- */
@@ -228,7 +228,7 @@ STriMat CreateSTriMat(MemHeap *x,int size);
    lower triangle of a square matrix.
 */
 
-Boolean IsTriMat(Matrix m);
+bool IsTriMat(Matrix m);
 /*
    Return true if m is actually TriMat
 */
@@ -260,7 +260,7 @@ int  GetUse(Ptr m);
    Access to Usage count attached to Shared Vector/Matrix m 
 */
 
-Boolean IsSeenV(Ptr m);
+bool IsSeenV(Ptr m);
 void TouchV(Ptr m);
 void UntouchV(Ptr m);
 /*

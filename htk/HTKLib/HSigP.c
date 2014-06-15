@@ -403,7 +403,7 @@ void SpecModulus(Vector s, Vector m)
 }
 
 /* EXPORT-> SpecLogModulus: store log modulus of s in m */
-void SpecLogModulus(Vector s, Vector m, Boolean invert)
+void SpecLogModulus(Vector s, Vector m, bool invert)
 {
    int i,j;
    float x,y;
@@ -469,8 +469,8 @@ float WarpFreq (float fcl, float fcu, float freq, float minFreq, float maxFreq ,
 
 /* EXPORT->InitFBank: Initialise an FBankInfo record */
 FBankInfo InitFBank(MemHeap *x, int frameSize, long sampPeriod, int numChans,
-                    float lopass, float hipass, Boolean usePower, Boolean takeLogs,
-                    Boolean doubleFFT,
+                    float lopass, float hipass, bool usePower, bool takeLogs,
+                    bool doubleFFT,
                     float alpha, float warpLowCut, float warpUpCut)
 {
    FBankInfo fb;
@@ -825,7 +825,7 @@ void FZeroMean(float *data, int vSize, int n, int step)
 /* Regression: add regression vector at +offset from source vector.  If head
    or tail is less than delwin then duplicate first/last vector to compensate */
 static void Regress(float *data, int vSize, int n, int step, int offset,
-                    int delwin, int head, int tail, Boolean simpleDiffs)
+                    int delwin, int head, int tail, bool simpleDiffs)
 {
    float *fp,*fp1,*fp2, *back, *forw;
    float sum, sigmaT2;
@@ -858,14 +858,14 @@ static void Regress(float *data, int vSize, int n, int step, int offset,
 
 /* EXPORT->AddRegression: add regression vector at +offset from source vector */
 void AddRegression(float *data, int vSize, int n, int step, int offset,
-                   int delwin, int head, int tail, Boolean simpleDiffs)
+                   int delwin, int head, int tail, bool simpleDiffs)
 {
    Regress(data,vSize,n,step,offset,delwin,head,tail,simpleDiffs);
 }
 
 /* EXPORT->AddHeadRegress: add regression at start of data */
 void AddHeadRegress(float *data, int vSize, int n, int step, int offset,
-                    int delwin, Boolean simpleDiffs)
+                    int delwin, bool simpleDiffs)
 {
    float *fp,*fp1,*fp2;
    int i,j;
@@ -887,7 +887,7 @@ void AddHeadRegress(float *data, int vSize, int n, int step, int offset,
 
 /* EXPORT->AddTailRegress: add regression at end of data */
 void AddTailRegress(float *data, int vSize, int n, int step, int offset,
-                    int delwin, Boolean simpleDiffs)
+                    int delwin, bool simpleDiffs)
 {
    float *fp,*fp1,*fp2;
    int i,j;

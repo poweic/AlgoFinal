@@ -74,8 +74,8 @@ static LabId endWord;           /* word at end of Lattice (!SENT_END) */
 static LabId startLMWord;       /* word at start in LM (<s>) */
 static LabId endLMWord;         /* word at end in LM (</s>) */
 static LabId nullWord;          /* null word in Lattices (!NULL) */
-static Boolean beamPruneArcs = TRUE; /* apply beam pruning to arcs (rather than just nodes) */
-static Boolean compressMerge = TRUE; /* compressing lattice scores when merging duplicates */
+static bool beamPruneArcs = TRUE; /* apply beam pruning to arcs (rather than just nodes) */
+static bool compressMerge = TRUE; /* compressing lattice scores when merging duplicates */
 
 static char *llfExt = "LLF";    /* extension for LLF lattice files */
 
@@ -177,7 +177,7 @@ LLFInfo *OpenLLF (char *fn)
    return llf;
 }
 
-Boolean ScanLLF (LLFInfo *llf, char *fn, char *ext)
+bool ScanLLF (LLFInfo *llf, char *fn, char *ext)
 {
    char buf[MAXFNAMELEN];
    char latfn[MAXFNAMELEN];
@@ -201,7 +201,7 @@ Boolean ScanLLF (LLFInfo *llf, char *fn, char *ext)
 Lattice *GetLattice (char *fn, char *path, char *ext,
                      /* arguments of ReadLattice() below */
                      MemHeap *heap, Vocab *voc, 
-                     Boolean shortArc, Boolean add2Dict)
+                     bool shortArc, bool add2Dict)
 {
    Lattice *lat;
    LLFInfo *llf;
@@ -222,7 +222,7 @@ Lattice *GetLattice (char *fn, char *path, char *ext,
       if (!llf) {       /* can't find LLF -> fall back to single file lattices */
          char latfn[MAXFNAMELEN];
          FILE *f;
-         Boolean isPipe;
+         bool isPipe;
 
          MakeFN (fn, path, ext, latfn);
          if ((f = FOpen(latfn, NetFilter, &isPipe)) == NULL)
@@ -266,7 +266,7 @@ Lattice *GetLattice (char *fn, char *path, char *ext,
 void InitLat(void)
 {
    int i;
-   Boolean b;
+   bool b;
    char buf[MAXSTRLEN];
 
    Register(hlat_version,hlat_vc_id);
@@ -420,13 +420,13 @@ void LatTopSortVisit (LNode *ln, int *time)
      uses depth first traversal (in reverse (pred) direction) 
      based on [CLR:1990], p. 485 
 */
-Boolean LatTopSort (Lattice *lat, LNode **topOrder)
+bool LatTopSort (Lattice *lat, LNode **topOrder)
 {
    int time = -1;       /* new numbering will start at 0 */
    int i;
    LNode *ln;
    LArc *la;
-   Boolean isDAG = TRUE;
+   bool isDAG = TRUE;
 
    for (i = 0, ln = lat->lnodes; i < lat->nn; ++i, ++ln)
       ln->n = -1;        /* mark node as unseen (WHITE in CLR) */
@@ -875,7 +875,7 @@ void CalcStats (Lattice *lat)
    LArc *la;
    int i, d, max_inDegree, max_outDegree, nWords;
    LogDouble nPaths;
-   Boolean isDAG;
+   bool isDAG;
    LNode *lnStart, *lnEnd;
    Word word;
 
@@ -977,7 +977,7 @@ void FixBadLat (Lattice *lat)
 {
    LNode *ln;
    LArc *la;
-   Boolean seenSE, seenOther;
+   bool seenSE, seenOther;
    Word end;
 
    LatCheck (lat);
@@ -1278,7 +1278,7 @@ void MergeArcsForNode(Lattice *lat, LNode *ln)
 */
 void RecoverArcsForNode(Lattice *lat, LNode *ln)
 {
-   Boolean in, out; 
+   bool in, out; 
    LArc *la1, *la2;
 
    /* checking inbound arcs */
@@ -1396,9 +1396,9 @@ static LNode *MergeNodes(Lattice *lat, LNode *ln1, LNode *ln2)
   ToMergeLatNodesForw: checking if forword merge is needed between 
   a node and other active nodes that are connected to this node
 */
-Boolean ToMergeLatNodesForw(Lattice *lat, LNode *ln)
+bool ToMergeLatNodesForw(Lattice *lat, LNode *ln)
 {
-   Boolean isFound = FALSE;
+   bool isFound = FALSE;
    LArc *la1, *la2;
       
    for (la1 = ln->foll; la1; la1 = la1->farc) {
@@ -1475,9 +1475,9 @@ void MergeLatNodesForw(Lattice *lat, LNode *ln)
   ToMergeLatNodesBackw: checking if backward merge is needed between 
   a node and other active nodes that are connected to this node
 */
-Boolean ToMergeLatNodesBackw(Lattice *lat, LNode *ln)
+bool ToMergeLatNodesBackw(Lattice *lat, LNode *ln)
 {
-   Boolean isFound = FALSE;
+   bool isFound = FALSE;
    LArc *la1, *la2;
       
    for (la1 = ln->pred; la1; la1 = la1->parc) {
@@ -1581,7 +1581,7 @@ void ShowLattice(Lattice *lat)
      contexts or pronunciation variants in a lattice for acoutic rescoring.
      The converted word graph retains the original LM information.
 */
-Lattice *MergeLatNodesArcs(Lattice *lat, MemHeap *heap, Boolean mergeFwd)
+Lattice *MergeLatNodesArcs(Lattice *lat, MemHeap *heap, bool mergeFwd)
 {
    int i, nn, na;
    LNode *ln, *newln;
@@ -1708,7 +1708,7 @@ Lattice *MergeLatNodesArcs(Lattice *lat, MemHeap *heap, Boolean mergeFwd)
 void ApplyWPNet2LabLat(Lattice *lat, Lattice *wdNet)
 {
    int i, j; 
-   Boolean isFound;
+   bool isFound;
    LArc *la, *lmla;
 
    /* label lattice must contain NULL node at the start and end */

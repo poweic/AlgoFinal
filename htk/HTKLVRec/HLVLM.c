@@ -56,14 +56,14 @@ char *hlvlm_vc_id = "$Id: HLVLM.c,v 1.1.1.1 2006/10/11 09:54:55 jal58 Exp $";
 static int trace=0;
 static ConfParam *cParm[MAXGLOBS];      /* config parameters */
 static int nParm = 0;
-static Boolean rawMITFormat = FALSE;    /* by default do not use HTK quoting */
+static bool rawMITFormat = FALSE;    /* by default do not use HTK quoting */
 
 const double LN10 = 2.30258509299404568;    /* Defined to save recalculating it */
 
 /* --------------------------- Prototypes ---------------------- */
 
 FSLM_ngram *CreateBoNGram (MemHeap *heap, int vocSize, int counts[NSIZE]);
-NEntry *GetNEntry (FSLM_ngram *nglm, LMId ndx[NSIZE], Boolean create);
+NEntry *GetNEntry (FSLM_ngram *nglm, LMId ndx[NSIZE], bool create);
 
 void SetNEntryBO (FSLM *lm);
 
@@ -81,7 +81,7 @@ LMState Fast_LMLA_LMState (FSLM *lm, LMState src);
 void InitLVLM (void)
 {
    int i;
-   Boolean b;
+   bool b;
 
    Register (hlvlm_version, hlvlm_vc_id);
    nParm = GetConfig("HLVLM", TRUE, cParm, MAXGLOBS);
@@ -112,7 +112,7 @@ void InitLVLM (void)
 
      Read one Float from src and convert from log_10 to log_e
 */
-static LogFloat GetProb(Source *src, Boolean bin)
+static LogFloat GetProb(Source *src, bool bin)
 {
    float prob;
 
@@ -138,7 +138,7 @@ static LogFloat GetProb(Source *src, Boolean bin)
      Read Word string from src, possibly in raw format
 
 */
-static void GetLMWord (Source *src, char *buf, Boolean raw)
+static void GetLMWord (Source *src, char *buf, bool raw)
 {
    if (raw) {
       if (!ReadRawString (src, buf))
@@ -233,9 +233,9 @@ static int se_cmp(const void *v1,const void *v2)
 
      read one LM entry (one line in ARPA LM file)
 */
-static void GetLMEntry (FSLM_ngram *nglm, Source *src, Boolean bin, int n, LMId *ndx, 
+static void GetLMEntry (FSLM_ngram *nglm, Source *src, bool bin, int n, LMId *ndx, 
                         LMId word2lmid(FSLM_ngram *, char*), 
-                        LogFloat *prob, Boolean *hasBO, LogFloat *bo, Boolean *hasUNK)
+                        LogFloat *prob, bool *hasBO, LogFloat *bo, bool *hasUNK)
 {
    unsigned char size, flags;
    char buf[MAXSTRLEN];
@@ -308,11 +308,11 @@ static void GetLMEntry (FSLM_ngram *nglm, Source *src, Boolean bin, int n, LMId 
 
      read one n-gram section from ARPA LM file
 */
-static void ReadARPAngram (FSLM_ngram *nglm, Source *lmSrc, int n, int count, Boolean bin,
+static void ReadARPAngram (FSLM_ngram *nglm, Source *lmSrc, int n, int count, bool bin,
                            Vocab *vocab)
 {
    LogFloat prob, bo;
-   Boolean hasBO, hasUNK;
+   bool hasBO, hasUNK;
    int i;
    LMId ndx[NSIZE+1];
    NEntry *ne, *le = NULL;
@@ -464,7 +464,7 @@ FSLM *ReadARPALM(MemHeap *heap, char *lmfn, Vocab *vocab)
    Source lmSrc;
    char buf[MAXSTRLEN], fmt[MAXSTRLEN], ngFmtCh;
    int i, n;
-   Boolean ngBin[NSIZE+1];
+   bool ngBin[NSIZE+1];
    int nng[NSIZE+1];  /* number of ngrams */
 
    if (InitSource (lmfn, &lmSrc, LangModFilter) < SUCCESS)
@@ -1407,7 +1407,7 @@ static int hvs[]= { 165902236, 220889002, 32510287, 117809592,
                     165902236, 220889002, 32510287, 117809592 };
 
 /* EXPORT->GetNEntry: Access specific NGram entry indexed by ndx */
-NEntry *GetNEntry (FSLM_ngram *nglm, LMId ndx[NSIZE], Boolean create)
+NEntry *GetNEntry (FSLM_ngram *nglm, LMId ndx[NSIZE], bool create)
 {
    NEntry *ne;
    unsigned int hash;

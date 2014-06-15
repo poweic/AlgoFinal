@@ -92,7 +92,7 @@ typedef enum {
 TriState;
 
 typedef struct {
-   Boolean eSep;         /* Energy is in separate stream */
+   bool eSep;         /* Energy is in separate stream */
    short swidth[SMAX];   /* [0]=num streams,[i]=width of stream i */
    ParmKind bk;          /* parm kind of the parm buffer */
    ParmKind pk;          /* parm kind of this obs (bk or DISCRETE) */
@@ -136,12 +136,12 @@ typedef struct {
    AudioIn a;                 /* the audio source - if any */
    Wave w;                    /* the wave input - if any */
    Ptr i;                     /* the other input - if any */
-   Boolean useSilDet;         /* Use Silence Detector */
+   bool useSilDet;         /* Use Silence Detector */
    int audSignal;             /* Signal Number for Audio Control */
    char *vqTabFN;             /* Name of VQ Table Defn File */
-   Boolean saveCompressed;    /* Save in compressed format */
-   Boolean saveWithCRC;       /* Save with CRC check added */
-   Boolean spDetParmsSet;     /* Parameters set for sp/sil detector */
+   bool saveCompressed;    /* Save in compressed format */
+   bool saveWithCRC;       /* Save with CRC check added */
+   bool spDetParmsSet;     /* Parameters set for sp/sil detector */
    float spDetSil;            /* Silence level for channel */
    float chPeak;              /* Peak-to-peak input level for channel */
    float spDetSp;             /* Speech level for channel */
@@ -258,7 +258,7 @@ void CloseBuffer(ParmBuf pbuf);
    any and release any associated memory.
 */
 
-Boolean ReadAsBuffer(ParmBuf pbuf, Observation *o);
+bool ReadAsBuffer(ParmBuf pbuf, Observation *o);
 /*
    Get next observation from buffer.  Buffer status must be PB_FILLING 
    or PB_STOPPED.  If no observation is available the function
@@ -331,7 +331,7 @@ void AddToBuffer(ParmBuf pbuf, Observation o);
 /* ----------------- Observation Handling Routines -------------- */
 
 Observation MakeObservation(MemHeap *x, short *swidth, 
-                            ParmKind pkind, Boolean forceDisc, Boolean eSep);
+                            ParmKind pkind, bool forceDisc, bool eSep);
 /*
    Create observation using info in swidth, eSep and pkind
    If forceDisc is true the observation will be DISCRETE but can
@@ -355,7 +355,7 @@ void ZeroStreamWidths(int numS, short *swidth);
    swidth to zero
 */
 
-void  SetStreamWidths(ParmKind pk, int size, short *swidth, Boolean *eSep);
+void  SetStreamWidths(ParmKind pk, int size, short *swidth, bool *eSep);
 /*
    If swidth has been 'zeroed' by ZeroStreamWidths, then this function
    sets up stream widths in swidth[1] to swidth[S] for number of streams
@@ -365,7 +365,7 @@ void  SetStreamWidths(ParmKind pk, int size, short *swidth, Boolean *eSep);
 */
 
 /* EXPORT->SyncBuffers: if matrix transformations are used this syncs the two buffers */
-Boolean SyncBuffers(ParmBuf pbuf,ParmBuf pbuf2);
+bool SyncBuffers(ParmBuf pbuf,ParmBuf pbuf2);
 
 void SetParmHMMSet(Ptr hset);
 /* 
@@ -385,21 +385,21 @@ ParmKind Str2ParmKind(char *str);
 */
 
 ParmKind BaseParmKind(ParmKind kind);
-Boolean HasEnergy(ParmKind kind);
-Boolean HasDelta(ParmKind kind);
-Boolean HasNulle(ParmKind kind);
-Boolean HasAccs(ParmKind kind);
-Boolean HasThird(ParmKind kind);
-Boolean HasCompx(ParmKind kind);
-Boolean HasCrcc(ParmKind kind);
-Boolean HasZerom(ParmKind kind);
-Boolean HasZeroc(ParmKind kind);
-Boolean HasVQ(ParmKind kind);
+bool HasEnergy(ParmKind kind);
+bool HasDelta(ParmKind kind);
+bool HasNulle(ParmKind kind);
+bool HasAccs(ParmKind kind);
+bool HasThird(ParmKind kind);
+bool HasCompx(ParmKind kind);
+bool HasCrcc(ParmKind kind);
+bool HasZerom(ParmKind kind);
+bool HasZeroc(ParmKind kind);
+bool HasVQ(ParmKind kind);
 /* 
    Functions to separate base param kind from qualifiers 
 */
 
-Boolean ValidConversion(ParmKind src, ParmKind tgt);
+bool ValidConversion(ParmKind src, ParmKind tgt);
 /* 
    Checks that src -> tgt conversion is possible 
 */

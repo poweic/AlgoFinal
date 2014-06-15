@@ -54,12 +54,12 @@ static int trace = 0;               /* trace level */
 
 /* -------------------------- Global Variables etc ---------------------- */
 
-static Boolean doBigram = FALSE;    /* do what? */
-static Boolean doDurs   = FALSE;
-static Boolean doList   = FALSE;
-static Boolean doPCount = FALSE; 
-static Boolean doLCount = FALSE;
-static Boolean doBOff   = FALSE;
+static bool doBigram = FALSE;    /* do what? */
+static bool doDurs   = FALSE;
+static bool doList   = FALSE;
+static bool doPCount = FALSE; 
+static bool doLCount = FALSE;
+static bool doBOff   = FALSE;
 
 static char *listFile   = NULL;     /* file for label list */
 static char *bigFile    = NULL;     /* file for bigram */
@@ -441,7 +441,7 @@ void InitStats(char *listFn)
 
 /* GetAEntry: find ngram in in aetab.  If not found and create
    is set, then add new entry */
-AEntry *GetAEntry(int in[ASIZE],Boolean create)
+AEntry *GetAEntry(int in[ASIZE],bool create)
 {
    AEntry *ae;
    int i;

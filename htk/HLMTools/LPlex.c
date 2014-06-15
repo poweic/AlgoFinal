@@ -102,9 +102,9 @@ static LabId unkId = NULL;          /* sentence end marker */
 
 static LabId pLab[LBUF_SIZE];       /* label array */
 
-static Boolean skipOOV  = TRUE;     /* discard OOV in computation */
-static Boolean printOOV = FALSE;    /* print uniqe OOV's and their frequencies */
-static Boolean streamMode = FALSE;  /* stream mode */
+static bool skipOOV  = TRUE;     /* discard OOV in computation */
+static bool printOOV = FALSE;    /* print uniqe OOV's and their frequencies */
+static bool streamMode = FALSE;  /* stream mode */
 
 static FileFormat lff = UNDEFF;     /* label file format */
 
@@ -342,10 +342,10 @@ static void Initialise(void)
    int i,j,ndx;
    float x;
    LMInfo *li;
-   Boolean inLM;
+   bool inLM;
    LabId *wid,lab;
    NameId *na,nid;
-   Boolean isPipe;
+   bool isPipe;
 
    nulClass = GetLabId(nulName,TRUE);
 
@@ -567,7 +567,7 @@ static void AddStats(PStats *ps1, PStats *ps2)
 }
 
 /* PrintInfo: print statistics from ps */
-static void PrintInfo(PStats *ps, Boolean showOOV)
+static void PrintInfo(PStats *ps, bool showOOV)
 {
    int i;
    float ovr;
@@ -632,7 +632,7 @@ static double GetProb(LabId *wlab, int nSize)
 
    int i,j;
    LMInfo *li;
-   Boolean inThisLM,inAnyLM;
+   bool inThisLM,inAnyLM;
    double x,prob,psum;
    NameId nGram[LM_NSIZE];
 
@@ -690,7 +690,7 @@ static void CalcPerplexity(PStats *sent, LabId *pLab, int numPLabs, int nSize)
    int i,j;
    LabId *p;
    float prob;
-   Boolean hasOOV;
+   bool hasOOV;
 
    for (p=pLab, i=nSize-1; i<numPLabs; i++, p++)
    {
@@ -807,7 +807,7 @@ static void ProcessTextStream(char *fn, int nSize)
    LabId lab=0;
    double ppl;
    int numPLabs;
-   Boolean isPipe;
+   bool isPipe;
    char word[256];
 
    if (fn!=NULL) {

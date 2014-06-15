@@ -1239,7 +1239,7 @@ void WriteTLex (TLexNet *net, char *fn)
    TLexNode *ln;
    TLexLink *ll;
    FILE *dotFile;
-   Boolean isPipe;
+   bool isPipe;
 
    dotFile = FOpen (fn, NoOFilter, &isPipe);
 
@@ -1397,7 +1397,7 @@ void WriteTLex (TLexNet *net, char *fn)
 /* Create the Lexicon Network based on the vocabulary and model set
 */
 LexNet *CreateLexNet (MemHeap *heap, Vocab *voc, HMMSet *hset, 
-                      char *startWord, char *endWord, Boolean silDict)
+                      char *startWord, char *endWord, bool silDict)
 {
    int i;
    TLexNet *tnet;
@@ -1550,7 +1550,7 @@ LexNet *CreateLexNet (MemHeap *heap, Vocab *voc, HMMSet *hset,
 
 /* -------------- vocab handling --------------- */
 
-Boolean CompareBasePron (Pron b, Pron p)
+bool CompareBasePron (Pron b, Pron p)
 {
    int i;
 
@@ -1692,7 +1692,7 @@ void UnMarkAllWords (Vocab *voc)
       }
 }
 
-void MarkAllWordsfromLat (Vocab *voc, Lattice *lat, Boolean silDict)
+void MarkAllWordsfromLat (Vocab *voc, Lattice *lat, bool silDict)
 {
    int i;
    LNode *ln;

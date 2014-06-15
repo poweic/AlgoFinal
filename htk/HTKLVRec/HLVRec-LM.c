@@ -240,7 +240,7 @@ LMTokScore Decoder::LMLA_nocache (LMState lmState, int lmlaIdx)
 
      return the (scaled!) LM lookahead score for the given LMState and lmlaIdx
 */
-LMTokScore Decoder::LMCacheLookaheadProb (LMState lmState, int lmlaIdx, Boolean fastlmla)
+LMTokScore Decoder::LMCacheLookaheadProb (LMState lmState, int lmlaIdx, bool fastlmla)
 {
    LMCache *cache;
    LMTokScore lmscore;

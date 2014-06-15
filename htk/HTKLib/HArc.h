@@ -78,7 +78,7 @@ struct _CorrN{
   int nArcs; /* normally 1, but e.g.  if quinphone or perhaps MWE, can be more. */
   HArc *me_start; HArc *me_end;/* first & last arc. */
   
-  Boolean IsSilence; /* Probably just start & end. */
+  bool IsSilence; /* Probably just start & end. */
 
   float scaled_aclike; /* scaled. */
   double alpha;
@@ -104,7 +104,7 @@ typedef struct _Acoustic{
 
   HLink hmm;
 
-  Boolean SP; /*short pause.  If (SP) rest of variables are NULL.*/
+  bool SP; /*short pause.  If (SP) rest of variables are NULL.*/
   DVector alphat; /* 1..Nq */
   DVector alphat1; /* 1..Nq  [for time t-1] */
   DVector *betaPlus;  /* [myArc->t_start..myArc->t_end][1..Nq] */
@@ -165,7 +165,7 @@ struct _Arc{
 
 typedef struct ArcInfoStruct{
   int nLats;
-  Boolean numLatIncluded; /*if TRUE and this is a denominator lat, means the num lat
+  bool numLatIncluded; /*if TRUE and this is a denominator lat, means the num lat
 			    has been included as the last one.*/
   Lattice *lat[MAXLATS]; /*only needed if we are creating an Arc. Array starts from zero.*/
   MemHeap *mem;
@@ -210,7 +210,7 @@ int TimeToNFrames(float time, ArcInfo *aInfo);
 
 void AttachMPEInfo(ArcInfo *aInfo); /* attaches the "mpe" fields  */
 
-Boolean LatInLat(Lattice *numLat, Lattice *denLat);
+bool LatInLat(Lattice *numLat, Lattice *denLat);
 
 #define StartOfWord(a) (a->pos==0)
 #define EndOfWord(a) (a->pos == a->parentLarc->nAlign-1)

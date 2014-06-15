@@ -105,14 +105,14 @@ typedef struct {
 }WordBuf;
 
 typedef struct {
-   Boolean rawMode;             /* Raw input mode */
+   bool rawMode;             /* Raw input mode */
    EdOp wop;                    /* Used to apply UCWORD/LCWORD before sorting inputs */
    int numCons;                 /* number of context defs */
    EditCmd contexts[MAXCONS];   /* array of context defs */
    ScriptItem *script;          /* edit script for this input dictionary */
    int headSkip;                /* num header lines to skip on input */
    Source src;                  /* input file source */
-   Boolean isPipe;              /* dictionary is input thru pipe */
+   bool isPipe;              /* dictionary is input thru pipe */
    char *name;                  /* full path of dictionary file */
    LabId source;                /* name of source dict */
    WordBuf wbuf;                /* current input word */
@@ -145,11 +145,11 @@ static LabId required;               /* current required word */
 static MemHeap memStak;              /* all storage allocated in this */
 
 /* Flags etc */
-static Boolean mergeProns = FALSE;   /* merge prons from all sources */
-static Boolean nullOutput = FALSE;   /* suppress generation of output dict */
-static Boolean incOutSyms = FALSE;   /* write out extra field */
-static Boolean incProbs = FALSE;     /* write out extra field */
-static Boolean tagSources = FALSE;   /* tag output words with name of source dict */
+static bool mergeProns = FALSE;   /* merge prons from all sources */
+static bool nullOutput = FALSE;   /* suppress generation of output dict */
+static bool incOutSyms = FALSE;   /* write out extra field */
+static bool incProbs = FALSE;     /* write out extra field */
+static bool tagSources = FALSE;   /* tag output words with name of source dict */
 static char commentChars[10] = "#";  /* default dictionary comment char */
 static char wdBndSym[10] = "#";      /* word boundary symbol */
 
@@ -159,7 +159,7 @@ static LabId wdBnd;                  /* LabId of word boundary symbol  */
 static LabId cmuId;                  /* "cmu" */
 
 /* Log Information */
-static Boolean isLogging = FALSE;
+static bool isLogging = FALSE;
 static FILE *logF = NULL;            /* log file if any */
 static int nNewPhones = 0;               /* num new phones encountered */
 static int nDefPhones = 0;               /* num predefined phones */
@@ -232,7 +232,7 @@ int main(int argc, char *argv[])
    int i,skip;
    void Initialise(void);
    void EditFile(char *labfn);
-   void CreateBuffer(char *dName, Boolean isInput);
+   void CreateBuffer(char *dName, bool isInput);
    void EditAndMerge(void);
    void LoadWordList(void);
    void LoadPhoneList(void);
@@ -597,7 +597,7 @@ int ReadIdList(Source *src, LabId *argList)
 /* ReadScript: read a file of cmds and store script in db. If
    it is an input script UW/LW must be applied during reading
    to prevent sort order breaking. */
-void ReadScript(char *scriptFn, DBuffer *db, Boolean isInput)
+void ReadScript(char *scriptFn, DBuffer *db, bool isInput)
 {
    ScriptItem *i, *head, *tail;
    EdOp op;
@@ -706,11 +706,11 @@ void SkipHeader(Source *src, int skipHeaderLines)
 }
 
 /* CreateBuffer: initialise an input or output buffer */
-void CreateBuffer(char *dName, Boolean isInput)
+void CreateBuffer(char *dName, bool isInput)
 {
    DBuffer *db;
    char buf[256],scriptFN[256],*src;
-   Boolean ReadNextWord(DBuffer *db);
+   bool ReadNextWord(DBuffer *db);
 
    if (isInput) {
       db = inbuf+nInputs;
@@ -771,7 +771,7 @@ void LoadWordList(void)
    Source src;
    int i;
    char buf[MAXSTRLEN];
-   Boolean mustSort = FALSE;
+   bool mustSort = FALSE;
    
 
    if(InitSource(wListFN,&src,NoFilter)<SUCCESS)
@@ -786,7 +786,7 @@ void LoadWordList(void)
       ReadString(&src,buf);
       wList[i] = GetLabId(buf,TRUE);
       if (!mustSort && i>0)  /* check in sort order */
-         mustSort = Boolean(strcmp(wList[i-1]->name,buf) > 0);
+         mustSort = bool(strcmp(wList[i-1]->name,buf) > 0);
       SkipLine(&src);
    }
    CloseSource(&src);
@@ -824,7 +824,7 @@ LabId LCase(LabId id)
 }
 
 /* IsCommentChar: Test whether c is in commentChars */
-Boolean IsCommentChar(int c)
+bool IsCommentChar(int c)
 {
    char *s;
  
@@ -853,7 +853,7 @@ static void SetCase(EdOp cmd, char *s)
 }
 
 /* ReadNextWord: read next word, return FALSE if EOF */
-Boolean ReadNextWord(DBuffer *db)
+bool ReadNextWord(DBuffer *db)
 {
    static LabId labels[MAXPHONES+3];
    char buf[MAXSTRLEN];
@@ -943,7 +943,7 @@ Boolean ReadNextWord(DBuffer *db)
 }
 
 /* WriteEntry: write out a dictionary entry and update newPhones */
-void WriteEntry(FILE *f, LabId word, LabId outsym, Pronunciation *p, int margin, Boolean findNew)
+void WriteEntry(FILE *f, LabId word, LabId outsym, Pronunciation *p, int margin, bool findNew)
 {
    int i,st,en;
    char buf[256],m[20];
@@ -995,10 +995,10 @@ void WriteEntry(FILE *f, LabId word, LabId outsym, Pronunciation *p, int margin,
 /* ----------------- Read/Write Dictionary Words --------------- */
 
 /* ReadDictProns: read entries for next word, return FALSE if none found */
-Boolean ReadDictProns(DBuffer *db)
+bool ReadDictProns(DBuffer *db)
 {
    LabId thisWord;
-   Boolean ok;
+   bool ok;
    int i = 0;
 
    if (db->nextWord == NULL) return FALSE;
@@ -1023,7 +1023,7 @@ Boolean ReadDictProns(DBuffer *db)
 }
 
 /* WriteDictWord: write current word to output file */
-void WriteDictWord(DBuffer *db, FILE *f, int margin, Boolean findNew)
+void WriteDictWord(DBuffer *db, FILE *f, int margin, bool findNew)
 {
    int i;
 
@@ -1045,7 +1045,7 @@ void ShowDB(DBuffer *db, char * title)
 /* --------------------------- Editing ------------------------- */
 
 /* IsInIdList: return true if id is in idlist */
-Boolean IsInIdList(LabId id, LabId *idlist)
+bool IsInIdList(LabId id, LabId *idlist)
 {
    while (*idlist != NULL) {
       if (id == *idlist) return TRUE;
@@ -1119,7 +1119,7 @@ int DeleteSourceOp(WordBuf *wb, LabId *args)
 void DelDefOp(WordBuf *wb, LabId *args)
 {
    int i,j,idx=0;
-   Boolean found = FALSE;
+   bool found = FALSE;
    Pronunciation *p;
    LabId *ph;
    char buf[256];
@@ -1214,7 +1214,7 @@ LabId *GetContextList(LabId id, DBuffer *db)
 void ContextRep(Pronunciation *p, LabId *args, DBuffer *db)
 {
    LabId lc,rc,cc;
-   Boolean ltrue, replace;
+   bool ltrue, replace;
    LabId *lcList,*rcList;
    int i;
    
@@ -1227,12 +1227,12 @@ void ContextRep(Pronunciation *p, LabId *args, DBuffer *db)
          if (lcList != NULL)
             ltrue = IsInIdList(p->phone[i-1],lcList);
          else
-            ltrue = Boolean((lc == asterix || lc == p->phone[i-1] ));
+            ltrue = bool((lc == asterix || lc == p->phone[i-1] ));
          if (ltrue){
             if (rcList != NULL)
                replace = IsInIdList(p->phone[i+1],rcList);
             else
-               replace = Boolean((rc == asterix || rc == p->phone[i+1] ));
+               replace = bool((rc == asterix || rc == p->phone[i+1] ));
          }
       }
       if (replace) p->phone[i] = *args;
@@ -1253,7 +1253,7 @@ void ContextReplaceOp(WordBuf *wb, LabId *args, DBuffer *db)
 
 /* SeqMatch: Returns true if the nMerge sequence of LabIds 
              are the same in list1 and list2 */
-Boolean SeqMatch(int nMerge, LabId *list1, LabId *list2)
+bool SeqMatch(int nMerge, LabId *list1, LabId *list2)
 {
    int i;
 
@@ -1406,7 +1406,7 @@ LabId MakeTriId(LabId l, LabId c, LabId r)
 
 /* TriPhon: convert phone labels in pronunciation to either
       left, right or triphone (ie both) contexts */
-void TriPhon(Pronunciation *p, Boolean left, Boolean right, 
+void TriPhon(Pronunciation *p, bool left, bool right, 
              LabId stId, LabId enId)
 {
    int i;
@@ -1435,7 +1435,7 @@ void TriPhon(Pronunciation *p, Boolean left, Boolean right,
 }
 
 /* Triphonise: given word buffer */
-void Triphonise(WordBuf *wb,  Boolean left, Boolean right, 
+void Triphonise(WordBuf *wb,  bool left, bool right, 
                 LabId stId, LabId enId)
 {
    int i;
@@ -1649,7 +1649,7 @@ LabId HighestInput(void)
    dictionary is exhausted.  Dicts are sorted so stop as soon as next
    word is alphabetically after required word. If found then return true
    and load required word in wordbuf. */
-Boolean ScanDict(DBuffer *db, LabId reqd)
+bool ScanDict(DBuffer *db, LabId reqd)
 {
    int scmp;
 
@@ -1662,7 +1662,7 @@ Boolean ScanDict(DBuffer *db, LabId reqd)
    }
    if (scmp==0)
       ReadDictProns(db);
-   return Boolean(scmp==0);
+   return bool(scmp==0);
 }
 
 /* FillInputs: scan inputs until current word in each is >= required word.
@@ -1670,7 +1670,7 @@ Boolean ScanDict(DBuffer *db, LabId reqd)
    highest ranked word across all the inputs.  If a wordlist is given
    then it is just the next word in the list. Returns false when all
    inputs or wordlist is exhausted */
-Boolean FillInputs(Boolean *valid)
+bool FillInputs(bool *valid)
 {
    int i;
 
@@ -1750,11 +1750,11 @@ void AppendWordBuf(DBuffer *s, DBuffer *t)
 }
 
 /* HasDuplicate: return true if given pron has preceding duplicate */
-Boolean HasDuplicate(DBuffer *db, int pronNum)
+bool HasDuplicate(DBuffer *db, int pronNum)
 {
    Pronunciation *s, *t;
    int i,k;
-   Boolean found = FALSE;
+   bool found = FALSE;
 
    s = db->wbuf.pron+pronNum;
    for (i=0; !found && i<pronNum; i++) {
@@ -1795,7 +1795,7 @@ void RemDuplicates(DBuffer *db)
 /* EditAndMerge: main processing loop */
 void EditAndMerge(void)
 {
-   Boolean valid[MAXDICTS];
+   bool valid[MAXDICTS];
    int i;
 
    SetActiveCount();

@@ -57,10 +57,10 @@ static int trace = 0;
 static ConfParam *cParm[MAXGLOBS];      /* config parameters */
 static int nParm = 0;
 static int sqOffset;                    /* squash offset, this depends on byte */
-static Boolean checkOrder = FALSE;      /* Check n-gram ordering */
-static Boolean natReadOrder = FALSE;    /* Preserve natural read byte order */
-static Boolean natWriteOrder = FALSE;   /* Preserve natural write byte order */
-extern Boolean vaxOrder;                /* True if byteswapping needed to preserve SUNSO */
+static bool checkOrder = FALSE;      /* Check n-gram ordering */
+static bool natReadOrder = FALSE;    /* Preserve natural read byte order */
+static bool natWriteOrder = FALSE;   /* Preserve natural write byte order */
+extern bool vaxOrder;                /* True if byteswapping needed to preserve SUNSO */
 
 /* --------------------- Initialisation --------------------- */
 
@@ -68,7 +68,7 @@ extern Boolean vaxOrder;                /* True if byteswapping needed to preser
 void InitGBase(void)
 {
    int i;
-   Boolean b;
+   bool b;
 
    Register(lgbase_version,lgbase_vc_id);
    /* get config variables for this module */
@@ -103,7 +103,7 @@ void NGramSquash(int N, NGram ng, Byte *comp)
    int i;
    UInt b;
    Byte *e,*c;
-   Boolean mustSwap = (vaxOrder && !natWriteOrder);
+   bool mustSwap = (vaxOrder && !natWriteOrder);
 
    for (c = comp,i=0; i<N; i++, c+=SQUASH) {
       b = ng[i]; e = (Byte *) &b;
@@ -118,7 +118,7 @@ void NGramExpand(int N, Byte *comp, NGram ng)
    int i;
    UInt b;
    Byte *e,*c;
-   Boolean mustSwap = (vaxOrder && !natReadOrder);
+   bool mustSwap = (vaxOrder && !natReadOrder);
 
    for (c=comp,i=0; i<N; i++,c+=SQUASH){
       e = (Byte *) &b;
@@ -131,7 +131,7 @@ void NGramExpand(int N, Byte *comp, NGram ng)
 }
 
 /* EXPORT -> SameGrams: true if grams (ignoring counts) are equal */
-Boolean SameGrams(int N, NGram ng1, NGram ng2)
+bool SameGrams(int N, NGram ng1, NGram ng2)
 {
    int i;
 
@@ -199,7 +199,7 @@ void WriteRawHGram(FILE *f, char *name, int N, NGram ng, WordMap *wm)
 }
 
 /* SameHGrams: compare raw and text N-grams */
-static Boolean SameHGrams(int N, NGram ng, LabId *tg)
+static bool SameHGrams(int N, NGram ng, LabId *tg)
 {
    int i,ndx;
 
@@ -224,7 +224,7 @@ static int CmpTxtNGram(int N, LabId *ng1, LabId *ng2)
 
 
 /* CompareMapNames: compare map name and n-gram file map name */
-static Boolean CompareMapNames(char *ngfMap, char *master)
+static bool CompareMapNames(char *ngfMap, char *master)
 {
   char *s;
 
@@ -246,7 +246,7 @@ static void SetNext(NGSource *ngs, Byte ngRawBuf[GSIZE])
 {
    UInt *gp;
    int i, N, ng_size;
-   Boolean same, hasOOM;
+   bool same, hasOOM;
 
    N = ngs->info.N;
    ng_size = ngs->info.ng_size;
@@ -349,7 +349,7 @@ void ReadNGram(NGSource *ngs, NGram ng)
 {
    UInt a,oc,N,ng_size;
    Byte c,b[GSIZE];
-   Boolean same;
+   bool same;
 
    if (ngs->nItems <= 0)
       HError(15313,"ReadNGram: Gram file %s is empty",ngs->src.name);
@@ -410,7 +410,7 @@ NGBuffer *CreateNGBuffer(MemHeap *mem, int N, int size, char *fn, WordMap *wm)
 }
 
 /* EXPORT->StoreNGram: store ngram in buf into ngb, return TRUE if ngb is full */
-Boolean StoreNGram(NGBuffer *ngb, NGram ng)
+bool StoreNGram(NGBuffer *ngb, NGram ng)
 {
    memcpy(ngb->next, ng, ngb->info.ng_full);
    ngb->used++; ngb->next += ngb->info.N+1;
@@ -529,7 +529,7 @@ void WriteNGBuffer(NGBuffer *ngb, char *source)
    UInt *p;
    FILE *f;
    char fn[256];
-   Boolean isPipe;
+   bool isPipe;
 
    N = ngb->info.N;
    sprintf(fn,"%s.%d",ngb->fn,ngb->fndx);
@@ -682,7 +682,7 @@ static void ReSortGFList(NGInputSet *inset)
 {
    int i,j,n,_this;
    NGram p,q;
-   Boolean found = FALSE;
+   bool found = FALSE;
 
    n = inset->nOpen; _this = inset->gfsort[0];
    p = inset->ngs[_this].nxt;
@@ -789,12 +789,12 @@ static void GetInsetGram(NGInputSet *inset, NGram ng, float *wt)
 }
 
 /* EXPORT->GetNextNGram: get next ngram from parallel input streams */
-Boolean GetNextNGram(NGInputSet *inset, NGram ng, float *count, int N)
+bool GetNextNGram(NGInputSet *inset, NGram ng, float *count, int N)
 {
    float sum;
    UInt thisGram[MAXNG];
    int i;
-   Boolean same;
+   bool same;
 
    if (N > inset->N)
       HError(15341,"GetNextNGram: Requested N[%d] > gram size [%d]",N,inset->N);

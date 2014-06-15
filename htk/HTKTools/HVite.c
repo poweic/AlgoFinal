@@ -69,8 +69,8 @@ static int trace = 0;
 /* Doing what */
 static int nToks = 0;             /* Number of tokens for N best */
 static int nTrans = 1;            /* Number of transcriptions for N best */
-static Boolean states = FALSE;    /* Keep track of state alignment */
-static Boolean models = FALSE;    /* Keep track of model alignment */
+static bool states = FALSE;    /* Keep track of state alignment */
+static bool models = FALSE;    /* Keep track of model alignment */
 
 /* With what */
 static char *datFN;               /* Speech file */
@@ -79,8 +79,8 @@ static char *wdNetFn = NULL;      /* Word level lattice */
 static char *hmmListFn;           /* HMMs */
 static char * hmmDir = NULL;      /* directory to look for hmm def files */
 static char * hmmExt = NULL;      /* hmm def file extension */
-static Boolean loadLabels = FALSE; /* Load network for each file */
-static Boolean loadNetworks = FALSE; /* Load network for each file */
+static bool loadLabels = FALSE; /* Load network for each file */
+static bool loadNetworks = FALSE; /* Load network for each file */
 static LabId bndId = NULL;        /* Boundary word for alignment */
 
 /* Results and formats */
@@ -95,11 +95,11 @@ static char * labFileMask = NULL; /* mask for reading lablels (lattices) */
 static FileFormat dfmt=UNDEFF;    /* Data input file format */
 static FileFormat ifmt=UNDEFF;    /* Label input file format */
 static FileFormat ofmt=UNDEFF;    /* Label output file format */
-static Boolean saveAudioOut=FALSE;/* Save rec output from direct audio */
+static bool saveAudioOut=FALSE;/* Save rec output from direct audio */
 static char * roPrefix=NULL;      /* Prefix for direct audio output name */
 static char * roSuffix=NULL;      /* Suffix for direct audio output name */
 static int roCounter = 0;         /* Counter for audio output name */
-static Boolean replay = FALSE;    /* enable audio replay */
+static bool replay = FALSE;    /* enable audio replay */
 
 /* Language model */
 static double lmScale = 1.0;      /* bigram and log(1/NSucc) scale factor */
@@ -131,7 +131,7 @@ static UttInfo *utt;              /* utterance info for state/frame align */
 static FBInfo *fbInfo;            /* forward-backward info for alignment */
 static PSetInfo *alignpsi;        /* Private data used by HRec */
 static VRecInfo *alignvri;        /* Visible HRec Info */
-static Boolean saveBinary=FALSE;  /* Save tmf in binary format */
+static bool saveBinary=FALSE;  /* Save tmf in binary format */
 
 /* Heaps */
 static MemHeap ansHeap;
@@ -155,7 +155,7 @@ static int nParm = 0;            /* total num params */
 void SetConfParms(void)
 {
    int i;
-   Boolean b;
+   bool b;
    char buf[MAXSTRLEN];
 
    nParm = GetConfig("HVITE", TRUE, cParm, MAXGLOBS);
@@ -492,7 +492,7 @@ int main(int argc, char *argv[])
 /* Initialise: set up global data structures */
 void Initialise(void)
 {
-   Boolean eSep;
+   bool eSep;
    int s;
 
    /* Load hmms, convert to inverse DiagC */
@@ -637,7 +637,7 @@ int DoOnlineAdaptation(Lattice *lat, ParmBuf pbuf, int nFrames)
 } 
 
 /* ProcessFile: process given file. If fn=NULL then direct audio */
-Boolean ProcessFile(char *fn, Network *net, int utterNum, LogDouble currGenBeam, Boolean restartable)
+bool ProcessFile(char *fn, Network *net, int utterNum, LogDouble currGenBeam, bool restartable)
 {
    FILE *file;
    ParmBuf pbuf;
@@ -652,7 +652,7 @@ Boolean ProcessFile(char *fn, Network *net, int utterNum, LogDouble currGenBeam,
    int s,j,tact,nFrames;
    LatFormat form;
    char *p,lfn[255],buf1[80],buf2[80],thisFN[MAXSTRLEN];
-   Boolean enableOutput = TRUE, isPipe;
+   bool enableOutput = TRUE, isPipe;
 
    if (fn!=NULL)
       strcpy(thisFN,fn);
@@ -833,7 +833,7 @@ void DoAlignment(void)
    char lfn[MAXSTRLEN], buf[MAXSTRLEN];
    Transcription *trans;
    Network *net;
-   Boolean isPipe;
+   bool isPipe;
    int n=0;
    LogDouble currGenBeam;
    AdaptXForm *incXForm;
@@ -900,7 +900,7 @@ void DoAlignment(void)
       if (genBeamInc == 0.0)
          ProcessFile (datFN, net, n, currGenBeam, FALSE);
       else {
-         Boolean completed;
+         bool completed;
 
          completed = ProcessFile (datFN, net, n, currGenBeam, TRUE);
          currGenBeam += genBeamInc;
@@ -938,7 +938,7 @@ void DoRecognition(void)
 {
    FILE *nf;
    Network *net;
-   Boolean isPipe;
+   bool isPipe;
    int n=0;
    AdaptXForm *incXForm;
 

@@ -27,25 +27,6 @@
 /*         File: HLVNet.c Network data types for HTK LV Decoder*/
 /* ----------------------------------------------------------- */
 
-/*
-   every LexNet has a single root node
-
-
-   LexNode types:
-	- root
-	    single root node, providing single starting point for
-	    Token propagation, i.e. during utterance initialisation a
-	    single token is put here.
-	- word end
-	    corresponds to a uniqe pronunciation
-	- context
-	    special node to connect two large sets of nodes,
-            taking only |A| + |B| links instead of |A| * |B|
-	- model
-	    "normal" node corresponding to a (context-dependent) HMM,
-	    storing TokenSets for all states
-
-*/
 
 #ifndef _HLVNET_H_
 #define _HLVNET_H_
@@ -64,7 +45,22 @@ typedef struct _LexNodeInst LexNodeInst;        /* structure defined in HLVRec *
 
 typedef struct _LMlaTree LMlaTree;
 
+/* Every LexNet has a single root node:
 
+   LexNode types:
+	- root
+	    single root node, providing single starting point for
+	    Token propagation, i.e. during utterance initialisation a
+	    single token is put here.
+	- word end
+	    corresponds to a uniqe pronunciation
+	- context
+	    special node to connect two large sets of nodes,
+            taking only |A| + |B| links instead of |A| * |B|
+	- model
+	    "normal" node corresponding to a (context-dependent) HMM,
+	    storing TokenSets for all states
+*/
 typedef enum _LexNodeType {
   LN_WORDEND, LN_CON, LN_MODEL
 } LexNodeType;
@@ -109,7 +105,7 @@ typedef struct _LexNet {
    MemHeap *heap;
    Vocab *voc;
    char *vocabFN;
-   Boolean silDict;             /* does dict contain -/sp/sil variants and pronprobs? */
+   bool silDict;             /* does dict contain -/sp/sil variants and pronprobs? */
    HMMSet *hset;
 
    LexNode *start;              /* single start node */
@@ -201,7 +197,7 @@ typedef struct _TLexNet {
    TLexNode *end;       /* end node of network */
 
    TLexNode *root;	/* global chain of all nodes */
-   Boolean silDict;     /* does dict contain -/sp/sil variants and pronprobs? */
+   bool silDict;     /* does dict contain -/sp/sil variants and pronprobs? */
    TLexNode *lnSEsp;             /* sp lexnode leading to SENT_END */
    TLexNode *lnSEsil;            /* sil lexnode leading to SENT_END */
 
@@ -282,7 +278,7 @@ void InitLVNet(void);
 /* build lexicon network for recognition for Vocab and HMMSet */
 
 LexNet *CreateLexNet (MemHeap *heap, Vocab *voc, HMMSet *hset, 
-                      char *startWord, char *endWord, Boolean silDict);
+                      char *startWord, char *endWord, bool silDict);
 
 
 void ConvertSilDict (Vocab *voc, LabId spLab, LabId silLab, 
@@ -290,7 +286,7 @@ void ConvertSilDict (Vocab *voc, LabId spLab, LabId silLab,
 void MarkAllProns (Vocab *vocab);
 void MarkAllWords (Vocab *vocab);
 void UnMarkAllWords (Vocab *vocab);
-void MarkAllWordsfromLat (Vocab *voc, Lattice *lat, Boolean silDict);
+void MarkAllWordsfromLat (Vocab *voc, Lattice *lat, bool silDict);
 
 
 #ifdef __cplusplus

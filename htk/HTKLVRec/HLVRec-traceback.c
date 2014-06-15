@@ -644,7 +644,7 @@ void Decoder::CheckLAlign (Lattice *lat)
 
 */
 
-AltWordendHyp* Decoder::FakeSEpath (RelToken *tok, Boolean useLM)
+AltWordendHyp* Decoder::FakeSEpath (RelToken *tok, bool useLM)
 {
    AltWordendHyp *alt = NULL;
    PronId endPronId;
@@ -804,7 +804,7 @@ WordendHyp* Decoder::BuildLattice ()
    return path;
 }
 
-AltWordendHyp* Decoder::BuildLatAltList (TokenSet *ts, Boolean useLM)
+AltWordendHyp* Decoder::BuildLatAltList (TokenSet *ts, bool useLM)
 {
    AltWordendHyp *alt, *altPrev;
    RelToken *tok;

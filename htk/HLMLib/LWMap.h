@@ -74,10 +74,10 @@ typedef struct {         /* array of words (map or list) */
    char    *lang;        /* language */
    char    *source;      /* description of sources */
    int     seqno;        /* sequence number */
-   Boolean htkEsc;       /* has HTK escaping */
-   Boolean isMap;        /* true if map, false if word list */
-   Boolean hasCnts;      /* has word freq cnts, map option only */
-   Boolean isSorted;     /* used to avoid redundant sorts */
+   bool htkEsc;       /* has HTK escaping */
+   bool isMap;        /* true if map, false if word list */
+   bool hasCnts;      /* has word freq cnts, map option only */
+   bool isSorted;     /* used to avoid redundant sorts */
    int     size;         /* size of array */
    int     used;         /* total words and classes in map */
    int     nClass;       /* number of class ids in map */
@@ -109,7 +109,7 @@ void CreateWordList(char *fn, WordMap *w, int freeSlots);
    loaded from fn.
 */
 
-void SaveWordMap(char *fn, WordMap *w, Boolean noHeader);
+void SaveWordMap(char *fn, WordMap *w, bool noHeader);
 /*
    Write given word map or list to file fn.  If noHeader
    then the standard HLM header is suppressed.
@@ -144,7 +144,7 @@ void BuildLookupTables(WordMap *wm);
 
 /* --------------  General Utility Routines --------------- */
 
-Boolean GetSrcString(Source *src, char *s, Boolean htkEsc);
+bool GetSrcString(Source *src, char *s, bool htkEsc);
 /* 
    Get next string from src in appropriate in either raw mode 
    (htkEsc=FALSE) or HTK escaped mode (htkEsc=TRUE)

@@ -85,7 +85,7 @@ static double acScale = 1.0;    /* acoustic scale factor */
 static LogDouble wordPen = 0.0; /* inter word log penalty */
 static double prScale = 1.0;    /* pronunciation scale factor */
 
-static Boolean fixPronprobs = FALSE; /* get pron probs from dict */
+static bool fixPronprobs = FALSE; /* get pron probs from dict */
 
 static char *lmFile = NULL;     /* LM filename */
 static LModel *lm;              /* LM for expandin lattices */
@@ -102,8 +102,8 @@ static char *startLMWord;       /* word at start in LM (<s>) */
 static char *endLMWord;         /* word at end in LM (</s>) */
 static char *mergeDir;          /* lattice merging direction */
 
-static Boolean fixBadLats = FALSE;         /* fix final word in lattices */
-static Boolean sortLattice = TRUE;         /* sort lattice nodes by time & posterior */
+static bool fixBadLats = FALSE;         /* fix final word in lattices */
+static bool sortLattice = TRUE;         /* sort lattice nodes by time & posterior */
 
 static LogDouble pruneInThresh = - LZERO;  /* beam for pruning (-t) */
 static LogDouble pruneOutThresh = - LZERO; /* beam for pruning (-u) */
@@ -111,14 +111,14 @@ static LogDouble pruneInArcsPerSec = 0.0;  /* arcs per second threshold (-t) */
 static LogDouble pruneOutArcsPerSec = 0.0; /* arcs per second threshold (-u) */
 
 /* operations to perform: */
-static Boolean pruneInLat = FALSE;  /* -t */
-static Boolean writeLat = FALSE;    /* -w */
-static Boolean expandLat = FALSE;   /* -n */
-static Boolean pruneOutLat = FALSE; /* -u */
-static Boolean findBest = FALSE;    /* -f */
-static Boolean calcStats = FALSE;   /* -c */
-static Boolean lab2Lat = FALSE;     /* -I */
-static Boolean mergeLat = FALSE;    /* -m */
+static bool pruneInLat = FALSE;  /* -t */
+static bool writeLat = FALSE;    /* -w */
+static bool expandLat = FALSE;   /* -n */
+static bool pruneOutLat = FALSE; /* -u */
+static bool findBest = FALSE;    /* -f */
+static bool calcStats = FALSE;   /* -c */
+static bool lab2Lat = FALSE;     /* -I */
+static bool mergeLat = FALSE;    /* -m */
 
 /* -------------------------- Heaps ------------------------------------- */
 
@@ -142,7 +142,7 @@ void SetConfParms(void)
 {
    int i;
    char buf[MAXSTRLEN];
-   Boolean b;
+   bool b;
 
    nParm = GetConfig ("HLRESCORE", TRUE, cParm, MAXGLOBS);
    if (nParm>0){
@@ -190,7 +190,7 @@ int main(int argc, char *argv[])
 {
    char *s, *latfn, *labfn;
    FILE *nf;
-   Boolean isPipe;
+   bool isPipe;
 
    /*#### new error code range */
    if(InitShell (argc, argv, hlrescore_version, hlrescore_vc_id) < SUCCESS)
@@ -493,7 +493,7 @@ void ProcessLattice (char *latfn)
    Lattice *lat;
    char lfn[MAXSTRLEN];
    FILE *lf;
-   Boolean isPipe;
+   bool isPipe;
 
    MakeFN (latfn, latInDir, latInExt, lfn);
   
@@ -554,13 +554,13 @@ void ProcessLattice (char *latfn)
       if (labOutForm)
          FormatTranscription (trans, 
                               1.0e7, FALSE, FALSE,
-                              Boolean(strchr(labOutForm,'X')!=NULL),
-                              Boolean(strchr(labOutForm,'N')!=NULL),
-			      Boolean(strchr(labOutForm,'S')!=NULL),
-                              Boolean(strchr(labOutForm,'C')!=NULL),
-			      Boolean(strchr(labOutForm,'T')!=NULL),
-                              Boolean(strchr(labOutForm,'W')!=NULL),
-			      Boolean(strchr(labOutForm,'M')!=NULL));
+                              bool(strchr(labOutForm,'X')!=NULL),
+                              bool(strchr(labOutForm,'N')!=NULL),
+			      bool(strchr(labOutForm,'S')!=NULL),
+                              bool(strchr(labOutForm,'C')!=NULL),
+			      bool(strchr(labOutForm,'T')!=NULL),
+                              bool(strchr(labOutForm,'W')!=NULL),
+			      bool(strchr(labOutForm,'M')!=NULL));
       
       MakeFN (latfn, labOutDir, labOutExt, lfn);
       if (LSave (lfn, trans, ofmt) < SUCCESS)
@@ -636,7 +636,7 @@ void ProcessLabels (char *labfn)
    Lattice *lat;
    char lfn[MAXSTRLEN];
    FILE *lf;
-   Boolean isPipe;
+   bool isPipe;
    LabList *ll = NULL, *expll = NULL;
    LLink l;
    Transcription *reftrans;
@@ -718,13 +718,13 @@ void ProcessLabels (char *labfn)
       if (labOutForm)
          FormatTranscription (trans,
                               1.0e7, FALSE, FALSE,
-                              Boolean(strchr(labOutForm,'X')!=NULL),
-                              Boolean(strchr(labOutForm,'N')!=NULL),
-			      Boolean(strchr(labOutForm,'S')!=NULL),
-                              Boolean(strchr(labOutForm,'C')!=NULL),
-			      Boolean(strchr(labOutForm,'T')!=NULL),
-                              Boolean(strchr(labOutForm,'W')!=NULL),
-			      Boolean(strchr(labOutForm,'M')!=NULL));
+                              bool(strchr(labOutForm,'X')!=NULL),
+                              bool(strchr(labOutForm,'N')!=NULL),
+			      bool(strchr(labOutForm,'S')!=NULL),
+                              bool(strchr(labOutForm,'C')!=NULL),
+			      bool(strchr(labOutForm,'T')!=NULL),
+                              bool(strchr(labOutForm,'W')!=NULL),
+			      bool(strchr(labOutForm,'M')!=NULL));
       
       MakeFN (labfn, labOutDir, labOutExt, lfn);
       if (LSave (lfn, trans, ofmt) < SUCCESS)

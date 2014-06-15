@@ -46,11 +46,11 @@ typedef struct {
   char *outXFormDir;
   char *paXFormDir;
   char *alXFormDir;
-  Boolean useOutXForm;
-  Boolean useInXForm;
-  Boolean usePaXForm;
+  bool useOutXForm;
+  bool useInXForm;
+  bool usePaXForm;
   char *xformTMF;
-  Boolean saveBinary;
+  bool saveBinary;
   AdaptXForm *inXForm;
   AdaptXForm *outXForm;
   AdaptXForm *paXForm;
@@ -157,21 +157,21 @@ AdaptXForm *CreateAdaptXForm(HMMSet *hset, char* xformName);
   be used as the macroname for the transform.
 */
 
-Boolean GenAdaptXForm(HMMSet *hset, AdaptXForm* xform);
+bool GenAdaptXForm(HMMSet *hset, AdaptXForm* xform);
 /*
   Estimate the transform using the information and regression
   trees specified in the configuration files. Returns FALSE
   if there was insufficient data to generate a transform.
 */
 
-Boolean UpdateSpkrStats(HMMSet *hset, XFInfo *xfinfo, char *datafn);
+bool UpdateSpkrStats(HMMSet *hset, XFInfo *xfinfo, char *datafn);
 /* 
    UpdateSpkrStats: monitor speaker changes and generate transforms
    at each speaker boundary, returns TRUE when the output speaker
    has changed
 */
 
-Boolean HardAssign(AdaptXForm *xform);
+bool HardAssign(AdaptXForm *xform);
 /* 
    Whether the transform uses hard assignment or not - required
    for HModel to determine how to read/write transform

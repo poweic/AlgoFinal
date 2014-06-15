@@ -27,12 +27,8 @@
 /*         File: HDecode.c  HTK Large Vocabulary Decoder       */
 /* ----------------------------------------------------------- */
 
-char *hdecode_version = "!HVER!HDecode:   3.4.1 [GE 12/03/09]";
-char *hdecode_sccs_id = "$Id: HDecode.c,v 1.1.1.1 2006/10/11 09:54:55 jal58 Exp $";
-
 /* this is just the tool that handles command line arguments and
    stuff, all the real magic is in HLVNet and HLVRec */
-
 
 #include <cmdparser.h>
 #include "misc.h"
@@ -41,7 +37,6 @@ int trace = 0;
 
 /* -------------------------- Global Variables etc ---------------------- */
 
-// char *langfn;		/* LM filename from commandline */
 char *dictfn;		/* dict filename from commandline */
 char *hmmListfn;		/* model list filename from commandline */
 char *hmmDir = NULL;     /* directory to look for HMM def files */
@@ -58,20 +53,12 @@ void InitAll(int argc, char *argv[]);
 
 void SetConfParms (Vocabulary& vocab, Decoder& decoder);
 void ReportUsage ();
-Boolean UpdateSpkrModels (char *fn);
+bool UpdateSpkrModels (char *fn);
 
 /* ---------------- Configuration Parameters ---------------------------- */
 
 static ConfParam *cParm[MAXGLOBS];
 static int nParm = 0;		/* total num params */
-
-
-/* ---------------- Debug support  ------------------------------------- */
-
-#if 0
-FILE *debug_stdout = stdout;
-FILE *debug_stderr = stderr;
-#endif
 
 /* ---------------- Process Command Line ------------------------- */
 
@@ -129,7 +116,7 @@ int main (int argc, char *argv[]) {
 void SetConfParms (Vocabulary& vocab, Decoder& decoder) {
    int i;
    double f;
-   Boolean b;
+   bool b;
    char buf[MAXSTRLEN];
 
    nParm = GetConfig ("HDECODE", TRUE, cParm, MAXGLOBS);
@@ -185,67 +172,10 @@ void ReportUsage () {
    printf ("\n  sizes: PronId=%d  LMId=%d \n", sizeof (PronId), sizeof (LMId));
 }
 
-
-/**********  align best code  ****************************************/
-
-/* find the LN_MODEL lexnode following ln that has label lab
-   step over LN_CON and LN_WORDEND nodes.
-   return NULL if not found
-*/
-BestInfo* Decoder::FindLexNetLab (MemHeap *heap, LexNode *ln, LLink ll, HTime frameDur)
-{
-  int i;
-  LexNode *follLN;
-  MLink m;
-  BestInfo *info, *next;
-
-  if (!ll->succ) {
-    info = (BestInfo*) New (heap, sizeof (BestInfo));
-    info->next = NULL;
-    info->ll = NULL;
-    info->ln = NULL;
-    info->start = info->end = 0;
-    return info;
-  }
-
-  for (i = 0; i < ln->nfoll; ++i) {
-    follLN = ln->foll[i];
-    if (follLN->type == LN_MODEL) {
-      m = _hmm.FindMacroStruct('h', follLN->data.hmm);
-      if (m->id == ll->labid) {
-	/*            printf ("found  %8.0f %8.0f %8s  %p\n", ll->start, ll->end, ll->labid->name, follLN); */
-	next = FindLexNetLab (heap, follLN, ll->succ, frameDur);
-	if (next) {
-	  info = (BestInfo*) New (heap, sizeof (BestInfo));
-	  info->next = next;
-	  info->start = ll->start / (frameDur*1.0e7);
-	  info->end = ll->end / (frameDur*1.0e7);
-	  info->ll = ll;
-	  info->ln = follLN;
-	  return info;
-	}
-	/*            printf ("damn got 0 back searching for %8s\n", ll->labid->name); */
-      }
-    }
-    else {
-      /*         printf ("searching for %8s recursing\n", ll->labid->name); */
-      next = FindLexNetLab (heap, follLN, ll, frameDur);
-      if (next) {
-	info = (BestInfo*) New (heap, sizeof (BestInfo));
-	info->next = next;
-	info->start = info->end = ll->start / (frameDur*1.0e7);
-	info->ll = ll;
-	info->ln = follLN;
-	return info;
-      }
-      /*         printf ("damn got 0 back from recursion\n"); */
-    }
-  }
-
-  return NULL;
-}
-
 void InitAll(int argc, char *argv[]) {
+
+  char *hdecode_version = "!HVER!HDecode:   3.4.1 [GE 12/03/09]";
+  char *hdecode_sccs_id = "$Id: HDecode.c,v 1.1.1.1 2006/10/11 09:54:55 jal58 Exp $";
 
   if (InitShell (argc, argv, hdecode_version, hdecode_sccs_id) < SUCCESS)
     HError (4000, "HDecode: InitShell failed");
@@ -510,7 +440,7 @@ void ParseCommandArguments(Vocabulary& vocab, LanguageModel& lm, HiddenMarkovMod
 
 /*****************  main recognition function  ************************/
 
-Boolean UpdateSpkrModels (char *fn) {
+bool UpdateSpkrModels (char *fn) {
    HError (1, "MLLR or FV transforms not supported");
    return FALSE;
 }

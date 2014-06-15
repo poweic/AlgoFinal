@@ -54,13 +54,13 @@ static int trace = 0;
 
 /* ---------------------- Global Variables ----------------------- */
 
-static Boolean srcHdr  = FALSE;  /* print source header info */
-static Boolean tgtHdr  = FALSE;  /* print target header info */
-static Boolean obsFmt  = FALSE;  /* print observation format */
-static Boolean prData  = TRUE;   /* print data */
-static Boolean rawOut = FALSE;   /* raw output i.e no numbering */
-static Boolean replay = FALSE;   /* replay audio */
-static Boolean frcDisc = FALSE;  /* List VQ symbols from cont file */
+static bool srcHdr  = FALSE;  /* print source header info */
+static bool tgtHdr  = FALSE;  /* print target header info */
+static bool obsFmt  = FALSE;  /* print observation format */
+static bool prData  = TRUE;   /* print data */
+static bool rawOut = FALSE;   /* raw output i.e no numbering */
+static bool replay = FALSE;   /* replay audio */
+static bool frcDisc = FALSE;  /* List VQ symbols from cont file */
 static FileFormat ff = UNDEFF;   /* Source File format */
 static long gst = -1;             /* start sample to list */
 static long gen = -1;             /* end sample to list */
@@ -191,8 +191,8 @@ int main(int argc, char *argv[])
 
 typedef struct{   /* gather together basic header info */
    char *name;
-   Boolean isSource;
-   Boolean isAudio;
+   bool isSource;
+   bool isAudio;
    FileFormat fmt;
    ParmKind kind;
    HTime period;
@@ -286,16 +286,16 @@ void PrintDataBar(long st, long en)
 /* ---------------- Data Access Routines  ------------------- */
 
 /* IsWave: check config parms to see if target is a waveform */
-Boolean IsWave(char *srcFile)
+bool IsWave(char *srcFile)
 {
    FILE *f;
    long nSamp,sampP, hdrS;
    short sampS,kind;
-   Boolean isPipe,bSwap,isWave;
+   bool isPipe,bSwap,isWave;
    char buf[MAXSTRLEN];
    ParmKind tgtPK=ANON;
    FileFormat srcFF=HTK;
-   Boolean isEXF;               /* srcFile is extended file */
+   bool isEXF;               /* srcFile is extended file */
    char actfname[MAXFNAMELEN];  /* actual filename */
    long stIndex, enIndex;       /* start and end indices */
    
@@ -303,7 +303,7 @@ Boolean IsWave(char *srcFile)
    /* Read all configuration params and get target */
    if (GetConfStr(cParm,nParm,"TARGETKIND",buf))
       tgtPK = Str2ParmKind(buf);
-   isWave = Boolean(tgtPK == WAVEFORM);
+   isWave = bool(tgtPK == WAVEFORM);
    if (tgtPK == ANON){
       if ((srcFF == HTK || srcFF == ESIG) && srcFile != NULL){
          strncpy (actfname, srcFile, MAXFNAMELEN);
@@ -324,7 +324,7 @@ Boolean IsWave(char *srcFile)
                       srcFile);
             break;
          }
-         isWave = Boolean(kind == WAVEFORM);
+         isWave = bool(kind == WAVEFORM);
          FClose(f,isPipe);
       } else
          isWave = TRUE;
@@ -343,7 +343,7 @@ void ListWavefromAudio(void)
    int avail,bsize,nrows,idx=0,np;
    short buf[AUDIO_BSIZE],*p;
    static MemHeap x,y;
-   static Boolean heapsCreated=FALSE;
+   static bool heapsCreated=FALSE;
 
    if (trace&T_TOP)
       printf(" Listing Waveform from Audio Source\n");
@@ -399,7 +399,7 @@ void ListWavefromFile(char *src)
    short *data;
    long ns,np,idx = 0;
    static MemHeap x;
-   static Boolean heapsCreated = FALSE;
+   static bool heapsCreated = FALSE;
    
    if (trace&T_TOP)
       printf(" Listing Waveform from File %s\n",src);
@@ -446,11 +446,11 @@ void ListParms(char *src)
    Observation o;
    HeadInfo hi,ho;
    long idx = 0;
-   Boolean eSep;
+   bool eSep;
    short swidth[SMAX];
    BufferInfo info;
    static MemHeap x,y;
-   static Boolean heapsCreated = FALSE;
+   static bool heapsCreated = FALSE;
 
    if (trace&T_TOP)
       printf(" Listing Parameter Vectors from %s\n",
@@ -468,7 +468,7 @@ void ListParms(char *src)
       HError(1150,"ListParms: Config parameters invalid");
    GetBufferInfo(pbuf,&info);
    SetBarWidth(8);
-   hi.isAudio = Boolean(src==NULL);
+   hi.isAudio = bool(src==NULL);
    if (replay && hi.isAudio)
       AttachReplayBuf(info.a,100000);
    if (srcHdr) {

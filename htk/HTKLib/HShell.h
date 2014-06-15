@@ -95,10 +95,6 @@ typedef int int32;
 
 typedef enum {FAIL=-1, SUCCESS=0} ReturnStatus;
 
-/* Boolean type definition */
-//typedef enum {FALSE=0, TRUE=1} Boolean;
-typedef bool Boolean;
-
 typedef double HTime;      /* time in 100ns units */
 
 typedef enum{       /* Input filters for various types of file */
@@ -134,10 +130,10 @@ typedef enum{       /* Input filters for various types of file */
 typedef struct {     /* Defines a source file with position tracking */
    char name[256];      /* file name for error messages */
    FILE *f;             /* input stream */
-   Boolean isPipe;      /* input is a pipe */
-   Boolean pbValid;     /* true if putback holds char */
-   Boolean wasQuoted;   /* true if ReadString returned quoted string */
-   Boolean wasNewline;  /* true if SkipWhiteSpace went over newline */
+   bool isPipe;      /* input is a pipe */
+   bool pbValid;     /* true if putback holds char */
+   bool wasQuoted;   /* true if ReadString returned quoted string */
+   bool wasNewline;  /* true if SkipWhiteSpace went over newline */
    int putback;         /* put back character */
    int chcount;         /* num chars from start */
 } Source;
@@ -146,7 +142,7 @@ typedef enum{        /* Type of configuration parameter */
    StrCKind,            /* string, optionally in dble quotes */
    IntCKind,            /* integer value - coercable to float */
    FltCKind,            /* float value */
-   BoolCKind,           /* Boolean: T,F,True,False */
+   BoolCKind,           /* bool: T,F,True,False */
    AnyCKind             /* dont care */
 } ConfKind;
 
@@ -154,7 +150,7 @@ typedef union {      /* union of possible config param kinds */
    char *s;
    int i;
    double f;
-   Boolean b;
+   bool b;
 }ConfVal;
 
 typedef struct {     /* Configuration Parameter */
@@ -162,7 +158,7 @@ typedef struct {     /* Configuration Parameter */
    char *name;          /* name of param - upper case always */
    ConfKind kind;       /* kind of config param value */
    ConfVal val;         /* value */
-   Boolean seen;        /* set true when read by any module */
+   bool seen;        /* set true when read by any module */
 } ConfParam;
 
 
@@ -194,7 +190,7 @@ ReturnStatus SetScriptFile(char *fn);
 */
 
 
-extern Boolean vaxOrder;  
+extern bool vaxOrder;  
 /* 
    Global variable indicating VAX-order architecture for storing numbers 
 */
@@ -225,7 +221,7 @@ char * RegisterExtFileName(char *s);
 /* Record details of fn extended attributed if any in circular buffer */
 
 
-Boolean InfoPrinted(void);
+bool InfoPrinted(void);
 /*
    Returns true if Shell has printed out information via one
    of the special commands -A, -B or -V.  This MUST be called
@@ -260,7 +256,7 @@ void PrintConfig(void);
    Print the current configuration and usage
 */
 
-int GetConfig(char *user, Boolean incGlob, ConfParam **list, int max);
+int GetConfig(char *user, bool incGlob, ConfParam **list, int max);
 /*
     Store a list of upto max configuration parameters whose user name
     matches the user and return the number of parameters stored.  If
@@ -270,11 +266,11 @@ int GetConfig(char *user, Boolean incGlob, ConfParam **list, int max);
     If max is exceeded then an error occurs.
 */
 
-Boolean HasConfParm(ConfParam **list, int size, char *name);
-Boolean GetConfStr(ConfParam **list,int size,char *name, char *str);
-Boolean GetConfBool(ConfParam **list,int size,char *name, Boolean *b);
-Boolean GetConfInt(ConfParam **list,int size,char *name, int *ival);
-Boolean GetConfFlt(ConfParam **list,int size,char *name, double *fval);
+bool HasConfParm(ConfParam **list, int size, char *name);
+bool GetConfStr(ConfParam **list,int size,char *name, char *str);
+bool GetConfBool(ConfParam **list,int size,char *name, bool *b);
+bool GetConfInt(ConfParam **list,int size,char *name, int *ival);
+bool GetConfFlt(ConfParam **list,int size,char *name, double *fval);
 /*
    Access routines for the array of size ConfParam elements returned
    by GetConfig.  Returns true if name is found.  Generates an error
@@ -317,13 +313,13 @@ float GetChkedFlt(float min, float max, char * swtname);
    error message.
 */
 
-Boolean GetIntEnvVar(char *envVar, int *value);
+bool GetIntEnvVar(char *envVar, int *value);
 /*
    Get the integer value of env variable envVar.
    Returns false if envVar not set
 */
 
-Boolean GetFileNameExt(char *logfn, char *actfn, long *st, long *en);
+bool GetFileNameExt(char *logfn, char *actfn, long *st, long *en);
 /* 
    Return true if given file has extensions, i.e. an alias and/or st/end
    indices.  If true actual file name is copied into actfn and indices
@@ -337,21 +333,21 @@ Boolean GetFileNameExt(char *logfn, char *actfn, long *st, long *en);
 
 /* ---------------------- Input Handling ----------------------------- */
 
-FILE *FOpen(char *fname, IOFilter filter, Boolean *isPipe);
+FILE *FOpen(char *fname, IOFilter filter, bool *isPipe);
 /*
    Open the file fname for reading or writing (depending on
    whether IOFilter is a Filter or OFilter) and return a file pointer.  
    If the environment variable HxxxxFILTER is set to a 
    command of the form "foo $ a b ..." then the given fname
    replaces the $ and popen is used to connect to the output
-   of foo. The Boolean isPipe returns true if input is a pipe.
+   of foo. The bool isPipe returns true if input is a pipe.
    In addition, if the environment variable HMAXTRY is set to
    an integer n, then an fopen call which fails will be retried
    n-1 more times before failing completely.  This is useful 
    in combatting occassional NFS errors.
 */
 
-void FClose(FILE *f, Boolean isPipe);
+void FClose(FILE *f, bool isPipe);
 /*
    Close the given file or pipe
 */
@@ -382,8 +378,8 @@ void UnGetCh(int c, Source *src);
    Get/Unget a character from the given source 
 */
 
-Boolean ReadString(Source *src, char *s);
-Boolean ReadStringWithLen(Source *src, char *s, int buflen); /* With specified length of buffer*/
+bool ReadString(Source *src, char *s);
+bool ReadStringWithLen(Source *src, char *s, int buflen); /* With specified length of buffer*/
 char *ParseString(char *src, char *s);
 /*
    Read a string from the given source where a string is any
@@ -397,7 +393,7 @@ char *ParseString(char *src, char *s);
    '"QUOTE' "\"QUOTE" \"QUOTE \042QUOTE all return "QUOTE in s
 */
 
-Boolean ReadRawString(Source *src, char *s);
+bool ReadRawString(Source *src, char *s);
 /* 
    Read a raw string (i.e. word upto next white-space) from src and store it in s 
 */
@@ -413,12 +409,12 @@ char *ReWriteString(char *s,char *dst, char q);
    quote the string. 
 */
 
-Boolean SkipLine(Source *src);
+bool SkipLine(Source *src);
 /* 
    skip to next line in source, return FALSE when EOF reached
 */
 
-Boolean ReadLine(Source *src,char *s);
+bool ReadLine(Source *src,char *s);
 /* 
    read to next newline in source, return FALSE when EOF reached
 */
@@ -440,17 +436,17 @@ void SkipComment(Source *src);
    skip to next non-blank, if it is a # then skip to next line
 */
 
-Boolean ReadShort(Source *src, short *s, int n, Boolean binary);
-Boolean ReadInt  (Source *src, int *i,   int n, Boolean binary);
-Boolean ReadFloat(Source *src, float *x, int n, Boolean binary);
+bool ReadShort(Source *src, short *s, int n, bool binary);
+bool ReadInt  (Source *src, int *i,   int n, bool binary);
+bool ReadFloat(Source *src, float *x, int n, bool binary);
 /*
    Read n short/int/float(s) from the given source, return 
    TRUE if no error.  If binary then binary read is performed - 
    byte swapping is controlled by HShell config variables.
 */
-Boolean RawReadShort(Source *src, short *s, int n, Boolean bin, Boolean swap);
-Boolean RawReadInt(Source *src, int *i, int n, Boolean bin, Boolean swap);
-Boolean RawReadFloat(Source *src, float *x, int n, Boolean bin, Boolean swap);
+bool RawReadShort(Source *src, short *s, int n, bool bin, bool swap);
+bool RawReadInt(Source *src, int *i, int n, bool bin, bool swap);
+bool RawReadFloat(Source *src, float *x, int n, bool bin, bool swap);
 /*
    Read n short/int/float(s) from the given source, return 
    TRUE if no error.  
@@ -464,16 +460,16 @@ void SwapInt32(int32 *p);
    Byte swap various types
 */
 
-Boolean KeyPressed(int tWait);
+bool KeyPressed(int tWait);
 /*
    Returns TRUE if input is pending on stdin within tWait seconds
 */   
 
 /* -------------------------- Output Handling ------------------------ */
 
-void WriteShort(FILE *f, short *s, int n, Boolean binary);
-void WriteInt  (FILE *f, int *i,   int n, Boolean binary);
-void WriteFloat(FILE *f, float *x, int n, Boolean binary);
+void WriteShort(FILE *f, short *s, int n, bool binary);
+void WriteInt  (FILE *f, int *i,   int n, bool binary);
+void WriteFloat(FILE *f, float *x, int n, bool binary);
 /*
    Write n short/int/float(s) to the given file.  
    If binary then binary Write is performed.
@@ -532,7 +528,7 @@ void SubstFName(char *fname, char *s);
 
 /* ------------------------ Pattern Matching ------------------------- */
 
-Boolean DoMatch(char *s, char *p);
+bool DoMatch(char *s, char *p);
 /* 
    Returns true if the string s matches the pattern p.
    The pattern p may contain the metacharacters '?'
@@ -540,7 +536,7 @@ Boolean DoMatch(char *s, char *p);
    which will match zero or more characters.
 */
 
-Boolean MaskMatch(char *mask, char *spkr, char *str);
+bool MaskMatch(char *mask, char *spkr, char *str);
 /* Returns true if the string str matches the pattern.
    The string matched to the '%' is returned in spkr.
 */

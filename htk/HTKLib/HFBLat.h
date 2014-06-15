@@ -54,18 +54,18 @@ typedef struct {
   int Q;
   HMMSet *hset;
 
-  Boolean MPE;  /* currently doing MPE/MWE, this may change from call to call
+  bool MPE;  /* currently doing MPE/MWE, this may change from call to call
 		   (since we will sometimes want to do the correct transcription) */
   float AccScale; /*normally 1.0*/
   int S;
   HSetKind hsKind;              /* kind of the alignment HMM system */
   UPDSet uFlags;
-  Boolean firstTime ;     /* Flag used to enable creation of ot */
+  bool firstTime ;     /* Flag used to enable creation of ot */
 
 
   ArcInfo  *aInfo;
 
-  Boolean twoDataFiles;
+  bool twoDataFiles;
   Observation al_ot;
   Observation up_ot;
   Observation adapt_ot;   /* for parent XForm */
@@ -85,7 +85,7 @@ typedef struct {
   float num_index; /*make sure set. */
   float den_index; /*only for MPE. */ /*make sure set. */
 
-  Boolean InUse; /* FALSE if stacks are cleared and lattices empty. */
+  bool InUse; /* FALSE if stacks are cleared and lattices empty. */
   AdaptXForm *inXForm;/* current input transform (if any) */
   AdaptXForm *paXForm;/* current parent transform (if any) */
   /* ... */
@@ -96,7 +96,7 @@ void InitFBLat(void);
    Initialise module and set configuration parameters. 
 */
 
-void InitialiseFBInfo(FBLatInfo *fbInfo, HMMSet *hset, UPDSet uset, Boolean TwoDataFiles); 
+void InitialiseFBInfo(FBLatInfo *fbInfo, HMMSet *hset, UPDSet uset, bool TwoDataFiles); 
 
 
 
@@ -124,7 +124,7 @@ int GetNoContextPhone(LabId phone, int *nStates_quinphone, int *state_quinphone,
 void GetTimes(LArc *larc, int i, int *start, int *end);   /*gets times as ints. */
 
 /* EXPORT-> SetDoingFourthAcc: Indicate whether it is currently storing MMI statistics */
-void SetDoingFourthAcc(Boolean DO, int indx);
+void SetDoingFourthAcc(bool DO, int indx);
 
 /* ------------------------- End of HFBLat.h --------------------------- */
 

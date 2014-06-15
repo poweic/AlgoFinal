@@ -147,7 +147,7 @@ typedef enum {unknown, wdInternal, wdExternal, wdBegin, wdEnd, nullNode} NodeTyp
 
 typedef struct _NodeInfo{
    NodeType nType;   /* the type of this node */
-   Boolean seen;     /* flag used when scanning network */
+   bool seen;     /* flag used when scanning network */
    Link history;     /* used for word pronunciation expansion */
    int  nodeNum;     /* store node numbers */
 }NodeInfo;
@@ -163,9 +163,9 @@ static LabId wdEndId;                 /* LabId of WD_END nodes  */
 static int numWdBegin=0;              /* number of WORD_BEGIN nodes */
 static int numWdEnd=0;                /* number of WORD_END nodes */
 
-static Boolean v1Compat=FALSE;        /* compatability mode? */
-static Boolean saveLatLM=FALSE;       /* output lattice probabilities */
-static Boolean saveLatBin=FALSE;      /* save lattice in binary */ 
+static bool v1Compat=FALSE;        /* compatability mode? */
+static bool saveLatLM=FALSE;       /* output lattice probabilities */
+static bool saveLatBin=FALSE;      /* save lattice in binary */ 
 
 /* ---------------- Configuration Parameters --------------------- */
 
@@ -178,7 +178,7 @@ static int nParm = 0;            /* total num params */
 void SetConfParms(void)
 {
    int i;
-   Boolean b;
+   bool b;
 
    nParm = GetConfig("HPARSE", TRUE, cParm, MAXGLOBS);
    if (nParm>0){
@@ -448,7 +448,7 @@ void FreeNetwork(HPNetwork *network)
 }
 
 /* NotLinked: returns true if node x is not in link set ls */
-static Boolean NotLinked(LinkSet *ls, Link x)
+static bool NotLinked(LinkSet *ls, Link x)
 {
    int i;
    Link *p;
@@ -797,8 +797,8 @@ int AddTLoopBeginEnd(int numElements, SplitName* trilist, Link a, Link b)
 {
    LabId loopBeginId, loopEndId;
    SplitName *tlb, *tle;
-   Boolean beginFound = FALSE;
-   Boolean endFound = FALSE;
+   bool beginFound = FALSE;
+   bool endFound = FALSE;
    int total = numElements;
    int ib,ie;
    LinkSet *asucc;
@@ -912,10 +912,10 @@ static void FreeJMat(void)
 }
 
 /* SameLinks: Check to see if a1 and a2 have the same succs or preds */
-static Boolean SameLinks(int a1, int a2)
+static bool SameLinks(int a1, int a2)
      /* note: succs or preds checked depending on contents of jmat */
 {
-   Boolean same = TRUE;
+   bool same = TRUE;
    int j;
    unsigned char *p, *q;
    
@@ -925,7 +925,7 @@ static Boolean SameLinks(int a1, int a2)
    return same;
 }
 
-static Boolean IsJoined(int a, int b)
+static bool IsJoined(int a, int b)
 {
    return (jmat[a][b/8] & (1 <<(b&7))) != 0;
 }
@@ -1612,7 +1612,7 @@ static LabId  enterExitId;   /* for use in RemoveGlue */
    destroyed once the main net has been built. Otherwise, a main net
    expression is optional.  If skipEpr then the main net is skipped
    even if it is there.  */
-static void PNetwork(Link *hd, Link *tl, Boolean netOnly, Boolean skipExpr)
+static void PNetwork(Link *hd, Link *tl, bool netOnly, bool skipExpr)
 {
    Link entryNode,exitNode;
    
@@ -1658,7 +1658,7 @@ static void ReSizeNodes(HPNetwork *net)
 static void DeleteLink(Link x, LinkSet *ls)
      /* note: deletes the link whether ls is shared or not */
 {
-   Boolean found = FALSE;
+   bool found = FALSE;
    int i,j;
 
    i = 0;
@@ -1701,7 +1701,7 @@ static LinkSet*  MergeLinks(LinkSet *from, LinkSet *to)
 }
 
 /* CanCompact: Determine if a Gluenode should be compacted */
-static Boolean CanCompact(Link p)
+static bool CanCompact(Link p)
      /* compact if p either all succs are non-glue 
            or all preds are non-glue
            or only 1 succ and one pred (both glue)
@@ -1709,7 +1709,7 @@ static Boolean CanCompact(Link p)
 */
 {
    int i;
-   Boolean ok =TRUE;    
+   bool ok =TRUE;    
    Link predNode,succNode;
 
    for (i=1; (i <= p->succ->numLinks) && ok ; i++) {
@@ -1815,9 +1815,9 @@ static void  RemoveGlue(HPNetwork *network)
 {
    Link p,q;
    int numGlueLeft=0;
-   Boolean removedp;
-   Boolean changed=FALSE;
-   Boolean removeAll=FALSE;
+   bool removedp;
+   bool changed=FALSE;
+   bool removeAll=FALSE;
    int iter = 0;
    
    if (network->entryNode->modelName==NULL) network->entryNode->modelName=enterExitId;
@@ -1859,7 +1859,7 @@ static void  RemoveGlue(HPNetwork *network)
 }
 
 /* DisconNode: Is a node disconnected from the network */
-static Boolean DisconNode(Link p)
+static bool DisconNode(Link p)
 {
    if (p->succ == NULL || p->pred == NULL)
       return TRUE;
@@ -1874,8 +1874,8 @@ static void RemoveDiscon(HPNetwork *net)
 {
    Link p,q;
    Link succNode, predNode;
-   Boolean removedp;
-   Boolean changed;
+   bool removedp;
+   bool changed;
    int i;
        
    do {   /* until no changes  */
@@ -2287,7 +2287,7 @@ static Lattice* GenerateLattice(HPNetwork *theNet, Vocab *voc)
 static void SaveLattice(Lattice *lat, char *latFn, LatFormat format)
 {
    FILE *latf;
-   Boolean isPipe;
+   bool isPipe;
 
    if ( (latf = FOpen(latFn,NetOFilter,&isPipe)) == NULL)
       HError(3111,"SaveLattice : Cannot create new lattice file  %s",latFn);

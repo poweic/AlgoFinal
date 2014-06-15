@@ -171,13 +171,13 @@ typedef struct {
    FLEntry root;             /* the actual LM tree */
    float   gScale;           /* grammar scale factor */
    NGramInfo gInfo[LM_NSIZE];/* information for each n-gram component */
-   Boolean encrypt;          /* flag for encryption */
+   bool encrypt;          /* flag for encryption */
    /* class components */
-   Boolean classLM;          /* TRUE if a class-based LM (toggle on backoff) */
+   bool classLM;          /* TRUE if a class-based LM (toggle on backoff) */
    HashTab *classH;          /* If a class-based LM then use this hash table */
    NameId *classBM;          /* Hash table (similar to binMap) */
    int classW;               /* Number of words */
-   Boolean classCounts;      /* TRUE if LM file gives class counts not probs */
+   bool classCounts;      /* TRUE if LM file gives class counts not probs */
    int *word;                /* array of word counts */
    int *totals;              /* array of class counts (sum of word counts for each class) */
    /* other components */

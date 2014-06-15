@@ -46,9 +46,9 @@ static int trace = 0;
 
 
 static int ngen = 100;              /* num sents to gen */
-static Boolean lnum = FALSE;        /* enable line numbers */
-static Boolean stats = FALSE;       /* enable grammar stats estimation */
-static Boolean quiet = FALSE;       /* suppress sentence output */
+static bool lnum = FALSE;        /* enable line numbers */
+static bool stats = FALSE;       /* enable grammar stats estimation */
+static bool quiet = FALSE;       /* suppress sentence output */
 
 /* ---------------- Configuration Parameters --------------------- */
 
@@ -271,7 +271,7 @@ void  GenSentences(char * latfn, char * dicfn)
    double e,p;
    MemHeap lheap;
    FILE *f;
-   Boolean isPipe;
+   bool isPipe;
 
    InitVocab(&voc);
    if(ReadDict(dicfn,&voc)<SUCCESS)

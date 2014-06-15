@@ -83,11 +83,11 @@ static char *dcTypeName[] = {
    "Linear"
 };
 
-static Boolean defIntID = FALSE;        /* Don't use 4-byte IDs */
-static Boolean htkEsc = FALSE;          /* Don't use HTK quoting and escapes */
-static Boolean natReadOrder = FALSE;    /* Preserve natural read byte order */
-static Boolean natWriteOrder = FALSE;   /* Preserve natural write byte order */
-extern Boolean vaxOrder;                /* True if byteswapping needed to preserve SUNSO */
+static bool defIntID = FALSE;        /* Don't use 4-byte IDs */
+static bool htkEsc = FALSE;          /* Don't use HTK quoting and escapes */
+static bool natReadOrder = FALSE;    /* Preserve natural read byte order */
+static bool natWriteOrder = FALSE;   /* Preserve natural write byte order */
+extern bool vaxOrder;                /* True if byteswapping needed to preserve SUNSO */
 #ifdef ULTRA_LM
 static short   ultraKey[KEY_LENGTH];    /* Key used to identify ultra LMs */
 #endif
@@ -96,7 +96,7 @@ static short   ultraKey[KEY_LENGTH];    /* Key used to identify ultra LMs */
 void InitLModel(void)
 {
    int i;
-   Boolean b;
+   bool b;
 
    Register(lmodel_version,lmodel_vc_id);
    nParm = GetConfig("LMODEL", TRUE, cParm, MAXGLOBS);
@@ -413,7 +413,7 @@ static int nep_cmp(const void *v1,const void *v2)
 static void LoadUltraNGrams(Source *src, BackOffLM *lm)
 {
    float prob,bowt,scale;
-   Boolean newCTX;
+   bool newCTX;
    LMProbType ptype;
    int context[NSIZE+1];
    int i,j,idx,cneCnt,seCnt;
@@ -422,7 +422,7 @@ static void LoadUltraNGrams(Source *src, BackOffLM *lm)
    CNEntry *cne,*cneBuf;
    FLEntry *cfe,*feBuf,*parent;
    SMEntry *sme,*smeBuf,**smeTab;
-   Boolean mustSwap = (vaxOrder && !natReadOrder);
+   bool mustSwap = (vaxOrder && !natReadOrder);
 
    SyncStr(src,"\\N-grams:");
 
@@ -511,7 +511,7 @@ static int WriteNEntry(FILE *f, BackOffLM *lm, int lev, FLEntry **feBuf,
    float scale,bowt;
    LMProbType ptype;
    FLEntry *fe,*tgtFE;
-   Boolean mustSwap = (vaxOrder && !natWriteOrder);
+   bool mustSwap = (vaxOrder && !natWriteOrder);
 
    if (lev==lm->nSize)
       return 0;
@@ -556,7 +556,7 @@ static int WriteSEntry(FILE *f,BackOffLM *lm,FLEntry **feTab, int fetCount)
    int i,j,total = 0;
    float scale,prob;
    LMProbType ptype;
-   Boolean mustSwap = (vaxOrder && !natWriteOrder);
+   bool mustSwap = (vaxOrder && !natWriteOrder);
 
    ptype = lm->probType;
    scale = 1.0/(lm->gScale*LN10);
@@ -597,7 +597,7 @@ static void SaveUltraNGrams(FILE *f, BackOffLM *lm)
    int n,neCnt,seCnt,fetCount;
    CNEntry ne;
    FLEntry *feBuf[LM_NSIZE], **feTab;
-   Boolean mustSwap = (vaxOrder && !natWriteOrder);
+   bool mustSwap = (vaxOrder && !natWriteOrder);
 
    fprintf(f,"\n\\N-grams:\n");
    neCnt = seCnt = 0;
@@ -699,7 +699,7 @@ static int LoadUnigram(Source *src, BackOffLM *lm, int *itran)
    FLEntry *fe;
    NameId wdid;
    LMProbType ptype;
-   Boolean has_bowt;
+   bool has_bowt;
 
    nItem = 0;
    scale = lm->gScale*LN10;
@@ -802,7 +802,7 @@ static int LoadNGram(Source *src, int nSize, BackOffLM *lm, int *itran)
    float prob,bowt,scale;
    int i,j,k,num_fe,num_se; /*,n*/
    char *s,lnBuf[256],word[256];
-   Boolean has_bowt, hasOOV, newCTX, isBin=FALSE;
+   bool has_bowt, hasOOV, newCTX, isBin=FALSE;
    NameId wdid[LM_NSIZE], keyid[LM_NSIZE];
 
    if (nSize==1) {
@@ -1341,7 +1341,7 @@ BackOffLM *LoadLangModel(char *fn, WordMap *wl, float gramScale,
    int *itran,nSize,i,n;
    char c,sfmt[256];
    char lnBuf[MAXSYMLEN];
-   Boolean isUltra;
+   bool isUltra;
    char *first_line;         /* First line of input file */
    char wc_fname[MAXSYMLEN]; /* Filename of word|class probs */
    Source wcSrc;             /* word|class probs/counts file */
@@ -1618,7 +1618,7 @@ BackOffLM *LoadLangModel(char *fn, WordMap *wl, float gramScale,
 
 /* WriteNGram: recursive write routine */
 static int WriteNGram(FILE *f, BackOffLM *lm, FLEntry **feStack,
-		      int g, int nSize, Boolean intId)
+		      int g, int nSize, bool intId)
 {
    NGramInfo *gi;
    int i,j,ndx,nItem;
@@ -1626,7 +1626,7 @@ static int WriteNGram(FILE *f, BackOffLM *lm, FLEntry **feStack,
    FLEntry *fe,*topFE;
    Byte fsize,flags;
    float prob,bowt,iScale;
-   Boolean has_bowt, isBin=FALSE;
+   bool has_bowt, isBin=FALSE;
    char *s, *word, context[MAXSYMLEN];
    LMProbType ptype;
 
@@ -1745,7 +1745,7 @@ static int SaveNGram(FILE *f, int G, BackOffLM *lm)
    int total;
    Byte fsize;
    FLEntry *feStack[LM_NSIZE];
-   Boolean useIntID;
+   bool useIntID;
 
    if (lm->vocSize > USHRT_MAX) {
       if (sizeof(LM_Id) <= sizeof(UShort))
@@ -1776,7 +1776,7 @@ void SaveLangModel(char *lmFn, BackOffLM *lm)
    int i,n;
    FILE *f;
    NGramInfo *gi;
-   Boolean isPipe,isUltra;
+   bool isPipe,isUltra;
 
 #ifdef HTK_CRYPT
    if (lm->encrypt) {

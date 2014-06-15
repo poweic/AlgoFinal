@@ -43,11 +43,11 @@ void HiddenMarkovModel::init(char* hmmList_fn, char* mmf_fn, char* inXFormDir_fn
     printf("Read %d physical / %d logical HMMs\n", _hset.numPhyHMM, _hset.numLogHMM);  
 }
 
-void HiddenMarkovModel::SetStreamWidths(Boolean *eSep) {
+void HiddenMarkovModel::SetStreamWidths(bool *eSep) {
   ::SetStreamWidths(_hset.pkind, _hset.vecSize, _hset.swidth, eSep);
 }
 
-Boolean HiddenMarkovModel::UpdateSpkrStats(XFInfo *xfinfo, char *datafn) {
+bool HiddenMarkovModel::UpdateSpkrStats(XFInfo *xfinfo, char *datafn) {
   return ::UpdateSpkrStats(&_hset, xfinfo, datafn);
 }
 
@@ -156,7 +156,7 @@ FSLM* LanguageModel::get_lm() {
   return lm;
 }
 
-Lattice* LanguageModel::ReadLattice(FILE *file, Boolean shortArc, Boolean add2Dict) {
+Lattice* LanguageModel::ReadLattice(FILE *file, bool shortArc, bool add2Dict) {
   return ::ReadLattice(file, &_lmHeap, &_vocab.get_vocab(), shortArc, add2Dict);
 }
 
@@ -247,7 +247,7 @@ void Decoder::init() {
       _lm.loadFromFile(_lm.langfn);
    }
 
-   Boolean modAlign = FALSE;
+   bool modAlign = FALSE;
    if (latOutForm) {
       if (strchr (latOutForm, 'd'))
          modAlign = TRUE;
@@ -261,7 +261,7 @@ void Decoder::init() {
                             modAlign);
    
    /* create buffers for observations */
-   Boolean eSep;
+   bool eSep;
    _hmm.SetStreamWidths(&eSep);
 
    obs = (Observation *) New (&gcheap, outpBlocksize * sizeof (Observation));
@@ -290,7 +290,7 @@ void Decoder::rescoreLattice(char* fn) {
   /* read lattice and create LM */
   char latfn[MAXSTRLEN],buf3[MAXSTRLEN];
   FILE *latF;
-  Boolean isPipe;
+  bool isPipe;
   Lattice *lat;
 
   /* clear out previous LexNet, Lattice and LM structures */
@@ -354,7 +354,7 @@ void Decoder::recognize(char *fn) {
    /* This handles the initial input transform, parent transform setting
       and output transform creation */
    { 
-      Boolean changed;
+      bool changed;
       changed = _hmm.UpdateSpkrStats(&_xfInfo, fn);
    }
 
@@ -468,7 +468,7 @@ void Decoder::recognize(char *fn) {
       if (lat) {
          char latfn[MAXSTRLEN];
          char *p;
-         Boolean isPipe;
+         bool isPipe;
          FILE *file;
          LatFormat form;
          
@@ -588,6 +588,65 @@ BestInfo* Decoder::CreateBestInfo (char *fn, HTime frameDur)
 
    return bestAlignInfo;
 }
+
+/**********  align best code  ****************************************/
+
+/* find the LN_MODEL lexnode following ln that has label lab
+   step over LN_CON and LN_WORDEND nodes.
+   return NULL if not found
+*/
+BestInfo* Decoder::FindLexNetLab (MemHeap *heap, LexNode *ln, LLink ll, HTime frameDur) {
+  int i;
+  LexNode *follLN;
+  MLink m;
+  BestInfo *info, *next;
+
+  if (!ll->succ) {
+    info = (BestInfo*) New (heap, sizeof (BestInfo));
+    info->next = NULL;
+    info->ll = NULL;
+    info->ln = NULL;
+    info->start = info->end = 0;
+    return info;
+  }
+
+  for (i = 0; i < ln->nfoll; ++i) {
+    follLN = ln->foll[i];
+    if (follLN->type == LN_MODEL) {
+      m = _hmm.FindMacroStruct('h', follLN->data.hmm);
+      if (m->id == ll->labid) {
+	/*            printf ("found  %8.0f %8.0f %8s  %p\n", ll->start, ll->end, ll->labid->name, follLN); */
+	next = FindLexNetLab (heap, follLN, ll->succ, frameDur);
+	if (next) {
+	  info = (BestInfo*) New (heap, sizeof (BestInfo));
+	  info->next = next;
+	  info->start = ll->start / (frameDur*1.0e7);
+	  info->end = ll->end / (frameDur*1.0e7);
+	  info->ll = ll;
+	  info->ln = follLN;
+	  return info;
+	}
+	/*            printf ("damn got 0 back searching for %8s\n", ll->labid->name); */
+      }
+    }
+    else {
+      /*         printf ("searching for %8s recursing\n", ll->labid->name); */
+      next = FindLexNetLab (heap, follLN, ll, frameDur);
+      if (next) {
+	info = (BestInfo*) New (heap, sizeof (BestInfo));
+	info->next = next;
+	info->start = info->end = ll->start / (frameDur*1.0e7);
+	info->ll = ll;
+	info->ln = follLN;
+	return info;
+      }
+      /*         printf ("damn got 0 back from recursion\n"); */
+    }
+  }
+
+  return NULL;
+}
+
 
 void Decoder::PrintAlignBestInfo (BestInfo *b)
 {

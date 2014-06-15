@@ -64,8 +64,8 @@ static int trace = 0;
 
 /* --------------------- Global Variables ------------------- */
 
-static Boolean natWriteOrder = FALSE; /* Preserve natural write byte order*/
-extern Boolean vaxOrder;              /* true if byteswapping needed to 
+static bool natWriteOrder = FALSE; /* Preserve natural write byte order*/
+extern bool vaxOrder;              /* true if byteswapping needed to 
                                                preserve SUNSO */
 /* varScale stuff: acts as a cache to stop the scaling file being re-read 
    on each file opening */
@@ -74,8 +74,8 @@ static float varScale[100];
 static int varScaleDim=0;
 static char varScaleFN[MAXFNAMELEN] = "\0";
 
-static Boolean highDiff = FALSE;   /* compute higher oder differentials, only up to fourth */
-static Boolean UseOldXFormCVN = FALSE;  /* this allows us to go back to the old version with broken CVN */
+static bool highDiff = FALSE;   /* compute higher oder differentials, only up to fourth */
+static bool UseOldXFormCVN = FALSE;  /* this allows us to go back to the old version with broken CVN */
 static ParmKind ForcePKind = ANON; /* force to output a customized parm kind to make older versions
                                     happy for all the parm kind types supported here */
 
@@ -111,16 +111,16 @@ typedef struct {
    ParmKind srcPK;            /* Source ParmKind */ 
    FileFormat srcFF;          /* Source File format */ 
    HTime srcSampRate;         /* Source Sample Rate */ 
-   Boolean zMeanSrc;          /* Zero Mean the Source */
+   bool zMeanSrc;          /* Zero Mean the Source */
    ParmKind tgtPK;            /* Target ParmKind */ 
    FileFormat tgtFF;          /* Target File format */ 
    HTime tgtSampRate;         /* Target Sample Rate */ 
-   Boolean saveCompressed;    /* If LPREFC save as IREFC else _C */
-   Boolean saveWithCRC;       /* Append check sum on save */
+   bool saveCompressed;    /* If LPREFC save as IREFC else _C */
+   bool saveWithCRC;       /* Append check sum on save */
    HTime winDur;              /* Source window duration */
-   Boolean useHam;            /* Use Hamming Window */
+   bool useHam;            /* Use Hamming Window */
    float preEmph;             /* PreEmphasis Coef */
-   Boolean usePower;          /* Use power instead of Magnitude */
+   bool usePower;          /* Use power instead of Magnitude */
    int numChans;              /* Number of filter bank channels */
    float loFBankFreq;         /* Fbank lo frequency cut-off */
    float hiFBankFreq;         /* Fbank hi frequency cut-off */
@@ -132,15 +132,15 @@ typedef struct {
    int cepLifter;             /* Cepstral liftering coef */
    int numCepCoef;            /* Number of cepstral coef */
    float cepScale;            /* Scaling factor to avoid arithmetic problems */
-   Boolean rawEnergy;         /* Use raw energy before preEmp and ham */
-   Boolean eNormalise;        /* Normalise log energy */
+   bool rawEnergy;         /* Use raw energy before preEmp and ham */
+   bool eNormalise;        /* Normalise log energy */
    float eScale;              /* Energy scale factor */
    float silFloor;            /* Silence floor in dBs */
    int delWin;                /* Delta window halfsize */
    int accWin;                /* Accel window halfsize */
-   Boolean simpleDiffs;       /* Use simple differences for delta calcs */
+   bool simpleDiffs;       /* Use simple differences for delta calcs */
    /* Silence detector parameters */
-   Boolean useSilDet;         /* Use Silence Detector */
+   bool useSilDet;         /* Use Silence Detector */
    int selfCalSilDet;         /* Self calibrating silence detection */
    float spThresh;            /* Speech Threshold (in dB above sil level) */
    float silDiscard;          /* Calibrate discard level */
@@ -150,14 +150,14 @@ typedef struct {
    int silGlchCount;          /*   of sil in spc acceptable as glitches */
    int silSeqCount;           /*   of silence before stopping */
    int marginCount;           /*   of sil around speech to process */
-   Boolean measureSil;        /* Measure Silence */
-   Boolean outSilWarn;        /* Give Warning when SilMeas */
+   bool measureSil;        /* Measure Silence */
+   bool outSilWarn;        /* Give Warning when SilMeas */
    /* Misc */
    int audSignal;             /* Signal Number for Audio Control */
-   Boolean v1Compat;          /* V1 compatibility mode */
+   bool v1Compat;          /* V1 compatibility mode */
    char *vqTabFN;             /* Name of VQ Table Defn File */
    float addDither;           /* Additional dither added to file */
-   Boolean doubleFFT;         /* use twice the required FFT size */
+   bool doubleFFT;         /* use twice the required FFT size */
   /* side based normalisation */
    char *varScaleFN;          /* var scale file name */          
    char* cMeanDN;             /* dir to find cepstral mean files */
@@ -208,7 +208,7 @@ typedef struct {
    Vector mean;       /* Running mean shared by this config */
    /* Running stuff */
    Source src;        /* Source to read HParm file from */
-   Boolean bSwap;     /* TRUE if source needs byte swapping */
+   bool bSwap;     /* TRUE if source needs byte swapping */
    unsigned short crcc; /* Running CRCC */
    Vector A;          /* Parameters for decompressing */
    Vector B;          /*  HTK parameterised files */
@@ -218,7 +218,7 @@ typedef struct {
    ParmKind matPK;
    int preFrames;
    int postFrames;
-   Boolean preQual;
+   bool preQual;
    InputXForm *xform;
    AdaptXForm *sideXForm;
 }IOConfigRec;
@@ -384,7 +384,7 @@ typedef struct channelinfo {
    int fCnt;              /* Number of files processed for this channel */
    int sCnt;              /* Number of files processed in current session */
    int oCnt;              /* Number of observations processed in session */
-   Boolean spDetParmsSet; /* Speech detector parameters set */
+   bool spDetParmsSet; /* Speech detector parameters set */
    float frMin;           /* Measured minimum frame energy for channel (dB) */
    float spDetSil;        /* Measured/set silence level for channel (dB) */
    float spDetThresh;     /* Measured/set speech/silence threshold (dB) */
@@ -498,11 +498,11 @@ typedef struct _ParmBuf {
    PBStatus status;    /* status of this buffer */
    ChannelInfo *chan;  /* input channel for this buffer */
    IOConfig cf;        /* configuration for this channel */
-   Boolean noTable;    /* no need for table access */
+   bool noTable;    /* no need for table access */
    ChannelType chType; /* type of input channel */
-   Boolean chClear;    /* End of channel reached */
-   Boolean dShort;     /* data is array of shorts not floats (DISCRETE) */
-   Boolean fShort;     /* file is array of shorts (DISCRETE, COMPX or IREFC) */
+   bool chClear;    /* End of channel reached */
+   bool dShort;     /* data is array of shorts not floats (DISCRETE) */
+   bool fShort;     /* file is array of shorts (DISCRETE, COMPX or IREFC) */
 
    /* New parameters for channel type buffer */
    HParmSrcDef ext;     /* external source functions */
@@ -544,7 +544,7 @@ static int nParm = 0;
 
 static MemHeap parmHeap;                /* HParm no longer uses gstack */
 
-static Boolean hparmBin=TRUE; /* HTK format files are binary */
+static bool hparmBin=TRUE; /* HTK format files are binary */
 
 static ChannelInfo *defChan=NULL;
 static ChannelInfo *curChan=NULL;
@@ -556,7 +556,7 @@ static void LoadVarScale (MemHeap *x, IOConfig cf)
 {
    Source varsrc;
    char buf[MAXSTRLEN];
-   Boolean vbinary=FALSE;
+   bool vbinary=FALSE;
    int dim,i;
 
    Matrix GlobalVar,NewGlobalVar;
@@ -731,7 +731,7 @@ static AdaptXForm *LoadSideXForm(IOConfig cf, char *fname)
    AdaptXForm *xf;
    char macroname[MAXSTRLEN];
    char side[MAXSTRLEN];
-   Boolean maskMatch;
+   bool maskMatch;
 
    maskMatch = MaskMatch(cf->sideXFormMask,side, fname);
    if ((!maskMatch) && (fname != NULL))
@@ -794,7 +794,7 @@ static void ApplyXForm2Vector(LinXForm *linXForm, Vector mean)
 char *GS(char *s){static char b[MAXFNAMELEN]; GetConfStr(cParm,nParm,s,b); return b;}
 int     GI(char *s){int i;     GetConfInt(cParm,nParm,s,&i); return i;}
 double  GF(char *s){double d;  GetConfFlt(cParm,nParm,s,&d); return d;}
-Boolean GB(char *s){Boolean b; GetConfBool(cParm,nParm,s,&b); return b;}
+bool GB(char *s){bool b; GetConfBool(cParm,nParm,s,&b); return b;}
 
 /* ReadIOConfig: Create an IOConfig object.  Initial values are copied
    from defCon and then updated from configuration parameters. */
@@ -905,7 +905,7 @@ static ReturnStatus ReadChanFiles(ChannelInfo *chan)
 /* EXPORT->InitParm: initialise memory and configuration parameters */
 ReturnStatus InitParm(void)
 {
-   Boolean b;
+   bool b;
    int i;
    char buf[MAXSTRLEN];
 
@@ -944,7 +944,7 @@ ReturnStatus InitParm(void)
 ReturnStatus SetChannel(char *confName)
 { 
    char buf[MAXSTRLEN],*in,*out;
-   Boolean b;
+   bool b;
 
    if (confName==NULL) {
       curChan=defChan;
@@ -1038,10 +1038,10 @@ static void ChangeState(ParmBuf pbuf, PBStatus newState)
 /* CheckBuffer: update status of given buffer */
 static void CheckBuffer(ParmBuf pbuf)
 {
-   Boolean started=FALSE;  /* Speech detected */
-   Boolean finished=FALSE; /* Silence detected */
-   Boolean cleared=FALSE;  /* Source of data is clear */
-   Boolean empty=FALSE;    /* ParmBuf is empty */
+   bool started=FALSE;  /* Speech detected */
+   bool finished=FALSE; /* Silence detected */
+   bool cleared=FALSE;  /* Source of data is clear */
+   bool empty=FALSE;    /* ParmBuf is empty */
    
    if (pbuf->outRow==pbuf->spDetEn) empty=TRUE;
    if (pbuf->status>PB_INIT && pbuf->chClear) cleared=TRUE;
@@ -1110,7 +1110,7 @@ ParmKind Str2ParmKind(char *str)
 {
    ParmKind i = -1;
    char *s,buf[255];
-   Boolean hasE,hasD,hasN,hasA,hasT,hasF,hasC,hasK,hasZ,has0,hasV,found;
+   bool hasE,hasD,hasN,hasA,hasT,hasF,hasC,hasK,hasZ,has0,hasV,found;
    int len;
    
    hasV=hasE=hasD=hasN=hasA=hasT=hasF=hasC=hasK=hasZ=has0=FALSE;
@@ -1166,19 +1166,19 @@ ParmKind Str2ParmKind(char *str)
 ParmKind BaseParmKind(ParmKind kind) { return kind & BASEMASK; }
 
 /* EXPORT->HasXXXX: returns true if XXXX included in ParmKind */
-Boolean HasEnergy(ParmKind kind){return (kind & HASENERGY) != 0;}
-Boolean HasDelta(ParmKind kind) {return (kind & HASDELTA) != 0;}
-Boolean HasAccs(ParmKind kind)  {return (kind & HASACCS) != 0;}
-Boolean HasThird(ParmKind kind) {return (kind & HASTHIRD) != 0;}
-Boolean HasNulle(ParmKind kind) {return (kind & HASNULLE) != 0;}
-Boolean HasCompx(ParmKind kind) {return (kind & HASCOMPX) != 0;}
-Boolean HasCrcc(ParmKind kind)  {return (kind & HASCRCC) != 0;}
-Boolean HasZerom(ParmKind kind) {return (kind & HASZEROM) != 0;}
-Boolean HasZeroc(ParmKind kind) {return (kind & HASZEROC) != 0;}
-Boolean HasVQ(ParmKind kind)    {return (kind & HASVQ) != 0;}
+bool HasEnergy(ParmKind kind){return (kind & HASENERGY) != 0;}
+bool HasDelta(ParmKind kind) {return (kind & HASDELTA) != 0;}
+bool HasAccs(ParmKind kind)  {return (kind & HASACCS) != 0;}
+bool HasThird(ParmKind kind) {return (kind & HASTHIRD) != 0;}
+bool HasNulle(ParmKind kind) {return (kind & HASNULLE) != 0;}
+bool HasCompx(ParmKind kind) {return (kind & HASCOMPX) != 0;}
+bool HasCrcc(ParmKind kind)  {return (kind & HASCRCC) != 0;}
+bool HasZerom(ParmKind kind) {return (kind & HASZEROM) != 0;}
+bool HasZeroc(ParmKind kind) {return (kind & HASZEROC) != 0;}
+bool HasVQ(ParmKind kind)    {return (kind & HASVQ) != 0;}
 
 /* EXPORT->SyncBuffers: if matrix transformations are used this syncs the two buffers */
-Boolean SyncBuffers(ParmBuf pbuf,ParmBuf pbuf2)
+bool SyncBuffers(ParmBuf pbuf,ParmBuf pbuf2)
 {
    int pref1=0, pref2=0, postf1=0, postf2=0;
    int preshift, postshift;
@@ -1384,7 +1384,7 @@ static void ValidCodeParms(IOConfig cf)
 }
 
 /* EXPORT->ValidConversion: checks that src -> tgt conversion is possible */
-Boolean ValidConversion (ParmKind src, ParmKind tgt)
+bool ValidConversion (ParmKind src, ParmKind tgt)
 {
    static short xmap[13][13] = {
       { 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0},    /* src = WAVEFORM */
@@ -1513,7 +1513,7 @@ static int NumEnergy(ParmKind pk)
 }
 
 /* EqualKind: return true if kinds are internally compatible */
-static Boolean EqualKind(ParmKind a, ParmKind b)
+static bool EqualKind(ParmKind a, ParmKind b)
 {
    /* Energy suppression only occurs at observation level */
    a = a&(~HASNULLE); b = b&(~HASNULLE);
@@ -1550,7 +1550,7 @@ static Boolean EqualKind(ParmKind a, ParmKind b)
 /* unintended side effect of the way the function worked previously) */
 
 static void AddDiffs(float *data, int nRows, int nCols, int si, int ti, int d, 
-                     int winSize, int hdMargin, int tlMargin, Boolean v1Compat, Boolean simpDiffs)
+                     int winSize, int hdMargin, int tlMargin, bool v1Compat, bool simpDiffs)
 {
    float *p;
    int n,offset = ti-si;
@@ -1855,7 +1855,7 @@ static void DelQualifiers(float *data, IOConfig cf)
    char buf[100];
    int si,d,used=cf->nUsed;
    short span[12];
-   Boolean baseX,statX,eX,zX;
+   bool baseX,statX,eX,zX;
    
    statX = (cf->curPK&BASEMASK) != (cf->tgtPK&BASEMASK);
    eX = (cf->curPK&HASENERGY) && !(cf->tgtPK&HASENERGY);
@@ -2218,7 +2218,7 @@ static int ConvertFrame(IOConfig cf, float *pbuf)
    int i,bsize=0;
    Vector v=NULL;
    char buf[50];
-   Boolean rawE;
+   bool rawE;
    
    p = pbuf;
    rawE = cf->rawEnergy;
@@ -2524,7 +2524,7 @@ static void CalcSilDetParms(ParmBuf pbuf, float *res,
 
 /* CalcSilDetParmsAudio: listen to audio input and calculate silence detector 
                          threshold  parameters */ 
-static void SetAudioSpDetParms(ParmBuf pbuf, float dur, Boolean warn)
+static void SetAudioSpDetParms(ParmBuf pbuf, float dur, bool warn)
 {
    IOConfig cf = pbuf->cf;
    AudioIn a;
@@ -2620,7 +2620,7 @@ static void SetWaveSpDetParms(ParmBuf pbuf)
 
 /* CalcSilDetParmsAudio: listen to audio input and calculate silence detector 
                          threshold  parameters */ 
-static void SetExtSpDetParms(ParmBuf pbuf, float dur, Boolean warn)
+static void SetExtSpDetParms(ParmBuf pbuf, float dur, bool warn)
 {
    IOConfig cf = pbuf->cf;
    ShortVec v;
@@ -2745,7 +2745,7 @@ static void SetSilDetParms(ParmBuf pbuf, TriState silMeasure)
 
 static void ExtractObservation(float *fp, Observation *o);
 
-void RunSilDet(ParmBuf pbuf,Boolean cleared)
+void RunSilDet(ParmBuf pbuf,bool cleared)
 {
    IOConfig cf = pbuf->cf;
    int i;
@@ -2825,8 +2825,8 @@ void RunSilDet(ParmBuf pbuf,Boolean cleared)
 
 /* EXPORT ReadESIGPHeader: get header from Esignal pamameter file;
    return FALSE in case of failure */
-Boolean ReadESIGPHeader(FILE *f, long *nSamp, long *sampP, short *sampS,
-                        short *kind, Boolean *bSwap, Boolean isPipe)
+bool ReadESIGPHeader(FILE *f, long *nSamp, long *sampP, short *sampS,
+                        short *kind, bool *bSwap, bool isPipe)
 {
    long hdrS;
 
@@ -2845,7 +2845,7 @@ static void ExtractObservation(float *fp, Observation *o)
    int i,j,k,n,w1,w2,w,nStatic = 0;
    int numS = o->swidth[0];
    Vector v,ev;
-   Boolean wantE,skipE;
+   bool wantE,skipE;
    
    if (trace&T_OBS) {
       for (i=1,j=0; i<=numS; i++) j += o->swidth[i];
@@ -2896,7 +2896,7 @@ static void ExtractObservation(float *fp, Observation *o)
 
 /* EXPORT->MakeObservation: Create obs using info in swidth and pkind */
 Observation MakeObservation(MemHeap *x, short *swidth, 
-                            ParmKind pkind, Boolean forceDisc, Boolean eSep)
+                            ParmKind pkind, bool forceDisc, bool eSep)
 {
    Observation ob;
    int i,numS;
@@ -2933,7 +2933,7 @@ void ExplainObservation(Observation *o, int itemsPerLine)
 {
    char idx[10],str[5],buf[20],blank[10];
    int s,j,k,len,n,nTotal,nStatic,numS,nDel;
-   Boolean idd = FALSE,isE;
+   bool idd = FALSE,isE;
    
    for (j=0; j<OBMARGIN; j++) blank[j] = ' ';
    blank[OBMARGIN] = '\0';
@@ -3040,7 +3040,7 @@ void PrintObservation(int i, Observation *o, int itemsPerLine)
 {
    char idx[10],str[5],buf[20],blank[10];
    int s,j,k,len;
-   Boolean idd = FALSE;
+   bool idd = FALSE;
    
    for (j=0; j<OBMARGIN; j++) blank[j] = ' ';
    blank[OBMARGIN] = '\0';
@@ -3091,9 +3091,9 @@ void ZeroStreamWidths(int numS, short *swidth)
 
 /* EXPORT->SetStreamWidths: if not already set, put stream widths in swidth 
            for desired stream split and set eSep.  Otherwise just set eSep */
-void  SetStreamWidths(ParmKind pk, int size, short *swidth, Boolean *eSep)
+void  SetStreamWidths(ParmKind pk, int size, short *swidth, bool *eSep)
 { 
-   Boolean isSet,ok;
+   bool isSet,ok;
    short span[12], sw[SMAX];
    char buf[50];
    int s,neTab,neObs;
@@ -3354,7 +3354,7 @@ static void LoadVarScaleVector(MemHeap* x, IOConfig cf, char *fname)
 #define CRCC_AT_CLOSE 65534
 #define CRCC_STREAM 65533
 
-unsigned int UpdateCRCC(void *data,int n,int s,Boolean bSwap,unsigned int crcc)
+unsigned int UpdateCRCC(void *data,int n,int s,bool bSwap,unsigned int crcc)
 {
    char *ptr = (char *) data;
    int i;
@@ -3379,10 +3379,10 @@ unsigned int UpdateCRCC(void *data,int n,int s,Boolean bSwap,unsigned int crcc)
    return(crcc);
 }
 
-static Boolean GetCRCCFrame(ParmBuf pbuf,void *data,int n,int s,Boolean bSwap)
+static bool GetCRCCFrame(ParmBuf pbuf,void *data,int n,int s,bool bSwap)
 {
    IOConfig cf=pbuf->cf;
-   Boolean lastReadValid=FALSE;
+   bool lastReadValid=FALSE;
    static unsigned short lastReadShort;
    unsigned int crcc=cf->crcc;
    unsigned short *sp,s1,s2;
@@ -3562,13 +3562,13 @@ static ReturnStatus OpenParmChannel(ParmBuf pbuf,char *fname, int *ret_val)
 {
    IOConfig cf = pbuf->cf;
    ParmKind tgtBase;
-   Boolean isPipe;
+   bool isPipe;
    FILE *f;
    long nSamples,sampPeriod;
    int initRows,i, tmp;
    short sampSize,kind;
    char b1[50],b2[50];
-   Boolean isEXF;
+   bool isEXF;
    char actfname[MAXFNAMELEN];
    long stIndex, enIndex;
    long preskip;
@@ -3928,7 +3928,7 @@ static void FillBufFromChannel(ParmBuf pbuf,int minRows)
 {
    IOConfig cf = pbuf->cf;
    PBlock *pb,*lb;
-   Boolean dis,cleared;
+   bool dis,cleared;
    char b1[100];
    int availRows,newRows,space,i,head,tail,nShift;
    short *sp1=NULL, *sp2;
@@ -4367,7 +4367,7 @@ ParmBuf OpenBuffer(MemHeap *x, char *fn, int maxObs, FileFormat ff,
    pbuf->mem = x; pbuf->status = PB_INIT;
    pbuf->chan = curChan; pbuf->ext=NULL; pbuf->chClear=FALSE;
    pbuf->cf = MakeIOConfig(pbuf->mem, pbuf->chan);
-   if (enSpeechDet!=TRI_UNDEF) pbuf->cf->useSilDet=(Boolean)enSpeechDet;
+   if (enSpeechDet!=TRI_UNDEF) pbuf->cf->useSilDet=(bool)enSpeechDet;
    if (pbuf->cf->addDither>0.0) RandInit(12345);
 
    /* side based normalisation -- #### should maybe be in OpenAsChannel? */
@@ -4410,7 +4410,7 @@ ParmBuf OpenExtBuffer(MemHeap *x, char *fn, int maxObs,
    pbuf->mem = x; pbuf->status = PB_INIT;
    pbuf->chan = curChan; pbuf->ext=ext; pbuf->chClear=FALSE;
    pbuf->cf = MakeIOConfig(pbuf->mem, pbuf->chan);
-   if (enSpeechDet!=TRI_UNDEF) pbuf->cf->useSilDet=(Boolean)enSpeechDet;
+   if (enSpeechDet!=TRI_UNDEF) pbuf->cf->useSilDet=(bool)enSpeechDet;
    if (pbuf->cf->addDither>0.0) RandInit(12345);
 
    if(OpenAsChannel(pbuf,maxObs,fn,ff,silMeasure)<SUCCESS){
@@ -4593,7 +4593,7 @@ static void ReadObs(ParmBuf pbuf, int outRow,Observation *o)
 }
 
 /* EXPORT->ReadAsBuffer: Get next observation from buffer */
-Boolean ReadAsBuffer(ParmBuf pbuf, Observation *o)
+bool ReadAsBuffer(ParmBuf pbuf, Observation *o)
 {
    CheckBuffer(pbuf);
    if (pbuf->status<=PB_FILLING) {
@@ -4890,7 +4890,7 @@ void WriteESIGPHeader(FILE *f, IOConfig cf, HTime sampPeriod, short sampSize, sh
 }
 
 /* CalcCompress: calculate the scaling factors for compressing data */
-static void CalcCompress(ParmBuf pbuf, PBlock *pbInit,int nCols, Boolean irefc)
+static void CalcCompress(ParmBuf pbuf, PBlock *pbInit,int nCols, bool irefc)
 {
    IOConfig cf = pbuf->cf;
    PBlock *pb;
@@ -4967,7 +4967,7 @@ ReturnStatus SaveBuffer(ParmBuf pbuf, char *fname, FileFormat ff)
    PBlock *pb,*pbInit,*pbFin;
    FILE *f;
    IOConfig cf = pbuf->cf;
-   Boolean bSwap,isPipe;
+   bool bSwap,isPipe;
    short sampSize,kind,*sp;
    long nSamples,sampPeriod;
    char buf[50];

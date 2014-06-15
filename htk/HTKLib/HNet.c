@@ -60,31 +60,31 @@ static int nParm = 0;
 
 /* --------------------------- Global Flags -------------------------- */
 
-Boolean forceCxtExp=FALSE;
+bool forceCxtExp=FALSE;
 /*
   force triphone context exp to get model names
   ie. don't use model names direct from dict 
   without expansion (is overridden by allowCxtExp)
 */
-Boolean forceLeftBiphones=FALSE;
-Boolean forceRightBiphones=FALSE;
+bool forceLeftBiphones=FALSE;
+bool forceRightBiphones=FALSE;
 /*
   force biphone context exp to get model names
   ie. don't try triphone names
 */
-Boolean allowCxtExp=TRUE;
+bool allowCxtExp=TRUE;
 /*
    allow context exp to get model names #
 */
-Boolean allowXWrdExp=FALSE;
+bool allowXWrdExp=FALSE;
 /*
    allow context exp across words
 */
-Boolean cfWordBoundary=TRUE;
+bool cfWordBoundary=TRUE;
 /*
    In word internal systems treat context free phones as word boundaries.
 */
-Boolean factorLM=FALSE;
+bool factorLM=FALSE;
 /*
    factor lm likelihoods throughout words
 */
@@ -93,12 +93,12 @@ char *frcSil=NULL,frcSilBuf[MAXSTRLEN];
 /* 
    Automagically add these sil models to the end of words.
 */
-Boolean remDupPron=TRUE;
+bool remDupPron=TRUE;
 /*
    Remove duplicate pronunciations
 */
 
-Boolean sublatmarkers=FALSE;
+bool sublatmarkers=FALSE;
 /*
    Add sublatstart and sublatend markers to the lattice
 */
@@ -113,7 +113,7 @@ char *subLatEnd="!)_SUBLAT",subLatEndBuf[MAXSTRLEN];
 /* EXPORT->InitNet: register module & set configuration parameters */
 void InitNet(void)
 {
-   Boolean b;
+   bool b;
    int i;
 
    Register(hnet_version,hnet_vc_id);
@@ -476,7 +476,7 @@ static int QSCmpArcs(const void *v1,const void *v2)
 }
 
 /* OutputIntField: output integer as text or binary */
-static void OutputIntField(char field,int val,Boolean bin,
+static void OutputIntField(char field,int val,bool bin,
                            char *form,FILE *file)
 {
    fprintf(file,"%c%c",field,bin?'~':'=');
@@ -488,7 +488,7 @@ static void OutputIntField(char field,int val,Boolean bin,
 }
 
 /* OutputFloatField: output float as text or binary */
-static void OutputFloatField(char field,float val,Boolean bin,
+static void OutputFloatField(char field,float val,bool bin,
                              char *form,FILE *file)
 {
    fprintf(file,"%c%c",field,bin?'~':'=');
@@ -876,7 +876,7 @@ static int ReadAlign(Lattice *lat,LArc *la,char *buf)
 
 /* ReadOneLattice: Read (one level) of lattice from file */
 Lattice *ReadOneLattice(Source *src, MemHeap *heap, Vocab *voc, 
-                               Boolean shortArc, Boolean add2Dict)
+                               bool shortArc, bool add2Dict)
 {
    int i,s,e,n,v=0,nn,na;
    Lattice *lat;
@@ -1228,7 +1228,7 @@ Lattice *ReadOneLattice(Source *src, MemHeap *heap, Vocab *voc,
 /* EXPORT->ReadLattice: Read lattice from file - calls ReadOneLattice */
 /*                      for each level of a multi-level lattice file  */
 Lattice *ReadLattice(FILE *file, MemHeap *heap, Vocab *voc, 
-                     Boolean shortArc, Boolean add2Dict)
+                     bool shortArc, bool add2Dict)
 {
    Lattice *lat,*list,*fLat;
    Source source;
@@ -1299,7 +1299,7 @@ static void ExpandedLatticeSize(Lattice *lat, int *nNodes,int *nArcs)
 /* CopyLattice: copy lattice from lat to newlat starting at offsets         */
 /*              *newNodes and *newArcs - ignore NULL id words if ignoreNull */
 void CopyLattice(Lattice *lat, Lattice *newlat, 
-                 int *newNodes, int *newArcs, Boolean ignoreNull)
+                 int *newNodes, int *newArcs, bool ignoreNull)
 {
    int i,j;
    LNode *oldNode,*newNode;
@@ -1660,7 +1660,7 @@ static void PrintChain(Network *wnet,HMMSet *hset)
    }
 }
 
-static Boolean IsWd0Link(NetLink *link)
+static bool IsWd0Link(NetLink *link)
 {
    int i;
    NetNode *nextNode;
@@ -1719,8 +1719,8 @@ typedef struct pronholder
    LogFloat fct;    /* LM likelihood to be factored into each phone */
    int ic;          /* Initial context - cache saves finding for all links */
    int fc;          /* Final context - cache saves finding for all links */
-   Boolean fci;     /* Final phone context independent */
-   Boolean tee;     /* TRUE if word consists solely of tee models */
+   bool fci;     /* Final phone context independent */
+   bool tee;     /* TRUE if word consists solely of tee models */
    int clen;        /* Number of non-cf phones in pronunciation */
    NetNode **lc;    /* Left contexts - linked to word initial models */
    NetNode **rc;    /* Right contexts - linked to word end nodes */
@@ -1739,7 +1739,7 @@ PronHolder;
 #define WNHASHSIZE 5701
 static NetNode *wnHashTab[WNHASHSIZE];
 
-static HMMSetCxtInfo *NewHMMSetCxtInfo(HMMSet *hset, Boolean frcCxtInd)
+static HMMSetCxtInfo *NewHMMSetCxtInfo(HMMSet *hset, bool frcCxtInd)
 {
    HMMSetCxtInfo *hci;
 
@@ -1836,7 +1836,7 @@ int GetHCIContext(HMMSetCxtInfo *hci,LabId labid)
 }
 
 /* Check to see if CI model exists for labid */
-Boolean IsHCIContextInd(HMMSetCxtInfo *hci,LabId labid)
+bool IsHCIContextInd(HMMSetCxtInfo *hci,LabId labid)
 {
    int c;
    if (hci->nc==0) return(TRUE);
@@ -1873,7 +1873,7 @@ static int FindRContext(HMMSetCxtInfo *hci,PronHolder *p,int pos,int rc)
 
 /* Determine if dictionary contains any models not in list */
 /* Notionally checks whether dictionary is phone or model based */
-static Boolean ClosedDict(Vocab *voc,HMMSet *hset)
+static bool ClosedDict(Vocab *voc,HMMSet *hset)
 {
    Word word;
    Pron pron;
@@ -2098,7 +2098,7 @@ static HLink FindModel(HMMSetCxtInfo *hci,int lc,LabId name,int rc)
 }
 
 /* Determine if phone in position pos is independent of right context */
-static Boolean IsRContextInd(HMMSetCxtInfo *hci,PronHolder *p,int pos,int xlc)
+static bool IsRContextInd(HMMSetCxtInfo *hci,PronHolder *p,int pos,int xlc)
 {
    LabId labid;
    HLink hmm,cmp;
@@ -2139,7 +2139,7 @@ static Boolean IsRContextInd(HMMSetCxtInfo *hci,PronHolder *p,int pos,int xlc)
 
 /* Determine if dictionary voc be constructed solely from word internal */
 /* models.  Notionally checks for cross word/word internal differences */
-static Boolean InternalDict(Vocab *voc,HMMSetCxtInfo *hci)
+static bool InternalDict(Vocab *voc,HMMSetCxtInfo *hci)
 {
    Word word;
    Pron pron;
@@ -2516,7 +2516,7 @@ void SetNullContexts(Lattice *lat,int xc)
    PronHolder *lInst,*rInst,*pInst;
    LNode *thisLNode;
    LArc *thisLArc;
-   Boolean doPairs;
+   bool doPairs;
    int i,lc,rc;
 
    doPairs=FALSE;
@@ -2777,7 +2777,7 @@ static void CreateX1Model(PronHolder *pInst,int p, int q,
    NetLink *links;
    HLink hmm;
    Ptr tptr;
-   Boolean tee,initTee,anyTee;
+   bool tee,initTee,anyTee;
    int j,k,n;
 
    /* Single phone word means that we need to */
@@ -3145,7 +3145,7 @@ static void CreateXEModels(PronHolder *pInst,int p, int q,
    NetLink *links;
    HLink hmm;
    Ptr tptr;
-   Boolean tee,anyTee;
+   bool tee,anyTee;
    int j,n;
 
    /* Cross word context and more than one phone */
@@ -3413,7 +3413,7 @@ void ShowWords(Lattice *lat,Vocab *voc,HMMSetCxtInfo *hci)
 }
 
 
-HMMSetCxtInfo *GetHMMSetCxtInfo(HMMSet *hset, Boolean frcCxtInd)
+HMMSetCxtInfo *GetHMMSetCxtInfo(HMMSet *hset, bool frcCxtInd)
 {
    HMMSetCxtInfo *hci;
    LabId labid;

@@ -97,11 +97,11 @@ static float mixWeightFloor=0.0; /* Floor for mixture weights */
 static int minEgs    = 3;        /* min examples to train a model */
 static UPDSet uFlags = (UPDSet) (UPMEANS|UPVARS|UPTRANS|UPMIXES); /* update flags */
 static int parMode   = -1;       /* enable one of the // modes */
-static Boolean stats = FALSE;    /* enable statistics reports */
+static bool stats = FALSE;    /* enable statistics reports */
 static char * mmfFn  = NULL;     /* output MMF file, if any */
 static int trace     = 0;        /* Trace level */
-static Boolean saveBinary = FALSE;  /* save output in binary  */
-static Boolean ldBinary = TRUE;        /* load/dump in binary */
+static bool saveBinary = FALSE;  /* save output in binary  */
+static bool ldBinary = TRUE;        /* load/dump in binary */
 static FileFormat dff=UNDEFF;       /* data file format */
 static FileFormat lff=UNDEFF;       /* label file format */
 static int updateMode = UPMODE_UPDATE; /* dump summed accs, update models or do both? */
@@ -110,7 +110,7 @@ static int updateMode = UPMODE_UPDATE; /* dump summed accs, update models or do 
 static ConfParam *cParm[MAXGLOBS];   /* configuration parameters */
 static int nParm = 0;               /* total num params */
 
-static Boolean al_hmmUsed = FALSE;   /* Set for 2-model ReEstimation */
+static bool al_hmmUsed = FALSE;   /* Set for 2-model ReEstimation */
 static char al_hmmDir[MAXFNAMELEN];  /* dir to look for alignment hmm defs */
 static char al_hmmExt[MAXSTRLEN];  	 /* alignment hmm def file extension */
 static char al_hmmMMF[MAXFNAMELEN];  /* alignment hmm MMF */
@@ -125,8 +125,8 @@ static LogDouble pruneLim = NOPRUNE;     /* pruning threshold limit */
 static float minFrwdP = NOPRUNE;         /* mix prune threshold */
 
 
-static Boolean firstTime = TRUE;    /* Flag used to enable creation of ot */
-static Boolean twoDataFiles = FALSE; /* Enables creation of ot2 for FB
+static bool firstTime = TRUE;    /* Flag used to enable creation of ot */
+static bool twoDataFiles = FALSE; /* Enables creation of ot2 for FB
                                         training using two data files */
 static int totalT=0;       /* total number of frames in training data */
 static LogDouble totalPr=0;   /* total log prob upto current utterance */
@@ -150,7 +150,7 @@ static char *labFileMask = NULL;
 void SetConfParms(void)
 {
    int i;
-   Boolean b;
+   bool b;
    double f;
    char buf[MAXSTRLEN];
    
@@ -655,10 +655,10 @@ void Initialise(FBInfo *fbInfo, MemHeap *x, HMMSet *hset, char *hmmListFn)
        /* load multiple MMFs */
        if (strlen(al_hmmMMF) > 0 ) {
            char *p,*q;
-           Boolean eos;
+           bool eos;
            p=q=al_hmmMMF;
            for(;;) {
-               eos = Boolean(*p=='\0');
+               eos = bool(*p=='\0');
                if ( ( isspace((int) *p) || *p == '\0' ) && (q!=p) ) {
                    *p='\0';
                    if (trace&T_TOP) { 
@@ -1055,7 +1055,7 @@ void UpdateVars(HMMSet *hset, int px, HLink hmm)
    MixtureElem *me;
    Vector mean;
    Covariance cov;
-   Boolean mixFloored,shared;
+   bool mixFloored,shared;
    
    N = hmm->numStates;
    se = hmm->svec+2;
@@ -1078,7 +1078,7 @@ void UpdateVars(HMMSet *hset, int px, HLink hmm)
                   occim = va->occ;
                   mixFloored = FALSE;
                   if (occim > 0.0){
-                     shared=Boolean((GetUse(cov.var)>1 || ma==NULL || ma->occ<=0.0));
+                     shared=bool((GetUse(cov.var)>1 || ma==NULL || ma->occ<=0.0));
                      if (me->mpdf->ckind==DIAGC) {
                         for (k=1; k<=vSize; k++){
                            muDiffk=(shared)?0.0:ma->mu[k]/ma->occ;
@@ -1133,7 +1133,7 @@ void UpdateTMVars(HMMSet *hset)
    MixPDF *mpdf;
    Vector mean;
    Covariance cov;
-   Boolean mixFloored,shared;
+   bool mixFloored,shared;
    
    S = hset->swidth[0];
    for (s=1;s<=S;s++){
@@ -1150,7 +1150,7 @@ void UpdateTMVars(HMMSet *hset)
             occim = va->occ;
             mixFloored = FALSE;
             if (occim > 0.0){
-               shared=Boolean((GetUse(cov.var)>1 || ma==NULL || ma->occ<=0.0));
+               shared=bool((GetUse(cov.var)>1 || ma==NULL || ma->occ<=0.0));
                if (mpdf->ckind==DIAGC) {
                   for (k=1; k<=vSize; k++){
                      muDiffk=(shared)?0.0:ma->mu[k]/ma->occ;

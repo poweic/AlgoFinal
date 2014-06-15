@@ -52,8 +52,8 @@ static int trace = 0;
 static ConfParam *cParm[MAXGLOBS];   /* config parameters */
 static int nParm = 0;
 
-static Boolean outWMapRaw = FALSE;   /* Output file in raw mode */
-static Boolean inWMapRaw = FALSE;    /* Read input files in raw mode */
+static bool outWMapRaw = FALSE;   /* Output file in raw mode */
+static bool inWMapRaw = FALSE;    /* Read input files in raw mode */
 
 static LabId *sortTab;               /* global temp used by qsort */
 
@@ -63,7 +63,7 @@ static LabId *sortTab;               /* global temp used by qsort */
 void InitWMap(void)
 {
    int i;
-   Boolean b;
+   bool b;
    
    Register(lwmap_version,lwmap_vc_id);
    nParm = GetConfig("LWMAP", TRUE, cParm, MAXGLOBS);
@@ -86,7 +86,7 @@ static int CmpListEntry(const void *p1, const void *p2)
 }
 
 /* EXPORT->GetSrcString: get next string from src in appropriate mode */
-Boolean GetSrcString(Source *src, char *s, Boolean htkEsc)
+bool GetSrcString(Source *src, char *s, bool htkEsc)
 {
    if (htkEsc) 
       return ReadString(src,s);
@@ -264,7 +264,7 @@ static void LoadMapData(Source *src, WordMap *wm)
 }
 
 /* CreateListorMap: Create a word list or map structure */
-static void CreateListorMap(char *fn, WordMap *wm, int freeSlots, Boolean isMap)
+static void CreateListorMap(char *fn, WordMap *wm, int freeSlots, bool isMap)
 {
    Source src;
    char buf[MAXSTRLEN],buf2[MAXSTRLEN];
@@ -323,7 +323,7 @@ static void WriteMapHeader(FILE *f, WordMap *w)
 }
 
 /* WriteWordMap: Write given word map to file f */
-static void WriteWordMap(FILE *f, WordMap *w, Boolean noHeader, Boolean debug)
+static void WriteWordMap(FILE *f, WordMap *w, bool noHeader, bool debug)
 {
    int i;
    MapEntry *me;
@@ -373,10 +373,10 @@ void CreateWordMap(char *fn, WordMap *w, int freeSlots)
 }
 
 /* EXPORT->SaveWordMap: Write given word map to file fn */
-void SaveWordMap(char *fn, WordMap *w, Boolean noHeader)
+void SaveWordMap(char *fn, WordMap *w, bool noHeader)
 {
    FILE *f;
-   Boolean isPipe;
+   bool isPipe;
    
    f = FOpen(fn,LWMapOFilter,&isPipe);
    if (f==NULL)

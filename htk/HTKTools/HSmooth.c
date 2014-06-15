@@ -56,9 +56,9 @@ static int minEgs    = 3;        /* min examples to train a model */
 static int maxStep   = 16;       /* max number of binary chops */
 static float epsilon = 0.0001;   /* binary chop convergence criterion */
 static UPDSet uFlags = (UPDSet) (UPMEANS|UPVARS|UPTRANS|UPMIXES);   /* update flags */
-static Boolean stats = FALSE;    /* enable statistics reports */
-static Boolean saveBinary = FALSE;  /* save output in binary  */
-static Boolean ldBinary = TRUE;     /* load in binary */
+static bool stats = FALSE;    /* enable statistics reports */
+static bool saveBinary = FALSE;  /* save output in binary  */
+static bool ldBinary = TRUE;     /* load in binary */
 static int trace     = 0;        /* Trace level */
 static int nBlk = 0;       /* number of data blocks */
 
@@ -103,7 +103,7 @@ static MemHeap wtAccStack;
 void SetConfParms(void)
 {
    int i;
-   Boolean b;
+   bool b;
    
    nParm = GetConfig("HSMOOTH", TRUE, cParm, MAXGLOBS);
    if (nParm>0) {
@@ -502,7 +502,7 @@ void CreateWStore(void)
 void CreateMonoList(void)
 {
    int i,j;
-   Boolean found;
+   bool found;
    LabId list[MAXMONOPHONES], id;
    char buf[255];
    MLink q;
@@ -930,7 +930,7 @@ void UpdateTMVars(void)
    MixPDF *mpdf;
    Vector mean;
    Covariance cov;
-   Boolean mixFloored,shared;
+   bool mixFloored,shared;
 
    for (s=1;s<=nStreams;s++){
       vSize = hset.swidth[s];

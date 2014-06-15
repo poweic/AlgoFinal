@@ -128,7 +128,7 @@ void InitLabel(void);
    the routines in this module.
 */
 
-LabId GetLabId(char *name, Boolean insert);
+LabId GetLabId(char *name, bool insert);
 /*
    Lookup given name in hash table and return its id.  If it
    is not there and insert is true then insert the new name
@@ -141,7 +141,7 @@ void PrintNameTabStats(void);
    name cell heap and average search length
 */
 
-Boolean ReadLabel(FILE *f, char *buf);
+bool ReadLabel(FILE *f, char *buf);
 /*
    Read the next label from f into buf.  A label is any
    sequence of printing chars.  Returns false if no label
@@ -291,7 +291,7 @@ void TriStrip(char *s);
    Remove contexts of form A- and +B from s 
 */
 
-void LTriStrip(Boolean enab);
+void LTriStrip(bool enab);
 /*
    When enab is set, all triphone labels with the form A-B+C
    are converted to B on read in by LOpen.
@@ -316,7 +316,7 @@ FILE *GetMLFFile(int fidx);
    Return the fidx'th loaded MLF file.  Index base is 0.
 */
 
-Boolean IsMLFFile(char *fn);
+bool IsMLFFile(char *fn);
 /* 
    Return true if fn is an MLF file
 */

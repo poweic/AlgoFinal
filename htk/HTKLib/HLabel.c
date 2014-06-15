@@ -102,10 +102,10 @@ part of the file's path matching pattern2 must be in subdir2
 
 static ConfParam *cParm[MAXGLOBS];        /* config parameters */
 static int numParm = 0;
-static Boolean stripTriPhones = FALSE;   /* Enable triPhone stripping */
+static bool stripTriPhones = FALSE;   /* Enable triPhone stripping */
 static int transLev = 0;           /* if >0 filter all but specified level */
 static int transAlt = 0;           /* if >0 filter all but specified alt */
-static Boolean compatMode = FALSE;  /* Allow spaces around . or /// */
+static bool compatMode = FALSE;  /* Allow spaces around . or /// */
 static char labelQuote = 0;        /* How do we quote label names */
 static double htkLabelTimeScale = 1; /* multiply all times in HTK format labels by this on reading */
 
@@ -167,7 +167,7 @@ static NameCell *NewCell(char *name)
 void InitLabel(void)
 {
    int i;
-   Boolean b;
+   bool b;
    double d;
    char str[MAXSTRLEN];
 
@@ -192,7 +192,7 @@ void InitLabel(void)
 
 
 /* EXPORT->GetLabId: return id of given name */
-LabId GetLabId(char *name, Boolean insert)
+LabId GetLabId(char *name, bool insert)
 {
    int h;
    NameCell *p;
@@ -231,7 +231,7 @@ void PrintNameTabStats(void)
 }
 
 /* EXPORT->ReadLabel: into buf from file f and return TRUE if ok */
-Boolean ReadLabel(FILE *f, char *buf)
+bool ReadLabel(FILE *f, char *buf)
 {
    int c;
    
@@ -592,7 +592,7 @@ static double trNum;
 static char trStr[256];
 
 /* IsNumeric: returns true if given string is a number */
-Boolean IsNumeric(char *s)
+bool IsNumeric(char *s)
 {
    int i,len;
    
@@ -619,10 +619,10 @@ static void InitTrScan(void)
 
 /* GetTrSym: get next symbol from f, remember that f might be an MLF
              in which case EOF is a period on its own line   */
-static void GetTrSym(Source *src, Boolean htk)
+static void GetTrSym(Source *src, bool htk)
 {
    int nxtch;
-   Boolean trSOL;
+   bool trSOL;
 
    trNum = 0.0; trStr[0]='\0'; 
    if (trSym==TRNULL) curch = GetCh(src);
@@ -753,7 +753,7 @@ static LabList * LoadHTKList(MemHeap *x, Source *src, int alt)
    HTime start,end;
    float score, auxScore[100];
    int n,maxAux = 0;
-   Boolean ok;
+   bool ok;
    
    ok = (transAlt==0) || (transAlt == alt);
    if (ok) ll = CreateLabelList(x,maxAux);  /* assume no aux labels */
@@ -1030,7 +1030,7 @@ void TriStrip(char *s)
 }
 
 /* EXPORT->LTriStrip: enable triphone stripping */
-void LTriStrip(Boolean enab)
+void LTriStrip(bool enab)
 {
    stripTriPhones = enab;
 }
@@ -1050,7 +1050,7 @@ static void StoreMLFEntry(MLFEntry *e)
 }
 
 /* FindMLFStr: find the next quoted string in s */
-static Boolean FindMLFStr(char *s, char **st, char **en)
+static bool FindMLFStr(char *s, char **st, char **en)
 {
    char *p,*q;
    
@@ -1078,7 +1078,7 @@ static MLFDefType FindMLFType(char *s, char **en)
 }
 
 /* NoMLFHeader: return true if s doesnt contain #!MLF!# */
-static Boolean NoMLFHeader(char *s)
+static bool NoMLFHeader(char *s)
 {
    int len;
    char *e;
@@ -1096,14 +1096,14 @@ static Boolean NoMLFHeader(char *s)
    return (strcmp(s,"#!MLF!#") != 0);
 }
 
-static Boolean incSpaces;
+static bool incSpaces;
 
 /* IsDotLine: return true if line contains only a single dot */
-static Boolean IsDotLine(char *s)
+static bool IsDotLine(char *s)
 {
    int len;
    char *e;
-   Boolean cut;
+   bool cut;
 
    len = strlen(s);cut=FALSE;
    if (s[len-1]=='\n') {
@@ -1166,7 +1166,7 @@ void LoadMasterFile(char *fname)
    char *men;        /* end of mode indicator */
    char *pst,*pen;   /* start/end of pattern (inc quotes) */
    char *dst,*den;   /* start/end of subdirectory (inc quotes) */
-   Boolean inEntry = FALSE;   /* ignore ".." within an entry */
+   bool inEntry = FALSE;   /* ignore ".." within an entry */
    MLFEntry *e;
    FILE *f;
    
@@ -1235,7 +1235,7 @@ FILE *GetMLFFile(int fidx)
 }
 
 /*EXPORT->IsMLFFile: return true if fn is an MLF */
-Boolean IsMLFFile(char *fn)
+bool IsMLFFile(char *fn)
 {
    FILE *f;
    char buf[1024];
@@ -1281,12 +1281,12 @@ static void SplitPath(char *path, char *name, char *subdir, char *tryspec)
                 returned may be a real file or simply the MLF seek'ed
                 to the start of an immediate file definition, isMLF
                 tells you which it is.  Returns NULL if nothing found  */
-static FILE * OpenLabFile(char *fname, Boolean *isMLF)
+static FILE * OpenLabFile(char *fname, bool *isMLF)
 {
    FILE *f;
    MLFEntry *e;
    char path[1024],name[256],tryspec[1024];
-   Boolean isMatch = FALSE;
+   bool isMatch = FALSE;
    unsigned fixedHash;     /* hash value for PAT_FIXED */
    unsigned anypathHash;   /* hash value for PAT_ANYPATH */ 
    char *fnStart;          /* start of actual file name */
@@ -1380,7 +1380,7 @@ Transcription *LOpen(MemHeap *x, char * fname, FileFormat fmt)
    Source source;
    char buf[MAXSTRLEN];
    Transcription *t;
-   Boolean isMLF;
+   bool isMLF;
 
    if (fmt == UNDEFF){
       if (GetConfStr(cParm,numParm,"SOURCELABEL",buf))
@@ -1484,7 +1484,7 @@ static void SaveHTKLabels( FILE *f, Transcription *t)
    LabList *ll;
    LLink p,hd;
    LabId id;
-   Boolean hasScores[100];
+   bool hasScores[100];
 
    ll = t->head;
    for (i=1; i<=t->numLists; i++,ll=ll->next){

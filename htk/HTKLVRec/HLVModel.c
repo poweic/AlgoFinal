@@ -83,7 +83,7 @@ size_t RoundAlign(size_t addr, size_t align)
    return ((addr % align) == 0) ? addr : (addr/align + 1) * align;
 }
 
-StateInfo_lv *ConvertHSet(MemHeap *heap, HMMSet *hset, Boolean useHModel)
+StateInfo_lv *ConvertHSet(MemHeap *heap, HMMSet *hset, bool useHModel)
 {
    HMMScanState hss;
    StateInfo_lv *si;

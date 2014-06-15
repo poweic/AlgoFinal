@@ -54,7 +54,7 @@ char *hutil_vc_id = "$Id: HUtil.c,v 1.1.1.1 2006/10/11 09:54:59 jal58 Exp $";
 #define T_OCC  0004       /* Occupancy statistics tracing */
 
 static int trace = 0;
-static Boolean parsePhysicalHMM = FALSE;
+static bool parsePhysicalHMM = FALSE;
 
 static MemHeap setHeap;
 static MemHeap itemHeap;
@@ -88,7 +88,7 @@ void ResetUtilItemList()
 }
 
 /* EXPORT->SetParsePhysicalHMM: only parse physical HMMs */
-void SetParsePhysicalHMM(Boolean parse)
+void SetParsePhysicalHMM(bool parse)
 {
    parsePhysicalHMM = parse;
 }
@@ -96,7 +96,7 @@ void SetParsePhysicalHMM(Boolean parse)
 /* -------------------- Clone Routines ------------------------ */
 
 /* CloneSVector: return a clone of given matrix */
-SVector CloneSVector(MemHeap *hmem, SVector s, Boolean sharing)
+SVector CloneSVector(MemHeap *hmem, SVector s, bool sharing)
 {
    SVector t;  /* the target */
    
@@ -111,7 +111,7 @@ SVector CloneSVector(MemHeap *hmem, SVector s, Boolean sharing)
 }
 
 /* CloneSMatrix: return a clone of given Matrix */
-SMatrix CloneSMatrix(MemHeap *hmem, SMatrix s, Boolean sharing)
+SMatrix CloneSMatrix(MemHeap *hmem, SMatrix s, bool sharing)
 {
    SMatrix t;  /* the target */
    
@@ -126,7 +126,7 @@ SMatrix CloneSMatrix(MemHeap *hmem, SMatrix s, Boolean sharing)
 }
 
 /* CloneSTriMat: return a clone of given TriMat */
-STriMat CloneSTriMat(MemHeap *hmem, STriMat s, Boolean sharing)
+STriMat CloneSTriMat(MemHeap *hmem, STriMat s, bool sharing)
 {
    STriMat t;  /* the target */
    
@@ -141,7 +141,7 @@ STriMat CloneSTriMat(MemHeap *hmem, STriMat s, Boolean sharing)
 }
 
 /* CloneMixPDF: return a clone of given MixPDF */
-MixPDF *CloneMixPDF(HMMSet *hset, MixPDF *s, Boolean sharing)
+MixPDF *CloneMixPDF(HMMSet *hset, MixPDF *s, bool sharing)
 {
    MixPDF *t;
    
@@ -171,7 +171,7 @@ MixPDF *CloneMixPDF(HMMSet *hset, MixPDF *s, Boolean sharing)
 }
 
 /* CloneStream: return a clone of given stream */
-MixtureVector CloneStream(HMMSet *hset, StreamElem *ste, Boolean sharing)
+MixtureVector CloneStream(HMMSet *hset, StreamElem *ste, bool sharing)
 {
    int m,M;
    MixtureElem *sme,*tme;
@@ -197,7 +197,7 @@ MixtureVector CloneStream(HMMSet *hset, StreamElem *ste, Boolean sharing)
 }
 
 /* CloneState: return a clone of given State */
-StateInfo *CloneState(HMMSet *hset, StateInfo *ssi, Boolean sharing)
+StateInfo *CloneState(HMMSet *hset, StateInfo *ssi, bool sharing)
 {
    StateInfo *tsi;  /* the target */
    StreamElem *tste,*sste;
@@ -223,7 +223,7 @@ StateInfo *CloneState(HMMSet *hset, StateInfo *ssi, Boolean sharing)
 }
 
 /* EXPORT->CloneHMM: copy src HMM into tgt.  If sharing, then macros are shared */
-void CloneHMM(HLink src, HLink tgt, Boolean sharing)
+void CloneHMM(HLink src, HLink tgt, bool sharing)
 {
    StateElem *s,*t;
    int i;
@@ -262,7 +262,7 @@ void EndHMMScan(HMMScanState *hss)
 }
 
 /* EXPORT->GoNextHMM: Move to next unseen HMM in HMM set */
-Boolean GoNextHMM(HMMScanState *hss)
+bool GoNextHMM(HMMScanState *hss)
 {
    int M;
    MLink mac;
@@ -296,9 +296,9 @@ Boolean GoNextHMM(HMMScanState *hss)
 }
 
 /* EXPORT->GoNextState: move to next unseen state */
-Boolean GoNextState(HMMScanState *hss, Boolean noSkip)
+bool GoNextState(HMMScanState *hss, bool noSkip)
 {
-   Boolean stepping = FALSE, ok = TRUE;
+   bool stepping = FALSE, ok = TRUE;
    int M;
    
    while (IsSeen(hss->si->nUse) && ok){
@@ -333,9 +333,9 @@ Boolean GoNextState(HMMScanState *hss, Boolean noSkip)
 }
 
 /* EXPORT->GoNextStream: move to next unseen stream */
-Boolean GoNextStream(HMMScanState *hss, Boolean noSkip)
+bool GoNextStream(HMMScanState *hss, bool noSkip)
 {
-   Boolean stepping = FALSE, ok = TRUE;
+   bool stepping = FALSE, ok = TRUE;
    int M;
    
    while (IsSeen(hss->ste->nMix) && ok){
@@ -368,9 +368,9 @@ Boolean GoNextStream(HMMScanState *hss, Boolean noSkip)
 }
 
 /* EXPORT->GoNextMix: move to next unseen mixture component */
-Boolean GoNextMix(HMMScanState *hss, Boolean noSkip)
+bool GoNextMix(HMMScanState *hss, bool noSkip)
 {
-   Boolean ok = TRUE;
+   bool ok = TRUE;
    
    if (hss->isCont || (hss->hset->hsKind == TIEDHS)) {
       while (IsSeen(hss->mp->nUse) && ok){
@@ -410,7 +410,7 @@ Boolean GoNextMix(HMMScanState *hss, Boolean noSkip)
   or vice versa. If convData is TRUE then each variance element is
   replaced by its reciprocal - otherwise only the CovKind in each HMM
   is changed and no data conversions are performed. */
-void ConvDiagC(HMMSet *hset, Boolean convData)
+void ConvDiagC(HMMSet *hset, bool convData)
 {
    HMMScanState hss;
    SVector v;
@@ -554,11 +554,11 @@ void FreeItems(ILink *list)
 IntSet CreateSet(int size)
 {
    int i;
-   Boolean *b;
+   bool *b;
    IntSet s;
    
    s.nMembers = size;
-   b = (Boolean*) New(&setHeap, sizeof(Boolean)*size);
+   b = (bool*) New(&setHeap, sizeof(bool)*size);
    s.set = b-1;
    for (i=1;i<=size;i++) *b++ = FALSE;
    return s;
@@ -571,7 +571,7 @@ void FreeSet(IntSet s)
 }
 
 /* IsMember: return TRUE if x is a member of s */
-Boolean IsMember(IntSet s, int x)
+bool IsMember(IntSet s, int x)
 {
    if (x<1 || x>s.nMembers)
       HError(7271,"IsMember: Illegal set member test");
@@ -587,7 +587,7 @@ void AddMember(IntSet s, int x)
 }
 
 /* IsFullSet: return TRUE if given set is full */
-Boolean IsFullSet(IntSet s)
+bool IsFullSet(IntSet s)
 {
    int i;
    
@@ -660,7 +660,7 @@ static void SkipSpaces(void)
 static char *GetAlpha(char *s)
 {
    static char term[]=".,)}";
-   Boolean wasQuoted;
+   bool wasQuoted;
    int i,n,q=0;
 
    wasQuoted=FALSE;
@@ -1004,7 +1004,7 @@ static void PHIdent(ILink *models, HMMSet *hset)
    int h; 
    MLink q;
    LabId hmmId;
-   Boolean fullName=TRUE; /* are there wildcards in the name */
+   bool fullName=TRUE; /* are there wildcards in the name */
    char *p;
    
    SkipSpaces();
@@ -1098,7 +1098,7 @@ static void PItemSet(ILink *ilist, char *type, HMMSet *hset)
 
 /* EXPORT->PItemList: parse items in item list setting ilist and type */
 char *PItemList(ILink *ilist, char *type, HMMSet *hset,
-                Source *s, Boolean itrace)
+                Source *s, bool itrace)
 {
    int rtrace;
 
@@ -1288,7 +1288,7 @@ void ResetHooks(HMMSet *hset,char *what)
 /* ------------------- Load Statistics File  --------------------- */
 
 /* EXPORT->LoadStatsFile: load the statistics file output by HERest */
-void LoadStatsFile(char *statfile,HMMSet *hset,Boolean otrace)
+void LoadStatsFile(char *statfile,HMMSet *hset,bool otrace)
 {
    Source src;
    char hname[256];
@@ -1300,7 +1300,7 @@ void LoadStatsFile(char *statfile,HMMSet *hset,Boolean otrace)
    double occSum = 0.0;
    long occN = 0;
    StateInfo *si;
-   Boolean bin=FALSE;
+   bool bin=FALSE;
 
    if(InitSource(statfile,&src,NoFilter)<SUCCESS)
       HError(7210,"LoadStatsFile: Can't open file %s", statfile);

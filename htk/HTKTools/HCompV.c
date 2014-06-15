@@ -88,8 +88,8 @@ static char *hmmfn=NULL;            /* HMM definition file name */
 static char *outfn=NULL;            /* output HMM file name (name only) */
 static char *outDir=NULL;           /* HMM output directory */
 static long totalCount=0;           /* total number of vector samples*/
-static Boolean meanUpdate = FALSE;  /* update means  */
-static Boolean saveBinary = FALSE;  /* save output in binary  */
+static bool meanUpdate = FALSE;  /* update means  */
+static bool saveBinary = FALSE;  /* save output in binary  */
 static float vFloorScale = 0.0;     /* if >0.0 then vFloor scaling */
 
 /* Major Data Structures */
@@ -106,7 +106,7 @@ typedef struct {
    Covariance   fixed;              /* fixed (co)variance values */
 } CovAcc;
 static CovAcc accs[SMAX];           /* one CovAcc for each stream */
-static Boolean fullcNeeded[SMAX];   /* true for each stream that needs full
+static bool fullcNeeded[SMAX];   /* true for each stream that needs full
                                        covariance calculated */
 static Observation obs;             /* storage for observations  */
 
@@ -132,7 +132,7 @@ static char pathPattern[MAXSTRLEN];      /* path mask */
 static char oflags[MAXSTRLEN] = "m";     /* export flags for CMV */  
 static char cmDir[MAXSTRLEN];            /* directory to export CMV */
 static char TargetPKStr[MAXSTRLEN];      /* target parm kind string */
-static Boolean DoCMV = FALSE;            /* switch from old HCompV to CMV */
+static bool DoCMV = FALSE;            /* switch from old HCompV to CMV */
 
 
 /* ------------- Process Command Line and Check Data ------------ */
@@ -140,7 +140,7 @@ static Boolean DoCMV = FALSE;            /* switch from old HCompV to CMV */
 /* SetConfParms: set conf parms relevant to HCompV  */
 void SetConfParms(void)
 {
-   Boolean b,c;
+   bool b,c;
    int i;
    double d;
    
@@ -194,7 +194,7 @@ void CheckVarianceKind(void)
 void Initialise(void)
 {
    int s,V;
-   Boolean eSep;
+   bool eSep;
    char base[MAXSTRLEN];
    char path[MAXSTRLEN];
    char ext[MAXSTRLEN];
@@ -526,7 +526,7 @@ SpkrAcc *AccGenUtt(char *SpkrPattern, char *UttFileName, SpkrAcc *sa)
    ParmBuf pbuf;
    BufferInfo info;
    short swidth[SMAX];
-   Boolean eSep;
+   bool eSep;
    Vector tempV;
    int i;
 
@@ -612,7 +612,7 @@ SpkrAccListItem *UpdateSpkrAccList(SpkrAccListItem *sal, SpkrAcc *sa)
 { 
    SpkrAccListItem *p;
    int i;
-   Boolean tag = FALSE;
+   bool tag = FALSE;
 
    p = sal;
 
@@ -686,7 +686,7 @@ void ReportOutput()
 void ExportNMV(SpkrAccListItem *sal, char *OutDirName, char *tgtPKStr) 
 {
    FILE *oFile;
-   Boolean isPipe;
+   bool isPipe;
    char oFileName[MAXSTRLEN];
    char pathBuffer1[MAXSTRLEN];
    char pathBuffer2[MAXSTRLEN];

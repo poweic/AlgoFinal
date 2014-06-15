@@ -116,7 +116,7 @@ void InitBuildInfo(BuildInfo *bi)
 #define LMNDX(wm,i) wm->me[i].sort+1
 
 /* EXPORT->FilterNGram: read n-grams and map them to LM IDs */
-Boolean FilterNGram(NGInputSet *inSet, UInt *gram, float *count, int nSize)
+bool FilterNGram(NGInputSet *inSet, UInt *gram, float *count, int nSize)
 {
 
    int i;
@@ -138,7 +138,7 @@ Boolean FilterNGram(NGInputSet *inSet, UInt *gram, float *count, int nSize)
 }
 
 /* EXPORT->CalcUniProbs: calculate unigram */
-static int CalcUniProbs(BackOffLM *lm, FLEntry *tgtFE, Boolean rebuild)
+static int CalcUniProbs(BackOffLM *lm, FLEntry *tgtFE, bool rebuild)
 {
    NameId nid;
    double tMass;
@@ -262,7 +262,7 @@ static double ApplyABS(BackOffInfo *boi, FLEntry *tgtFE, double tMass)
    tgtFE  - target FLEntry
    rebuld - TRUE if converting LMP_COUNT -> LMP_FLOAT 
 */
-static int CalcNGramProbs(BackOffLM *lm, UInt *feId, int nSize, FLEntry *tgtFE, Boolean rebuild)
+static int CalcNGramProbs(BackOffLM *lm, UInt *feId, int nSize, FLEntry *tgtFE, bool rebuild)
 {
    int i, j, r;
    int nse, nItem;
@@ -404,7 +404,7 @@ static int CalculateNGram(BackOffLM *lm, NGInputSet *inSet, int nSize)
    FLEntry *fe, *fe_buff, *feptr;
    UInt *ge, gram[LM_NSIZE];
    UInt gramKey[LM_NSIZE];
-   Boolean newCX1, newCX2;
+   bool newCX1, newCX2;
 
    if ((se = se_buff = lm->se_buff)==NULL)
       HError(15590,"CalculateNGram: se_buff not initialised");
@@ -524,7 +524,7 @@ static void CalcTGCoefs(MemHeap *heap, BackOffInfo *boi, int nSize, FoFTab *ftab
    UInt **fof;
    double kTerm,gTerm;
    TuringGoodInfo *tgi;
-   Boolean ok,allPositive;
+   bool ok,allPositive;
    
    fof = ftab->fof; 
    tgi = &boi->dcInfo.tgInfo; 

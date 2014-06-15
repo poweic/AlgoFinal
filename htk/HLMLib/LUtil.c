@@ -176,7 +176,7 @@ int NumLMHdrFields(LMFileHdr hdr)
 }
 
 /* EXPORT->GetLMHdrStr: get string valued field */
-char * GetLMHdrStr(char *name, LMFileHdr hdr, Boolean ucase)
+char * GetLMHdrStr(char *name, LMFileHdr hdr, bool ucase)
 {
    HdrField *h;
 
@@ -191,7 +191,7 @@ char * GetLMHdrStr(char *name, LMFileHdr hdr, Boolean ucase)
 }
 
 /* EXPORT->GetLMHdrInt: get int valued field */
-Boolean GetLMHdrInt(char *name, int *value, LMFileHdr hdr)
+bool GetLMHdrInt(char *name, int *value, LMFileHdr hdr)
 {
    char *s;
 
@@ -214,7 +214,7 @@ void UpperCase(char *s)
 }
 
 /* EXPORT->BlankString: return true if s is blank */
-Boolean BlankString(char *s)
+bool BlankString(char *s)
 {
    int i;
    for (i=0; i<strlen(s); i++)
@@ -267,7 +267,7 @@ HashTab *CreateHashTable(int hashSize, char *description)
 }
 
 /* EXPORT->GetNameId: return id of given name */
-NameId GetNameId(HashTab *htab, char *name, Boolean insert)
+NameId GetNameId(HashTab *htab, char *name, bool insert)
 {
    int h;
    NameHolder *p;
@@ -321,7 +321,7 @@ static void u4srt(int32 *data, int l, int r,
 {
    int32 t,p,*p1,*p2,*p3;
    int c,o,x,i,j,n;
-   Boolean sorted;
+   bool sorted;
 
    if (l>=r) return;
    n=r-l+1;
@@ -378,7 +378,7 @@ static void usrt(void *base, int l, int r, size_t size,
 		 int (*compar)(const void *, const void *))
 {
    static char tmp[1024],p[1024];
-   Boolean sorted;
+   bool sorted;
    char *first= (char*) base,*p1,*p2,*p3;
    int c,o,x,i,j,n;
 

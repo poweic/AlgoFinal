@@ -147,8 +147,8 @@ FileFormat Str2Format(char *fmt);
 
 /* --------------------- HTK Header Routines --------------------- */
 
-Boolean ReadHTKHeader(FILE *f,long *nSamp,long *sampP,short *sampS,
-                      short *kind, Boolean *bSwap);
+bool ReadHTKHeader(FILE *f,long *nSamp,long *sampP,short *sampS,
+                      short *kind, bool *bSwap);
 /* 
    Get header info from HTK file f, return false if apparently not
    a HTK file.  If byte-swapped bswap returns true.  NB only
@@ -157,7 +157,7 @@ Boolean ReadHTKHeader(FILE *f,long *nSamp,long *sampP,short *sampS,
 */
 
 void WriteHTKHeader(FILE *f, long nSamp, long sampP, short sampS, 
-		    short kind, Boolean *bSwap);
+		    short kind, bool *bSwap);
 /* 
    Write header info to HTK file f.  
    Sets bSwap to indicate whether header was byte swapped before writing.
@@ -172,9 +172,9 @@ void RetrieveESIGFieldList(HFieldList *fList);
    Retrieve the field list of an ESIG input file 
 */
 
-Boolean ReadEsignalHeader(FILE *f, long *nSamp, long *sampP, short *sampS,
- 			  short *kind, Boolean *bSwap, long *hdrS,
- 			  Boolean isPipe);
+bool ReadEsignalHeader(FILE *f, long *nSamp, long *sampP, short *sampS,
+ 			  short *kind, bool *bSwap, long *hdrS,
+ 			  bool isPipe);
 /*
     Get header from Esignal file f; return FALSE in case of failure.
 */

@@ -75,8 +75,8 @@ static char *mapFN   = NULL;        /* word map file name */
 static char *cmapFN  = NULL;        /* word list file name */
 static char *omapFN  = NULL;        /* output map filename */
 
-static Boolean outMapped = FALSE;   /* output mapped IDs only */
-static Boolean mapWords = FALSE;    /* map words to classes */
+static bool outMapped = FALSE;   /* output mapped IDs only */
+static bool mapWords = FALSE;    /* map words to classes */
 
 static WordMap    *omap = NULL;     /* output buffer map */
 static WordMap    wmap;             /* word map for this corpus */
@@ -305,7 +305,7 @@ static void SaveOutBuffer(void)
 }
 
 /* CompressBuffer: and save if necessary or mustSave is TRUE */
-static void CompressBuffer(Boolean mustSave)
+static void CompressBuffer(bool mustSave)
 {
    float compx;
 
@@ -327,7 +327,7 @@ static void CopyFiles(void)
    float count;
    MapEntry *me;
    ClassEntry *ce;
-   Boolean outThis, success;
+   bool outThis, success;
    UInt ng[MAXNG], nin, nout;
 
    nin = nout = 0;

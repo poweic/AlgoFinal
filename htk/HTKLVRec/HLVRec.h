@@ -323,7 +323,7 @@ struct _DecoderInst {
 
    int nTok;                    /* max number of tokens per state */
 
-   Boolean latgen;              /* generate lattices or just 1-bet? */
+   bool latgen;              /* generate lattices or just 1-bet? */
    LogFloat bestScore;          /* score of best token */
    LexNodeInst *bestInst;       /* instance containing best token */
 
@@ -344,10 +344,10 @@ struct _DecoderInst {
 
    float maxLMLA;               /* maximum jump in LM lookahead per model */
 
-   Boolean fastlmla;            /* use fast LM lookahead, i.e. back-off to bigram states */
+   bool fastlmla;            /* use fast LM lookahead, i.e. back-off to bigram states */
    LogFloat fastlmlaBeam;       /* beam in which to use full lmla */
    
-   Boolean useHModel;           /* use normal HModel OutP() functions? */
+   bool useHModel;           /* use normal HModel OutP() functions? */
    /*    outP cache */
    OutPCache *outPCache;        /* cache of outP values for block of observations */
 
@@ -360,7 +360,7 @@ struct _DecoderInst {
    StateInfo_lv *si;
 
 #ifdef MODALIGN
-   Boolean modAlign;
+   bool modAlign;
    MemHeap modendHypHeap;       /* MHEAP for word end hyps */
 #endif
 
@@ -383,10 +383,10 @@ struct _DecoderInst {
 
 void InitLVRec(void);
 
-DecoderInst *CreateDecoderInst(HMMSet *hset, FSLM *lm, int nTok, Boolean latgen, 
-                               Boolean useHModel,
-                               int outpBlocksize, Boolean doPhonePost,
-                               Boolean modAlign);
+DecoderInst *CreateDecoderInst(HMMSet *hset, FSLM *lm, int nTok, bool latgen, 
+                               bool useHModel,
+                               int outpBlocksize, bool doPhonePost,
+                               bool modAlign);
 void InitDecoderInst (DecoderInst *dec, LexNet *net, HTime sampRate, LogFloat beamWidth, 
                       LogFloat relBeamWidth, LogFloat weBeamWidth, LogFloat zsBeamWidth,
                       int maxModel,
@@ -401,10 +401,10 @@ Transcription *TraceBack (MemHeap *heap, DecoderInst *dec);
 Lattice *LatTraceBack (MemHeap *heap, DecoderInst *dec);
 
 void ReFormatTranscription(Transcription *trans,HTime frameDur,
-                           Boolean states,Boolean models,Boolean triStrip,
-                           Boolean normScores,Boolean killScores,
-                           Boolean centreTimes,Boolean killTimes,
-                           Boolean killWords,Boolean killModels);
+                           bool states,bool models,bool triStrip,
+                           bool normScores,bool killScores,
+                           bool centreTimes,bool killTimes,
+                           bool killWords,bool killModels);
 
 #ifdef __cplusplus
 }

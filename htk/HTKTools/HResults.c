@@ -53,7 +53,7 @@ static int nParm = 0;               /* total num params */
 
 /* ----------------------- HResults configuration ----------------------- */
 
-static Boolean wSpot      = FALSE;    /* true if word spotting */
+static bool wSpot      = FALSE;    /* true if word spotting */
 
 /* General options */
 static int fileLimit = INT_MAX;       /* max num of label files to process */
@@ -63,8 +63,8 @@ static FileFormat rff   = UNDEFF;     /* ff of reference transcription files */
 static FileFormat tff   = UNDEFF;     /* ff of test transcription files */
 static char * nulName = "???";        /* name of null class */
 static LabId nulClass;                /* Id of NULCLASS phone label */
-static Boolean ignoreCase = FALSE;    /* true converts labels to upper case */
-static Boolean stripContexts = FALSE; /* strip triphone contexts */
+static bool ignoreCase = FALSE;    /* true converts labels to upper case */
+static bool stripContexts = FALSE; /* strip triphone contexts */
 
 /* Word spotting only options */
 static HTime totalDur = 0.0;          /* total duration of test input */
@@ -72,11 +72,11 @@ static float faTimeUnit = 1.0;        /* unit for measuring false alarms */
 /* default is 1 hour and this gives NIST std of measuring over 0 to 10 FA/hr */
 
 /* Rec only options */
-static Boolean fullResults = FALSE;   /* enable full Results */
-static Boolean outTrans   = FALSE;    /* enable transcription output */
-static Boolean outPStats  = FALSE;    /* enable phoneme statistics */
-static Boolean nistAlign = FALSE;     /* use NIST alignment & penalties */
-static Boolean nistFormat = FALSE;    /* use NIST formatting */
+static bool fullResults = FALSE;   /* enable full Results */
+static bool outTrans   = FALSE;    /* enable transcription output */
+static bool outPStats  = FALSE;    /* enable phoneme statistics */
+static bool nistAlign = FALSE;     /* use NIST alignment & penalties */
+static bool nistFormat = FALSE;    /* use NIST formatting */
 static int maxNDepth=1;               /* find best of 1..max lists */
 static char * spkrMask = NULL;        /* non-null report on per spkr basis */
 static char * phraseStr = "SENT";     /* label for phrase level stats */
@@ -107,7 +107,7 @@ static int recidUsed = 0;             /* number of test identifiers set */
 void SetConfParms(void)
 {
    char s[MAXSTRLEN];
-   Boolean b;
+   bool b;
    int i;
 
    nParm = GetConfig("HRESULTS", TRUE, cParm, MAXGLOBS);
@@ -160,7 +160,7 @@ int main(int argc, char *argv[])
    char *s,*e,*c;
    int fidx,count=0;
    MLFEntry *me;
-   Boolean tffSet = FALSE;      /* indicates rff set at command line */   
+   bool tffSet = FALSE;      /* indicates rff set at command line */   
 
    void Initialise(char * listfn);
    void MatchFiles(void);
@@ -432,10 +432,10 @@ static int  spkrFails = 0;     /* num time spkr pattern fails to match */
    is the min length string that can match p and
    numstars is the number of *'s in p 
            spkr is next character of the spkr name */
-static Boolean SpRMatch(char *s,char *p,char *spkr,
+static bool SpRMatch(char *s,char *p,char *spkr,
                         int slen,int minplen,int numstars)
 {
-   Boolean match;
+   bool match;
    
    if (slen==0 && minplen==0)
       match=TRUE;
@@ -460,7 +460,7 @@ static Boolean SpRMatch(char *s,char *p,char *spkr,
 }
 
 /* SpMatch: return spkr if s matches pattern p */
-Boolean SpMatch(char *spkrpat, char *spkr, char *str)
+bool SpMatch(char *spkrpat, char *spkr, char *str)
 {
    int spkrlen, slen, minplen, numstars;
    char *q,c;
@@ -490,7 +490,7 @@ Spkr *GetSpeaker(void)
    char name[MAXSTRLEN], buf[MAXSTRLEN];
    LabId id;
    Spkr *s, *t;
-   Boolean found;
+   bool found;
 
    strcpy(buf,recfn);
    if (trace&T_SPK)
@@ -527,9 +527,9 @@ Spkr *GetSpeaker(void)
 }
 
 /* RecordFileStats: record info from current input file */
-Boolean RecordFileStats(CellPtr p)
+bool RecordFileStats(CellPtr p)
 {
-   Boolean error;
+   bool error;
    Spkr *s;
 
    del += p->del;    ins += p->ins; /* update global counters */
@@ -551,7 +551,7 @@ Boolean RecordFileStats(CellPtr p)
 
 /* ---------------------- Print Routines  ------------------------ */
 
-static Boolean headerPrinted = FALSE;  /* delay header as long as poss */
+static bool headerPrinted = FALSE;  /* delay header as long as poss */
 /* to accumulate rec file names */
 
 /* PrintBar: print a bar of given char width with title if any */
@@ -884,7 +884,7 @@ void DoCompare(void)
 {
    CellPtr gridi,gridi1;
    int h,d,v,i,j;
-   Boolean refnull,testnull;
+   bool refnull,testnull;
 
    for (i=1;i<=nTest;i++){
       gridi = grid[i]; gridi1 = grid[i-1];
@@ -954,7 +954,7 @@ void DoCompareNIST(void)
 {
    CellPtr gridi,gridi1;
    int h,d,v,i,j;
-   Boolean refnull,testnull;
+   bool refnull,testnull;
 
    for (i=1;i<=nTest;i++){
       gridi = grid[i]; gridi1 = grid[i-1];
@@ -1096,7 +1096,7 @@ void OutTrans(void)
 static int nLabs;
 static LabId *names;
 
-Boolean ReadWordFromLine(Source *src, char *s)
+bool ReadWordFromLine(Source *src, char *s)
 {
    char *p;
    int ch;
@@ -1190,12 +1190,12 @@ void InitConMat(void)
 /* OutConMat: output the confusion matrix */
 void OutConMat(void)
 {
-   Boolean *seen;
+   bool *seen;
    int i,j,k,err,rowerr,maxlen;
    char *s,c,buf[64];
    float correct, errprop;
 
-   seen=(Boolean*)New(&tempHeap,sizeof(Boolean)*nLabs);
+   seen=(bool*)New(&tempHeap,sizeof(bool)*nLabs);
    seen--;
    maxlen = 0;
    for (i=1;i<=nLabs;i++) {
@@ -1356,7 +1356,7 @@ void MatchRecFiles(void)
    in descending score order - nasty but convenient */
 typedef struct _SpotRec{
    float score;                 /* score for this hit */
-   Boolean hit;                 /* true if real occurrence */
+   bool hit;                 /* true if real occurrence */
    struct _SpotRec *next;
 } SpotRec;
 
@@ -1392,7 +1392,7 @@ void InitSpotLists(void)
 }
 
 /* AddSpot: insert given keyword spot into list */
-void AddSpot(LabId key, Boolean hit, float score)
+void AddSpot(LabId key, bool hit, float score)
 {
    SpotRec *newRec,*p,*q;
    int i;
@@ -1448,7 +1448,7 @@ void PrintKeySpots(void)
 }
 
 /* IsHit: true if test label occurs in ref label list */
-Boolean IsHit(LLink t)
+bool IsHit(LLink t)
 {
    LLink l;
    HTime mid;

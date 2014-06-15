@@ -79,23 +79,23 @@ typedef struct _XFDirInfo {
 
 static ConfParam *cParm[MAXGLOBS];      /* config parameters */
 static int nParm = 0;
-static Boolean checking   = TRUE;       /* check HMM defs */
-static Boolean saveBinary = FALSE;      /* save HMM defs in binary */
-static Boolean saveGlobOpts = TRUE;     /* save ~o with HMM defs */
-static Boolean saveRegTree = FALSE;     /* save regression classes and tree */ 
-static Boolean saveBaseClass = FALSE;   /* save base classes */ 
-static Boolean saveInputXForm = TRUE;   /* save input xforms with models set */
-static Boolean forceHSKind= FALSE;      /* force HMM Set Kind */
-static Boolean keepDistinct=FALSE;      /* keep orphan HMMs distinct */
-static Boolean discreteLZero=FALSE;     /* map DLOGZERO to LZERO */
-static Boolean reorderComps=FALSE;      /* re-order mixture components (PDE) */
+static bool checking   = TRUE;       /* check HMM defs */
+static bool saveBinary = FALSE;      /* save HMM defs in binary */
+static bool saveGlobOpts = TRUE;     /* save ~o with HMM defs */
+static bool saveRegTree = FALSE;     /* save regression classes and tree */ 
+static bool saveBaseClass = FALSE;   /* save base classes */ 
+static bool saveInputXForm = TRUE;   /* save input xforms with models set */
+static bool forceHSKind= FALSE;      /* force HMM Set Kind */
+static bool keepDistinct=FALSE;      /* keep orphan HMMs distinct */
+static bool discreteLZero=FALSE;     /* map DLOGZERO to LZERO */
+static bool reorderComps=FALSE;      /* re-order mixture components (PDE) */
 
-static Boolean allowOthers=TRUE;        /* allow unseen models in files */
+static bool allowOthers=TRUE;        /* allow unseen models in files */
 static HSetKind cfHSKind;
 static char orphanMacFile[100];         /* last resort file for new macros */
 
 static XFDirLink xformDirNames = NULL;  /* linked list of input transform directories */
-static Boolean indexSet = FALSE;        /* have the indexes been set for the model set */
+static bool indexSet = FALSE;        /* have the indexes been set for the model set */
 
 static MemHeap xformStack;              /* For Storage of xforms with no model sets ... */
 
@@ -117,7 +117,7 @@ void InitModel(void)
 {
    int i;
    double d;
-   Boolean b;
+   bool b;
    char buf[MAXSTRLEN];
    
    Register(hmodel_version,hmodel_vc_id);
@@ -456,7 +456,7 @@ static char *symNames[NULLSYM+1];
 
 typedef struct {     /* Token returned by the scanner */
    Symbol sym;          /* the current input symbol */
-   Boolean binForm;     /* binary form of keyword symbol */
+   bool binForm;     /* binary form of keyword symbol */
    ParmKind pkind;      /* samp kind when sym==PARMKIND */
    char macroType;      /* current macro type if sym==MACRO */
 } Token;
@@ -590,7 +590,7 @@ static ReturnStatus GetToken(Source *src, Token *tok)
 /* ------------------- HMM 'option' handling ----------------------- */
 
 
-static void OWarn(HMMSet *hset,Boolean equal,char *opt)
+static void OWarn(HMMSet *hset,bool equal,char *opt)
 {
    if (!equal && hset->optSet)
       HRError(-7032,"OWarn: change HMM Set %s",opt);
@@ -603,7 +603,7 @@ static ReturnStatus GetOption(HMMSet *hset, Source *src, Token *tok, int *nState
    char buf[MAXSTRLEN];
    short vs,sw[SMAX],nSt=0;
    int i;
-   Boolean ntok=TRUE;
+   bool ntok=TRUE;
 
    InputXForm* GetInputXForm(HMMSet *hset, Source *src, Token *tok);
    
@@ -830,7 +830,7 @@ void AddInXFormDir(HMMSet *hset, char *dirname)
 /* ---------------------- MMF File Name Handling ---------------------- */
 
 /* FindMMF: find given file name in HMM set */
-static MILink FindMMF(HMMSet *hset, char *fname, Boolean ignorePath)
+static MILink FindMMF(HMMSet *hset, char *fname, bool ignorePath)
 {
    MILink p;
    char buf1[MAXSTRLEN],buf2[MAXSTRLEN];
@@ -993,7 +993,7 @@ ReturnStatus GetTiedMixtures(HMMSet *hset, Source *src, Token *tok,
 {
    char tmName[MAXSTRLEN],macName[2*MAXSTRLEN],intstr[20];
    LabId id,mid;
-   Boolean isNew;
+   bool isNew;
    int m;
    MLink q;
    
@@ -1819,7 +1819,7 @@ static StreamElem *CreateSE(HMMSet *hset, int S)
 static MixPDF *EmptyMixPDF(HMMSet *hset, int vSize, int s)
 {
    int i;
-   static Boolean isInitialised = FALSE;
+   static bool isInitialised = FALSE;
    static MixPDF *t[SMAX];
    static int size[SMAX];
 
@@ -2578,7 +2578,7 @@ static AdaptXForm* GetAdaptXForm(HMMSet *hset, Source *src, Token *tok)
 /* ---------------------- Symbol Output Routine ------------------------ */
 
 /* PutSymbol: output symbol to f in ascii or binary form */
-static void PutSymbol(FILE *f, Symbol sym, Boolean binary)
+static void PutSymbol(FILE *f, Symbol sym, bool binary)
 {
    if (binary){
       fputc(':',f);fputc(sym,f);
@@ -2588,10 +2588,10 @@ static void PutSymbol(FILE *f, Symbol sym, Boolean binary)
 
 /* ------------- Special Tied Mixture Output Routines ------------------ */
 
-static Boolean putWtActive;   /* false until a weight is output */
+static bool putWtActive;   /* false until a weight is output */
 
 /* PutTiedWeight: output mix weight via 1-item buffer */
-void PutTiedWeight(FILE *f, short repeatLast, float w, Boolean binary)
+void PutTiedWeight(FILE *f, short repeatLast, float w, bool binary)
 {
    static float putWtCurrent;  /* the current output weight */
    
@@ -2617,7 +2617,7 @@ void PutTiedWeight(FILE *f, short repeatLast, float w, Boolean binary)
 }
 
 /* PutTiedWeights: output mixture weights in compact format */
-void PutTiedWeights(FILE *f, StreamElem *se, Boolean binary)
+void PutTiedWeights(FILE *f, StreamElem *se, bool binary)
 {
    int repCount=0;
    float weight= -1;
@@ -2645,7 +2645,7 @@ void PutTiedWeights(FILE *f, StreamElem *se, Boolean binary)
 }
 
 /* PutMixWeight: output mix weight via 1-item buffer */
-void PutMixWeight(FILE *f, short repeatLast, short w, Boolean binary)
+void PutMixWeight(FILE *f, short repeatLast, short w, bool binary)
 {
    static short   putWtCurrent;  /* the current output weight */
    static short   putWtLCount;   /* num wts output on this line */
@@ -2675,7 +2675,7 @@ void PutMixWeight(FILE *f, short repeatLast, short w, Boolean binary)
 }
 
 /* PutDiscreteWeights: output mixture weights in compact format */
-void PutDiscreteWeights(FILE *f, StreamElem *se, Boolean binary)
+void PutDiscreteWeights(FILE *f, StreamElem *se, bool binary)
 {
    int repCount=0;
    short weight= -1;
@@ -2703,7 +2703,7 @@ void PutDiscreteWeights(FILE *f, StreamElem *se, Boolean binary)
 }
 
 /* PutTiedMixtures: output mixture weights in compact tied mix format */
-void PutTiedMixtures(HMMSet *hset,FILE *f,int s,StreamElem *se,Boolean binary)
+void PutTiedMixtures(HMMSet *hset,FILE *f,int s,StreamElem *se,bool binary)
 {
    PutSymbol(f,TMIX,binary);
    fprintf(f," %s",ReWriteString(hset->tmRecs[s].mixId->name,NULL,DBL_QUOTE));
@@ -2712,7 +2712,7 @@ void PutTiedMixtures(HMMSet *hset,FILE *f,int s,StreamElem *se,Boolean binary)
 }
 
 /* PutDiscrete: output discrete weights in compact format */
-void PutDiscrete(FILE *f, StreamElem *se, Boolean binary)
+void PutDiscrete(FILE *f, StreamElem *se, bool binary)
 {
    PutSymbol(f,DPROB,binary);
    if (!binary) fprintf(f,"\n");
@@ -2724,7 +2724,7 @@ void PutDiscrete(FILE *f, StreamElem *se, Boolean binary)
 /* PutMacroHdr: write macro name to f.  If m is null find structure
    corresponding to ptr */
 static void PutMacroHdr(HMMSet *hset, FILE *f, MLink m, char mType, 
-                        Ptr ptr, Boolean binary)
+                        Ptr ptr, bool binary)
 {
    if (m==NULL)   
       m = FindMacroStruct(hset,mType,ptr);
@@ -2741,7 +2741,7 @@ static void PutMacroHdr(HMMSet *hset, FILE *f, MLink m, char mType,
 
 /* PutMean: output mean vector to stream f */
 static void PutMean(HMMSet *hset, FILE *f, MLink q, SVector m, 
-                    Boolean inMacro, Boolean binary)
+                    bool inMacro, bool binary)
 {
    int nUse;
    short size;
@@ -2760,7 +2760,7 @@ static void PutMean(HMMSet *hset, FILE *f, MLink q, SVector m,
 
 /* PutVariance: output variance vector to stream f */
 static void PutVariance(HMMSet *hset, FILE *f, MLink q, SVector v,
-                        Boolean inMacro, Boolean binary)
+                        bool inMacro, bool binary)
 {
    int nUse;
    short size;
@@ -2779,7 +2779,7 @@ static void PutVariance(HMMSet *hset, FILE *f, MLink q, SVector v,
 
 /* PutCovar: output inverse/choleski cov matrix to stream f */
 static void PutCovar(HMMSet *hset, FILE *f, MLink q, STriMat m,
-                     Symbol sym, Boolean inMacro, Boolean binary)
+                     Symbol sym, bool inMacro, bool binary)
 {
    int nUse;
    short size;
@@ -2798,7 +2798,7 @@ static void PutCovar(HMMSet *hset, FILE *f, MLink q, STriMat m,
 
 /* PutTransform: output xform matrix to stream f */
 static void PutTransform(HMMSet *hset, FILE *f, MLink q, SMatrix m,
-                         Boolean inMacro, Boolean binary)
+                         bool inMacro, bool binary)
 {
    int nUse;
    short nr,nc;
@@ -2818,7 +2818,7 @@ static void PutTransform(HMMSet *hset, FILE *f, MLink q, SMatrix m,
 
 /* PutBias: output bias vector to stream f */
 static void PutBias(HMMSet *hset, FILE *f, MLink q, SVector m, 
-                    Boolean inMacro, Boolean binary)
+                    bool inMacro, bool binary)
 {
    int nUse;
    short size;
@@ -2837,7 +2837,7 @@ static void PutBias(HMMSet *hset, FILE *f, MLink q, SVector m,
 
 /* PutDuration: output duration vector to stream f */
 static void PutDuration(HMMSet *hset, FILE *f, MLink q, SVector v,
-                        Boolean inMacro, Boolean binary)
+                        bool inMacro, bool binary)
 {
    int nUse;
    short size;
@@ -2856,7 +2856,7 @@ static void PutDuration(HMMSet *hset, FILE *f, MLink q, SVector v,
 
 /* PutSWeights: output stream weight vector to stream f */
 static void PutSWeights(HMMSet *hset, FILE *f, MLink q, SVector v,
-                        Boolean inMacro, Boolean binary)
+                        bool inMacro, bool binary)
 {
    int nUse;
    short size;
@@ -2875,7 +2875,7 @@ static void PutSWeights(HMMSet *hset, FILE *f, MLink q, SVector v,
 
 /* PutTransMat: output transition matrix to stream f */
 static void PutTransMat(HMMSet *hset, FILE *f, MLink q, SMatrix m,
-                        Boolean inMacro, Boolean binary)
+                        bool inMacro, bool binary)
 {
    Matrix mm;
    Vector v;
@@ -2919,7 +2919,7 @@ static void PutTransMat(HMMSet *hset, FILE *f, MLink q, SMatrix m,
 static void GetMixPDFInfo(HMMSet *hset, HMMDef *hmm, MixtureElem *tme, int *state, int *stream, int *comp)
 {
    int M,N,S,i,m,s;
-   Boolean found;
+   bool found;
    StateElem *se;
    StreamElem *ste;
    MixtureElem *me;
@@ -2950,7 +2950,7 @@ static void GetMixPDFInfo(HMMSet *hset, HMMDef *hmm, MixtureElem *tme, int *stat
 
 /* PutBaseClass: output the regression class tree */
 static void PutBaseClass(HMMSet *hset, FILE *f, MLink q, BaseClass *bclass, 
-			 Boolean inMacro, Boolean binary) 
+			 bool inMacro, bool binary) 
 {
   char buf[MAXSTRLEN];
   int numClass, c;
@@ -2993,7 +2993,7 @@ static void PutBaseClass(HMMSet *hset, FILE *f, MLink q, BaseClass *bclass,
 
 /* PutRegTreeNode: outpur a node a regression tree 
    this should only be printed explicitly (not in the form of a macro */
-static void PutRegNode(HMMSet *hset, FILE *f, RegNode *rnode, Boolean binary) 
+static void PutRegNode(HMMSet *hset, FILE *f, RegNode *rnode, bool binary) 
 {
    int size,c;
 
@@ -3017,7 +3017,7 @@ static void PutRegNode(HMMSet *hset, FILE *f, RegNode *rnode, Boolean binary)
 
 /* PutRegTree: output the regression class tree */
 static void PutRegTree(HMMSet *hset, FILE *f, MLink q, RegTree *t, 
-                       Boolean inMacro, Boolean binary) 
+                       bool inMacro, bool binary) 
 {
    PutMacroHdr(hset,f,q,'r',t,binary);
    PutSymbol(f,BASECLASS,binary);
@@ -3027,7 +3027,7 @@ static void PutRegTree(HMMSet *hset, FILE *f, MLink q, RegTree *t,
 
 /* PutMixPDF: output mixture pdf to stream f */
 static void PutMixPDF(HMMSet *hset, FILE *f, MLink q, MixPDF *mp, 
-                      Boolean inMacro, Boolean binary)
+                      bool inMacro, bool binary)
 {
    if (mp->nUse >0 || inMacro)  
       PutMacroHdr(hset,f,q,'m',mp,binary);
@@ -3051,14 +3051,14 @@ static void PutMixPDF(HMMSet *hset, FILE *f, MLink q, MixPDF *mp,
 
 /* PutStateInfo: output state info to stream f */
 static void PutStateInfo(HMMSet *hset, FILE *f, MLink q, StateInfo *si, 
-                         Boolean inMacro, Boolean binary)
+                         bool inMacro, bool binary)
 {
    int S;
    float wt;
    StreamElem *se;
    MixtureElem *me;
    short m,s,nMix[SMAX];
-   Boolean needNM = FALSE;
+   bool needNM = FALSE;
    
    S = hset->swidth[0];
    if (si->nUse > 0 || inMacro) 
@@ -3114,7 +3114,7 @@ static void PutStateInfo(HMMSet *hset, FILE *f, MLink q, StateInfo *si,
 }
 
 static void PutLinXForm(HMMSet *hset, FILE *f, MLink q, LinXForm *xf, 
-			  Boolean inMacro, Boolean binary)
+			  bool inMacro, bool binary)
 {
   int i;
 
@@ -3152,7 +3152,7 @@ static void PutLinXForm(HMMSet *hset, FILE *f, MLink q, LinXForm *xf,
 }
 
 static void PutXFormSet(HMMSet *hset, FILE *f, MLink q, XFormSet *xformSet, 
-			  Boolean inMacro, Boolean binary)
+			  bool inMacro, bool binary)
 {
   int i;
   char buf[MAXSTRLEN];
@@ -3175,7 +3175,7 @@ static void PutXFormSet(HMMSet *hset, FILE *f, MLink q, XFormSet *xformSet,
 }
 
 static void PutInputXForm(HMMSet *hset, FILE *f, MLink q, InputXForm *xf, 
-			  Boolean inMacro, Boolean binary)
+			  bool inMacro, bool binary)
 {
   char buf[MAXSTRLEN];
   
@@ -3194,7 +3194,7 @@ static void PutInputXForm(HMMSet *hset, FILE *f, MLink q, InputXForm *xf,
 }
 
 static void PutAdaptXForm(HMMSet *hset, FILE *f, MLink q, AdaptXForm *xform, 
-			  Boolean inMacro, Boolean binary)
+			  bool inMacro, bool binary)
 {
   int i;
   char buf[MAXSTRLEN];
@@ -3228,7 +3228,7 @@ static void PutAdaptXForm(HMMSet *hset, FILE *f, MLink q, AdaptXForm *xform,
 }
 
 /* PutOptions: write the current global options to f */
-static void PutOptions(HMMSet *hset, FILE *f, Boolean binary)
+static void PutOptions(HMMSet *hset, FILE *f, bool binary)
 {
    short i,S;
    char buf[64];
@@ -3267,8 +3267,8 @@ static void PutOptions(HMMSet *hset, FILE *f, Boolean binary)
 }
 
 /* PutHMMDef: Save the model hmm to given stream in either text or binary */
-static void PutHMMDef(HMMSet *hset, FILE *f, MLink m, Boolean withHdr,
-                      Boolean binary)
+static void PutHMMDef(HMMSet *hset, FILE *f, MLink m, bool withHdr,
+                      bool binary)
 {
    short i;
    StateElem *se;
@@ -3466,7 +3466,7 @@ MLink FindMacroStruct(HMMSet *hset, char type, Ptr structure)
 
 /* EXPORT->HasMacros: return true if numMacros>0, if types != NULL
                       create a list of all macro types used */
-Boolean HasMacros(HMMSet *hset, char * types)
+bool HasMacros(HMMSet *hset, char * types)
 {
    MLink p;
    char buf[2];
@@ -3546,7 +3546,7 @@ void ApplyVFloor(HMMSet *hset)
 {
    int s,S,k,vSize;
    int nFloorVar,nFloorVarMix,nMix;
-   Boolean mixFloored;
+   bool mixFloored;
    Vector vFloor[SMAX],minv;
    Covariance cov;
    MLink m;
@@ -3907,7 +3907,7 @@ static ReturnStatus LoadMacroFiles(HMMSet *hset)
 /* IsShared: decide if given HMM set is SHAREDHS.  Note that shared means,
       vars, invs, xforms dont make it a SHARED system since there is no
       way to exploit the sharing at this level. */
-static Boolean IsShared(HMMSet *hset)
+static bool IsShared(HMMSet *hset)
 {
    char types[20];
    
@@ -4185,7 +4185,7 @@ ReturnStatus LoadHMMSet(HMMSet *hset, char *hmmDir, char *hmmExt)
 /* ------------------------ HMM Set Creation ----------------------- */
 
 /* EXPORT->CreateHMMSet: create the basic HMMSet structure */
-void CreateHMMSet(HMMSet *hset, MemHeap *heap, Boolean allowTMods)
+void CreateHMMSet(HMMSet *hset, MemHeap *heap, bool allowTMods)
 {
    int s;
 
@@ -4222,7 +4222,7 @@ static ReturnStatus CreateHMM(HMMSet *hset, LabId lId, LabId pId)
 {
    MLink m;
    HLink hmm;
-   Boolean newMacro=FALSE; /* for memory clear up*/
+   bool newMacro=FALSE; /* for memory clear up*/
 
    m = FindMacroName(hset,'l',lId);
    if (m != NULL){
@@ -4260,14 +4260,14 @@ static ReturnStatus CreateHMM(HMMSet *hset, LabId lId, LabId pId)
 
 /* InitHMMSet: Init a HMM set by reading the HMM list in fname.
                If isSingle, then fname is the name of a single HMM */
-static ReturnStatus InitHMMSet(HMMSet *hset, char *fname, Boolean isSingle)
+static ReturnStatus InitHMMSet(HMMSet *hset, char *fname, bool isSingle)
 {
    Source src;
    char buf[MAXSTRLEN];
    LabId lId, pId;
     
    /* sets first element on heap to allow disposing of memory */
-   hset->firstElem = (Boolean *) New(hset->hmem, sizeof(Boolean));
+   hset->firstElem = (bool *) New(hset->hmem, sizeof(bool));
 
    if (isSingle){
       /* fname is a single HMM file to load as a singleton set */
@@ -4339,7 +4339,7 @@ ReturnStatus MakeOneHMM(HMMSet *hset, char *hname)
 /* -------------------- HMM/Macro Save Routines -------------------- */
 
 /* SaveMacros: save all shared macro structures associated with fidx */
-static void SaveMacros(FILE *f, HMMSet *hset, short fidx, Boolean binary)
+static void SaveMacros(FILE *f, HMMSet *hset, short fidx, bool binary)
 {
    MLink m;
    int h;
@@ -4485,7 +4485,7 @@ static char *InitXFormScanner(HMMSet *hset, char *macroname, char *fname,
 {
   static char buf[MAXSTRLEN];
   XFDirLink p;
-  Boolean isPipe;
+  bool isPipe;
   FILE *f=NULL;
 
   if ((fname==NULL) || ((f=FOpen(fname,NoFilter,&isPipe)) == NULL)) {
@@ -4737,12 +4737,12 @@ void CreateXFormMacro(HMMSet *hset,AdaptXForm *xform, char* macroname)
    EXPORT->SaveAllXForms: outputs all generated transforms 
    - these are indicated by having fidx=-1
 */
-void SaveAllXForms(HMMSet *hset, char *fname, Boolean binary)
+void SaveAllXForms(HMMSet *hset, char *fname, bool binary)
 {
   MLink m;
   int h;
   FILE *f;
-  Boolean isPipe;
+  bool isPipe;
   int fidx=CREATEFIDX;
       
   binary = binary||saveBinary;
@@ -4801,11 +4801,11 @@ void SaveAllXForms(HMMSet *hset, char *fname, Boolean binary)
 }
 
 /* EXPORT->SaveOneXForm: outputs an individual transform */
-void SaveOneXForm(HMMSet *hset, AdaptXForm *xform, char *fname, Boolean binary)
+void SaveOneXForm(HMMSet *hset, AdaptXForm *xform, char *fname, bool binary)
 {
   FILE *f;
   AdaptXForm *swapxform;
-  Boolean isPipe;
+  bool isPipe;
   char buf1[MAXSTRLEN], buf2[MAXSTRLEN];
 
   if (xform->nUse>0) 
@@ -4836,10 +4836,10 @@ void SaveOneXForm(HMMSet *hset, AdaptXForm *xform, char *fname, Boolean binary)
 }
 
 /* EXPORT->SaveInputXForm: outputs an individual transform */
-void SaveInputXForm(HMMSet *hset, InputXForm *xf, char *fname, Boolean binary)
+void SaveInputXForm(HMMSet *hset, InputXForm *xf, char *fname, bool binary)
 {
   FILE *f;
-  Boolean isPipe;
+  bool isPipe;
 
   if ((f=FOpen(fname,HMMDefOFilter,&isPipe)) == NULL){
     HError(7011,"SaveInputXForm: Cannot create output file %s",fname);
@@ -4976,14 +4976,14 @@ static void ReOrderComponents(HMMSet *hset)
 }
 
 /* EXPORT->SaveHMMSet: save the given HMM set */
-ReturnStatus SaveHMMSet(HMMSet *hset, char *hmmDir, char *hmmExt, char *macroExt, Boolean binary)
+ReturnStatus SaveHMMSet(HMMSet *hset, char *hmmDir, char *hmmExt, char *macroExt, bool binary)
 {
    FILE *f;
    MILink p;
    char fname[256];
    int h,i;
    MLink m;
-   Boolean isPipe;
+   bool isPipe;
    
    FixOrphanMacros(hset);
    /* Sort mixture components according to the gConst values */
@@ -5032,7 +5032,7 @@ ReturnStatus SaveHMMList(HMMSet *hset, char *fname)
    MLink m,p;
    HLink hmm;
    FILE *f;
-   Boolean isPipe;
+   bool isPipe;
 
    if ((f=FOpen(fname,HMMListOFilter,&isPipe)) == NULL){
       HRError(7011,"SaveHMMList: Cannot create HMM list file %s",fname);
@@ -5061,7 +5061,7 @@ ReturnStatus SaveHMMList(HMMSet *hset, char *fname)
 /* -------------- Shared Structure "Seen" Flags -------------- */
 
 /* EXPORT->IsSeen: return true if flag is "set" */
-Boolean IsSeen(int flag)
+bool IsSeen(int flag)
 {
    return (flag<0);
 }
@@ -5177,7 +5177,7 @@ int MaxMixInSetS(HMMSet *hset, int s)
    int max=0,m,h;
    HLink hmm;
    MLink q;
-   Boolean found;
+   bool found;
 
    switch(hset->hsKind){
    case PLAINHS:
@@ -5219,7 +5219,7 @@ int MaxMixInSet(HMMSet *hset)
    int max=0,m,h,s;
    HLink hmm;
    MLink q;
-   Boolean found;
+   bool found;
 
    switch(hset->hsKind){
    case PLAINHS:
@@ -5436,7 +5436,7 @@ LogFloat IDOutP(Vector x, int vecSize, MixPDF *mp)
    log mixture weight and det is a log determinant of an xform
 
    BTW, works only with INVDIAGC */
-Boolean PDEMOutP(Vector otvs, MixPDF *mp, LogFloat *mixp, LogFloat xwtdet)
+bool PDEMOutP(Vector otvs, MixPDF *mp, LogFloat *mixp, LogFloat xwtdet)
 {
    int i,vs;
    LogFloat xmm;

@@ -169,7 +169,7 @@ void ResolveFilterList(void)
 }
 
 /* ShowNgram: return true if any item is in the filter list */
-Boolean ShowNgram(int N, NGram ng)
+bool ShowNgram(int N, NGram ng)
 {
    FItem *p;
    int i;

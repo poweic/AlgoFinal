@@ -93,16 +93,16 @@ void CopyDVector(DVector v1, DVector v2);
    Copy v1 into v2; sizes must be the same
 */
 
-Boolean ReadShortVec(Source *src, ShortVec v, Boolean binary);
-Boolean ReadIntVec(Source *src, IntVec v, Boolean binary);
-Boolean ReadVector(Source *src, Vector v, Boolean binary);
+bool ReadShortVec(Source *src, ShortVec v, bool binary);
+bool ReadIntVec(Source *src, IntVec v, bool binary);
+bool ReadVector(Source *src, Vector v, bool binary);
 /*
    Read vector v from source in ascii or binary
 */
 
-void WriteShortVec(FILE *f, ShortVec v, Boolean binary);
-void WriteIntVec(FILE *f, IntVec v, Boolean binary);
-void WriteVector(FILE *f, Vector v, Boolean binary);
+void WriteShortVec(FILE *f, ShortVec v, bool binary);
+void WriteIntVec(FILE *f, IntVec v, bool binary);
+void WriteVector(FILE *f, Vector v, bool binary);
 /*
    Write vector v to stream f in ascii or binary
 */
@@ -143,16 +143,16 @@ void Tri2Mat (TriMat m1,  Matrix m2);
    dimensions
 */
 
-Boolean ReadMatrix(Source *src, Matrix m, Boolean binary);
-Boolean ReadTriMat(Source *src, TriMat m, Boolean binary);
+bool ReadMatrix(Source *src, Matrix m, bool binary);
+bool ReadTriMat(Source *src, TriMat m, bool binary);
 /*
    Read matrix from source into m using ascii or binary.
    TriMat version expects m to be in upper triangular form
    but converts to lower triangular form internally.
 */
    
-void WriteMatrix(FILE *f, Matrix m, Boolean binary);
-void WriteTriMat(FILE *f, TriMat m, Boolean binary);
+void WriteMatrix(FILE *f, Matrix m, bool binary);
+void WriteTriMat(FILE *f, TriMat m, bool binary);
 /*
     Write matrix to stream in ascii or binary.  TriMat version 
     writes m in upper triangular form even though it is stored

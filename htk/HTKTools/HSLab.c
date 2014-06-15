@@ -152,7 +152,7 @@ static short *data;          /* the data samples */
 static long nSamples;        /* number of samples */
 static HTime sampPeriod;     /* the sample period */
 static Wave wave;            /* the input waveform */
-static Boolean newData=FALSE;
+static bool newData=FALSE;
 
 static FileFormat ifmt=UNDEFF;      /* Label input file format */
 static FileFormat ofmt=UNDEFF;      /* Label output file format */
@@ -197,7 +197,7 @@ static char *scString[NUM_OF_SCALES] = {"x1", "x2", "x4", "x8", "x16", "x32"};
 static short scIndex = 0;    /* initial scaling index == 1.0*/
 static HButton *scale_btn;   /* pointer to the amplitude scale button */
 
-static Boolean wavePtrOn = FALSE;   /* keeps track of the state of the waveform pointer */
+static bool wavePtrOn = FALSE;   /* keeps track of the state of the waveform pointer */
 static int thisWpos, lastWpos;      /* the positions of the waveform pointer */
 
 static char labfn[SLEN];                   /* the label file name */
@@ -212,15 +212,15 @@ static LabList *llist;          /* the current label list edited */
 static int labSet;              /* the number of the current label list */
 static int numSet;              /* number of alternative transcriptions */
 
-static Boolean labsModified = FALSE;   /* tracks any changes made to the labels */
-static Boolean newLabFile   = FALSE;   /* forcing the creation of a new (empty) label file */
-static Boolean incLab       = FALSE;   /* increment global label */
+static bool labsModified = FALSE;   /* tracks any changes made to the labels */
+static bool newLabFile   = FALSE;   /* forcing the creation of a new (empty) label file */
+static bool incLab       = FALSE;   /* increment global label */
 
-static Boolean regnMarked = FALSE;     /* region marked */
+static bool regnMarked = FALSE;     /* region marked */
 static int markA, markB;               /* boundaries of a marked region */
 
 static UndoRecord undo;                /* the undo record variable */
-static Boolean undoEmpty;              /* shows the status of the record */
+static bool undoEmpty;              /* shows the status of the record */
 
 static HButton *spcl_btn;                 /* pointer to special button */
 static char spcl_str[SLEN] = "Command";   /* special button string */
@@ -378,7 +378,7 @@ Wave Record(long *nSamples, HTime *sampPeriod)
    AudioIn ain;
    float bufDur;
    HButton *btn;
-   Boolean done;
+   bool done;
    HEventRec hev;
    BarType tm, vu;
    char sbuf[256];
@@ -457,7 +457,7 @@ Wave Record(long *nSamples, HTime *sampPeriod)
 }
 
 /* Playback: playback part of DataFile with given volume and scale */
-void Playback(Wave w, long sampA, long sampB, int vol, int scale, Boolean *newData)
+void Playback(Wave w, long sampA, long sampB, int vol, int scale, bool *newData)
 {
    long i;
    AudioOut aout;
@@ -501,7 +501,7 @@ typedef enum {
 } HSlabCmdType;
 
 /* CommandSet: returns true and puts cmd in s if envvar set */
-Boolean CommandSet(HSlabCmdType hcmd, char *s)
+bool CommandSet(HSlabCmdType hcmd, char *s)
 {
    char *env;
  
@@ -536,13 +536,13 @@ void DrawRectWin(RectWin *win)
 }
 
 /* IsInRectWin: check if (x, y) is in w */
-Boolean IsInRectWin(RectWin *w, int x, int y)
+bool IsInRectWin(RectWin *w, int x, int y)
 {
    return IsInRect(x, y, w->x, w->y, w->x + w->w, w->y + w->h);
 }
 
 /* IsInWin: check if (x, y) is in w */
-Boolean IsInWin(RectWin *w, int x, int y)
+bool IsInWin(RectWin *w, int x, int y)
 {
    return IsInRect(x, y, w->x, w->y, w->x + w->w, w->y + w->h);
 }
@@ -702,7 +702,7 @@ void DeleteLabObj(LabList *ll, LLink q)
    i.e. the end of the current label matches the start of it's
    successor by taking (start + eps) and (end - eps) where eps is a 
    small number. */
-LLink GetLabDistance(LabList *ll, long t, long st, long en, Boolean *isStart)
+LLink GetLabDistance(LabList *ll, long t, long st, long en, bool *isStart)
 {
    long pos;
    LLink p, bp;
@@ -743,9 +743,9 @@ LLink GetLabT(LabList *ll, long t)
 }
 
 /* Intersect: returns TRUE if the regions (a,b):{a<=b} and (a1,b1):{a1<=b1} intersect */
-Boolean Intersect(long a, long b, long a1, long b1)
+bool Intersect(long a, long b, long a1, long b1)
 {
-   return Boolean(!(((a1 < a) && (b1 < a)) || ((a1 >= b) && (b1 >= b))));
+   return bool(!(((a1 < a) && (b1 < a)) || ((a1 >= b) && (b1 >= b))));
 }
 
 
@@ -763,7 +763,7 @@ void PlotLabels(RectWin *win, LabList *ll, long sStart, long sEnd)
    HTime st, en, p_en;
    char sbuf[SLEN];
    short shift, p_shift;
-   Boolean no_st_bar, no_en_bar;
+   bool no_st_bar, no_en_bar;
    char *dot = ".", *dot2 = "..", *str;
    int x, y, h, w, yy, b1, b2, bb, h2, nPoints;
 
@@ -871,7 +871,7 @@ void PreparePlot(RectWin *win, short *data, int st, int en)
    long nSamples, t;
    short a, b, min, max, sample;
    float WaveScale;
-   Boolean rising=FALSE;
+   bool rising=FALSE;
 
    nPoints   = win->w - 1; cent = win->y + win->h/2; nSamples = en - st;
    WaveScale = (float) win->h / (float) 65535.0;
@@ -943,13 +943,13 @@ void TrackWPtr(void)
 /* InvertRegion: invert the window region a - b, taking care of the WavePtr */
 void InvertRegion(RectWin *win, int a, int b)
 {
-   Boolean wasOn=FALSE;
+   bool wasOn=FALSE;
 
    if (wavePtrOn) { wasOn = TRUE; WPtrOff(); }
    HSetXMode(GINVERT);
    HFillRectangle(a, win->y+1, b, win->y + win->h - 1);
    HSetXMode(GCOPY);
-   regnMarked = Boolean(!regnMarked);
+   regnMarked = bool(!regnMarked);
    if (wasOn) WPtrOn();
 }
 
@@ -973,7 +973,7 @@ void PlotFileWin(void)
 /* hRedrawWindow: redraw the main window */
 void hRedrawWindow(void)
 {
-   Boolean wasMarked;
+   bool wasMarked;
 
    wasMarked = regnMarked;
    PlotWaveWin();
@@ -988,7 +988,7 @@ void hRedrawWindow(void)
 }
 
 /* GetWavePtrPos: returns the waveform window pointer position after a button press */
-Boolean GetWavePtrPos(void)
+bool GetWavePtrPos(void)
 {
    HEventRec hev;
 
@@ -1047,7 +1047,7 @@ float CalcEnergy(int st,int en)
 }
 
 /* GetRegionAB: prompts the user for 2 points on the wave form window */
-Boolean GetRegionAB(int *pa, int *pb)
+bool GetRegionAB(int *pa, int *pb)
 {
    int a;
    char buf[80];
@@ -1100,7 +1100,7 @@ void Drag(void)
 void MouseMark(int x, int *markA, int *markB)
 {
    HEventRec hev;
-   Boolean done;
+   bool done;
    char buf[80];
    
    /* check if region marked, if so unmark */
@@ -1111,7 +1111,7 @@ void MouseMark(int x, int *markA, int *markB)
    mmWPos = -1;
    do {
       hev = HGetEvent(TRUE, Drag);
-      done = Boolean(hev.event==HMOUSEUP);
+      done = bool(hev.event==HMOUSEUP);
    } while (!done);
    if (mmWPos >=0) PlotWaveWinPtr(mmWPos);
    *markB = hev.x;
@@ -1134,7 +1134,7 @@ void MouseMark(int x, int *markA, int *markB)
                backspacing will be allowed until the length of the current string 
                exceeds minlen, from then on backspace will not delete any characters 
                which will make the length < minlen.  */
-Boolean GetString(RectWin *win, char *str, short minlen, short maxlen)
+bool GetString(RectWin *win, char *str, short minlen, short maxlen)
 {
    HEventRec hev;
    int x, y, sx, sy, cptr, ofs;
@@ -1142,7 +1142,7 @@ Boolean GetString(RectWin *win, char *str, short minlen, short maxlen)
    char nullchar = '\0';
    char buf[SLEN];
    int pad = 4;
-   Boolean done, hitesc;
+   bool done, hitesc;
 
 #define STR_FG   { HSetColour(win->fg); HPrintf(sx, sy, "%s", buf+ofs); }
 #define STR_BG   { HSetColour(win->bg); HPrintf(sx, sy, "%s", buf+ofs); }
@@ -1200,13 +1200,13 @@ Boolean GetString(RectWin *win, char *str, short minlen, short maxlen)
       }
    } while (!done);
    DrawRectWin(win);
-   return Boolean((!hitesc) && (strlen(str) > minlen)); 
+   return bool((!hitesc) && (strlen(str) > minlen)); 
 }
 
 /* FileExists: check to see if a file exsists */
-Boolean FileExists(char *fn, char *fmode)
+bool FileExists(char *fn, char *fmode)
 {
-   Boolean isEXF;               /* File name is extended */
+   bool isEXF;               /* File name is extended */
    char actfile[MAXFNAMELEN];   /* actual file name */
    long stindex,enindex;        /* segment indices */
    FILE *f;
@@ -1338,7 +1338,7 @@ void UndoOp(void)
 #define FIXLABSTR sprintf(levStr, "Set [%d]", labSet);
 
 /* DoZoomOut: zoom out of the current view */
-Boolean DoZoomOut(void)
+bool DoZoomOut(void)
 {
    if (zoomLev==0){ /* nothing to zoom out from */
       return FALSE;
@@ -1360,7 +1360,7 @@ Boolean DoZoomOut(void)
 }
 
 /* DoZoomIn: zoom into a region */
-Boolean DoZoomIn(void)
+bool DoZoomIn(void)
 {
    int zoomA, zoomB;
    int s_st, s_en;
@@ -1392,7 +1392,7 @@ Boolean DoZoomIn(void)
 }
 
 /* DoMark: mark a region */
-Boolean DoMark(int *markA, int *markB)
+bool DoMark(int *markA, int *markB)
 {
    /* check if region marked, if so unmark */
    if (regnMarked)
@@ -1502,7 +1502,7 @@ void DoScrollLeft(void)
 /* DoIncScale: increment the waveform scale factor */
 void DoIncScale(void)
 {
-   Boolean was;
+   bool was;
    
    was = regnMarked;
    scIndex = (scIndex + 1) % NUM_OF_SCALES;
@@ -1673,7 +1673,7 @@ void DoChangeLabStr(void)
 void IncLabStr(void)
 {
    char sbuf[LAB_BUF_LEN], nbuf[LAB_BUF_LEN],*p,*q;
-   Boolean isNum = FALSE;
+   bool isNum = FALSE;
    int num;
 
    strcpy(sbuf,labstr);
@@ -1692,7 +1692,7 @@ void IncLabStr(void)
 }
 
 /* DoDelLab: delete a label */
-Boolean DoDelLab(void)
+bool DoDelLab(void)
 {
    LLink p; 
    HTime t;
@@ -1716,7 +1716,7 @@ Boolean DoDelLab(void)
 }
 
 /* DoEditLabel: change the label string */
-Boolean DoEditLabel(void)
+bool DoEditLabel(void)
 {
    HTime t;
    LLink p;
@@ -1750,7 +1750,7 @@ Boolean DoEditLabel(void)
 }
 
 /* DoSelectlabel: use the boundaries of a chosen label to create a marked region */
-Boolean DoSelectLabel(void)
+bool DoSelectLabel(void)
 {
    LLink p;
    HTime t, st, en;
@@ -1780,7 +1780,7 @@ Boolean DoSelectLabel(void)
 }
 
 /* DoLabel: label a marked region or the waveform visible on the screen */
-Boolean DoLabel(Boolean useLabStr)
+bool DoLabel(bool useLabStr)
 {
    HTime st, en;
    char sbuf[LAB_BUF_LEN], *prompt = "Lab name: ";
@@ -1816,11 +1816,11 @@ Boolean DoLabel(Boolean useLabStr)
 }
 
 /* DoAdjustLabel: adjust the boundary of a selected label */
-Boolean DoAdjustLabel(void)
+bool DoAdjustLabel(void)
 {
    LLink p;
    Label q, qq;
-   Boolean isStart;
+   bool isStart;
    HTime t, nt, *bp;
    char sbuf[SLEN];
 
@@ -1922,14 +1922,14 @@ void DoSave(void)
 void CheckForSave(void)
 {
    char sbuf[255], *prompt = "Save label file (Y/N): ", c;
-   Boolean is0;
+   bool is0;
 
    if (!labsModified)
       return;
    do { 
       strcpy(sbuf, prompt);
       do 
-         is0 = Boolean(!GetString(&io_Win, sbuf, strlen(prompt), MAX_LAB_LEN)); 
+         is0 = bool(!GetString(&io_Win, sbuf, strlen(prompt), MAX_LAB_LEN)); 
       while (is0);
       c = sbuf[strlen(prompt)];
    } while ((c!='y') && (c!='Y') && (c!='n') && (c!='N'));
@@ -1938,7 +1938,7 @@ void CheckForSave(void)
 }
    
 /* DoLoad: load a new waveform/label files */
-Boolean DoLoad(void)
+bool DoLoad(void)
 {
    char sbuf[SLEN], fnbuf[SLEN], *prompt = "Load waveform file: ";
 

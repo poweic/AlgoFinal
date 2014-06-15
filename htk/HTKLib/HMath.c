@@ -146,39 +146,39 @@ void CopyDVector(DVector v1, DVector v2)
 }
 
 /* EXPORT->ReadShortVec: read vector from src in ascii or binary */ 
-Boolean ReadShortVec(Source *src, ShortVec v, Boolean binary)
+bool ReadShortVec(Source *src, ShortVec v, bool binary)
 {
    return ReadShort(src,v+1,ShortVecSize(v),binary);
 }
 
 /* EXPORT->ReadIntVec: read vector from src in ascii or binary */ 
-Boolean ReadIntVec(Source *src, IntVec v, Boolean binary)
+bool ReadIntVec(Source *src, IntVec v, bool binary)
 {
    return ReadInt(src,v+1,IntVecSize(v),binary);
 }
 
 /* EXPORT->ReadVector: read vector from src in ascii or binary */ 
-Boolean ReadVector(Source *src, Vector v, Boolean binary)
+bool ReadVector(Source *src, Vector v, bool binary)
 {
    return ReadFloat(src,v+1,VectorSize(v),binary);
 }
 
 /* EXPORT->WriteShortVec: write vector v to stream f */
-void WriteShortVec(FILE *f, ShortVec v, Boolean binary)
+void WriteShortVec(FILE *f, ShortVec v, bool binary)
 {
    WriteShort(f,v+1,ShortVecSize(v),binary);
    if (!binary) fputc('\n',f);
 }
 
 /* EXPORT->WriteIntVec: write vector v to stream f */
-void WriteIntVec(FILE *f, IntVec v, Boolean binary)
+void WriteIntVec(FILE *f, IntVec v, bool binary)
 {
    WriteInt(f,v+1,IntVecSize(v),binary);
    if (!binary) fputc('\n',f);
 }
 
 /* EXPORT->WriteVector: write vector v to stream f */
-void WriteVector(FILE *f, Vector v, Boolean binary)
+void WriteVector(FILE *f, Vector v, bool binary)
 {
    WriteFloat(f,v+1,VectorSize(v),binary);
    if (!binary) fputc('\n',f);
@@ -390,7 +390,7 @@ void Tri2Mat (TriMat m1, Matrix m2)
 }
 
 /* EXPORT->ReadMatrix: read matrix from source into m */
-Boolean ReadMatrix(Source *src, Matrix m, Boolean binary)
+bool ReadMatrix(Source *src, Matrix m, bool binary)
 {
    int i,nrows;
    
@@ -403,7 +403,7 @@ Boolean ReadMatrix(Source *src, Matrix m, Boolean binary)
 
 /* EXPORT->ReadTriMat: read symmetric matrix in lower triangular
                        form from source into m */
-Boolean ReadTriMat(Source *src, TriMat m, Boolean binary)
+bool ReadTriMat(Source *src, TriMat m, bool binary)
 {
    int i,j,size;
    
@@ -417,7 +417,7 @@ Boolean ReadTriMat(Source *src, TriMat m, Boolean binary)
 }
 
 /* EXPORT->WriteMatrix: write matrix to f */
-void WriteMatrix(FILE *f, Matrix m, Boolean binary)
+void WriteMatrix(FILE *f, Matrix m, bool binary)
 {
    int i,nrows;
    
@@ -428,7 +428,7 @@ void WriteMatrix(FILE *f, Matrix m, Boolean binary)
 
 /* EXPORT->WriteTriMat: write symmetric matrix to stream f in
                         upper triangular form */
-void WriteTriMat(FILE *f, TriMat m, Boolean binary)
+void WriteTriMat(FILE *f, TriMat m, bool binary)
 {
    int i,j,size;
    
@@ -511,7 +511,7 @@ void ShowTriMat(char * title,TriMat m,int maxCols,int maxRows)
 
 /* Choleski: Place lower triangular choleski factor of A in L.*/
 /*           Return FALSE if matrix singular or not +definite */
-static Boolean Choleski(TriMat A, DMatrix L)
+static bool Choleski(TriMat A, DMatrix L)
 {
    int size,i,j,k;
    double sum;
@@ -570,7 +570,7 @@ LogFloat CovInvert(TriMat c, Matrix invc)
    DVector x,y;   /* for f/b substitution */
    LogFloat ldet = 0.0;
    int i,j,n;
-   Boolean isTri;
+   bool isTri;
    
    n = TriMatSize(c); isTri = IsTriMat(invc);
    l = CreateDMatrix(&gstack,n,n);
@@ -1178,7 +1178,7 @@ void InvSVD(DMatrix A, DMatrix U, DVector W, DMatrix V, DMatrix Result)
 {
    int m, n, i, j, k;
    double wmax, wmin;
-   Boolean isSmall = FALSE;
+   bool isSmall = FALSE;
    DMatrix tmp1;
 
    m = NumDRows(U);
@@ -1237,7 +1237,7 @@ void InvSVD(DMatrix A, DMatrix U, DVector W, DMatrix V, DMatrix Result)
        of the rows is returned in perm and sign is returned as +/-1
        depending on whether there was an even/odd number of row 
        interchanges */
-static Boolean LUDecompose(Matrix a, int *perm, int *sign)
+static bool LUDecompose(Matrix a, int *perm, int *sign)
 {
    int i,imax,j,k,n;
    double scale,sum,xx,yy;
@@ -1316,7 +1316,7 @@ float MatDet(Matrix c)
        of the rows is returned in perm and sign is returned as +/-1
        depending on whether there was an even/odd number of row 
        interchanges */
-static Boolean DLUDecompose(DMatrix a, int *perm, int *sign)
+static bool DLUDecompose(DMatrix a, int *perm, int *sign)
 {
    int i,imax,j,k,n;
    double scale,sum,xx,yy;

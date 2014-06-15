@@ -47,9 +47,9 @@ class HiddenMarkovModel {
     void init(char* hmmList_fn, char* mmf_fn, char* inXFormDir_fn,
 	char* hmmDir, char* hmmExt);
 
-    void SetStreamWidths(Boolean *eSep);
+    void SetStreamWidths(bool *eSep);
 
-    Boolean UpdateSpkrStats(XFInfo *xfinfo, char *datafn);
+    bool UpdateSpkrStats(XFInfo *xfinfo, char *datafn);
 
     MLink FindMacroStruct(char type, Ptr structure);
 
@@ -108,7 +108,7 @@ class Vocabulary {
     char *silModel;  /* model used as word end Silence */
     LabId silLab;    /*   corresponding LabId */
 
-    Boolean silDict;
+    bool silDict;
 };
 
 class LanguageModel {
@@ -121,7 +121,7 @@ class LanguageModel {
 
     FSLM* get_lm();
 
-    Lattice *ReadLattice(FILE *file, Boolean shortArc, Boolean add2Dict);
+    Lattice *ReadLattice(FILE *file, bool shortArc, bool add2Dict);
 
     void ResetHeap();
 
@@ -151,12 +151,12 @@ class Decoder {
 
     // From propagate.c
     void HandleWordend (LexNode *ln);
-    void PropagateExternal (LexNodeInst *inst, Boolean handleWE, Boolean wintTree);
+    void PropagateExternal (LexNodeInst *inst, bool handleWE, bool wintTree);
     void UpdateWordEndHyp (LexNodeInst *inst);
     void AddPronProbs (TokenSet *ts, int var);
-    void MergeTokSet (TokenSet *src, TokenSet *dest, LogFloat score, Boolean prune);
+    void MergeTokSet (TokenSet *src, TokenSet *dest, LogFloat score, bool prune);
     void PropagateInternal (LexNodeInst *inst);
-    void PropIntoNode (TokenSet *ts, LexNode *ln, Boolean updateLMLA);
+    void PropIntoNode (TokenSet *ts, LexNode *ln, bool updateLMLA);
 #ifdef MODALIGN
     void UpdateModPaths (TokenSet *ts, LexNode *ln);
 #endif
@@ -168,15 +168,15 @@ class Decoder {
     // From HLVRec-LM.c
     LMTokScore LMLA_nocache (LMState lmState, int lmlaIdx);
     LMCache* CreateLMCache (MemHeap *heap);
-    LMTokScore LMCacheLookaheadProb (LMState lmState, int lmlaIdx, Boolean fastlmla);
+    LMTokScore LMCacheLookaheadProb (LMState lmState, int lmlaIdx, bool fastlmla);
     LMTokScore LMCacheTransProb (FSLM *lm, LMState src, PronId pronid, LMState *dest);
     void UpdateLMlookahead(LexNode *ln);
 
     // From HLVRec.c 3/7 are moved here
-    DecoderInst *CreateDecoderInst(HMMSet *hset, FSLM *lm, int nTok, Boolean latgen, 
-	  Boolean useHModel,
-	  int outpBlocksize, Boolean doPhonePost,
-	  Boolean modAlign);
+    DecoderInst *CreateDecoderInst(HMMSet *hset, FSLM *lm, int nTok, bool latgen, 
+	  bool useHModel,
+	  int outpBlocksize, bool doPhonePost,
+	  bool modAlign);
     void InitDecoderInst ( LexNet *net, HTime sampRate, LogFloat beamWidth, 
 	  LogFloat relBeamWidth, LogFloat weBeamWidth, LogFloat zsBeamWidth,
 	  int maxModel, 
@@ -184,7 +184,7 @@ class Decoder {
 	  LogFloat fastlmlaBeam);
     void CleanDecoderInst ();
     TokenSet *NewTokSetArray(int N);
-    TokenSet *NewTokSetArrayVar(int N, Boolean isSil);
+    TokenSet *NewTokSetArrayVar(int N, bool isSil);
 
     LexNodeInst *ActivateNode (LexNode *ln);
     void DeactivateNode (LexNode *ln);
@@ -206,8 +206,8 @@ class Decoder {
     void AccumulateStats ();
 
     // From traceback.c 13/18 are moved here
-    AltWordendHyp* FakeSEpath (RelToken *tok, Boolean useLM);
-    AltWordendHyp* BuildLatAltList (TokenSet *ts, Boolean useLM);
+    AltWordendHyp* FakeSEpath (RelToken *tok, bool useLM);
+    AltWordendHyp* BuildLatAltList (TokenSet *ts, bool useLM);
     WordendHyp *BuildForceLat ();
     WordendHyp* BuildLattice ();
     Lattice* LatTraceBack (MemHeap *heap);
@@ -260,7 +260,7 @@ class Decoder {
     LogFloat fastlmlaBeam;  /* do fast LM la outside this beam */
 
     int nTok;		    /* number of different LMStates per HMM state */
-    Boolean useHModel;	    /* use standard HModel OutP functions */
+    bool useHModel;	    /* use standard HModel OutP functions */
     int outpBlocksize;	    /* number of frames for which outP is calculated in one go */
     Observation *obs;       /* array of Observations */
 
@@ -272,18 +272,18 @@ class Decoder {
     char *labExt;	    /* output label file extension */
     char *labForm;	    /* output label format */
 
-    Boolean latRescore;     /* read lattice for each utterance and rescore? */
+    bool latRescore;     /* read lattice for each utterance and rescore? */
     char *latInDir;	    /* lattice input directory */
     char *latInExt;	    /* latttice input extension */
     char *latFileMask;	    /* mask for reading lattice */
 
-    Boolean latGen;	    /* output lattice? */
+    bool latGen;	    /* output lattice? */
     char *latOutDir;	    /* lattice output directory */
     char *latOutExt;	    /* latttice output extension */
     char *latOutForm;	    /* lattice output format */
 
     FileFormat dataForm;    /* data input file format */
-    Boolean mergeTokOnly;   /* if merge token set with pruning */
+    bool mergeTokOnly;   /* if merge token set with pruning */
     AdaptXForm *inXForm;
     float dynBeamInc;       /* dynamic beam increment for max model pruning */
     int gcFreq;             /* run Garbage Collection every gcFreq frames */

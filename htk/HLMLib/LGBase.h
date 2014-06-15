@@ -94,7 +94,7 @@ typedef struct {        /* input N-gram file set */
    int gfsort[MAXINF];     /* idx's of sorted gram files */
    UInt nextGram[MAXNG];   /* next gram to read from inset */  
    float nextWt;           /* weight of next gram */
-   Boolean nextValid;      /* true if nextGram is valid */
+   bool nextValid;      /* true if nextGram is valid */
 }NGInputSet;
 
 typedef struct {        /* N-gram buffer */
@@ -121,7 +121,7 @@ void InitGBase(void);
 
 /* --------------- Basic NGram Operations --------------- */
 
-Boolean SameGrams(int N, NGram ng1, NGram ng2);
+bool SameGrams(int N, NGram ng1, NGram ng2);
 /*
    Returns true if grams (ignoring counts) are equal
 */
@@ -180,7 +180,7 @@ void ResetNGBuffer(NGBuffer *ngb);
    Reset buffer to empty and increment file index
 */
 
-Boolean StoreNGram(NGBuffer *ngb, NGram ng);
+bool StoreNGram(NGBuffer *ngb, NGram ng);
 /*
    Store expanded (N+1 length) N-gram in buf into ngb.
    Return TRUE if ngb is full
@@ -224,7 +224,7 @@ void OpenInputSet(NGInputSet *inset);
    open all files which can possibly supply the first N-gram.
 */
 
-Boolean GetNextNGram(NGInputSet *inset,NGram ng,float *cnt,int N);
+bool GetNextNGram(NGInputSet *inset,NGram ng,float *cnt,int N);
 /*
    This is the primary interface to an input set of gram files.
    The open N-gram files in the input set are repeatedly scanned
