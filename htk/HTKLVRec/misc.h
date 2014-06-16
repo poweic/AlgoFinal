@@ -160,7 +160,7 @@ class Decoder {
     void TokSetBucketSortPruning(TokenSet *dest, const RelTokScore& deltaLimit,
 	int nWinTok, RelToken* &winTok, TokScore &winScore);
 
-    void FindWinningToken(TokenSet *src, TokenSet *dest, LogFloat score,
+    void FindWinningTokens(TokenSet *src, TokenSet *dest, LogFloat score,
 	RelTokScore srcCorr, RelTokScore destCorr, RelTokScore deltaLimit,
 	RelToken* &winTok, int &nWinTok, int* nWin);
 
@@ -180,6 +180,8 @@ class Decoder {
 
     void __collect_stats__ (TokenSet *instTS, int N); 
     void OptLeftToRightPropagateInternal(LexNodeInst *inst, TokenSet* instTS, int N, SMatrix &trP, HLink &hmm);
+    // void GeneralPropagateInternal();
+    void GeneralPropagateInternal(LexNodeInst *inst, TokenSet* instTS, int N, SMatrix &trP, HLink &hmm);
 
     // From HLVRec-LM.c
     LMTokScore LMLA_nocache (LMState lmState, int lmlaIdx);
@@ -190,14 +192,14 @@ class Decoder {
 
     // From HLVRec.c 3/7 are moved here
     DecoderInst *CreateDecoderInst(HMMSet *hset, FSLM *lm, int nTok, bool latgen, 
-	  bool useHModel,
-	  int outpBlocksize, bool doPhonePost,
-	  bool modAlign);
+	  bool useHModel, int outpBlocksize, bool doPhonePost, bool modAlign);
+
     void InitDecoderInst ( LexNet *net, HTime sampRate, LogFloat beamWidth, 
 	  LogFloat relBeamWidth, LogFloat weBeamWidth, LogFloat zsBeamWidth,
 	  int maxModel, 
 	  LogFloat insPen, float acScale, float pronScale, float lmScale,
 	  LogFloat fastlmlaBeam);
+
     void CleanDecoderInst ();
     TokenSet *NewTokSetArray(int N);
     TokenSet *NewTokSetArrayVar(int N, bool isSil);
@@ -266,7 +268,7 @@ class Decoder {
     float pronScale;   /* pronunciation scaling factor */
     float lmScale;     /* LM scaling factor */
 
-    int maxModel;        /* max model pruning */
+    int maxModel;	    /* max model pruning */
     LogFloat beamWidth;     /* pruning global beam width */
     LogFloat weBeamWidth;   /* pruning wordend beam width */
     LogFloat zsBeamWidth;   /* pruning z-s beam width */
@@ -288,7 +290,7 @@ class Decoder {
     char *labExt;	    /* output label file extension */
     char *labForm;	    /* output label format */
 
-    bool latRescore;     /* read lattice for each utterance and rescore? */
+    bool latRescore;	    /* read lattice for each utterance and rescore? */
     char *latInDir;	    /* lattice input directory */
     char *latInExt;	    /* latttice input extension */
     char *latFileMask;	    /* mask for reading lattice */
@@ -299,7 +301,7 @@ class Decoder {
     char *latOutForm;	    /* lattice output format */
 
     FileFormat dataForm;    /* data input file format */
-    bool mergeTokOnly;   /* if merge token set with pruning */
+    bool mergeTokOnly;	    /* if merge token set with pruning */
     AdaptXForm *inXForm;
     float dynBeamInc;       /* dynamic beam increment for max model pruning */
     int gcFreq;             /* run Garbage Collection every gcFreq frames */

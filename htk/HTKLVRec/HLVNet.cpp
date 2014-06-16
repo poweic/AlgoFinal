@@ -64,10 +64,6 @@ static int trace=0;
 static ConfParam *cParm[MAXGLOBS];      /* config parameters */
 static int nParm = 0;
 
-/* -------------------------- Global Variables etc ---------------------- */
-
-static MemHeap tnetHeap;                /* used for temporary data in net creation */
-
 /* --------------------------- Initialisation ---------------------- */
 
 /* EXPORT->InitLVNet: register module & set configuration parameters */
@@ -77,11 +73,9 @@ void InitLVNet(void)
    
    Register(hlvnet_version,hlvnet_vc_id);
    nParm = GetConfig("HLVNET", TRUE, cParm, MAXGLOBS);
-   if (nParm>0){
+   if (nParm>0) {
       if (GetConfInt(cParm,nParm,"TRACE",&i)) trace = i;
    }
-
-   CreateHeap (&tnetHeap, "Net temp heap", MSTAK, 1, 0,100000, 800000);
 }
 
 /* --------------------------- the real code  ---------------------- */
@@ -158,52 +152,38 @@ TLexNode *NewTLexNodeCon (MemHeap *heap, TLexNet *net, int layerId, LabId lc, La
    return ln;
 }
 
-
-
 /* from HNet.c */
 /* Binary search to find elem in n element array */
-static int BSearch (Ptr elem, int n, Ptr *array)
-{
-   int l,u,c;
-
-   l=1;u=n;
-   while(l<=u) {
-      c=(l+u)/2;
-      if (array[c]==elem) return(c);
-      else if (array[c]<elem) l=c+1; 
-      else u=c-1;
-   }
-   return(0);
-}
-
-/* from HNet.c */
-/* Binary search to find elem in n element array */
-static int BAddSearch (Ptr elem, int *np, Ptr **ap)
+/* Compare to BSearch, this function add element to array if not found */
+static int BAddSearch (Ptr elem, int &np, Ptr **ap)
 {
    Ptr *array;
    int l,u,c;
 
    array=*ap;
-   l=1;u=*np;
+   l=1;u=np;
    while(l<=u) {
       c=(l+u)/2;
       if (array[c]==elem) return(c);
       else if (array[c]<elem) l=c+1; 
       else u=c-1;
    }
-   if (((*np+1) % LIST_BLOCKSIZE)==0) {
+
+   if (((np+1) % LIST_BLOCKSIZE)==0) {
       Ptr *newId;
 
-      newId=(Ptr *) New(&gcheap,sizeof(Ptr)*(*np+1+LIST_BLOCKSIZE));
-      for (c=1;c<=*np;c++)
+      newId=(Ptr *) New(&gcheap,sizeof(Ptr)*(np+1+LIST_BLOCKSIZE));
+      for (c=1;c<=np;c++)
          newId[c]=array[c];
       Dispose(&gcheap,array);
       *ap=array=newId;
    }
-   for (c=1;c<=*np;c++)
+   for (c=1;c<=np;c++)
       if (elem<array[c]) break;
-   for (u=(*np)++;u>=c;u--)
+
+   for (u=np++;u>=c;u--)
       array[u+1]=array[u];
+
    array[c]=elem;
    return(c);
 }
@@ -285,6 +265,19 @@ HLink FindTriphone (HMMSet *hset, LabId a, LabId b, LabId c)
    return ((HLink) triMLink->structure);
 }
 
+void TLexNet::add_phones(Ptr elem, char type) {
+  switch (type) {
+    case 'A':
+      BAddSearch(elem, nlexA, ((Ptr **) &lexA));
+      break;
+    case 'Z':
+      BAddSearch(elem, nlexZ, ((Ptr **) &lexZ));
+      break;
+    case 'P':
+      BAddSearch(elem, nlexP, ((Ptr **) &lexP));
+      break;
+  }
+}
 
 /*  scan vocabulary pronunciations for phone sets A, B, AB, YZ
     sets A and B are small (~50) and stored in arays
@@ -292,58 +285,62 @@ HLink FindTriphone (HMMSet *hset, LabId a, LabId b, LabId c)
 */
 void TLexNet::CollectPhoneStats ()
 {
-   int i, j;
-   Word word;
-   Pron pron;
    LabId sil, z, p;
 
-   for (i = 0; i < VHASHSIZE; i++)
-      for (word = voc->wtab[i]; word ; word = word->next)
-         if (word->aux == (Ptr) 1 && (word->wordName != startId && word->wordName != endId))
-            for (pron = word->pron; pron ; pron = pron->next) {
-               if (pron->nphones < 1)
-                  HError (9999, "CollectPhoneStats: pronunciation of '%s' is empty", word->wordName->name);
+   for (int i = 0; i < VHASHSIZE; i++) {
+     for (auto word = voc->wtab[i]; word ; word = word->next) {
+       if (word->aux != (Ptr) 1 || (word->wordName == startId || word->wordName == endId) )
+	 continue;
+       
+       // word->print();
+       for (auto pron = word->pron; pron ; pron = pron->next) {
+	 // pron->print();
 
-               if (pron->aux == (Ptr) 1) {
-                  BAddSearch ((Ptr) pron->phones[0], &nlexA, ((Ptr **) &lexA));
-                  BAddSearch ((Ptr) pron->phones[pron->nphones - 1], &nlexZ, ((Ptr **) &lexZ));
+	 if (pron->nphones < 1)
+	   HError (9999, "CollectPhoneStats: pronunciation of '%s' is empty", word->wordName->name);
 
-                  if (pron->nphones >= 2) {
-                     /* add to AB and YZ hashes */
-                     FindAddTLCN (heap, this, LAYER_AB, &nlexAB, lexABhash, 
-                                  pron->phones[0], pron->phones[1]);
-                     FindAddTLCN (heap, this, LAYER_YZ, &nlexYZ, lexYZhash, 
-                                  pron->phones[pron->nphones - 2], pron->phones[pron->nphones - 1]);
-                  }
-                  else {
-                     BAddSearch ((Ptr) pron->phones[0], &nlexP, ((Ptr **) &lexP));
-                     /*#### need to add ZP node in YZ list for single phone word */
-                     /*#### here only collect phones used in single phone words */
-                  }
-               }
-            }
+	 if (pron->aux != (Ptr) 1)
+	   continue;
+
+	 add_phones ((Ptr) pron->phones[0]		    , 'A');
+	 add_phones ((Ptr) pron->phones[pron->nphones - 1], 'Z');
+
+	 if (pron->nphones == 1) {
+	   add_phones ((Ptr) pron->phones[0], 'P');
+	   /*#### need to add ZP node in YZ list for single phone word */
+	   /*#### here only collect phones used in single phone words */
+	   continue;
+	 }
+
+	 /* add to AB and YZ hashes */
+	 FindAddTLCN (heap, this, LAYER_AB, &nlexAB, lexABhash, pron->phones[0]		   , pron->phones[1]		    );
+	 FindAddTLCN (heap, this, LAYER_YZ, &nlexYZ, lexYZhash, pron->phones[pron->nphones - 2], pron->phones[pron->nphones - 1]);
+
+       }
+     }
+   }
    
    /* add 'sil' to A and Z lists */
    sil = GetLabId ("sil", FALSE);
    if (!sil)
       HError (9999, "cannot find 'sil' model.");
 
-   BAddSearch ((Ptr) sil, &nlexA, ((Ptr **) &lexA));
-   BAddSearch ((Ptr) sil, &nlexZ, ((Ptr **) &lexZ));
-
+   add_phones ((Ptr) sil, 'A');
+   add_phones ((Ptr) sil, 'Z');
 
    /* for each phone P occuring in a single phone word 
         for each word end context Z
           add node ZP to SA and YZ layers
    */
+
    if (trace & T_NETCON)
       printf ("adding extra nodes for single phone words:\n");
 
-   for (i = 1; i <= nlexP; ++i) {
+   for (int i = 1; i <= nlexP; ++i) {
       if (trace & T_NETCON)
          printf ("P='%s'  ", lexP[i]->name);
       p = lexP[i];
-      for (j = 1; j <= nlexZ; ++j) {
+      for (int j = 1; j <= nlexZ; ++j) {
          if (trace & T_NETCON)
             printf ("z='%s' ", lexZ[j]->name);
          z = lexZ[j];
@@ -359,24 +356,24 @@ void TLexNet::CollectPhoneStats ()
       TLexNode *lcn;
 
       /* debug: print lexA, lexZ, lexAB & lexYZ*/
-      printf ("nlexA = %d   ", nlexA);
-      for (i = 1; i <= nlexA; ++i)
+      printf ("\33[33mnlexA = %d   \33[0m", nlexA);
+      for (int i = 1; i <= nlexA; ++i)
          printf ("%s ", lexA[i]->name);
       printf ("\n");
       
-      printf ("nlexZ = %d   ", nlexZ);
-      for (i = 1; i <= nlexZ; ++i)
+      printf ("\33[33mnlexZ = %d   \33[0m", nlexZ);
+      for (int i = 1; i <= nlexZ; ++i)
          printf ("%s ", lexZ[i]->name);
       printf ("\n");
       
-      printf ("nlexAB = %d   ", nlexAB);
-      for (i = 0; i < LEX_CON_HASH_SIZE; ++i)
+      printf ("\33[33mnlexAB = %d   \33[0m", nlexAB);
+      for (int i = 0; i < LEX_CON_HASH_SIZE; ++i)
          for (lcn = lexABhash[i]; lcn; lcn = lcn->next)
             printf ("%s-%s  ", lcn->lc->name, lcn->rc->name);
       printf ("\n");
       
-      printf ("nlexYZ = %d   ", nlexYZ);
-      for (i = 0; i < LEX_CON_HASH_SIZE; ++i)
+      printf ("\33[33mnlexYZ = %d   \33[0m", nlexYZ);
+      for (int i = 0; i < LEX_CON_HASH_SIZE; ++i)
          for (lcn = lexYZhash[i]; lcn; lcn = lcn->next)
             printf ("%s-%s  ", lcn->lc->name, lcn->rc->name);
       printf ("\n");
@@ -446,11 +443,7 @@ void TLexNet::CreateAnodes ()
             hmm = FindTriphone (hset, z, a, b);
             lnZAB = FindAddTLexNode (heap, this, LAYER_A, &nNodeA, nodeAhash, LN_MODEL, hmm);
 
-#ifdef DEBUG_LABEL_NET          /*#### expensive name lookup for dot graph! */
-            lnZAB->lc = FindMacroStruct (hset, 'h', hmm)->id;
-#else 
             lnZAB->lc = NULL;
-#endif 
             /* connect to ZA node */
             lcnZA = FindAddTLCN (heap, this, LAYER_SA, &nlexSA, lexSAhash, z, a);
             AddLink (heap, lcnZA, lnZAB);
@@ -502,11 +495,7 @@ void TLexNet::CreateZnodes ()
             hmm = FindTriphone (hset, y, z, a);
             lnYZA = FindAddTLexNode (heap, this, LAYER_Z, &nNodeZ, nodeZhash, LN_MODEL, hmm);
 
-#ifdef DEBUG_LABEL_NET          /*#### expensive name lookup for dot graph! */
-            lnYZA->lc = FindMacroStruct (hset, 'h', hmm)->id;
-#else 
             lnYZA->lc = NULL;
-#endif 
             /* connect to YZ node */
             AddLink (heap, lcnYZ, lnYZA);
             /* connect to ZS node */
@@ -670,79 +659,71 @@ void Handle1PhonePron (MemHeap *heap, TLexNet *net, Pron pron)
 */
 void TLexNet::CreateBYnodes () {
 
-   int i,p;
-   HLink hmm;
-   TLexNode *prevln, *ln;
-   TLexLink *ll;
-   Word word;
-   Pron pron;
+   TLexNode *ln;
    int nshared = 0;
 
    /* Create tree B -- Y */
 
    /* for each pron with 2 or more phones */
-   for (i = 0; i < VHASHSIZE; i++) {
-     for (word = voc->wtab[i]; word ; word = word->next) {
-       if (word->aux == (Ptr) 1 && (word->wordName != startId && word->wordName != endId)) {
-	 for (pron = word->pron; pron ; pron = pron->next) {
-	   if (pron->aux == (Ptr) 1) {
-	     if (pron->nphones >= 2) {
+   for (int i = 0; i < VHASHSIZE; i++) {
+     for (auto word = voc->wtab[i]; word ; word = word->next) {
+       if ( word->aux != (Ptr) 1 || (word->wordName == startId || word->wordName == endId) )
+	 continue;
 
-	       /* find AB node */
-	       prevln = FindAddTLCN (NULL, this, LAYER_AB, &nlexAB, lexABhash, 
-		   pron->phones[0], pron->phones[1]);
+       for (auto pron = word->pron; pron ; pron = pron->next) {
+	 if (pron->aux != (Ptr) 1) continue;
 
-	       /* add models for phones B -- Y */
-	       for (p = 1; p < pron->nphones - 1; ++p) {
-		 hmm = FindTriphone (hset, pron->phones[p-1], pron->phones[p], pron->phones[p+1]);
-		 /* search in prevln's successors */
+	 if (pron->nphones < 2) {
+	   /*  printf ("one- or two-phone word (%s) ignored\n", word->wordName->name); */
+	   Handle1PhonePron (heap, this, pron);
+	   continue;
+	 }
 
-		 ll = FindHMMLink (prevln, hmm);
-		 if (ll) {
-		   prevln = ll->end;
-		   ++nshared;
-		 }
-		 else {             /* model not found -> create a new one */
-		   ln = NewTLexNodeMod (heap, this, LAYER_BY, hmm);
+	 /* find AB node */
+	 TLexNode* prevln = FindAddTLCN (NULL, this, LAYER_AB, &nlexAB, lexABhash, 
+	     pron->phones[0], pron->phones[1]);
 
-		   ln->next = nodeBY;
-		   nodeBY = ln;
-		   ++nNodeBY;
+	 /* add models for phones B -- Y */
+	 for (int p = 1; p < pron->nphones - 1; ++p) {
+	   HLink hmm = FindTriphone (hset, pron->phones[p-1], pron->phones[p], pron->phones[p+1]);
 
-		   AddLink (heap, prevln, ln);   /* guaranteed to be a new link! */
+	   /* search in prevln's successors */
+	   TLexLink *ll = FindHMMLink (prevln, hmm);
+	   if (ll) {
+	     prevln = ll->end;
+	     ++nshared;
+	   }
+	   else {             /* model not found -> create a new one */
+	     ln = NewTLexNodeMod (heap, this, LAYER_BY, hmm);
 
-#ifdef DEBUG_LABEL_NET          /*#### expensive name lookup for dot graph! */
-		   ln->lc = FindMacroStruct (hset, 'h', hmm)->id;
-#else 
-		   ln->lc = NULL;
-#endif 
-		   prevln = ln;
-		 }
-	       }
-	       /* create word end node */
-	       ln = NewTLexNodeWe (heap, this, LAYER_WE, pron);
+	     ln->next = nodeBY;
+	     nodeBY = ln;
+	     ++nNodeBY;
 
-	       ln->lc = pron->word->wordName;
-	       ln->next = nodeBY;
-	       nodeBY = ln;
-	       ++nNodeBY;
+	     AddLink (heap, prevln, ln);   /* guaranteed to be a new link! */
 
-	       AddLink (heap, prevln, ln);   /* guaranteed to be a NEW link! */
-	       prevln = ln;
-
-	       /* find YZ node */
-	       ln = FindAddTLCN (NULL, this, LAYER_YZ, &nlexYZ, lexYZhash, 
-		   pron->phones[pron->nphones - 2], pron->phones[pron->nphones - 1]);
-	       /* find LexNode and connect prevln to it */
-	       AddLink (heap, prevln, ln);
-	     }
-	     else {
-	       /*  printf ("one- or two-phone word (%s) ignored\n", word->wordName->name); */
-	       Handle1PhonePron (heap, this, pron);
-	     }
+	     ln->lc = NULL;
+	     prevln = ln;
 	   }
 	 }
-       }
+	 /* create word end node */
+	 ln = NewTLexNodeWe (heap, this, LAYER_WE, pron);
+
+	 ln->lc = pron->word->wordName;
+	 ln->next = nodeBY;
+	 nodeBY = ln;
+	 ++nNodeBY;
+
+	 AddLink (heap, prevln, ln);   /* guaranteed to be a NEW link! */
+	 prevln = ln;
+
+	 /* find YZ node */
+	 ln = FindAddTLCN (NULL, this, LAYER_YZ, &nlexYZ, lexYZhash, 
+	     pron->phones[pron->nphones - 2], pron->phones[pron->nphones - 1]);
+	 /* find LexNode and connect prevln to it */
+	 AddLink (heap, prevln, ln);
+       } // End of pron for-loop
+       
      }
    }
    if (trace & T_NETCON)
@@ -879,65 +860,63 @@ void CreateStartEnd (MemHeap *heap, TLexNet *tnet)
       in subtree below it.
 
 */
-int TraverseTree (TLexNode *ln, int start, int *lmlaCount)
+int TraverseTree (TLexNode *ln, int start, int &lmlaCount)
 {
-   TLexLink *ll;
    int curHi;
-   static int depth = 0;
 
-   ++depth;
-   
-   assert (ln->loWE == 0);
-   assert (ln->hiWE == 0); 
    /* WE? then bottom out, get new id, store it with ln and return */
    if (ln->type == LN_WORDEND) {
-      ln->loWE = ln->hiWE = start;
-      /*# store ID in ln->pron */
-
+      ln->loWE = ln->hiWE = start;    /* store ID in ln->pron */
       ln->pron->aux = (Ptr) ln->loWE;
-      /*       printf("LMLA %p %d %d  %d\n", ln, ln->loWE, ln->hiWE, *lmlaCount); */
-      --depth;
+
+      // printf("LMLA %p %d %d  %d\n", ln, ln->loWE, ln->hiWE, lmlaCount);
       return start;
    }
 
    ln->loWE = start;
    curHi = start - 1;
-   for (ll = ln->link; ll; ll = ll->next) {
+   for (auto ll = ln->link; ll; ll = ll->next) {
       start = curHi + 1;
       curHi = TraverseTree (ll->end, start, lmlaCount);
    }
    ln->hiWE = curHi;
-   /* I could probably replace curHi by ln->hiWE in the above */
-
+   /* ^^^ One could probably replace curHi by ln->hiWE in the above ^^^ */
    
    /* unique successors don't get a slot in the LMlaTree */
-   assert (ln->nlinks >= 1);
    if (ln->nlinks > 1) {
-      int nl=0;
-      for (ll = ln->link; ll; ll = ll->next) {
-         /* assign new lmlaIds to successor node */
-         ll->end->lmlaIdx = ++*lmlaCount;
-         ++nl;
-         assert (!((ln->loWE==ll->end->loWE) && (ln->hiWE==ll->end->hiWE)));
-      }
-      assert (nl == ln->nlinks);
-      /*     *lmlaCount += ln->nlinks; */
+      for (auto ll = ln->link; ll; ll = ll->next)
+         ll->end->lmlaIdx = ++lmlaCount; // Assign new lmlaIds to successor 
+      // lmlaCount += ln->nlinks;
    }
    else {
-      /* LA tree compression: no LM handling required for the 
-         unique successor of this node */
-      assert ((ln->loWE==ln->link->end->loWE) && (ln->hiWE==ln->link->end->hiWE));
+      /* LA Tree Compression :
+       * no LM handling required for the unique successor of this node */
+
+      /* LM look ahead tree.
+      
+           Each node in the prefix part of the LexNet points to an entry
+           in LMlaTree. An entry of 0 indicates that the lookahead
+           information doesn't need to be updated. This occur if the set
+           of reachable word ends is the same as for the predecessor node,
+           e.g.:
+                     3-->0
+                    /
+           1-->0-->0
+                    \
+                     2
+      */
+
       ln->link->end->lmlaIdx = 0;
    }
 
-   /*    printf("LMLA %p %d %d  %d\n", ln, ln->loWE, ln->hiWE, *lmlaCount);*/
+   // printf("LMLA %p %d %d  %d\n", ln, ln->loWE, ln->hiWE, lmlaCount);
 
    return curHi;
 }
 
 /* AssignWEIds
-
-*/
+ *
+ * */
 void AssignWEIds(TLexNet *tnet)
 {
    int i;
@@ -947,7 +926,7 @@ void AssignWEIds(TLexNet *tnet)
    /* assign PronIds to wordend nodes reachable from AB nodes.
       this excludes:
        - single phone prons (cf. Handle1PhonePron)
-       - start/end words  (cf. CreateStartEnd)
+       - start/end words    (cf. CreateStartEnd)
    */
 
    highest = tnet->nPronIds;
@@ -957,7 +936,7 @@ void AssignWEIds(TLexNet *tnet)
 
          /*          ln->loWE = start; */
          ln->lmlaIdx = ++tnet->lmlaCount;
-         highest = TraverseTree (ln, start, &tnet->lmlaCount);
+         highest = TraverseTree (ln, start, tnet->lmlaCount);
          ln->hiWE = highest;
 
 
@@ -1058,9 +1037,7 @@ void InitLMlaTree(LexNet *net, TLexNet *tnet)
 
 
    /* complex nodes */
-#if 1
    CreateCompLMLA (net->heap, laTree, tnet);
-#endif
 }
 
 
@@ -1143,13 +1120,9 @@ LexNet *ConvertTLex2Lex (MemHeap *heap, TLexNet *tnet)
       ++layerCur[tln->layerId];
    }
    
-
-#if 1
    /* check whether all layer memory blocks are full (as they should be) */
-   for (i = 0; i < net->nLayers-1; ++i) {
+   for (i = 0; i < net->nLayers-1; ++i)
       assert (net->layerStart[i+1] == layerCur[i]);
-   }
-#endif
 
    InitLMlaTree(net, tnet);
 
@@ -1355,7 +1328,6 @@ void WriteTLex (TLexNet *net, char *fn)
                   ln->rc ? ln->rc->name : "A?");
    fprintf (dotFile, "}\n");
    
-#if 1
    /* links from SA nodes */
    for (i = 0; i < LEX_CON_HASH_SIZE; ++i)
       for (ln = net->lexSAhash[i]; ln; ln = ln->next)
@@ -1374,68 +1346,76 @@ void WriteTLex (TLexNet *net, char *fn)
          fprintf (dotFile, "n2%p [label=\"%s\"];\n", ln, ln->lc ? ln->lc->name : "A?");
       }
    fprintf (dotFile, "}\n");
-#endif
 
    fprintf (dotFile, "}\n");
    FClose (dotFile, FALSE);
 }
 
+void* TLexNet::operator new (size_t n, MemHeap *heap, Vocab *voc, HMMSet *hset, 
+    char *startWord, char *endWord, bool silDict) {
+
+  CreateHeap (&tnetHeap, "Net temp heap", MSTAK, 1, 0,100000, 800000);
+
+  TLexNet* tnet = (TLexNet *) New (&tnetHeap, sizeof (TLexNet));
+
+  tnet->heap = &tnetHeap;
+  tnet->root = NULL;
+
+  tnet->nlexA = tnet->nlexZ = tnet->nlexP = 0;
+  tnet->nlexAB = tnet->nlexYZ = tnet->nlexZS = tnet->nlexSA = 0;
+  tnet->nNodeA = tnet->nNodeZ = 0;
+
+  tnet->lexA = (LabId *) New (&gcheap, LIST_BLOCKSIZE * sizeof(LabId));
+  tnet->lexZ = (LabId *) New (&gcheap, LIST_BLOCKSIZE * sizeof(LabId));
+  tnet->lexP = (LabId *) New (&gcheap, LIST_BLOCKSIZE * sizeof(LabId));
+
+  for (int i = 0; i < LEX_CON_HASH_SIZE; ++i)
+    tnet->lexABhash[i] = tnet->lexYZhash[i] = 
+      tnet->lexZShash[i] = tnet->lexSAhash[i] = NULL;
+
+  for (int i = 0; i < LEX_MOD_HASH_SIZE; ++i)
+    tnet->nodeAhash[i] = tnet->nodeZhash[i] = NULL;
+
+  tnet->nNodeBY = 0;
+  tnet->nodeBY = NULL;
+  tnet->nNodeSIL = 0;
+  tnet->nodeSIL = NULL;
+  tnet->lmlaCount = 0;
+  tnet->nPronIds = 0;
+
+  tnet->voc = voc;
+  tnet->hset = hset;
+  tnet->silDict = silDict;
+
+  tnet->startId = GetLabId (startWord, FALSE);
+  if (!tnet->startId) 
+    HError (9999, "HLVNet: cannot find STARTWORD '%s'\n", startWord);
+
+  tnet->endId = GetLabId (endWord, FALSE);
+  if (!tnet->endId) 
+    HError (9999, "HLVNet: cannot find ENDWORD '%s'\n", endWord);
+
+  for (int i = 0; i < NLAYERS; ++i)
+    tnet->nNodesLayer[i] = 0;
+
+  return tnet;
+}
+
+MemHeap TLexNet::tnetHeap;	/* used for temporary data in net creation */
+
 /* Create the Lexicon Network based on the vocabulary and model set
 */
 LexNet *CreateLexNet (MemHeap *heap, Vocab *voc, HMMSet *hset, 
-                      char *startWord, char *endWord, bool silDict)
-{
-   int i;
-   TLexNet *tnet;
-   LexNet *net;
+    char *startWord, char *endWord, bool silDict) {
 
-   tnet = (TLexNet *) New (&tnetHeap, sizeof (TLexNet));
-   tnet->heap = &tnetHeap;
-   tnet->root = NULL;
-   tnet->nlexA = tnet->nlexZ = tnet->nlexP = tnet->nlexAB = tnet->nlexYZ = tnet->nlexZS = tnet->nlexSA = 0;
-   tnet->nNodeA = tnet->nNodeZ = 0;
-   tnet->lexA = (LabId *) New (&gcheap, LIST_BLOCKSIZE * sizeof(LabId));
-   tnet->lexZ = (LabId *) New (&gcheap, LIST_BLOCKSIZE * sizeof(LabId));
-   tnet->lexP = (LabId *) New (&gcheap, LIST_BLOCKSIZE * sizeof(LabId));
-   for (i = 0; i < LEX_CON_HASH_SIZE; ++i)
-      tnet->lexABhash[i] = tnet->lexYZhash[i] = 
-         tnet->lexZShash[i] = tnet->lexSAhash[i] = NULL;
-   for (i = 0; i < LEX_MOD_HASH_SIZE; ++i)
-      tnet->nodeAhash[i] = tnet->nodeZhash[i] = NULL;
-   tnet->nNodeBY = 0;
-   tnet->nodeBY = NULL;
-   tnet->nNodeSIL = 0;
-   tnet->nodeSIL = NULL;
-   tnet->lmlaCount = 0;
-   tnet->nPronIds = 0;
-
-   tnet->voc = voc;
-   tnet->hset = hset;
-   tnet->silDict = silDict;
-   /* init root node */
-   tnet->root = NULL;
-
-   tnet->startId = GetLabId (startWord, FALSE);
-   if (!tnet->startId) 
-      HError (9999, "HLVNet: cannot find STARTWORD '%s'\n", startWord);
-   tnet->endId = GetLabId (endWord, FALSE);
-   if (!tnet->endId) 
-      HError (9999, "HLVNet: cannot find ENDWORD '%s'\n", endWord);
-
-
-   for (i = 0; i < NLAYERS; ++i)
-      tnet->nNodesLayer[i] = 0;
-
-   /* init phone sets A, B, AB, YZ 
-      and create LexNodes for AB and YZ */
+   TLexNet* tnet = new (heap, voc, hset, startWord, endWord, silDict) TLexNet;
+   /* init phone sets A, B, AB, YZ and create LexNodes for AB and YZ */
    tnet->CollectPhoneStats ();
 
-   /* Create initial phone (A) layer of z-a+b nodes
-      also creates SA nodes*/
+   /* Create initial phone (A) layer of z-a+b nodes also creates SA nodes*/
    tnet->CreateAnodes ();
 
-   /* Create final phone (Z) layer of y-z+a nodes 
-      also creates ZS nodes */
+   /* Create final phone (Z) layer of y-z+a nodes also creates ZS nodes */
    tnet->CreateZnodes ();
 
    /* Create silence (sil/sp) nodes connecting ZS and SA nodes */
@@ -1450,7 +1430,7 @@ LexNet *CreateLexNet (MemHeap *heap, Vocab *voc, HMMSet *hset,
    AssignWEIds(tnet);
 
    /* convert TLexNet to more compact LexNet */
-   net = ConvertTLex2Lex(heap, tnet);
+   LexNet *net = ConvertTLex2Lex(heap, tnet);
 
    /* all tokens pass through SA directly before (i.e. with no time diff) the first 
       model of a new word. Update time and score in last weHyp of token in this layer */
@@ -1471,7 +1451,7 @@ LexNet *CreateLexNet (MemHeap *heap, Vocab *voc, HMMSet *hset,
    net->silDict = silDict;
 
    /* get rid of temporary data structures */
-   ResetHeap (&tnetHeap);
+   TLexNet::ResetHeap();
 
    return net;
 }

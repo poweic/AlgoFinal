@@ -111,7 +111,7 @@ void Decoder::TokSetBucketSortPruning(TokenSet *dest, const RelTokScore& deltaLi
 
 }
 
-void Decoder::FindWinningToken(TokenSet *src, TokenSet *dest, LogFloat score,
+void Decoder::FindWinningTokens(TokenSet *src, TokenSet *dest, LogFloat score,
     RelTokScore srcCorr, RelTokScore destCorr, RelTokScore deltaLimit,
     RelToken* &winTok, int &nWinTok, int* nWin) {
 
@@ -203,53 +203,56 @@ void Decoder::MergeTokSet (TokenSet *src, TokenSet *dest, LogFloat score, bool p
       dest->score = std::max(src->score + score, dest->score);
    }
 #endif
-   else {    /* expensive MergeTokSet, #### move into separate function */
-      /* exploit & retain RelTok order (sorted by lmState?) */
-      TokScore winScore;
-      RelTokScore srcCorr, destCorr, deltaLimit;
+   else {    
+     /* expensive MergeTokSet, #### move into separate function */
+     /* exploit & retain RelTok order (sorted by lmState?) */
+     TokScore winScore;
+     RelTokScore srcCorr, destCorr, deltaLimit;
 
-      /* first go at sorted Tok merge, very explicit, no optimisation at all, yet! */
+     /* first go at sorted Tok merge, very explicit, no optimisation at all, yet! */
 
-      /* find best score */
-      if (src->score + score > dest->score) {
-         winScore = src->score + score;
-         srcCorr = - score;     /* avoid adding score twice! */
-         destCorr = dest->score - winScore;
-      } else {
-         winScore = dest->score;
-         srcCorr = src->score - winScore;
-         destCorr = 0.0;
-      }
+     /* find best score */
+     if (src->score + score > dest->score) {
+       winScore = src->score + score;
+       srcCorr = - score;     /* avoid adding score twice! */
+       destCorr = dest->score - winScore;
+     } else {
+       winScore = dest->score;
+       srcCorr = src->score - winScore;
+       destCorr = 0.0;
+     }
 
-      deltaLimit = _decInst->nTok * _decInst->relBeamWidth;  /* scaled relative beam, must initialize !!!*/;
-      /* set pruning deltaLimit */
-      if (prune)
-	deltaLimit = std::max(_decInst->beamLimit - winScore, _decInst->relBeamWidth);
+     /* scaled relative beam, must initialize !!!*/;
+     deltaLimit = _decInst->nTok * _decInst->relBeamWidth;  
 
-      /* find winning tokens */
-      /* location where winnning toks came from: 0 == src, 1 == dest */
-      RelToken *winTok = _decInst->winTok;
-      int nWinTok = 0;
-      int nWin[2] = {0, 0};
-      FindWinningToken(src, dest, score, srcCorr, destCorr, deltaLimit, winTok, nWinTok, nWin);
+     /* set pruning deltaLimit */
+     if (prune)
+       deltaLimit = std::max(_decInst->beamLimit - winScore, _decInst->relBeamWidth);
 
-      if (nWinTok <= _decInst->nTok) {
-         /* just copy */
-         for (int i = 0; i < nWinTok; ++i)
-            dest->relTok[i] = winTok[i];
+     /* find winning tokens */
+     /* location where winnning toks came from: 0 == src, 1 == dest */
+     RelToken *winTok = _decInst->winTok;
+     int nWinTok = 0;
+     int nWin[2] = {0, 0};
+     FindWinningTokens(src, dest, score, srcCorr, destCorr, deltaLimit, winTok, nWinTok, nWin);
 
-         dest->n = nWinTok;
-         dest->score = winScore;
+     if (nWinTok <= _decInst->nTok) {
+       /* just copy */
+       for (int i = 0; i < nWinTok; ++i)
+	 dest->relTok[i] = winTok[i];
 
-         if (nWin[0] == nWinTok)
-            dest->id = src->id;          /* copy src->id */
-         else if (nWin[1] == nWinTok)
-            dest->id = dest->id;         /* copy dest->id */
-         else
-            dest->id = ++_decInst->tokSetIdCount;    /* new id */
+       dest->n = nWinTok;
+       dest->score = winScore;
 
-      } else 
-	TokSetBucketSortPruning(dest, deltaLimit, nWinTok, winTok, winScore);
+       if (nWin[0] == nWinTok)
+	 dest->id = src->id;          /* copy src->id */
+       else if (nWin[1] == nWinTok)
+	 dest->id = dest->id;         /* copy dest->id */
+       else
+	 dest->id = ++_decInst->tokSetIdCount;    /* new id */
+
+     } else 
+       TokSetBucketSortPruning(dest, deltaLimit, nWinTok, winTok, winScore);
    }
 }
 
@@ -327,8 +330,69 @@ void Decoder::OptLeftToRightPropagateInternal(LexNodeInst *inst, TokenSet* instT
   __collect_stats__(instTS, N);
 }
 
-/* PropagateInternal
+void Decoder::GeneralPropagateInternal(LexNodeInst *inst, TokenSet* instTS, int N, SMatrix &trP, HLink &hmm) {
 
+  /* temp storage for N tokensets  */
+  TokenSet *tempTS = _decInst->tempTS[N];
+
+  PI_GEN++;
+
+  /* internal propagation; transition i -> j,  \forall 2 <= j <= N-1 */
+
+  /* internal states */
+  for (int j = 2; j < N; ++j) {
+    tempTS[j-1].score = 0.0;
+    tempTS[j-1].n = 0;
+    tempTS[j-1].id = 0;
+
+    for (int i = 1; i < N; ++i) {
+      if ((instTS[i-1].n > 0) && (trP[i][j] > LSMALL))
+	MergeTokSet (&instTS[i-1], &tempTS[j-1], trP[i][j], (!mergeTokOnly));
+    }
+
+    if (tempTS[j-1].n > 0) {
+      LogFloat outP = cOutP (_decInst->obs, hmm, j);
+      tempTS[j-1].score += outP;         /* only change top tok */
+    }
+  }
+
+  instTS[0].n = 0;          /* clear entry state */
+  instTS[0].id = 0;
+
+  /* internal states: copy temp array back and find best score */
+  LogFloat bestScore = LZERO;
+  for (int j = 1; j < N-1; ++j) {
+    instTS[j] = tempTS[j]; // copy reltoks
+
+    if (instTS[j].n > 0)
+      bestScore = std::max(instTS[j].score, bestScore);
+  }
+  inst->best = bestScore;
+
+  /* exit state (j=N), merge directly into ints->ts */
+  int j = N;
+  instTS[j-1].n = 0;
+  instTS[j-1].id = 0;
+
+  for (int i = 2; i < N; ++i) {
+    if ((instTS[i-1].n > 0) && (trP[i][j] > LSMALL))
+      MergeTokSet (&instTS[i-1], &instTS[j-1], trP[i][j], FALSE);
+  }
+
+  /* exit state score is some internal state score plus transP,
+     thus can be ignored for findeing the best score */
+
+  /* update global best score */
+  if (bestScore > _decInst->bestScore) {
+    _decInst->bestScore = bestScore;
+    _decInst->bestInst = inst;
+  }
+
+  /* # this only collects stats for the model nodes */
+  __collect_stats__(instTS, N);
+}
+
+/* PropagateInternal
      Internal token propagation
 */
 void Decoder::PropagateInternal (LexNodeInst *inst) {
@@ -344,80 +408,18 @@ void Decoder::PropagateInternal (LexNodeInst *inst) {
 
    /* Main beam pruning: prune tokensets before propagation
       the beamLimit is the one found during the last frame */
-   int i = 1;
-   for (auto ts = &instTS[0]; i < N; ++i, ++ts) {
-      if (ts->score < _decInst->beamLimit) {
-         ts->n = 0;
-         ts->id = 0;
-      }
+   auto ts = &instTS[0];
+   for (int i = 1; i < N; ++i, ++ts) {
+     if (ts->score < _decInst->beamLimit)
+       ts->n = ts->id = 0;
    }
 
-   /* optimised version for L-R models */
-   if (hmm->tIdx < 0) {
+   /* Optimised version for L-R models OR 
+      General (not left-to-right) Propagate Internal   */
+   if (hmm->tIdx < 0)
       OptLeftToRightPropagateInternal(inst, instTS, N, trP, hmm);
-      return;
-   }
-
-   /* General (not left-to-right) Propagate Internal   */
-
-   /* temp storage for N tokensets  */
-   TokenSet *tempTS = _decInst->tempTS[N];
-
-   PI_GEN++;
-
-   /* internal propagation; transition i -> j,  \forall 2 <= j <= N-1 */
-
-   /* internal states */
-   for (int j = 2; j < N; ++j) {
-     tempTS[j-1].score = 0.0;
-     tempTS[j-1].n = 0;
-     tempTS[j-1].id = 0;
-
-     for (i = 1; i < N; ++i) {
-       if ((instTS[i-1].n > 0) && (trP[i][j] > LSMALL))
-	 MergeTokSet (&instTS[i-1], &tempTS[j-1], trP[i][j], (!mergeTokOnly));
-     }
-
-     if (tempTS[j-1].n > 0) {
-       LogFloat outP = cOutP (_decInst->obs, hmm, j);
-       tempTS[j-1].score += outP;         /* only change top tok */
-     }
-   }
-
-   instTS[0].n = 0;          /* clear entry state */
-   instTS[0].id = 0;
-
-   /* internal states: copy temp array back and find best score */
-   LogFloat bestScore = LZERO;
-   for (int j = 1; j < N-1; ++j) {
-     instTS[j] = tempTS[j]; // copy reltoks
-
-     if (instTS[j].n > 0)
-       bestScore = std::max(instTS[j].score, bestScore);
-   }
-   inst->best = bestScore;
-
-   /* exit state (j=N), merge directly into ints->ts */
-   int j = N;
-   instTS[j-1].n = 0;
-   instTS[j-1].id = 0;
-
-   for (i = 2; i < N; ++i) {
-     if ((instTS[i-1].n > 0) && (trP[i][j] > LSMALL))
-       MergeTokSet (&instTS[i-1], &instTS[j-1], trP[i][j], FALSE);
-   }
-
-   /* exit state score is some internal state score plus transP,
-      thus can be ignored for findeing the best score */
-
-   /* update global best score */
-   if (bestScore > _decInst->bestScore) {
-     _decInst->bestScore = bestScore;
-     _decInst->bestInst = inst;
-   }
-
-   /* # this only collects stats for the model nodes */
-   __collect_stats__(instTS, N);
+   else
+     GeneralPropagateInternal(inst, instTS, N, trP, hmm);
 }
 
 #ifdef MODALIGN
@@ -465,7 +467,7 @@ void Decoder::PropIntoNode (TokenSet *ts, LexNode *ln, bool updateLMLA)
       return;
    }
 
-   if (updateLMLA){
+   if (updateLMLA) {
       UpdateLMlookahead (ln);
       inst->best = std::max(inst->ts[0].score, inst->best);
    }

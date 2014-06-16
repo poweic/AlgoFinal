@@ -51,6 +51,16 @@ typedef struct _WordPron{   /* storage for each pronunciation */
    Word word;      /* Word this is a pronuciation of */
    Pron next;      /* Next pronunciation of word */
    void *aux;      /* hook for temp info */
+
+   void print() const {
+     printf("pnum = %d, ", this->pnum);
+     printf("nphones = %d, ", this->nphones);
+     for (int i=0; i<nphones; ++i)
+       printf("%s ", this->phones[i]->name);
+     printf("prob = %f, ", this->prob);
+     printf("next = %p\n", this->next);
+   }
+
 } WordPron;
 
 typedef struct _DictEntry{
@@ -59,6 +69,11 @@ typedef struct _DictEntry{
    int nprons;      /* number of prons for this word */
    Word next;       /* next word in hash table chain */
    void *aux;       /* hook used by HTK library modules for temp info */
+
+   void print() const {
+     printf("%s\n", wordName->name);
+   }
+
 } DictEntry;
 
 class Vocab {

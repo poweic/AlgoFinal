@@ -195,18 +195,16 @@ void ShowDict(Vocab *voc)
 }
 
 /* EXPORT->InitVocab: Initialise voc data structure */
-void InitVocab(Vocab *voc)
-{
-   int i;
-
-   CreateHeap(&voc->wordHeap,"Word Heap",MHEAP,sizeof(DictEntry),
-              0.4,200,2000);
-   CreateHeap(&voc->pronHeap,"Pron Heap",MHEAP,sizeof(WordPron),
-              0.4,200,2000);
+void InitVocab(Vocab *voc) {
+   CreateHeap(&voc->wordHeap,"Word Heap",MHEAP,sizeof(DictEntry), 0.4,200,2000);
+   CreateHeap(&voc->pronHeap,"Pron Heap",MHEAP,sizeof(WordPron), 0.4,200,2000);
    CreateHeap(&voc->phonesHeap,"Phones Heap",MSTAK,1,0.4,400,4000);
+
    voc->wtab = (Word*) New(&voc->phonesHeap,sizeof(Word)*VHASHSIZE);
-   for (i=0; i<VHASHSIZE; i++)
+   
+   for (int i=0; i<VHASHSIZE; i++)
       voc->wtab[i] = NULL;
+
    voc->nullWord = GetWord(voc, GetLabId("!NULL",TRUE), TRUE);
    voc->subLatWord = GetWord(voc, GetLabId("!SUBLATID",TRUE), TRUE);
    voc->nwords = voc->nprons = 0;

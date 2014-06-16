@@ -163,8 +163,8 @@ struct _TLexNode {
    LabId lc;            /* left context phone */
    LabId rc;            /* right context phone */
    int nlinks;
-   TLexLink *link;		/* linked list of  TLexLinks to successor nodes */
-   LexNode *ln;        /* the actual Lexicon Node */
+   TLexLink *link;	/* linked list of TLexLinks to successor nodes */
+   LexNode *ln;		/* the actual Lexicon Node */
    int layerId;
 
    int loWE;            /* lowest WE LMId reachable from here */
@@ -175,34 +175,43 @@ struct _TLexNode {
 
 class TLexNet {
   public:
+
+    void* operator new (size_t, MemHeap *heap, Vocab *voc, HMMSet *hset, 
+	char *startWord, char *endWord, bool silDict);
+
     void CollectPhoneStats ();
     void CreateAnodes ();
     void CreateZnodes ();
     void CreateBYnodes ();
     void CreateSILnodes ();
 
+    static MemHeap tnetHeap;	/* used for temporary data in net creation */
+    static void ResetHeap() { ::ResetHeap(&tnetHeap); }
+
   public:
     MemHeap *heap;
     Vocab *voc;
     HMMSet *hset;
-    LabId startId;       /* id of STARTWORD (from config) */
-    LabId endId;         /* id of ENDWORD (from config) */
+    LabId startId;	  /* id of STARTWORD (from config) */
+    LabId endId;          /* id of ENDWORD (from config) */
 
-    TLexNode *start;     /* start node of network */
-    TLexNode *end;       /* end node of network */
+    TLexNode *start;      /* start node of network */
+    TLexNode *end;        /* end node of network */
 
-    TLexNode *root;	/* global chain of all nodes */
-    bool silDict;     /* does dict contain -/sp/sil variants and pronprobs? */
-    TLexNode *lnSEsp;             /* sp lexnode leading to SENT_END */
-    TLexNode *lnSEsil;            /* sil lexnode leading to SENT_END */
+    TLexNode *root;	  /* global chain of all nodes */
+    bool silDict;	  /* does dict contain -/sp/sil variants and pronprobs? */
+    TLexNode *lnSEsp;     /* sp lexnode leading to SENT_END */
+    TLexNode *lnSEsil;    /* sil lexnode leading to SENT_END */
 
-    int nlexA;           /* array of initial phones */
+    int nlexA;		  /* array of initial phones */
+    int nlexZ;            /* array of final phones */
+    int nlexP;            /* array of phones in single phone words*/
+
     LabId *lexA;
-    int nlexZ;           /* array of final phones */
     LabId *lexZ;
-
-    int nlexP;           /* array of phones in single phone words*/
     LabId *lexP;
+
+    void add_phones(Ptr elem, char type);
 
     /* the following all correspond to real nodes in the final LexNet */
     int nlexAB;
@@ -216,6 +225,7 @@ class TLexNet {
     TLexNode *lexYZhash[LEX_CON_HASH_SIZE];  /* hastable of Y-Z contexts */
     TLexNode *lexZShash[LEX_CON_HASH_SIZE];  /* hastable of Z - (A+'sil') contexts */
     TLexNode *lexSAhash[LEX_CON_HASH_SIZE];  /* hastable of (Z+'sil') - A contexts */
+
     TLexNode *nodeAhash[LEX_MOD_HASH_SIZE];  /* hastable of A LexNodes */
     TLexNode *nodeZhash[LEX_MOD_HASH_SIZE];  /* hastable of Z LexNodes */
 
@@ -275,6 +285,7 @@ void InitLVNet(void);
 /* build lexicon network for recognition for Vocab and HMMSet */
 LexNet *CreateLexNet (MemHeap *heap, Vocab *voc, HMMSet *hset,
     char *startWord, char *endWord, bool silDict);
+
 void InitLMlaTree(LexNet *net, TLexNet *tnet);
 LexNet *ConvertTLex2Lex (MemHeap *heap, TLexNet *tnet);
 
@@ -293,7 +304,7 @@ HLink FindTriphone (HMMSet *hset, LabId a, LabId b, LabId c);
 void AddLink (MemHeap *heap, TLexNode *start, TLexNode *end);
 
 TLexLink *FindHMMLink (TLexNode *ln, HLink hmm);
-int TraverseTree (TLexNode *ln, int start, int *lmlaCount);
+int TraverseTree (TLexNode *ln, int start, int &lmlaCount);
 
 HLink FindHMM (HMMSet *hset, LabId id);
 void Handle1PhonePron (MemHeap *heap, TLexNet *net, Pron pron);
