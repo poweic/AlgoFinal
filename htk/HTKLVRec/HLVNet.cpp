@@ -49,7 +49,6 @@ char *hlvnet_vc_id = "$Id: HLVNet.c,v 1.1.1.1 2006/10/11 09:54:55 jal58 Exp $";
 
 #include <assert.h>
 
-
 #define LIST_BLOCKSIZE 70
 
 #undef DEBUG_LABEL_NET
@@ -125,6 +124,7 @@ static int BAddSearch (Ptr elem, int &np, Ptr **ap)
    Ptr *array;
    int l,u,c;
 
+   // Binary search
    array=*ap;
    l=1;u=np;
    while(l<=u) {
@@ -134,6 +134,7 @@ static int BAddSearch (Ptr elem, int &np, Ptr **ap)
       else u=c-1;
    }
 
+   // Add elem to array if NOT FOUND
    if (((np+1) % LIST_BLOCKSIZE)==0) {
       Ptr *newId;
 
@@ -156,19 +157,19 @@ static int BAddSearch (Ptr elem, int &np, Ptr **ap)
 #define HASH1(p1,s)  (((int)(p1))%(s))
 #define HASH2(p1,p2,s)  (( HASH1(p1,s) + HASH1(p2,s)) % (s))
 
-TLexConNode *FindAddTLCN (MemHeap *heap, TLexNet *net, int layerId, int *n, TLexConNode *lcnHashTab[], LabId lc, LabId rc)
+TLexConNode* TLexNet::FindAddTLCN (LayerId layerId, int *n,
+    TLexConNode *lcnHashTab[], LabId lc, LabId rc)
 {
-   TLexConNode *lcn;
-   unsigned int hash;
+   unsigned int hash = HASH2(lc, rc, LEX_CON_HASH_SIZE);
 
-   hash = HASH2(lc, rc, LEX_CON_HASH_SIZE);
-
-   lcn = lcnHashTab[hash];
-   while (lcn && !((lcn->lc == lc) && (lcn->rc == rc)))
+   TLexConNode *lcn = lcnHashTab[hash];
+   while (lcn && !((lcn->lc == lc) && (lcn->rc == rc)) )
       lcn = lcn->next;
 
    if (!lcn) {          /* not found */
-      lcn = (TLexConNode *) new(heap) TLexNode( net, layerId, lc, rc);
+     assert(heap);
+      // if (!heap) return NULL;
+      lcn = (TLexConNode *) new(heap) TLexNode( this, layerId, lc, rc);
 
       lcn->next = lcnHashTab[hash];
       lcnHashTab[hash] = lcn;
@@ -181,22 +182,19 @@ TLexConNode *FindAddTLCN (MemHeap *heap, TLexNet *net, int layerId, int *n, TLex
    only hmm is used for hashing and comparison, 
    i.e. no two node with same hmm, but different types are possible
 */
-TLexNode *FindAddTLexNode (MemHeap *heap, TLexNet *net, int layerId, int *n, TLexNode *lnHashTab[], LexNodeType type , HLink hmm)
+TLexNode* TLexNet::FindAddTLexNode (LayerId layerId, int *n,
+    TLexNode *lnHashTab[], LexNodeType type , HLink hmm)
 {
-   TLexNode *ln;
-   unsigned int hash;
+   unsigned int hash = HASH1 (hmm, LEX_MOD_HASH_SIZE);
 
-   hash = HASH1 (hmm, LEX_MOD_HASH_SIZE);
-
-   ln = lnHashTab[hash];
-   while (ln && !((ln->hmm == hmm)))
+   TLexNode *ln = lnHashTab[hash];
+   while (ln && !((ln->hmm == hmm)) )
       ln = ln->next;
 
-   if (!ln) {           /* not found */
-      if (!heap)
-         return NULL;
-      ln = new(heap) TLexNode( net, layerId, hmm);
-      ln->type = type;          /*#### do we ever use anything but LN_MODEL? */
+   /* not found */
+   if (!ln) {
+      if (!heap) return NULL;
+      ln = new(heap) TLexNode( this, layerId, hmm);
 
       ln->next = lnHashTab[hash];
       lnHashTab[hash] = ln;
@@ -205,43 +203,23 @@ TLexNode *FindAddTLexNode (MemHeap *heap, TLexNet *net, int layerId, int *n, TLe
    return ln;
 }
 
-
-
-#define BUFLEN 100
-
 HLink FindTriphone (HMMSet *hset, LabId a, LabId b, LabId c)
 {
+   const size_t BUFLEN = 100;
    char buf[BUFLEN];
-   LabId triLabId;
-   MLink triMLink;
    
-   /*   if (snprintf (buf, BUFLEN, "%s-%s+%s", a->name, b->name, c->name) == -1)  */
    if (sprintf (buf, "%s-%s+%s", a->name, b->name, c->name) == -1) 
       HError (9999, "HLVNet: model names too long");
    
-   triLabId = GetLabId (buf, FALSE);
+   LabId triLabId = GetLabId (buf, FALSE);
    if (!triLabId)
       HError (9999, "HLVNet: no model label for phone (%s)", buf);
    
-   triMLink = FindMacroName (hset, 'l', triLabId);
+   MLink triMLink = FindMacroName (hset, 'l', triLabId);
    if (!triMLink)
       HError (9999, "HLVNet: no model macro for phone (%s)", buf);
    
    return ((HLink) triMLink->structure);
-}
-
-void TLexNet::add_phones(Ptr elem, char type) {
-  switch (type) {
-    case 'A':
-      BAddSearch(elem, nlexA, ((Ptr **) &lexA));
-      break;
-    case 'Z':
-      BAddSearch(elem, nlexZ, ((Ptr **) &lexZ));
-      break;
-    case 'P':
-      BAddSearch(elem, nlexP, ((Ptr **) &lexP));
-      break;
-  }
 }
 
 /*  scan vocabulary pronunciations for phone sets A, B, AB, YZ
@@ -260,26 +238,28 @@ void TLexNet::CollectPhoneStats ()
        // word->print();
        for (auto pron = word->pron; pron ; pron = pron->next) {
 	 // pron->print();
+	 const auto& N = pron->nphones;
+	 const auto& phones = pron->phones;
 
-	 if (pron->nphones < 1)
+	 if (N < 1)
 	   HError (9999, "CollectPhoneStats: pronunciation of '%s' is empty", word->wordName->name);
 
 	 if (pron->aux != (Ptr) 1)
 	   continue;
 
-	 add_phones ((Ptr) pron->phones[0]		    , 'A');
-	 add_phones ((Ptr) pron->phones[pron->nphones - 1], 'Z');
+	 add_phones (phones[ 0 ], 'A');
+	 add_phones (phones[N-1], 'Z');
 
-	 if (pron->nphones == 1) {
-	   add_phones ((Ptr) pron->phones[0], 'P');
+	 if (N == 1) {
+	   add_phones (phones[0], 'P');
 	   /*#### need to add ZP node in YZ list for single phone word */
 	   /*#### here only collect phones used in single phone words */
 	   continue;
 	 }
 
 	 /* add to AB and YZ hashes */
-	 FindAddTLCN (heap, this, LAYER_AB, &nlexAB, lexABhash, pron->phones[0]		   , pron->phones[1]		    );
-	 FindAddTLCN (heap, this, LAYER_YZ, &nlexYZ, lexYZhash, pron->phones[pron->nphones - 2], pron->phones[pron->nphones - 1]);
+	 FindAddTLCN (LAYER_AB, &nlexAB, lexABhash, phones[ 0 ], phones[ 1 ]);
+	 FindAddTLCN (LAYER_YZ, &nlexYZ, lexYZhash, phones[N-2], phones[N-1]);
 
        }
      }
@@ -290,8 +270,8 @@ void TLexNet::CollectPhoneStats ()
    if (!sil)
       HError (9999, "cannot find 'sil' model.");
 
-   add_phones ((Ptr) sil, 'A');
-   add_phones ((Ptr) sil, 'Z');
+   add_phones (sil, 'A');
+   add_phones (sil, 'Z');
 
    /* for each phone P occuring in a single phone word 
         for each word end context Z
@@ -310,8 +290,8 @@ void TLexNet::CollectPhoneStats ()
             printf ("z='%s' ", lexZ[j]->name);
          z = lexZ[j];
 
-         FindAddTLCN (heap, this, LAYER_SA, &nlexSA, lexSAhash, z, p);
-         FindAddTLCN (heap, this, LAYER_YZ, &nlexYZ, lexYZhash, z, p);
+         FindAddTLCN (LAYER_SA, &nlexSA, lexSAhash, z, p);
+         FindAddTLCN (LAYER_YZ, &nlexYZ, lexYZhash, z, p);
       }
       if (trace & T_NETCON)
          printf ("\n");
@@ -406,11 +386,11 @@ void TLexNet::CreateAnodes ()
 
             /* create Node z-a+b */
             hmm = FindTriphone (hset, z, a, b);
-            lnZAB = FindAddTLexNode (heap, this, LAYER_A, &nNodeA, nodeAhash, LN_MODEL, hmm);
+            lnZAB = FindAddTLexNode (LAYER_A, &nNodeA, nodeAhash, LN_MODEL, hmm);
 
             lnZAB->lc = NULL;
             /* connect to ZA node */
-            lcnZA = FindAddTLCN (heap, this, LAYER_SA, &nlexSA, lexSAhash, z, a);
+            lcnZA = FindAddTLCN (LAYER_SA, &nlexSA, lexSAhash, z, a);
             AddLink (heap, lcnZA, lnZAB);
 
             /* connect to AB node */
@@ -458,13 +438,13 @@ void TLexNet::CreateZnodes ()
             a = lexA[j];
             /* create Node y-z+a */
             hmm = FindTriphone (hset, y, z, a);
-            lnYZA = FindAddTLexNode (heap, this, LAYER_Z, &nNodeZ, nodeZhash, LN_MODEL, hmm);
+            lnYZA = FindAddTLexNode (LAYER_Z, &nNodeZ, nodeZhash, LN_MODEL, hmm);
 
             lnYZA->lc = NULL;
             /* connect to YZ node */
             AddLink (heap, lcnYZ, lnYZA);
             /* connect to ZS node */
-            lcnZA = FindAddTLCN (heap, this, LAYER_ZS, &nlexZS, lexZShash, z, a);
+            lcnZA = FindAddTLCN (LAYER_ZS, &nlexZS, lexZShash, z, a);
             AddLink (heap, lnYZA, lcnZA);
          }
       }
@@ -504,57 +484,68 @@ HLink FindHMM (HMMSet *hset, LabId id)
  */
 void TLexNet::CreateSILnodes ()
 {
+  /* find sil & sp models */
+  LabId sil = GetLabId ("sil", FALSE);
+  if (!sil) HError (9999, "cannot find 'sil' model.");
+  HLink hmmSIL = FindHMM (hset, sil);
 
-   int i, j;
-   TLexNode *lcnZS, *lcnSA, *ln;
-   LabId z, s, a, sil, sp;
-   HLink hmmSIL, hmmSP;
+  LabId sp = GetLabId ("sp", FALSE);
+  if (!sp) HError (9999, "cannot find 'sp' model.");
+  HLink hmmSP = FindHMM (hset, sp);
 
-   /* find sil & sp models */
-   sil = GetLabId ("sil", FALSE);
-   if (!sil)
-      HError (9999, "cannot find 'sil' model.");
-   hmmSIL = FindHMM (hset, sil);
-   sp = GetLabId ("sp", FALSE);
-   if (!sp)
-      HError (9999, "cannot find 'sp' model.");
-   hmmSP = FindHMM (hset, sp);
+  for (int i = 0; i < LEX_CON_HASH_SIZE; ++i) {
+    for (auto lcnZS = lexZShash[i]; lcnZS; lcnZS = lcnZS->next) {
+      LabId z = lcnZS->lc;
+      LabId s = lcnZS->rc;
+      /*         printf ("ZS node %p %s-%s i %d\n", lcnZS, z->name, s->name, i); */
+      auto ln = new(heap) TLexNode( this, LAYER_SIL, (s==sil) ? hmmSIL : hmmSP);
 
-   for (i = 0; i < LEX_CON_HASH_SIZE; ++i)
-      for (lcnZS = lexZShash[i]; lcnZS; lcnZS = lcnZS->next) {
-         z = lcnZS->lc;
-         s = lcnZS->rc;
-         /*         printf ("ZS node %p %s-%s i %d\n", lcnZS, z->name, s->name, i); */
-         ln = new(heap) TLexNode( this, LAYER_SIL, (s==sil) ? hmmSIL : hmmSP);
+      ln->next = nodeSIL;
+      nodeSIL = ln;
+      ++nNodeSIL;
 
-         ln->next = nodeSIL;
-         nodeSIL = ln;
-         ++nNodeSIL;
-         
-         AddLink (heap, lcnZS, ln);
-         if (s == sil) {        /* sil node */
-            ln->lc = sil;
+      AddLink (heap, lcnZS, ln);
+      if (s == sil) {        /* sil node */
+	ln->lc = sil;
 
-            /* connect sil node to all sil-A nodes */
-            for (j = 1; j <= nlexA; ++j) {
-               a = lexA[j];
-               if (a != sil) {          /* list of A contxts includes sil! */
-                  lcnSA = FindAddTLCN (heap, this, LAYER_SA, &nlexSA, lexSAhash, s, a);
-                  /*  printf ("  sil SA node %s-%s\n", lcnSA->lc->name, lcnSA->rc->name); */
-                  AddLink (heap, ln, lcnSA);
-               }
-            }
-         }
-         else {         /* sp node */
-            ln->lc = sp;
+	/* connect sil node to all sil-A nodes */
+	for (int j = 1; j <= nlexA; ++j) {
+	  if (lexA[j] == sil)
+	    continue;
 
-            /* connect sp node to corresponding SA node (SA==ZS) */
-            lcnSA = FindAddTLCN (NULL, this, LAYER_SA, &nlexSA, lexSAhash, z, s);
-            /*  printf ("  sp  SA node %s-%s\n", lcnSA->lc->name, lcnSA->rc->name); */
-            AddLink (heap, ln, lcnSA);
-         }
+	  /* list of A contxts includes sil! */
+	  auto lcnSA = FindAddTLCN (LAYER_SA, &nlexSA, lexSAhash, s, lexA[j]);
+	  /*  printf ("  sil SA node %s-%s\n", lcnSA->lc->name, lcnSA->rc->name); */
+	  AddLink (heap, ln, lcnSA);
+	}
       }
+      else {         /* sp node */
+	ln->lc = sp;
+
+	/* connect sp node to corresponding SA node (SA==ZS) */
+	auto lcnSA = FindAddTLCN (LAYER_SA, &nlexSA, lexSAhash, z, s);
+	/*  printf ("  sp  SA node %s-%s\n", lcnSA->lc->name, lcnSA->rc->name); */
+	AddLink (heap, ln, lcnSA);
+      }
+
+    }
+  }
 }
+
+void TLexNet::add_phones(LabId elem, char type) {
+  switch (type) {
+    case 'A':
+      BAddSearch((Ptr) elem, nlexA, ((Ptr **) &lexA));
+      break;
+    case 'Z':
+      BAddSearch((Ptr) elem, nlexZ, ((Ptr **) &lexZ));
+      break;
+    case 'P':
+      BAddSearch((Ptr) elem, nlexP, ((Ptr **) &lexP));
+      break;
+  }
+}
+
 
 
 /* Handle1PhonePron
@@ -567,7 +558,7 @@ void TLexNet::CreateSILnodes ()
      SA               YZ       y-z+a ---> ZS    
 
 */
-void Handle1PhonePron (MemHeap *heap, TLexNet *net, Pron pron)
+void TLexNet::Handle1PhonePron (Pron pron)
 {
    LabId p;            /* the single phone */
    LabId z;
@@ -583,8 +574,8 @@ void Handle1PhonePron (MemHeap *heap, TLexNet *net, Pron pron)
 
    p = pron->phones[0];
 
-   pronid = ++net->nPronIds;
-   lmlaIdx = ++net->lmlaCount;
+   pronid = ++this->nPronIds;
+   lmlaIdx = ++this->lmlaCount;
 
    pron->aux = (Ptr) (int) pronid;
 
@@ -592,24 +583,24 @@ void Handle1PhonePron (MemHeap *heap, TLexNet *net, Pron pron)
         create a WE node and link to appropriate nodes in SA & YZ layers
         zp_sa ---> WE ---> zp_yz
    */
-   for (i = 1; i <= net->nlexZ; ++i) {
+   for (i = 1; i <= this->nlexZ; ++i) {
       if (trace & T_NETCON)
-         printf ("Z node '%s' P node '%s'\n", net->lexZ[i]->name, p->name);
-      z = net->lexZ[i];
+         printf ("Z node '%s' P node '%s'\n", this->lexZ[i]->name, p->name);
+      z = this->lexZ[i];
 
-      zp_sa = FindAddTLCN (NULL, net, LAYER_SA, &net->nlexSA, net->lexSAhash, z, p);
-      zp_yz = FindAddTLCN (NULL, net, LAYER_YZ, &net->nlexYZ, net->lexYZhash, z, p);
+      zp_sa = FindAddTLCN (LAYER_SA, &this->nlexSA, this->lexSAhash, z, p);
+      zp_yz = FindAddTLCN (LAYER_YZ, &this->nlexYZ, this->lexYZhash, z, p);
 
       /* create word end node */
-      we = new(heap) TLexNode( net, LAYER_WE, pron);
+      we = new(heap) TLexNode( this, LAYER_WE, pron);
       
       we->loWE = we->hiWE = pronid;
       we->lmlaIdx = lmlaIdx;
 
       we->lc = pron->word->wordName;
-      we->next = net->nodeBY; /*#### link into BY list? */
-      net->nodeBY = we;
-      ++net->nNodeBY;
+      we->next = this->nodeBY; /*#### link into BY list? */
+      this->nodeBY = we;
+      ++this->nNodeBY;
 
       AddLink (heap, zp_sa, we);
       AddLink (heap, we, zp_yz);
@@ -639,13 +630,12 @@ void TLexNet::CreateBYnodes () {
 	 if (pron->aux != (Ptr) 1) continue;
 
 	 if (pron->nphones < 2) {
-	   /*  printf ("one- or two-phone word (%s) ignored\n", word->wordName->name); */
-	   Handle1PhonePron (heap, this, pron);
+	   Handle1PhonePron (pron);
 	   continue;
 	 }
 
 	 /* find AB node */
-	 TLexNode* prevln = FindAddTLCN (NULL, this, LAYER_AB, &nlexAB, lexABhash, 
+	 TLexNode* prevln = FindAddTLCN (LAYER_AB, &nlexAB, lexABhash, 
 	     pron->phones[0], pron->phones[1]);
 
 	 /* add models for phones B -- Y */
@@ -683,7 +673,7 @@ void TLexNet::CreateBYnodes () {
 	 prevln = ln;
 
 	 /* find YZ node */
-	 ln = FindAddTLCN (NULL, this, LAYER_YZ, &nlexYZ, lexYZhash, 
+	 ln = FindAddTLCN (LAYER_YZ, &nlexYZ, lexYZhash, 
 	     pron->phones[pron->nphones - 2], pron->phones[pron->nphones - 1]);
 	 /* find LexNode and connect prevln to it */
 	 AddLink (heap, prevln, ln);

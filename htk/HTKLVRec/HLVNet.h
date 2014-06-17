@@ -214,6 +214,16 @@ class TLexNet {
     void CreateBYnodes ();
     void CreateSILnodes ();
 
+    void Handle1PhonePron (Pron pron);
+
+    void add_phones(LabId elem, char type);
+
+    TLexConNode *FindAddTLCN (LayerId layerId, int *n,
+	TLexConNode *lcnHashTab[], LabId lc, LabId rc);
+
+    TLexNode *FindAddTLexNode (LayerId layerId, int *n,
+	TLexNode *lnHashTab[], LexNodeType type , HLink hmm);
+
     static MemHeap tnetHeap;	/* used for temporary data in net creation */
     static void ResetHeap() { ::ResetHeap(&tnetHeap); }
 
@@ -239,8 +249,6 @@ class TLexNet {
     LabId *lexA;
     LabId *lexZ;
     LabId *lexP;
-
-    void add_phones(Ptr elem, char type);
 
     /* the following all correspond to real nodes in the final LexNet */
     int nlexAB;
@@ -312,16 +320,13 @@ struct _LMlaTree {
 void InitLVNet(void);
 
 /* build lexicon network for recognition for Vocab and HMMSet */
-/* LexNet *CreateLexNet (MemHeap *heap, Vocab *voc, HMMSet *hset,
-    char *startWord, char *endWord, bool silDict);*/
-// LexNet *ConvertTLex2Lex (MemHeap *heap, TLexNet *tnet);
 
 void InitLMlaTree(LexNet *net, TLexNet *tnet);
 
-TLexConNode *FindAddTLCN (MemHeap *heap, TLexNet *net, int layerId,
+TLexConNode *FindAddTLCN (MemHeap *heap, TLexNet *net, LayerId layerId,
     int *n, TLexConNode *lcnHashTab[], LabId lc, LabId rc);
 
-TLexNode *FindAddTLexNode (MemHeap *heap, TLexNet *net, int layerId,
+TLexNode *FindAddTLexNode (MemHeap *heap, TLexNet *net, LayerId layerId,
     int *n, TLexNode *lnHashTab[], LexNodeType type , HLink hmm);
 
 HLink FindTriphone (HMMSet *hset, LabId a, LabId b, LabId c);
@@ -332,7 +337,6 @@ TLexLink *FindHMMLink (TLexNode *ln, HLink hmm);
 int TraverseTree (TLexNode *ln, int start, int &lmlaCount);
 
 HLink FindHMM (HMMSet *hset, LabId id);
-void Handle1PhonePron (MemHeap *heap, TLexNet *net, Pron pron);
 TLexNode *CreateBoundary (MemHeap *heap, TLexNet *tnet, LabId labid, int modLayer, int weLayer);
 void CreateStartEnd (MemHeap *heap, TLexNet *tnet);
 void AssignWEIds(TLexNet *tnet);
