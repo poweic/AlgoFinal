@@ -196,7 +196,7 @@ AsciiWriteChar	HTKLib/esig_asc.c	/^AsciiWriteChar(char     *data,$/;"	f	file:
 AsciiWriteSub	HTKLib/esig_asc.c	/^AsciiWriteSub(void  *data,$/;"	f	file:
 AsciiWriteWchar	HTKLib/esig_asc.c	/^AsciiWriteWchar(Wchar   *data,$/;"	f	file:
 AssignStructure	HTKTools/HHEd.c	/^Ptr AssignStructure(LabId id, int state)$/;"	f
-AssignWEIds	HTKLVRec/HLVNet.cpp	/^void AssignWEIds(TLexNet *tnet)$/;"	f
+AssignWEIds	HTKLVRec/HLVNet.cpp	/^void TLexNet::AssignWEIds()$/;"	f	class:TLexNet
 AttachAccessInfo	HLMLib/LModel.c	/^void AttachAccessInfo(BackOffLM *lm)$/;"	f
 AttachAccs	HTKLib/HTrain.c	/^void AttachAccs(HMMSet *hset, MemHeap *x, UPDSet uFlags){ AttachAccsParallel(hset,x,uFlags,1); }$/;"	f
 AttachAccsParallel	HTKLib/HTrain.c	/^void AttachAccsParallel(HMMSet *hset, MemHeap *x, UPDSet uFlags, int nPara)$/;"	f
@@ -663,7 +663,7 @@ CreateBetaQ	HTKLib/HFB.c	/^static DVector *CreateBetaQ(MemHeap *x, int qLo,int q
 CreateBlockTriMat	HTKLib/HAdapt.c	/^static TriMat *CreateBlockTriMat(MemHeap *x, IntVec blockSize)$/;"	f	file:
 CreateBoNGram	HTKLVRec/HLVLM.c	/^FSLM_ngram *CreateBoNGram (MemHeap *heap, int vocSize, int counts[NSIZE])$/;"	f
 CreateBoNGram	HTKLib/HLM.c	/^NGramLM *CreateBoNGram(LModel *lm,int vocSize, int counts[NSIZE])$/;"	f
-CreateBoundary	HTKLVRec/HLVNet.cpp	/^TLexNode *CreateBoundary (MemHeap *heap, TLexNet *tnet, LabId labid, int modLayer, int weLayer)$/;"	f
+CreateBoundary	HTKLVRec/HLVNet.cpp	/^TLexNode* TLexNet::CreateBoundary (LabId labid, int modLayer, int weLayer)$/;"	f	class:TLexNet
 CreateBuffer	HTKTools/HDMan.c	/^void CreateBuffer(char *dName, bool isInput)$/;"	f
 CreateButtons	HTKTools/HSLab.c	/^void CreateButtons(void)$/;"	f
 CreateCME	HTKLib/HModel.c	/^static MixtureElem *CreateCME(HMMSet *hset, int M)$/;"	f	file:
@@ -737,7 +737,7 @@ CreateSequence	HTKLib/HTrain.c	/^Sequence CreateSequence(MemHeap *x, int blkSize
 CreateSet	HTKLib/HUtil.c	/^IntSet CreateSet(int size)$/;"	f
 CreateShortVec	HTKLib/HMem.c	/^ShortVec CreateShortVec(MemHeap *x,int size)$/;"	f
 CreateSrcExt	HTKLib/HParm.c	/^HParmSrcDef CreateSrcExt(Ptr xInfo, ParmKind pk, int size, HTime sampPeriod, $/;"	f
-CreateStartEnd	HTKLVRec/HLVNet.cpp	/^void CreateStartEnd (MemHeap *heap, TLexNet *tnet)$/;"	f
+CreateStartEnd	HTKLVRec/HLVNet.cpp	/^void TLexNet::CreateStartEnd ()$/;"	f	class:TLexNet
 CreateSubWindows	HTKTools/HSLab.c	/^void CreateSubWindows(void)$/;"	f
 CreateTME	HTKLib/HModel.c	/^static Vector CreateTME(HMMSet *hset, int M)$/;"	f	file:
 CreateTMRecs	HTKTools/HHEd.c	/^void CreateTMRecs(void)$/;"	f
@@ -789,7 +789,7 @@ DC_KATZ	HLMLib/LModel.h	/^   DC_KATZ, DC_ABSOLUTE, DC_LINEAR, DC_LAST$/;"	e	enum
 DC_LAST	HLMLib/LModel.h	/^   DC_KATZ, DC_ABSOLUTE, DC_LINEAR, DC_LAST$/;"	e	enum:__anon4
 DC_LINEAR	HLMLib/LModel.h	/^   DC_KATZ, DC_ABSOLUTE, DC_LINEAR, DC_LAST$/;"	e	enum:__anon4
 DDistance	HTKTools/HHEd.c	/^float DDistance(StreamElem *s1, StreamElem *s2)$/;"	f
-DEBUG_LABEL_NET	HTKLVRec/HLVNet.cpp	55;"	d	file:
+DEBUG_LABEL_NET	HTKLVRec/HLVNet.cpp	54;"	d	file:
 DEFCON	HTKTools/HDMan.c	/^typedef enum {UCWORD, UCPHONE, LCWORD, LCPHONE, DELETEW, DELDEF, FUNCW, DEFCON,$/;"	e	enum:__anon143	file:
 DEFCON	HTKTools/HLEd.c	/^   REPLACE, CHANGE, FIND,   MERGE,  EDOP_DELETE, DEFCON, TRIST,  $/;"	e	enum:__anon148	file:
 DEF_ABS_COEF	HLMLib/LPCalc.c	502;"	d	file:
@@ -820,8 +820,8 @@ DFACTOR	HTKTools/HMMIRest.c	/^static float DFACTOR = 2.0;         \/* not a conf
 DIAG	HTKTools/HResults.c	/^enum _Direction{DIAG,VERT,HOR,NIL};$/;"	e	enum:_Direction	file:
 DIAGC	HTKLib/HMath.h	/^   DIAGC,         \/* diagonal covariance *\/$/;"	e	enum:__anon48
 DIAGCOV	HTKLib/HModel.c	/^   DIAGCOV,  FULLCOV, XFORMCOV,$/;"	e	enum:__anon124	file:
-DIR_BACKW	HTKLVRec/HLVNet.cpp	1467;"	d	file:
-DIR_FORW	HTKLVRec/HLVNet.cpp	1466;"	d	file:
+DIR_BACKW	HTKLVRec/HLVNet.cpp	1462;"	d	file:
+DIR_FORW	HTKLVRec/HLVNet.cpp	1461;"	d	file:
 DISCRETE	HTKLib/HParm.h	/^      DISCRETE,                        \/* Discrete VQ symbols (shorts) *\/$/;"	e	enum:_BaseParmKind
 DISCRETEHS	HTKLib/HModel.h	/^enum _HSetKind {PLAINHS, SHAREDHS, TIEDHS, DISCRETEHS};$/;"	e	enum:_HSetKind
 DISTFILES	Makefile	/^DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)$/;"	m
@@ -1200,8 +1200,8 @@ FilterNGram	HLMLib/LPCalc.c	/^bool FilterNGram(NGInputSet *inSet, UInt *gram, fl
 FilterSet	HTKLib/HShell.c	/^static bool FilterSet(IOFilter filter, char *s)$/;"	f	file:
 FindAcc	HTKTools/HLEd.c	/^} FindAcc;$/;"	t	typeref:struct:_FindAcc	file:
 FindAddSubLNode	HTKLib/HLat.c	/^static SubLNode *FindAddSubLNode (MemHeap *heap, LNode *ln, LMState lmstate, int *nsln)$/;"	f	file:
-FindAddTLCN	HTKLVRec/HLVNet.cpp	/^TLexConNode *FindAddTLCN (MemHeap *heap, TLexNet *net, int layerId, int *n, TLexConNode *lcnHashTab[], LabId lc, LabId rc)$/;"	f
-FindAddTLexNode	HTKLVRec/HLVNet.cpp	/^TLexNode *FindAddTLexNode (MemHeap *heap, TLexNet *net, int layerId, int *n, TLexNode *lnHashTab[], LexNodeType type , HLink hmm)$/;"	f
+FindAddTLCN	HTKLVRec/HLVNet.cpp	/^TLexConNode* TLexNet::FindAddTLCN (LayerId layerId, int *n,$/;"	f	class:TLexNet
+FindAddTLexNode	HTKLVRec/HLVNet.cpp	/^TLexNode* TLexNet::FindAddTLexNode (LayerId layerId, int *n,$/;"	f	class:TLexNet
 FindBaseModel	HTKTools/HHEd.c	/^HLink FindBaseModel(HMMSet *hset,LabId id,baseType type)$/;"	f
 FindBestMixes	HTKTools/HInit.c	/^void FindBestMixes(int segNum, int segLen, IntVec states, IntVec *mixes)$/;"	f
 FindBestSplit	HTKTools/HHEd.c	/^Node *FindBestSplit(Node *first, float threshold)$/;"	f
@@ -1587,8 +1587,8 @@ HASCOMPX	HTKLib/HParm.h	62;"	d
 HASCRCC	HTKLib/HParm.h	64;"	d
 HASDELTA	HTKLib/HParm.h	60;"	d
 HASENERGY	HTKLib/HParm.h	58;"	d
-HASH1	HTKLVRec/HLVNet.cpp	156;"	d	file:
-HASH2	HTKLVRec/HLVNet.cpp	157;"	d	file:
+HASH1	HTKLVRec/HLVNet.cpp	157;"	d	file:
+HASH2	HTKLVRec/HLVNet.cpp	158;"	d	file:
 HASHSIZE	HTKLib/HLabel.c	135;"	d	file:
 HASNULLE	HTKLib/HParm.h	59;"	d
 HASTHIRD	HTKLib/HParm.h	67;"	d
@@ -1764,7 +1764,7 @@ HTextWidth	HTKLib/HGraf_WIN32.c	/^int HTextWidth(char *str)$/;"	f
 HTime	HTKLib/HShell.h	/^typedef double HTime;      \/* time in 100ns units *\/$/;"	t
 H_EOF	HTKTools/HParse.c	1299;"	d	file:
 Ham	HTKLib/HSigP.c	/^void Ham (Vector s)$/;"	f
-Handle1PhonePron	HTKLVRec/HLVNet.cpp	/^void Handle1PhonePron (MemHeap *heap, TLexNet *net, Pron pron)$/;"	f
+Handle1PhonePron	HTKLVRec/HLVNet.cpp	/^void TLexNet::Handle1PhonePron (Pron pron)$/;"	f	class:TLexNet
 HandleSpSkipLayer	HTKLVRec/HLVRec-propagate.c	/^void Decoder::HandleSpSkipLayer (LexNodeInst *inst)$/;"	f	class:Decoder
 HandleWordend	HTKLVRec/HLVRec-propagate.c	/^void Decoder::HandleWordend (LexNode *ln)$/;"	f	class:Decoder
 HardAssign	HTKLib/HAdapt.c	/^bool HardAssign(AdaptXForm *xform)$/;"	f
@@ -2099,7 +2099,7 @@ LIGHT_GREY	HTKLib/HGraf.h	/^                LIGHT_GREY, GREY, DARK_GREY, BLACK};
 LINKCHUNKSIZE	HTKTools/HParse.c	274;"	d	file:
 LINKEXTENTFACTOR	HTKTools/HParse.c	275;"	d	file:
 LINXFORM	HTKLib/HModel.c	/^   LINXFORM, OFFSET, BIAS, LOGDET, BLOCKINFO, BLOCK, BASECLASS, $/;"	e	enum:__anon124	file:
-LIST_BLOCKSIZE	HTKLVRec/HLVNet.cpp	53;"	d	file:
+LIST_BLOCKSIZE	HTKLVRec/HLVNet.cpp	52;"	d	file:
 LLFInfo	HTKLib/HLat.c	/^typedef struct _LLFInfo LLFInfo;$/;"	t	typeref:struct:_LLFInfo	file:
 LLTC	HTKLib/HMath.h	/^   LLTC,          \/* L' part of Choleski decomposition *\/$/;"	e	enum:__anon48
 LLTCOV	HTKLib/HModel.c	/^   DURATION, INVDIAGCOV, TRANSP, DPROB, LLTCOV, LLTCOVAR,$/;"	e	enum:__anon124	file:
@@ -3969,6 +3969,7 @@ TIMIT Label Files	HTKBook/labels.tex	/^\\subsection{TIMIT Label Files}$/;"	b
 TIMIThdr	HTKLib/HWave.c	/^} TIMIThdr;$/;"	t	typeref:struct:__anon69	file:
 TLexConNode	HTKLVRec/HLVNet.h	/^typedef TLexNode TLexConNode;$/;"	t
 TLexLink	HTKLVRec/HLVNet.h	/^typedef struct _TLexLink TLexLink;$/;"	t	typeref:struct:_TLexLink
+TLexNet	HTKLVRec/HLVNet.cpp	/^TLexNet::TLexNet(Vocab *voc, HMMSet *hset,$/;"	f	class:TLexNet
 TLexNet	HTKLVRec/HLVNet.h	/^class TLexNet {$/;"	c
 TLexNode	HTKLVRec/HLVNet.cpp	/^TLexNode::TLexNode(TLexNet* net, int layerId, HLink hmm): type(LN_MODEL) {$/;"	f	class:TLexNode
 TLexNode	HTKLVRec/HLVNet.cpp	/^TLexNode::TLexNode(TLexNet* net, int layerId, LabId lc, LabId rc): type(LN_CON) {$/;"	f	class:TLexNode
@@ -4136,8 +4137,8 @@ T_MOP	HLMLib/LGBase.c	51;"	d	file:
 T_MRE	HTKTools/HRest.c	60;"	d	file:
 T_MRG	HTKLib/HLat.c	64;"	d	file:
 T_NAC	HTKLib/HTrain.c	60;"	d	file:
-T_NET	HTKLVRec/HLVNet.cpp	60;"	d	file:
-T_NETCON	HTKLVRec/HLVNet.cpp	61;"	d	file:
+T_NET	HTKLVRec/HLVNet.cpp	59;"	d	file:
+T_NETCON	HTKLVRec/HLVNet.cpp	60;"	d	file:
 T_NGEN	HTKLib/HRec.c	41;"	d	file:
 T_NKY	HTKTools/HResults.c	45;"	d	file:
 T_NPHN	HTKTools/HDMan.c	53;"	d	file:
@@ -4233,7 +4234,7 @@ T_TOP	HLMTools/LSubset.c	47;"	d	file:
 T_TOP	HTKLVRec/HDecode.mod.c	62;"	d	file:
 T_TOP	HTKLVRec/HLVLM.c	53;"	d	file:
 T_TOP	HTKLVRec/HLVModel.c	55;"	d	file:
-T_TOP	HTKLVRec/HLVNet.cpp	59;"	d	file:
+T_TOP	HTKLVRec/HLVNet.cpp	58;"	d	file:
 T_TOP	HTKLVRec/HLVRec.c	65;"	d	file:
 T_TOP	HTKLVRec/misc.h	27;"	d
 T_TOP	HTKLib/HAdapt.c	56;"	d	file:
@@ -4685,7 +4686,7 @@ WriteSamples	HTKLib/esignal.c	/^WriteSamples(void       *data,$/;"	f
 WriteShort	HTKLib/HShell.c	/^void WriteShort (FILE *f, short *s, int n, bool binary)$/;"	f
 WriteShortVec	HTKLib/HMath.c	/^void WriteShortVec(FILE *f, ShortVec v, bool binary)$/;"	f
 WriteString	HTKLib/HShell.c	/^void WriteString(FILE *f,char *s,char q)$/;"	f
-WriteTLex	HTKLVRec/HLVNet.cpp	/^void WriteTLex (TLexNet *net, char *fn)$/;"	f
+WriteTLex	HTKLVRec/HLVNet.cpp	/^void TLexNet::WriteTLex (char *fn)$/;"	f	class:TLexNet
 WriteTriMat	HTKLib/HMath.c	/^void WriteTriMat(FILE *f, TriMat m, bool binary)$/;"	f
 WriteTxtHGram	HLMLib/LGBase.c	/^static void WriteTxtHGram(FILE *f, char *name, int N, LabId *ng)$/;"	f	file:
 WriteVQTable	HTKTools/HQuant.c	/^void WriteVQTable(ClusterSet *cs[], char *fn)$/;"	f
@@ -4914,7 +4915,7 @@ _XFDirInfo	HTKLib/HModel.c	/^typedef struct _XFDirInfo {$/;"	s	file:
 _XFormKind	HTKLib/HModel.h	/^enum _XFormKind {MLLRMEAN, MLLRCOV, MLLRVAR, CMLLR, SEMIT};$/;"	g
 _XferMode	HTKLib/HGraf.h	/^enum _XferMode {GCOPY, GOR, GXOR, GINVERT};$/;"	g
 __collect_stats__	HTKLVRec/HLVRec-propagate.c	/^void Decoder::__collect_stats__ (TokenSet *instTS, int N) {$/;"	f	class:Decoder
-__init__	HTKLVRec/HLVNet.cpp	/^void TLexNet::__init__(Vocab *voc, HMMSet *hset, $/;"	f	class:TLexNet
+__init__	HTKLVRec/HLVNet.cpp	/^void TLexNet::__init__() {$/;"	f	class:TLexNet
 _appendUsage	others/cmdparser.h	/^    void _appendUsage(bool optional, string option) {$/;"	f	class:CmdParser
 _argc	others/cmdparser.h	/^    int _argc;$/;"	m	class:CmdParser
 _arguments	others/cmdparser.h	/^    map<string, Arg> _arguments;$/;"	m	class:CmdParser
@@ -4991,7 +4992,7 @@ add	others/cmdparser.h	/^    CmdParser& add(string option, const char* descripti
 addDither	HTKLib/HParm.c	/^   float addDither;           \/* Additional dither added to file *\/$/;"	m	struct:__anon63	file:
 addGroup	others/cmdparser.h	/^    CmdParser& addGroup(string description) {$/;"	f	class:CmdParser
 add_index	HTKLib/HFBLat.c	/^static int add_index = 999;   \/* additional index for discriminative training: 3 for MPE with MMI prior *\/$/;"	v	file:
-add_phones	HTKLVRec/HLVNet.cpp	/^void TLexNet::add_phones(Ptr elem, char type) {$/;"	f	class:TLexNet
+add_phones	HTKLVRec/HLVNet.cpp	/^void TLexNet::add_phones(LabId elem, char type) {$/;"	f	class:TLexNet
 adevin	HTKLib/HAudio.c	/^   UMSBAUDDevice adevin;$/;"	m	struct:_AudioIn	file:
 adevout	HTKLib/HAudio.c	/^   UMSBAUDDevice adevout;$/;"	m	struct:_AudioOut	file:
 adpLM	HLMTools/LAdapt.c	/^static BackOffLM *adpLM;            \/* the adapted final LM *\/$/;"	v	file:
@@ -6300,7 +6301,7 @@ infodir	HTKLib/Makefile	/^infodir = ${prefix}\/share\/info$/;"	m
 infodir	HTKTools/Makefile	/^infodir = ${prefix}\/share\/info$/;"	m
 infodir	Makefile	/^infodir = ${prefix}\/share\/info$/;"	m
 init	HTKLVRec/HLVNet.cpp	/^void LexNet::init(Vocab *voc, HMMSet *hset, $/;"	f	class:LexNet
-init	HTKLVRec/HLVNet.cpp	/^void TLexNet::init(Vocab *voc, HMMSet *hset, $/;"	f	class:TLexNet
+init	HTKLVRec/HLVNet.cpp	/^void TLexNet::init() {$/;"	f	class:TLexNet
 init	HTKLVRec/HLVNet.cpp	/^void TLexNode::init(TLexNet* net, int layer_id) {$/;"	f	class:TLexNode
 init	HTKLVRec/misc.cpp	/^void Decoder::init() {$/;"	f	class:Decoder
 init	HTKLVRec/misc.cpp	/^void HiddenMarkovModel::init(char* hmmList_fn, char* mmf_fn, char* inXFormDir_fn,$/;"	f	class:HiddenMarkovModel
