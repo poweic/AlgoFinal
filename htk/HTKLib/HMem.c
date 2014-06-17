@@ -201,6 +201,11 @@ void InitMem(void)
    }
 }
 
+MemHeap::MemHeap(char *name, HeapType type, size_t elemSize, 
+    float growf, size_t numElem, size_t maxElem) {
+  CreateHeap(this, name, type, elemSize, growf, numElem, maxElem);
+}
+
 /* EXPORT->CreateHeap: create a memory heap with given characteristics */
 void CreateHeap(MemHeap *x, char *name, HeapType type, size_t elemSize, 
                 float growf, size_t numElem, size_t maxElem)

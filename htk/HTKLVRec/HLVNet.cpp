@@ -80,76 +80,41 @@ void InitLVNet(void)
 
 /* --------------------------- the real code  ---------------------- */
 
-TLexNode *NewTLexNodeMod (MemHeap *heap, TLexNet *net, int layerId, HLink hmm)
-{
-   TLexNode *ln;
-
-   assert (heap);
-   ln = (TLexNode *) New (heap, sizeof (TLexNode));
-   ln->nlinks = 0;
-   ln->link = NULL;
-   ln->ln = NULL;
-   ln->loWE = ln->hiWE = ln->lmlaIdx = 0;
-
-   ln->chain = net->root;
-   net->root = ln;
-
-   ln->layerId = layerId;
-   ++net->nNodesLayer[layerId];
-
-   ln->pron = NULL;
-   ln->hmm = hmm;
-   ln->type = LN_MODEL;
-
-   return ln;
+TLexNode::TLexNode(TLexNet* net, int layerId, HLink hmm): type(LN_MODEL) {
+    this->init(net, layerId);
+    this->hmm = hmm;
 }
 
-TLexNode *NewTLexNodeWe (MemHeap *heap, TLexNet *net, int layerId, Pron pron)
-{
-   TLexNode *ln;
-
-   assert (heap);
-   ln = (TLexNode *) New (heap, sizeof (TLexNode));
-   ln->nlinks = 0;
-   ln->link = NULL;
-   ln->ln = NULL;
-   ln->loWE = ln->hiWE = ln->lmlaIdx = 0;
-
-   ln->chain = net->root;
-   net->root = ln;
-
-   ln->layerId = layerId;
-   ++net->nNodesLayer[layerId];
-
-   ln->hmm = NULL;
-   ln->pron = pron;
-   ln->type = LN_WORDEND;
-
-   return ln;
+TLexNode::TLexNode(TLexNet* net, int layerId, Pron pron): type(LN_WORDEND) {
+    this->init(net, layerId);
+    this->pron = pron;
 }
 
-TLexNode *NewTLexNodeCon (MemHeap *heap, TLexNet *net, int layerId, LabId lc, LabId rc)
-{
-   TLexNode *ln;
+TLexNode::TLexNode(TLexNet* net, int layerId, LabId lc, LabId rc): type(LN_CON) {
+    this->init(net, layerId);
+    this->lc = lc;
+    this->rc = rc;
+}
 
-   assert (heap);
-   ln = (TLexNode *) New (heap, sizeof (TLexNode));
-   ln->nlinks = 0;
-   ln->link = NULL;
-   ln->ln = NULL;
-   ln->loWE = ln->hiWE = ln->lmlaIdx = 0;
+void TLexNode::init(TLexNet* net, int layer_id) {
+  nlinks = 0;
+  link = NULL;
+  ln = NULL;
+  loWE = hiWE = lmlaIdx = 0;
+  layerId = layer_id;
 
-   ln->chain = net->root;
-   net->root = ln;
+  chain = net->root;
+  net->root = this;
+  ++net->nNodesLayer[layerId];
 
-   ln->layerId = layerId;
-   ++net->nNodesLayer[layerId];
+  hmm = NULL;
+  pron = NULL;
+  lc = rc = NULL;
+}
 
-   ln->type = LN_CON;
-   ln->lc = lc;
-   ln->rc = rc;
-
-   return ln;
+void* TLexNode::operator new (size_t, MemHeap* heap) {
+  assert (heap);
+  return New (heap, sizeof (TLexNode));
 }
 
 /* from HNet.c */
@@ -203,7 +168,7 @@ TLexConNode *FindAddTLCN (MemHeap *heap, TLexNet *net, int layerId, int *n, TLex
       lcn = lcn->next;
 
    if (!lcn) {          /* not found */
-      lcn = (TLexConNode *) NewTLexNodeCon (heap, net, layerId, lc, rc);
+      lcn = (TLexConNode *) new(heap) TLexNode( net, layerId, lc, rc);
 
       lcn->next = lcnHashTab[hash];
       lcnHashTab[hash] = lcn;
@@ -230,7 +195,7 @@ TLexNode *FindAddTLexNode (MemHeap *heap, TLexNet *net, int layerId, int *n, TLe
    if (!ln) {           /* not found */
       if (!heap)
          return NULL;
-      ln = NewTLexNodeMod (heap, net, layerId, hmm);
+      ln = new(heap) TLexNode( net, layerId, hmm);
       ln->type = type;          /*#### do we ever use anything but LN_MODEL? */
 
       ln->next = lnHashTab[hash];
@@ -560,7 +525,7 @@ void TLexNet::CreateSILnodes ()
          z = lcnZS->lc;
          s = lcnZS->rc;
          /*         printf ("ZS node %p %s-%s i %d\n", lcnZS, z->name, s->name, i); */
-         ln = NewTLexNodeMod (heap, this, LAYER_SIL, (s==sil) ? hmmSIL : hmmSP);
+         ln = new(heap) TLexNode( this, LAYER_SIL, (s==sil) ? hmmSIL : hmmSP);
 
          ln->next = nodeSIL;
          nodeSIL = ln;
@@ -636,7 +601,7 @@ void Handle1PhonePron (MemHeap *heap, TLexNet *net, Pron pron)
       zp_yz = FindAddTLCN (NULL, net, LAYER_YZ, &net->nlexYZ, net->lexYZhash, z, p);
 
       /* create word end node */
-      we = NewTLexNodeWe (heap, net, LAYER_WE, pron);
+      we = new(heap) TLexNode( net, LAYER_WE, pron);
       
       we->loWE = we->hiWE = pronid;
       we->lmlaIdx = lmlaIdx;
@@ -694,7 +659,7 @@ void TLexNet::CreateBYnodes () {
 	     ++nshared;
 	   }
 	   else {             /* model not found -> create a new one */
-	     ln = NewTLexNodeMod (heap, this, LAYER_BY, hmm);
+	     ln = new(heap) TLexNode( this, LAYER_BY, hmm);
 
 	     ln->next = nodeBY;
 	     nodeBY = ln;
@@ -707,7 +672,7 @@ void TLexNet::CreateBYnodes () {
 	   }
 	 }
 	 /* create word end node */
-	 ln = NewTLexNodeWe (heap, this, LAYER_WE, pron);
+	 ln = new(heap) TLexNode( this, LAYER_WE, pron);
 
 	 ln->lc = pron->word->wordName;
 	 ln->next = nodeBY;
@@ -749,13 +714,13 @@ TLexNode *CreateBoundary (MemHeap *heap, TLexNet *tnet, LabId labid, int modLaye
               labid->name);
    
    /* create model node */
-   lnMod = NewTLexNodeMod (heap, tnet, modLayer, FindHMM (tnet->hset, w->pron->phones[0]));
+   lnMod = new(heap) TLexNode( tnet, modLayer, FindHMM (tnet->hset, w->pron->phones[0]));
 
    lnMod->next = NULL;
    lnMod->lc = w->pron->phones[0];
 
    /* create word end node */
-   lnWe = NewTLexNodeWe (heap, tnet, weLayer, w->pron);
+   lnWe = new(heap) TLexNode( tnet, weLayer, w->pron);
 
    lnWe->lc = w->pron->word->wordName;
    lnWe->next = lnMod;
@@ -813,7 +778,7 @@ void CreateStartEnd (MemHeap *heap, TLexNet *tnet)
    lnWe->lmlaIdx = ++tnet->lmlaCount;
    lnWe->pron->aux = (Ptr) lnWe->loWE;
    
-   lnTime = NewTLexNodeCon (heap, tnet, LAYER_SA, lnWe->lc, lnWe->lc);
+   lnTime = new(heap) TLexNode( tnet, LAYER_SA, lnWe->lc, lnWe->lc);
    AddLink (heap, lnTime, lnMod);
    
    tnet->end = lnWe;
@@ -843,8 +808,8 @@ void CreateStartEnd (MemHeap *heap, TLexNet *tnet)
       hmmSP = FindHMM (tnet->hset, sp);
       
       
-      tnet->lnSEsp = NewTLexNodeMod (heap, tnet, LAYER_SIL, hmmSP);
-      tnet->lnSEsil = NewTLexNodeMod (heap, tnet, LAYER_SIL, hmmSIL);
+      tnet->lnSEsp = new(heap) TLexNode( tnet, LAYER_SIL, hmmSP);
+      tnet->lnSEsil = new(heap) TLexNode( tnet, LAYER_SIL, hmmSIL);
 
       AddLink (heap, tnet->lnSEsp, lnTime);
       AddLink (heap, tnet->lnSEsil, lnTime);
@@ -1040,42 +1005,47 @@ void InitLMlaTree(LexNet *net, TLexNet *tnet)
    CreateCompLMLA (net->heap, laTree, tnet);
 }
 
+MemHeap LexNet::_netHeap("Net heap", MSTAK, 1, 0,100000, 800000);
+
+
+void* LexNet::operator new (size_t) {
+  return New (&LexNet::_netHeap, sizeof (LexNet));
+}
 
 /* ConvertTLex2Lex
 
      convert the large, verbose temp lex structure into the compact LexNet structure
      nodes are ordered in layers
  */
-LexNet *ConvertTLex2Lex (MemHeap *heap, TLexNet *tnet)
+void LexNet::ConvertTLex2Lex (TLexNet *tnet)
 {
-   int i, nn, nl, nlTotal = 0;
-   LexNet *net;
-   TLexNode *tln;
    LexNode *ln;
    TLexLink *tll;
    LexNode **foll;
    LexNode *layerCur[NLAYERS];        /* pointer to next free LN in layer */
 
+   // trace = 2; printf("\33[33m");
    if (trace &T_NET) {
       printf ("number of nodes:\n");
-      printf (" A model nodes: %d\n", tnet->nNodeA);
-      printf (" AB context nodes: %d\n", tnet->nlexAB);
-      printf (" B-Y model nodes: %d\n", tnet->nNodeBY);
-      printf (" YZ context nodes: %d\n", tnet->nlexYZ);
-      printf (" Z model nodes: %d\n", tnet->nNodeZ);
-      printf (" ZS context nodes: %d\n", tnet->nlexZS);
-      printf (" SIL model nodes: %d\n", tnet->nNodeSIL);
-      printf (" SA context nodes: %d\n", tnet->nlexSA);
+      printf ("  A model nodes:    %d\n", tnet->nNodeA);
+      printf ("  AB context nodes: %d\n", tnet->nlexAB);
+      printf ("  B-Y model nodes:  %d\n", tnet->nNodeBY);
+      printf ("  YZ context nodes: %d\n", tnet->nlexYZ);
+      printf ("  Z model nodes:    %d\n", tnet->nNodeZ);
+      printf ("  ZS context nodes: %d\n", tnet->nlexZS);
+      printf ("  SIL model nodes:  %d\n", tnet->nNodeSIL);
+      printf ("  SA context nodes: %d\n", tnet->nlexSA);
       printf ("total: %d\n", tnet->nNodeA + tnet->nlexAB + tnet->nNodeBY + tnet->nlexYZ +
               tnet->nNodeZ + tnet->nlexZS + tnet->nlexSA + tnet->nNodeSIL);
    }
 
-   nn = 0;
-   for (i = 0; i < NLAYERS; ++i) {
+   int nn = 0;
+   for (int i = 0; i < NLAYERS; ++i) {
       nn += tnet->nNodesLayer[i];
       if (trace & T_NET)
          printf ("layer %d contains %d nodes\n", i, tnet->nNodesLayer[i]);
    }
+
    if (trace & T_NET)
       printf ("total: %d nodes\n", nn);
    
@@ -1090,90 +1060,91 @@ LexNet *ConvertTLex2Lex (MemHeap *heap, TLexNet *tnet)
    
 
    /* alloc and init LexNet */
-   net = (LexNet *) New (heap, sizeof (LexNet));
-   net->heap = heap;
-   net->voc = tnet->voc;
-   net->hset = tnet->hset;
-   net->nLayers = NLAYERS;      /* keep HLVRec general without ugly constants! */
-   net->layerStart = (LexNode **) New (heap, net->nLayers * sizeof (LexNode *));
+   // LexNet *net = (LexNet *) New (heap, sizeof (LexNet));
+   this->heap = &LexNet::_netHeap;
+   this->voc = tnet->voc;
+   this->hset = tnet->hset;
+   this->nLayers = NLAYERS;      /* keep HLVRec general without ugly constants! */
+   this->layerStart = (LexNode **) New (&LexNet::_netHeap, this->nLayers * sizeof (LexNode *));
 
-   net->nNodes = nn;
-   net->node = (LexNode *) New (heap, net->nNodes * sizeof (LexNode));
+   this->nNodes = nn;
+   this->node = (LexNode *) New (&LexNet::_netHeap, this->nNodes * sizeof (LexNode));
 
    /* pronId to pron mapping */ 
-   net->pronlist = (Pron *) New (heap, (net->voc->nprons + 1) * sizeof (Pron));
-   net->pronlist[0] = NULL;
+   this->pronlist = (Pron *) New (&LexNet::_netHeap, (this->voc->nprons + 1) * sizeof (Pron));
+   this->pronlist[0] = NULL;
 
    /* initialise pointers to start of layers */
-   ln = net->node;
-   for (i = 0; i < net->nLayers; ++i) {
+   ln = this->node;
+   for (int i = 0; i < this->nLayers; ++i) {
       layerCur[i] = ln;
-      net->layerStart[i] = ln;
+      this->layerStart[i] = ln;
       ln += tnet->nNodesLayer[i];
    }
 
    /* initialise TLexNode -> LexNode pointers */
-   ln = net->node;
-   for (tln = tnet->root; tln; tln = tln->chain) {
+   ln = this->node;
+   for (auto tln = tnet->root; tln; tln = tln->chain) {
       /* take node from appropriate layer memory block */
       tln->ln = layerCur[tln->layerId];
       ++layerCur[tln->layerId];
    }
    
    /* check whether all layer memory blocks are full (as they should be) */
-   for (i = 0; i < net->nLayers-1; ++i)
-      assert (net->layerStart[i+1] == layerCur[i]);
+   for (int i = 0; i < this->nLayers-1; ++i)
+      assert (this->layerStart[i+1] == layerCur[i]);
 
-   InitLMlaTree(net, tnet);
+   InitLMlaTree(this, tnet);
 
 
    /* the real conversion follows here: */
-   net->start = tnet->start->ln;
-   net->end = tnet->end->ln;
+   this->start = tnet->start->ln;
+   this->end = tnet->end->ln;
    
+   int nlTotal = 0;
    /* copy info and convert links */
-   for (tln = tnet->root; tln; tln = tln->chain) {
+   for (auto tln = tnet->root; tln; tln = tln->chain) {
       ln = tln->ln;
       ln->type = (unsigned short) tln->type;
 
       switch (tln->type) {
-      case LN_MODEL:
-         ln->data.hmm = tln->hmm;
-         break;
-      case LN_CON:
-         ln->data.hmm = NULL;
-         break;
-      case LN_WORDEND:
-         assert (tln->loWE == tln->hiWE);
-         ln->data.pron = tln->loWE;
-         net->pronlist[tln->loWE] = tln->pron;
-         break;
-      default:
-         HError (9999, "HLVNet: unknown node type %d\n", tln->type);
-         break;
+	case LN_MODEL:
+	  ln->data.hmm = tln->hmm;
+	  break;
+	case LN_CON:
+	  ln->data.hmm = NULL;
+	  break;
+	case LN_WORDEND:
+	  assert (tln->loWE == tln->hiWE);
+	  ln->data.pron = tln->loWE;
+	  this->pronlist[tln->loWE] = tln->pron;
+	  break;
+	default:
+	  HError (9999, "HLVNet: unknown node type %d\n", tln->type);
+	  break;
       }
 
       if (tnet->silDict) {
-         net->lnSEsp = tnet->lnSEsp->ln;
-         net->lnSEsil = tnet->lnSEsil->ln;
+         this->lnSEsp = tnet->lnSEsp->ln;
+         this->lnSEsil = tnet->lnSEsil->ln;
       }
 
       ln->lmlaIdx = tln->lmlaIdx;
-      assert(ln->lmlaIdx < net->laTree->nNodes + net->laTree->nCompNodes);
+      assert(ln->lmlaIdx < this->laTree->nNodes + this->laTree->nCompNodes);
       /*       printf ("LMLA idx %d lo %d hi %d\n", tln->lmlaIdx, tln->loWE, tln->hiWE); */
 
       /* only handle simple case here -- complex one has already been done in CreateCompLMLA() */
-      if (ln->lmlaIdx < net->laTree->nNodes) {  
-         net->laTree->node[ln->lmlaIdx].loWE = tln->loWE;
-         net->laTree->node[ln->lmlaIdx].hiWE = tln->hiWE;
+      if (ln->lmlaIdx < this->laTree->nNodes) {  
+         this->laTree->node[ln->lmlaIdx].loWE = tln->loWE;
+         this->laTree->node[ln->lmlaIdx].hiWE = tln->hiWE;
       }
 
       ln->nfoll = tln->nlinks;
-      ln->foll = (LexNode **) New (heap, ln->nfoll * sizeof (LexNode *));
+      ln->foll = (LexNode **) New (&LexNet::_netHeap, ln->nfoll * sizeof (LexNode *));
 
       /* convert linked list of TLexLinks into array of pointers to
          end nodes of these links */
-      nl=0;
+      int nl=0;
       for (tll = tln->link, foll = ln->foll; tll; tll = tll->next, ++foll) {
          assert (tll->start == tln);
          *foll = tll->end->ln;
@@ -1188,7 +1159,7 @@ LexNet *ConvertTLex2Lex (MemHeap *heap, TLexNet *tnet)
    if (trace & T_NET)
       printf ("converted %d links\n", nlTotal);
 
-   return (net);
+   // trace = 0; printf("\33[0m");
 }
 
 
@@ -1318,7 +1289,7 @@ void WriteTLex (TLexNet *net, char *fn)
          fprintf (dotFile, "n%p -> n%p;\n", ll->start, ll->end);
       }
    
-   
+
    /* SA context nodes */
    fprintf (dotFile, "{ rank=same;\n");
    fprintf (dotFile, "SA [shape=box];\n");
@@ -1351,109 +1322,116 @@ void WriteTLex (TLexNet *net, char *fn)
    FClose (dotFile, FALSE);
 }
 
-void* TLexNet::operator new (size_t n, MemHeap *heap, Vocab *voc, HMMSet *hset, 
+void TLexNet::init(Vocab *voc, HMMSet *hset, 
     char *startWord, char *endWord, bool silDict) {
 
-  CreateHeap (&tnetHeap, "Net temp heap", MSTAK, 1, 0,100000, 800000);
+  this->__init__(voc, hset, startWord, endWord, silDict);
 
-  TLexNet* tnet = (TLexNet *) New (&tnetHeap, sizeof (TLexNet));
+  /* init phone sets A, B, AB, YZ and create LexNodes for AB and YZ */
+  this->CollectPhoneStats ();
 
-  tnet->heap = &tnetHeap;
-  tnet->root = NULL;
+  /* Create initial phone (A) layer of z-a+b nodes also creates SA nodes*/
+  this->CreateAnodes ();
 
-  tnet->nlexA = tnet->nlexZ = tnet->nlexP = 0;
-  tnet->nlexAB = tnet->nlexYZ = tnet->nlexZS = tnet->nlexSA = 0;
-  tnet->nNodeA = tnet->nNodeZ = 0;
+  /* Create final phone (Z) layer of y-z+a nodes also creates ZS nodes */
+  this->CreateZnodes ();
 
-  tnet->lexA = (LabId *) New (&gcheap, LIST_BLOCKSIZE * sizeof(LabId));
-  tnet->lexZ = (LabId *) New (&gcheap, LIST_BLOCKSIZE * sizeof(LabId));
-  tnet->lexP = (LabId *) New (&gcheap, LIST_BLOCKSIZE * sizeof(LabId));
+  /* Create silence (sil/sp) nodes connecting ZS and SA nodes */
+  this->CreateSILnodes ();
 
-  for (int i = 0; i < LEX_CON_HASH_SIZE; ++i)
-    tnet->lexABhash[i] = tnet->lexYZhash[i] = 
-      tnet->lexZShash[i] = tnet->lexSAhash[i] = NULL;
+  /* Create prefix tree nodes (B -- Y) */
+  this->CreateBYnodes ();
 
-  for (int i = 0; i < LEX_MOD_HASH_SIZE; ++i)
-    tnet->nodeAhash[i] = tnet->nodeZhash[i] = NULL;
+  /* Create sentence start and end nodes */
+  CreateStartEnd (&TLexNet::tnetHeap, this);
 
-  tnet->nNodeBY = 0;
-  tnet->nodeBY = NULL;
-  tnet->nNodeSIL = 0;
-  tnet->nodeSIL = NULL;
-  tnet->lmlaCount = 0;
-  tnet->nPronIds = 0;
-
-  tnet->voc = voc;
-  tnet->hset = hset;
-  tnet->silDict = silDict;
-
-  tnet->startId = GetLabId (startWord, FALSE);
-  if (!tnet->startId) 
-    HError (9999, "HLVNet: cannot find STARTWORD '%s'\n", startWord);
-
-  tnet->endId = GetLabId (endWord, FALSE);
-  if (!tnet->endId) 
-    HError (9999, "HLVNet: cannot find ENDWORD '%s'\n", endWord);
-
-  for (int i = 0; i < NLAYERS; ++i)
-    tnet->nNodesLayer[i] = 0;
-
-  return tnet;
+  AssignWEIds(this);
 }
 
-MemHeap TLexNet::tnetHeap;	/* used for temporary data in net creation */
+void TLexNet::__init__(Vocab *voc, HMMSet *hset, 
+    char *startWord, char *endWord, bool silDict) {
+
+  this->heap = &TLexNet::tnetHeap;
+  this->root = NULL;
+
+  this->nlexA = this->nlexZ = this->nlexP = 0;
+  this->nlexAB = this->nlexYZ = this->nlexZS = this->nlexSA = 0;
+  this->nNodeA = this->nNodeZ = 0;
+
+  this->lexA = (LabId *) New (&gcheap, LIST_BLOCKSIZE * sizeof(LabId));
+  this->lexZ = (LabId *) New (&gcheap, LIST_BLOCKSIZE * sizeof(LabId));
+  this->lexP = (LabId *) New (&gcheap, LIST_BLOCKSIZE * sizeof(LabId));
+
+  for (int i = 0; i < LEX_CON_HASH_SIZE; ++i)
+    this->lexABhash[i] = this->lexYZhash[i] = 
+      this->lexZShash[i] = this->lexSAhash[i] = NULL;
+
+  for (int i = 0; i < LEX_MOD_HASH_SIZE; ++i)
+    this->nodeAhash[i] = this->nodeZhash[i] = NULL;
+
+  this->nNodeBY = 0;
+  this->nodeBY = NULL;
+  this->nNodeSIL = 0;
+  this->nodeSIL = NULL;
+  this->lmlaCount = 0;
+  this->nPronIds = 0;
+
+  // ==================
+  this->voc = voc;
+  this->hset = hset;
+  this->silDict = silDict;
+
+  this->startId = GetLabId (startWord, FALSE);
+  if (!this->startId) 
+    HError (9999, "HLVNet: cannot find STARTWORD '%s'\n", startWord);
+
+  this->endId = GetLabId (endWord, FALSE);
+  if (!this->endId) 
+    HError (9999, "HLVNet: cannot find ENDWORD '%s'\n", endWord);
+
+  // ==================
+
+  for (int i = 0; i < NLAYERS; ++i)
+    this->nNodesLayer[i] = 0;
+}
+
+void* TLexNet::operator new (size_t n) {
+  return New (&TLexNet::tnetHeap, sizeof (TLexNet));
+}
+
+MemHeap TLexNet::tnetHeap("Net temp heap", MSTAK, 1, 0,100000, 800000);	/* used for temporary data in net creation */
 
 /* Create the Lexicon Network based on the vocabulary and model set
 */
-LexNet *CreateLexNet (MemHeap *heap, Vocab *voc, HMMSet *hset, 
+void LexNet::init(Vocab *voc, HMMSet *hset, 
     char *startWord, char *endWord, bool silDict) {
 
-   TLexNet* tnet = new (heap, voc, hset, startWord, endWord, silDict) TLexNet;
-   /* init phone sets A, B, AB, YZ and create LexNodes for AB and YZ */
-   tnet->CollectPhoneStats ();
-
-   /* Create initial phone (A) layer of z-a+b nodes also creates SA nodes*/
-   tnet->CreateAnodes ();
-
-   /* Create final phone (Z) layer of y-z+a nodes also creates ZS nodes */
-   tnet->CreateZnodes ();
-
-   /* Create silence (sil/sp) nodes connecting ZS and SA nodes */
-   tnet->CreateSILnodes ();
-
-   /* Create prefix tree nodes (B -- Y) */
-   tnet->CreateBYnodes ();
-
-   /* Create sentence start and end nodes */
-   CreateStartEnd (heap, tnet);
-
-   AssignWEIds(tnet);
+   TLexNet* tnet = new TLexNet;
+   tnet->init(voc, hset, startWord, endWord, silDict);
 
    /* convert TLexNet to more compact LexNet */
-   LexNet *net = ConvertTLex2Lex(heap, tnet);
+   this->ConvertTLex2Lex(tnet);
 
    /* all tokens pass through SA directly before (i.e. with no time diff) the first 
       model of a new word. Update time and score in last weHyp of token in this layer */
-   net->wordEndLayerId = LAYER_SA;
+   this->wordEndLayerId = LAYER_SA;
 
-   net->startPron = (PronId) (int) GetWord (voc, tnet->startId, FALSE)->pron->aux;
-   net->endPron = (PronId) (int) GetWord (voc, tnet->endId, FALSE)->pron->aux;
+   this->startPron = (PronId) (int) GetWord (voc, tnet->startId, FALSE)->pron->aux;
+   this->endPron = (PronId) (int) GetWord (voc, tnet->endId, FALSE)->pron->aux;
 
    /* add pronprobs in ZS nodes and (if S==sp) propagate - variant bypassing sp model. */
-   net->spSkipLayer = LAYER_ZS;
+   this->spSkipLayer = LAYER_ZS;
    { 
       LabId spLab;
       spLab = GetLabId ("sp", FALSE);
       if (!spLab)
          HError (9999, "cannot find 'sp' model.");
-      net->hmmSP = FindHMM (net->hset, spLab);
+      this->hmmSP = FindHMM (this->hset, spLab);
    }
-   net->silDict = silDict;
+   this->silDict = silDict;
 
    /* get rid of temporary data structures */
    TLexNet::ResetHeap();
-
-   return net;
 }
 
 

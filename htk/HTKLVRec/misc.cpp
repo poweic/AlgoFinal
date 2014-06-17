@@ -241,7 +241,9 @@ void Decoder::init() {
      _vocab.MarkAllWords();
 
       /* create network */
-      net = CreateLexNet (&_netHeap, &_vocab.get_vocab(), &_hmm.get_hset(), _vocab.startWord, _vocab.endWord, _vocab.silDict);
+      net = new LexNet;
+      net->init(&_vocab.get_vocab(), &_hmm.get_hset(), _vocab.startWord, _vocab.endWord, _vocab.silDict);
+      // net = CreateLexNet (&_netHeap, &_vocab.get_vocab(), &_hmm.get_hset(), _vocab.startWord, _vocab.endWord, _vocab.silDict);
       
       /* Read language model */
       _lm.loadFromFile(_lm.langfn);
@@ -328,7 +330,8 @@ void Decoder::rescoreLattice(char* fn) {
   /* create network of all the words/prons marked (word->aux and pron->aux == 1) */
   if (trace & T_TOP)
     printf ("Creating network\n");
-  net = CreateLexNet (&_netHeap, &_vocab.get_vocab(), &_hmm.get_hset(), _vocab.startWord, _vocab.endWord, _vocab.silDict);
+  net->init(&_vocab.get_vocab(), &_hmm.get_hset(), _vocab.startWord, _vocab.endWord, _vocab.silDict);
+  // net = CreateLexNet (&_netHeap, &_vocab.get_vocab(), &_hmm.get_hset(), _vocab.startWord, _vocab.endWord, _vocab.silDict);
 
   /* create LM based on pronIds defined by CreateLexNet */
   if (trace & T_TOP)

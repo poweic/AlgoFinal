@@ -89,7 +89,19 @@ struct _LexLink {
    LexNode *end;
 };
 
-typedef struct _LexNet {
+class TLexNet;
+
+class LexNet {
+public:
+  void init (Vocab *voc, HMMSet *hset, char *startWord, char *endWord, bool silDict);
+
+  static MemHeap _netHeap;
+
+  void* operator new (size_t);
+
+  void ConvertTLex2Lex (TLexNet *tnet);
+
+public:
    LexNode *node;               /* pointer to array of LexNodes */
    int nNodes;
 
@@ -117,7 +129,7 @@ typedef struct _LexNet {
    Pron *pronlist;              /* array [1..voc->nprons]  of Prons for given PronId */
 
    LMlaTree *laTree;            /* look ahead tree */
-} LexNet;
+};
 
 
 
@@ -144,8 +156,10 @@ typedef enum _LayerId {
 */
 
 typedef struct _TLexLink TLexLink;
-typedef struct _TLexNode TLexNode;
-typedef struct _TLexNode TLexConNode;
+
+class TLexNode;
+typedef TLexNode TLexNode;
+typedef TLexNode TLexConNode;
 
 struct _TLexLink {
    TLexLink *next;              /* next link from this start node */
@@ -153,7 +167,18 @@ struct _TLexLink {
    TLexNode *end;
 };
 
-struct _TLexNode {
+class TLexNode {
+public:
+  TLexNode(TLexNet* net, int layerId, HLink hmm);
+  TLexNode(TLexNet* net, int layerId, Pron pron);
+  TLexNode(TLexNet* net, int layerId, LabId lc, LabId rc);
+
+  void* operator new (size_t, MemHeap* heap);
+
+  void init(TLexNet* net, int layerId);
+
+public:
+  
    TLexNode *next;               /* next node in hash table for some net part (A, B..Y or Z) */
    TLexNode *chain;              /* global chain of all TLexNodes */
 
@@ -172,12 +197,16 @@ struct _TLexNode {
    int lmlaIdx;         /* index of node in (compressed) LMlaTree */
 };
 
-
 class TLexNet {
   public:
 
-    void* operator new (size_t, MemHeap *heap, Vocab *voc, HMMSet *hset, 
+    void init(Vocab *voc, HMMSet *hset, 
 	char *startWord, char *endWord, bool silDict);
+
+    void __init__(Vocab *voc, HMMSet *hset, 
+	char *startWord, char *endWord, bool silDict);
+
+    void* operator new (size_t);
 
     void CollectPhoneStats ();
     void CreateAnodes ();
@@ -283,15 +312,11 @@ struct _LMlaTree {
 void InitLVNet(void);
 
 /* build lexicon network for recognition for Vocab and HMMSet */
-LexNet *CreateLexNet (MemHeap *heap, Vocab *voc, HMMSet *hset,
-    char *startWord, char *endWord, bool silDict);
+/* LexNet *CreateLexNet (MemHeap *heap, Vocab *voc, HMMSet *hset,
+    char *startWord, char *endWord, bool silDict);*/
+// LexNet *ConvertTLex2Lex (MemHeap *heap, TLexNet *tnet);
 
 void InitLMlaTree(LexNet *net, TLexNet *tnet);
-LexNet *ConvertTLex2Lex (MemHeap *heap, TLexNet *tnet);
-
-TLexNode *NewTLexNodeMod (MemHeap *heap, TLexNet *net, int layerId, HLink hmm);
-TLexNode *NewTLexNodeWe  (MemHeap *heap, TLexNet *net, int layerId, Pron pron);
-TLexNode *NewTLexNodeCon (MemHeap *heap, TLexNet *net, int layerId, LabId lc, LabId rc);
 
 TLexConNode *FindAddTLCN (MemHeap *heap, TLexNet *net, int layerId,
     int *n, TLexConNode *lcnHashTab[], LabId lc, LabId rc);
