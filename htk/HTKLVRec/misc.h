@@ -248,6 +248,7 @@ class Decoder {
     void rescoreLattice(char* fn);
 
   private:
+    LexNet* net;
     LanguageModel& _lm;
     Vocabulary& _vocab;
     HiddenMarkovModel& _hmm;
@@ -255,8 +256,6 @@ class Decoder {
 
     DecoderInst* _decInst;
 
-    MemHeap _netHeap;
-    // MemHeap _lmHeap;
     MemHeap _inputBufHeap;
     MemHeap _transHeap;
     MemHeap _regHeap;

@@ -42,8 +42,6 @@ char *hmmListfn;		/* model list filename from commandline */
 char *hmmDir = NULL;     /* directory to look for HMM def files */
 char *hmmExt = NULL;     /* HMM def file extension */
 
-LexNet *net = NULL;      /* Lexicon network of all required words/prons */
-
 XFInfo xfInfo;
 
 /* -------------------------- Prototypes -------------------------------- */

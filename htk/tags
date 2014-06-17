@@ -653,7 +653,7 @@ CreateAdaptXForm	HTKLib/HAdapt.c	/^AdaptXForm *CreateAdaptXForm(HMMSet *hset, ch
 CreateAlpha	HTKLib/HFB.c	/^static void CreateAlpha(AlphaBeta *ab, HMMSet *hset, int Q)$/;"	f	file:
 CreateAnodes	HTKLVRec/HLVNet.cpp	/^void TLexNet::CreateAnodes ()$/;"	f	class:TLexNet
 CreateArc	HTKLib/HArc.c	/^HArc *CreateArc(MemHeap *mem, Lattice *lat, LArc *la, int start_time, int pos, int arcId, HArc *lastArc, float insPen, float lmScale, HMMSet *hset, ArcInfo *aInfo){ \/*Creates an arc.*\/$/;"	f
-CreateBYnodes	HTKLVRec/HLVNet.cpp	/^void TLexNet::CreateBYnodes () {$/;"	f	class:TLexNet
+CreateBYnodes	HTKLVRec/HLVNet.cpp	/^void TLexNet::CreateBYnodes () $/;"	f	class:TLexNet
 CreateBaseAdaptXForm	HTKLib/HAdapt.c	/^static AdaptXForm *CreateBaseAdaptXForm(HMMSet *hset, char *xformName)$/;"	f	file:
 CreateBaseTriMat	HTKLib/HAdapt.c	/^static void CreateBaseTriMat(MemHeap *x, MixPDF *mp, AdaptXForm *xform, int _class)$/;"	f	file:
 CreateBestInfo	HTKLVRec/HDecode.mod.c	/^BestInfo *CreateBestInfo (MemHeap *heap, char *fn, HTime frameDur)$/;"	f
@@ -820,8 +820,8 @@ DFACTOR	HTKTools/HMMIRest.c	/^static float DFACTOR = 2.0;         \/* not a conf
 DIAG	HTKTools/HResults.c	/^enum _Direction{DIAG,VERT,HOR,NIL};$/;"	e	enum:_Direction	file:
 DIAGC	HTKLib/HMath.h	/^   DIAGC,         \/* diagonal covariance *\/$/;"	e	enum:__anon48
 DIAGCOV	HTKLib/HModel.c	/^   DIAGCOV,  FULLCOV, XFORMCOV,$/;"	e	enum:__anon124	file:
-DIR_BACKW	HTKLVRec/HLVNet.cpp	1462;"	d	file:
-DIR_FORW	HTKLVRec/HLVNet.cpp	1461;"	d	file:
+DIR_BACKW	HTKLVRec/HLVNet.cpp	1405;"	d	file:
+DIR_FORW	HTKLVRec/HLVNet.cpp	1404;"	d	file:
 DISCRETE	HTKLib/HParm.h	/^      DISCRETE,                        \/* Discrete VQ symbols (shorts) *\/$/;"	e	enum:_BaseParmKind
 DISCRETEHS	HTKLib/HModel.h	/^enum _HSetKind {PLAINHS, SHAREDHS, TIEDHS, DISCRETEHS};$/;"	e	enum:_HSetKind
 DISTFILES	Makefile	/^DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)$/;"	m
@@ -3969,7 +3969,7 @@ TIMIT Label Files	HTKBook/labels.tex	/^\\subsection{TIMIT Label Files}$/;"	b
 TIMIThdr	HTKLib/HWave.c	/^} TIMIThdr;$/;"	t	typeref:struct:__anon69	file:
 TLexConNode	HTKLVRec/HLVNet.h	/^typedef TLexNode TLexConNode;$/;"	t
 TLexLink	HTKLVRec/HLVNet.h	/^typedef struct _TLexLink TLexLink;$/;"	t	typeref:struct:_TLexLink
-TLexNet	HTKLVRec/HLVNet.cpp	/^TLexNet::TLexNet(Vocab *voc, HMMSet *hset,$/;"	f	class:TLexNet
+TLexNet	HTKLVRec/HLVNet.cpp	/^TLexNet::TLexNet(Vocab *voc, HMMSet *hset, char *startWord, char *endWord, bool silDict):$/;"	f	class:TLexNet
 TLexNet	HTKLVRec/HLVNet.h	/^class TLexNet {$/;"	c
 TLexNode	HTKLVRec/HLVNet.cpp	/^TLexNode::TLexNode(TLexNet* net, int layerId, HLink hmm): type(LN_MODEL) {$/;"	f	class:TLexNode
 TLexNode	HTKLVRec/HLVNet.cpp	/^TLexNode::TLexNode(TLexNet* net, int layerId, LabId lc, LabId rc): type(LN_CON) {$/;"	f	class:TLexNode

@@ -4,7 +4,6 @@
  * external global variables 
  * */
 extern int trace;
-extern LexNet * net;
 
 /* 
  * class HiddenMarkovModel
@@ -13,7 +12,7 @@ extern LexNet * net;
 HiddenMarkovModel::HiddenMarkovModel() {
   /* init model heap & set early to support loading MMFs */
   CreateHeap(&_modelHeap, "Model heap",  MSTAK, 1, 0.0, 100000, 800000 );
-  CreateHMMSet(&_hset, &_modelHeap, TRUE); 
+  CreateHMMSet(&_hset, &_modelHeap, true); 
 }
 
 void HiddenMarkovModel::init(char* hmmList_fn, char* mmf_fn, char* inXFormDir_fn,
@@ -36,7 +35,7 @@ void HiddenMarkovModel::init(char* hmmList_fn, char* mmf_fn, char* inXFormDir_fn
     HError (4128, "Initialise: LoadHMMSet failed");
 
   /* convert to INVDIAGC */
-  ::ConvDiagC (&_hset, TRUE);
+  ::ConvDiagC (&_hset, true);
   ::ConvLogWt (&_hset);
 
   if (trace&T_TOP)
@@ -66,7 +65,7 @@ HMMSet& HiddenMarkovModel::get_hset() { return _hset; }
  * */
 
 Vocabulary::Vocabulary():
-  startWord("<s>"), endWord("</s>"), spModel("sp"), silModel("sil"), silDict(FALSE) {
+  startWord("<s>"), endWord("</s>"), spModel("sp"), silModel("sil"), silDict(false) {
 }
 
 void Vocabulary::init(char* dictFn) {
@@ -83,19 +82,19 @@ void Vocabulary::init(char* dictFn) {
 
 void Vocabulary::Process() {
    /* process dictionary */
-   startLab = GetLabId (startWord, FALSE);
+   startLab = GetLabId (startWord, false);
    if (!startLab) 
       HError (9999, "HDecode: cannot find STARTWORD '%s'\n", startWord);
 
-   endLab = GetLabId (endWord, FALSE);
+   endLab = GetLabId (endWord, false);
    if (!endLab) 
       HError (9999, "HDecode: cannot find ENDWORD '%s'\n", endWord);
 
-   spLab = GetLabId (spModel, FALSE);
+   spLab = GetLabId (spModel, false);
    if (!spLab)
       HError (9999, "HDecode: cannot find label 'sp'");
 
-   silLab = GetLabId (silModel, FALSE);
+   silLab = GetLabId (silModel, false);
    if (!silLab)
       HError (9999, "HDecode: cannot find label 'sil'");
 
@@ -164,36 +163,22 @@ void LanguageModel::ResetHeap() {
   ::ResetHeap(&_lmHeap);
 }
 
-// Decoder::Decoder(LanguageModel& lm, Vocabulary& vocab, HiddenMarkovModel& hmm);
-// void Decoder::init();
-// void Decoder::recognize(char* fn);
-// 
-// BestInfo* Decoder::CreateBestInfo (char* fn, HTime frameDur);
-// BestInfo* Decoder::FindLexNetLab (MemHeap *heap, LexNode *ln, LLink ll, HTime frameDur);
-// 
-// void Decoder::PrintAlignBestInfo (BestInfo *bestInfo);
-// void Decoder::AnalyseSearchSpace (BestInfo *bestInfo);
-// 
-// 
-// // ===== THIS function does NOT belongs here. Move it somewhere else. =====
-// void Decoder::rescoreLattice(char* fn);
-
 Decoder::Decoder(LanguageModel& lm, Vocabulary& vocab, HiddenMarkovModel& hmm, XFInfo& xfInfo)
-  : _lm(lm), _vocab(vocab), _hmm(hmm), _decInst(NULL), _xfInfo(xfInfo),
+  : net(NULL), _lm(lm), _vocab(vocab), _hmm(hmm), _decInst(NULL), _xfInfo(xfInfo),
 
     /* default configs */
     insPen(0.0), acScale(1.0), pronScale(1.0), lmScale(1.0), maxModel(0),
     beamWidth(-LZERO), weBeamWidth(-LZERO), zsBeamWidth(-LZERO), relBeamWidth(-LZERO),
     latPruneBeam(-LZERO), latPruneAPS(0), fastlmlaBeam(-LZERO),
-    nTok(32), useHModel(FALSE), outpBlocksize(1), obs(NULL), 
+    nTok(32), useHModel(false), outpBlocksize(1), obs(NULL), 
 
     bestAlignMLF(NULL),
 
     /* other configs */
     ofmt(UNDEFF), labDir(NULL), labExt("rec"), labForm(NULL), 
-    latRescore(FALSE), latInDir(NULL), latInExt("lat"), latFileMask(NULL), 
-    latGen(FALSE), latOutDir(NULL), latOutExt("lat"), latOutForm(NULL), 
-    dataForm(UNDEFF), mergeTokOnly(TRUE), gcFreq(100), dynBeamInc(1.3) {
+    latRescore(false), latInDir(NULL), latInExt("lat"), latFileMask(NULL), 
+    latGen(false), latOutDir(NULL), latOutExt("lat"), latOutForm(NULL), 
+    dataForm(UNDEFF), mergeTokOnly(true), gcFreq(100), dynBeamInc(1.3) {
 
       // Nothing to do now.
 }
@@ -201,8 +186,6 @@ Decoder::Decoder(LanguageModel& lm, Vocabulary& vocab, HiddenMarkovModel& hmm, X
 void Decoder::init() {
 
    /* init Heaps */
-   CreateHeap (&_netHeap, "Net heap", MSTAK, 1, 0,100000, 800000);
-   // CreateHeap (&_lmHeap, "LM heap", MSTAK, 1, 0,1000000, 10000000);
    CreateHeap (&_transHeap,"Transcription heap",MSTAK,1,0,8000,80000);
 
    _vocab.Process();
@@ -211,25 +194,19 @@ void Decoder::init() {
       _vocab.ConvertSilDict();
 
       /* check for skip in sp model */
-      { 
-	LabId spLab;
-	HLink spHMM;
-	MLink spML;
-	int N;
+      LabId spLab = GetLabId ("sp", false);
+      if (!spLab)
+	HError (9999, "cannot find 'sp' model.");
 
-	spLab = GetLabId ("sp", FALSE);
-	if (!spLab)
-	  HError (9999, "cannot find 'sp' model.");
+      MLink spML = _hmm.FindMacroName('l', spLab);
+      if (!spML)
+	HError (9999, "cannot find model for sp");
 
-	spML = _hmm.FindMacroName('l', spLab);
-	if (!spML)
-	  HError (9999, "cannot find model for sp");
-	spHMM = (HLink) spML->structure;
-	N = spHMM->numStates;
+      HLink spHMM = (HLink) spML->structure;
+      int N = spHMM->numStates;
 
-	if (spHMM->transP[1][N] > LSMALL)
-	  HError (9999, "HDecode: using -/sp/sil dictionary but sp contains tee transition!");
-      }
+      if (spHMM->transP[1][N] > LSMALL)
+	HError (9999, "HDecode: using -/sp/sil dictionary but sp contains tee transition!");
    }
    else {       /* lvx-style dict (no sp/sil at wordend */
      _vocab.MarkAllProns();
@@ -243,23 +220,22 @@ void Decoder::init() {
       /* create network */
       net = new LexNet;
       net->init(&_vocab.get_vocab(), &_hmm.get_hset(), _vocab.startWord, _vocab.endWord, _vocab.silDict);
-      // net = CreateLexNet (&_netHeap, &_vocab.get_vocab(), &_hmm.get_hset(), _vocab.startWord, _vocab.endWord, _vocab.silDict);
       
       /* Read language model */
       _lm.loadFromFile(_lm.langfn);
    }
 
-   bool modAlign = FALSE;
+   bool modAlign = false;
    if (latOutForm) {
       if (strchr (latOutForm, 'd'))
-         modAlign = TRUE;
+         modAlign = true;
       if (strchr (latOutForm, 'n'))
          HError (9999, "DoRecognition: likelihoods for model alignment not supported");
    }
 
    /* create Decoder instance */
-   _decInst = CreateDecoderInst (&_hmm.get_hset(), _lm.get_lm(), nTok, TRUE, useHModel, outpBlocksize,
-                            bestAlignMLF ? TRUE : FALSE,
+   _decInst = CreateDecoderInst (&_hmm.get_hset(), _lm.get_lm(), nTok, true, useHModel, outpBlocksize,
+                            bestAlignMLF ? true : false,
                             modAlign);
    
    /* create buffers for observations */
@@ -297,8 +273,6 @@ void Decoder::rescoreLattice(char* fn) {
 
   /* clear out previous LexNet, Lattice and LM structures */
   _lm.ResetHeap();
-  // ResetHeap (&_lmHeap);
-  ResetHeap (&_netHeap);
 
   if (latFileMask != NULL ) { /* support for rescoring lattoce masks */
     if (!MaskMatch(latFileMask, buf3 , fn))
@@ -316,8 +290,8 @@ void Decoder::rescoreLattice(char* fn) {
       HError (9999, "DoRecognition: Cannot open lattice file %s\n", latfn);
 
     /* #### maybe separate lattice heap? */
-    lat = _lm.ReadLattice(latF, FALSE, FALSE);
-    // lat = ReadLattice (latF, &_lmHeap, &_vocab.get_vocab(), FALSE, FALSE);
+    lat = _lm.ReadLattice(latF, false, false);
+    // lat = ReadLattice (latF, &_lmHeap, &_vocab.get_vocab(), false, false);
     FClose (latF, isPipe);
     if (!lat)
       HError (9999, "DoRecognition: cannot read lattice file %s\n", latfn);
@@ -443,7 +417,7 @@ void Decoder::recognize(char *fn) {
       char labfn[MAXSTRLEN];
 
       if (labForm != NULL)
-         ReFormatTranscription (trans, pbInfo.tgtSampRate, FALSE, FALSE,
+         ReFormatTranscription (trans, pbInfo.tgtSampRate, false, false,
                                 strchr(labForm,'X')!=NULL,
                                 strchr(labForm,'N')!=NULL,strchr(labForm,'S')!=NULL,
                                 strchr(labForm,'C')!=NULL,strchr(labForm,'T')!=NULL,
