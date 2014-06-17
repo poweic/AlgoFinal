@@ -200,11 +200,11 @@ public:
 class TLexNet {
   public:
 
-    void init(Vocab *voc, HMMSet *hset, 
+    TLexNet(Vocab *voc, HMMSet *hset,
 	char *startWord, char *endWord, bool silDict);
 
-    void __init__(Vocab *voc, HMMSet *hset, 
-	char *startWord, char *endWord, bool silDict);
+    void init();
+    void __init__();
 
     void* operator new (size_t);
 
@@ -215,6 +215,10 @@ class TLexNet {
     void CreateSILnodes ();
 
     void Handle1PhonePron (Pron pron);
+    void CreateStartEnd ();
+    void AssignWEIds();
+
+    TLexNode *CreateBoundary (LabId labid, int modLayer, int weLayer);
 
     void add_phones(LabId elem, char type);
 
@@ -223,6 +227,8 @@ class TLexNet {
 
     TLexNode *FindAddTLexNode (LayerId layerId, int *n,
 	TLexNode *lnHashTab[], LexNodeType type , HLink hmm);
+
+    void WriteTLex (char *fn);
 
     static MemHeap tnetHeap;	/* used for temporary data in net creation */
     static void ResetHeap() { ::ResetHeap(&tnetHeap); }
@@ -322,27 +328,14 @@ void InitLVNet(void);
 /* build lexicon network for recognition for Vocab and HMMSet */
 
 void InitLMlaTree(LexNet *net, TLexNet *tnet);
-
-TLexConNode *FindAddTLCN (MemHeap *heap, TLexNet *net, LayerId layerId,
-    int *n, TLexConNode *lcnHashTab[], LabId lc, LabId rc);
-
-TLexNode *FindAddTLexNode (MemHeap *heap, TLexNet *net, LayerId layerId,
-    int *n, TLexNode *lnHashTab[], LexNodeType type , HLink hmm);
+void CreateCompLMLA (MemHeap *heap, LMlaTree *laTree, TLexNet *tnet);
 
 HLink FindTriphone (HMMSet *hset, LabId a, LabId b, LabId c);
-
 void AddLink (MemHeap *heap, TLexNode *start, TLexNode *end);
-
 TLexLink *FindHMMLink (TLexNode *ln, HLink hmm);
-int TraverseTree (TLexNode *ln, int start, int &lmlaCount);
-
 HLink FindHMM (HMMSet *hset, LabId id);
-TLexNode *CreateBoundary (MemHeap *heap, TLexNet *tnet, LabId labid, int modLayer, int weLayer);
-void CreateStartEnd (MemHeap *heap, TLexNet *tnet);
-void AssignWEIds(TLexNet *tnet);
-void CreateCompLMLA (MemHeap *heap, LMlaTree *laTree, TLexNet *tnet);
-void WriteTLex (TLexNet *net, char *fn);
 
+int TraverseTree (TLexNode *ln, int start, int &lmlaCount);
 
 void MarkAllWordsfromLat (Vocab* vocab, Lattice *lat, bool silDict);
 
