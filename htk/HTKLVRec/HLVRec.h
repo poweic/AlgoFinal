@@ -100,7 +100,7 @@ struct _WordendHyp {            /* stores info about one word(end) */
    LMTokScore lm;               /* LM likelihood of this word given history */
                                 /* don't need pron like, it's in pron->prob */
    AltWordendHyp *alt;          /* alternative paths for lattice traceback */
-   int user;                  /* general user info; #### get rid of this! */
+   int user;			/* general user info; #### get rid of this! */
 #ifdef MODALIGN
    ModendHyp *modpath;          /* model level traceback */
 #endif
@@ -145,14 +145,21 @@ struct _TokenSet {
 	this->relTok[i] = rhs.relTok[i];
    }
 };
-   
-struct _LexNodeInst {           /* attached to active LexNode's, contains info about tokens */
+
+/* attached to active LexNode's, contains info about tokens */
+struct _LexNodeInst {           
    LexNode *node;
-   TokenSet *ts;                /* array of TokenSets; one per state (incl. entry and exit) */
-   TokScore best;               /* score of best token in any HMM state and LM state,
-                                   used for pruning */
-   LexNodeInst *next;           /* next instance in linked linst for this layer */
-                                /*#### need LM lookahead info, i.e. list of (LMState, LogFloat) */
+
+   /* array of TokenSets; one per state (incl. entry and exit) */
+   TokenSet *ts;                
+
+   /* score of best token in any HMM state and LM state, used for pruning */
+   TokScore best;               
+
+   /* next instance in linked list for this layer */
+   /*#### need LM lookahead info, i.e. list of (LMState, LogFloat) */
+   LexNodeInst *next;           
+                                
 };
    
 
@@ -284,8 +291,34 @@ struct _LMCache {
    int transMiss;
    int laHit;
    int laMiss;
-};
 
+   void free() {
+     DeleteHeap(&nodeHeap);
+   }
+   
+   void reset() {
+     ResetHeap (&nodeHeap);
+     for (int i = 0; i < nNode; ++i)
+       node[i] = NULL;
+
+     transHit = transMiss = 0;
+     laHit = laMiss = 0;
+   }
+
+   LMNodeCache* alloc(int lmlaIdx) {
+     
+     LMNodeCache *n;
+
+     n = (LMNodeCache *) New (&nodeHeap, sizeof (LMNodeCache));
+     memset ((void *) n, 1, sizeof (LMNodeCache));  /* clear all src entries */
+     n->idx = lmlaIdx;
+     n->size = LMCACHE_NLA;
+     n->nextFree = n->nEntries = 0;
+
+     return n;
+
+   }
+};
 
 
 
@@ -328,7 +361,7 @@ struct _DecoderInst {
 
    int nTok;                    /* max number of tokens per state */
 
-   bool latgen;              /* generate lattices or just 1-bet? */
+   bool latgen;			/* generate lattices or just 1-bet? */
    LogFloat bestScore;          /* score of best token */
    LexNodeInst *bestInst;       /* instance containing best token */
 
@@ -349,18 +382,16 @@ struct _DecoderInst {
 
    float maxLMLA;               /* maximum jump in LM lookahead per model */
 
-   bool fastlmla;            /* use fast LM lookahead, i.e. back-off to bigram states */
+   bool fastlmla;		/* use fast LM lookahead, i.e. back-off to bigram states */
    LogFloat fastlmlaBeam;       /* beam in which to use full lmla */
    
-   bool useHModel;           /* use normal HModel OutP() functions? */
-   /*    outP cache */
+   bool useHModel;		/* use normal HModel OutP() functions? */
    OutPCache *outPCache;        /* cache of outP values for block of observations */
 
-   /* LM lookahead cache */
-   LMCache *lmCache;
+   LMCache *lmCache;		/* LM lookahead cache */
 
    /* relToken set identifier */
-   unsigned int tokSetIdCount;/* max id used so far for token sets */
+   unsigned int tokSetIdCount;	/* max id used so far for token sets */
 
    StateInfo_lv *si;
 
@@ -375,7 +406,7 @@ struct _DecoderInst {
 
    /* Phone posterior info */
    int nPhone;
-   LabId monoPhone[100];           /* #### hard limit -- fix this */
+   LabId monoPhone[100];        /* #### hard limit -- fix this */
    LogDouble *phonePost;
    int *phoneFreq;
 };

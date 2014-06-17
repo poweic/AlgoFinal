@@ -71,7 +71,13 @@ typedef struct _Block{  /*      MHEAP                     MSTAK           */
    BlockP next;         /*           next block in chain                  */
 } Block;
 
-typedef struct {
+class MemHeap {
+public:
+   MemHeap() {}
+   MemHeap(char *name, HeapType type, size_t elemSize,
+       float growf, size_t numElem, size_t maxElem);
+
+public:
    char *name;          /*            name of this memory heap            */
    HeapType type;       /*              type of this heap                 */
    float growf;         /*           succ blocks grow as 1+growf          */
@@ -83,7 +89,7 @@ typedef struct {
    size_t totAlloc;     /*  total #elems alloc'ed    total #bytes alloc'd */
    BlockP heap;         /*               linked list of blocks            */
    bool protectStk;  /*  MSTAK only, prevents disposal below Stack Top */
-}MemHeap;
+};
 
 /* ---------------------- Alignment Issues -------------------------- */
 

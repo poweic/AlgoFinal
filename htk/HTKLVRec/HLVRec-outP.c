@@ -134,60 +134,6 @@ LogFloat SOutP_ID_mix_Block(HMMSet *hset, int s, Observation *x, StreamElem *se)
    return LZERO;;
 }
 
-#if 0           /* old OutPBlock()  copes with streams and non-diag outp's */
-static void OutPBlock (DecoderInst *_decInst, Observation **obsBlock, 
-                       int n, HLink hmm, int state, float acScale, LogFloat *outP)
-{
-   int i;
-   
-#if 0
-   for (i = 0; i < n; ++i) {
-      outP[i] = OutP (obsBlock[i], hmm, state);
-   }
-
-#else
-   StateInfo *si;
-   StreamElem *se;
-   int s, S = obsBlock[0]->swidth[0];
-   
-   si = (hmm->svec+state)->info;
-   se = si->pdf+1;
-   
-   if (S == 1 && !si->weights) {
-      
-      for (i = 0; i < n; ++i) {
-         outP[i] = OutP_lv (_decInst->si, hmm->svec[state].info->sIdx, &obsBlock[i]->fv[1][1]);
-#if 1   /* sanity checking */
-         {
-            LogFloat soutp;
-            soutp = SOutP (hmm->owner, 1, obsBlock[i], se);
-            assert (fabs (outP[i] - soutp) < 0.01);
-         }
-#endif
-      }
-   }
-   else {       /* multi stream */
-      Vector w;
-
-      for (i = 0; i < n; ++i)
-         outP[i] = 0.0;
-      
-      w = si->weights;
-      for (s = 1; s <= S; s++, se++)
-         for (i = 0; i < n; ++i)
-            outP[i] += w[s] * SOutP (hmm->owner, s, obsBlock[i], se);
-   }
-
-   /* acoustic scaling */
-   if (acScale != 1.0)
-      for (i = 0; i < n; ++i)
-         outP[i] *= acScale;
-#endif
-}
-
-#endif
-
-
 /* cOutP
 
      caching version of OutP from HModel. This only caches only on a state 
@@ -214,11 +160,6 @@ LogFloat Decoder::cOutP (Observation *x, HLink hmm, int state)
    if (n < cache->block) {
       outP = cache->stateOutP[sIdx * cache->block + n];
       ++cache->cacheHit;
-#if 0
-      /* the following is *very* expensive, it effectively disables the cache,
-         use only for sanity checking! */
-      assert (outP == _decInst->acScale * OutP (x, hmm, state));
-#endif
    }
    else {
       ++cache->cacheMiss;
@@ -235,27 +176,14 @@ LogFloat Decoder::cOutP (Observation *x, HLink hmm, int state)
             
          cache->stateT[sIdx] = _decInst->frame;
          outP = cache->stateOutP[sIdx * cache->block];
-#if 0   /* sanity checking for OutPBlock */
-         {
-            LogFloat safe_outP;
-            safe_outP = _decInst->acScale * OutP (x, hmm, state);
-            assert (fabs (outP - safe_outP) < 0.01);
-         }
-#endif
       }
       else {            /* cache mixtures (e.g. for soft-tied systems) */
          abort ();
-         /*
-x      outP = OutP (x, hmm, state);
-x      _decInst->cacheOutP[sIdx] = outP;
-x      CACHE_FLAG_SET(_decInst, sIdx);
-         */
       }
    }      
 
    return outP;
 }
-
 
 
 /* outP caclulation for USEHMODEL=T case  */

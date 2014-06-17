@@ -116,14 +116,12 @@ void ReFormatTranscription(Transcription *trans,HTime frameDur,
                            bool centreTimes,bool killTimes,
                            bool killWords,bool killModels);
 
-/* HLVRec-propagate.c */
-static int winTok_cmp (const void *v1,const void *v2);
-
 /* HLVRec-LM.c */
-static void FreeLMCache (LMCache *cache);
-static void ResetLMCache (LMCache *cache);
+// static void FreeLMCache (LMCache *cache);
+// static void ResetLMCache (LMCache *cache);
+// LMNodeCache* AllocLMNodeCache (LMCache *cache, int lmlaIdx);
+
 static int LMCacheState_hash (LMState lmstate);
-LMNodeCache* AllocLMNodeCache (LMCache *cache, int lmlaIdx);
 static void PrintPath (DecoderInst *_decInst, WordendHyp *we);
 static void PrintTok(DecoderInst *_decInst, Token *tok);
 static void PrintRelTok(DecoderInst *_decInst, RelToken *tok);
@@ -495,9 +493,8 @@ void Decoder::InitDecoderInst (LexNet *net, HTime sampRate, LogFloat beamWidth,
    ResetOutPCache (_decInst->outPCache);
 }
 
-void Decoder::CleanDecoderInst ()
-{
-   FreeLMCache (_decInst->lmCache);
+void Decoder::CleanDecoderInst () {
+  _decInst->lmCache->free();
 }
 
 /* NewTokSetArray

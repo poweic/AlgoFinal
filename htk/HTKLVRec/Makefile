@@ -56,7 +56,7 @@ HLVModel.orig.o: HLVModel.c $(HEADER)
 	$(CC) -c $(CFLAGS) $<
 	mv HLVModel.o $@
 
-HLVNet.orig.o: HLVNet.c $(HEADER)
+HLVNet.orig.o: HLVNet.cpp $(HEADER)
 	$(CC) -c $(CFLAGS) $<
 	mv HLVNet.o $@
 
@@ -82,7 +82,7 @@ HLVModel.mod.o: HLVModel.c $(HEADER)
 	$(CC) -c -DHDECODE_MOD $(CFLAGS) $<
 	mv HLVModel.o $@
 
-HLVNet.mod.o: HLVNet.c $(HEADER)
+HLVNet.mod.o: HLVNet.cpp $(HEADER)
 	$(CC) -c -DHDECODE_MOD $(CFLAGS) $<
 	mv HLVNet.o $@
 
