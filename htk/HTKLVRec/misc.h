@@ -167,8 +167,8 @@ class Decoder {
 	RelTokScore srcCorr, RelTokScore destCorr, RelTokScore deltaLimit,
 	RelToken* &winTok, int &nWinTok, int* nWin);
 
-    void PropagateInternal ();
-    void PropagateInternal (LexNodeInst *inst);
+    void InternalPropagation ();
+    void InternalPropagation (LexNodeInst *inst);
     void PropIntoNode (TokenSet *ts, LexNode *ln, bool updateLMLA);
     void UpdateModPaths (TokenSet *ts, LexNode *ln);
     void HandleSpSkipLayer (LexNodeInst *inst);

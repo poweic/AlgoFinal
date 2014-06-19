@@ -377,19 +377,17 @@ void Decoder::GeneralPropagateInternal(LexNodeInst *inst, TokenSet* instTS, int 
   __collect_stats__(instTS, N);
 }
 
-/* PropagateInternal
-     Internal token propagation
-*/
-void Decoder::PropagateInternal (LexNodeInst *inst) {
+/* \brief InternalPropagation
+ *    Internal token propagation
+ *    ln->type must be LN_MODEL
+ * */
+void Decoder::InternalPropagation (LexNodeInst *inst) {
 
    LexNode *ln = inst->node;
    HLink hmm = ln->data.hmm;
    int N = hmm->numStates;
    SMatrix trP = hmm->transP;
    TokenSet* instTS = inst->ts;
-
-   assert (ln->type == LN_MODEL);               /* Model node */
-   /* LM lookahead has already been updated in PropIntoNode() !!! */
 
    /* Main beam pruning: prune tokensets before propagation
       the beamLimit is the one found during the last frame */
@@ -532,24 +530,18 @@ void Decoder::PropagateExternal ( LexNodeInst *inst, bool handleWE, bool wintTre
 
 /* HandleWordend
      update traceback, add LM, update LM state, recombine tokens
+     ln->type must be LN_WORDEND
 */
 void Decoder::HandleWordend (LexNode *ln)
 {
-   LexNodeInst *inst;
-   WordendHyp *weHyp, *prev;
-   TokenSet *ts;
-   RelToken *tok, *tokJ;
-   int i, j, newN;
+   WordendHyp *prev;
    LMState dest;
-   LMTokScore lmScore;
    PronId pronid;
    RelTokScore newDelta, bestDelta, deltaLimit;
    ModendHyp *modpath;
 
-   assert (ln->type == LN_WORDEND);
-
-   inst = ln->inst;
-   ts = inst->ts;
+   LexNodeInst *inst = ln->inst;
+   TokenSet *ts = inst->ts;
 
    /* main beam pruning for reltoks */
    /* main and relative beam pruning */
@@ -561,18 +553,19 @@ void Decoder::HandleWordend (LexNode *ln)
 
    pronid = (PronId) ln->data.pron;
 
-   newN = 0;
+   int newN = 0;
    bestDelta = LZERO;
-   for (i = 0; i < ts->n; ++i) {
-      tok = &ts->relTok[i];
+   for (int i = 0; i < ts->n; ++i) {
+      auto tok = &ts->relTok[i];
 
-      if (tok->delta < deltaLimit)
-         continue;      /* prune */
+      // Pruning
+      if (tok->delta < deltaLimit) continue;      
 
-      lmScore = LMCacheTransProb (_dec->lm, tok->lmState, pronid, &dest);
+      auto lmScore = LMCacheTransProb (_dec->lm, tok->lmState, pronid, &dest);
 
-      /* word insertion penalty */
+      // word insertion penalty
       lmScore += _dec->insPen;
+
       /* remember prev path now, as we might overwrite it below */
       prev = tok->path;
       modpath = tok->modpath;
@@ -580,87 +573,87 @@ void Decoder::HandleWordend (LexNode *ln)
       /* subtract lookahead which has already been applied */
       newDelta = tok->delta + (lmScore - tok->lmscore);
 
-      if (newDelta < deltaLimit)
-         continue;              /* prune */
+      // Prune again
+      if (newDelta < deltaLimit) continue;
 
       bestDelta = std::max(bestDelta, newDelta);
 
+      int j;
       /* insert in list */
       for (j = 0; j < newN; ++j) {      /* is there already a token in state dest? */
-         tokJ = &ts->relTok[j];
-         if (tokJ->lmState == dest) {
-            if (!_dec->latgen) {
-               if (newDelta > tokJ->delta) {        /* replace tokJ */
-                  tokJ->delta = newDelta;
-                  tokJ->lmscore = 0.0;     /* reset lookahead */
-                  tokJ->modpath = modpath;
-                  /* update path; 
-                     weHyp exists, pron is the same anyway, update rest */
-                  tokJ->path->prev = prev;
-                  tokJ->path->score = ts->score + newDelta;
-                  tokJ->path->lm = lmScore;
-                  tokJ->path->modpath = modpath;
-               }
-               /* else just toss token */
-            }
-            else {      /* latgen */
-               AltWordendHyp *alt;
+         auto tokJ = &ts->relTok[j];
 
-               alt = (AltWordendHyp *) New (&_dec->altweHypHeap, sizeof (AltWordendHyp));
-               
-               if (newDelta > tokJ->delta) {
-                  /* move tokJ->path to alt */
-                  alt->prev = tokJ->path->prev;
-                  alt->score = tokJ->path->score;
-                  alt->lm = tokJ->path->lm;
-                  alt->modpath = tokJ->path->modpath;
+         if (tokJ->lmState != dest)
+	   continue;
 
-                  /* replace tokJ */
-                  tokJ->delta = newDelta;
-                  tokJ->lmscore = 0.0;     /* reset lookahead */
-                  tokJ->modpath = modpath;
+	 if (!_dec->latgen) {
+	   // replace tokJ
+	   if (newDelta > tokJ->delta) {
+	     tokJ->delta = newDelta;
+	     tokJ->lmscore = 0.0;	  // reset lookahead
+	     tokJ->modpath = modpath;
 
-                  tokJ->path->modpath = modpath;
+	     // Update path -- weHyp exists, pron is the same anyway, update rest
+	     tokJ->path->prev = prev;
+	     tokJ->path->score = ts->score + newDelta;
+	     tokJ->path->lm = lmScore;
+	     tokJ->path->modpath = modpath;
+	   }
+	   /* else just toss token */
+	 }
+	 else {      /* latgen */
+	   auto alt = (AltWordendHyp *) New (&_dec->altweHypHeap, sizeof (AltWordendHyp));
 
-                  /* store new tok info in path 
-                     weHyp exists, pron is the same anyway, update rest */
-                  tokJ->path->prev = prev;
-                  tokJ->path->score = ts->score + newDelta;
-                  tokJ->path->lm = lmScore;
-               }
-               else {
-                  /* store new tok info in alt */
-                  alt->prev = prev;
-                  alt->score = ts->score + newDelta;
-                  alt->lm = lmScore;
-                  alt->modpath = modpath;
-               }
+	   if (newDelta > tokJ->delta) {
+	     /* move tokJ->path to alt */
+	     alt->prev = tokJ->path->prev;
+	     alt->score = tokJ->path->score;
+	     alt->lm = tokJ->path->lm;
+	     alt->modpath = tokJ->path->modpath;
 
-               /* attach alt to tokJ's weHyp */
-               alt->next = tokJ->path->alt;
-               tokJ->path->alt = alt;
-            }               
-            break;      /* leave j loop */
-         }
+	     /* replace tokJ */
+	     tokJ->delta = newDelta;
+	     tokJ->lmscore = 0.0;     /* reset lookahead */
+	     tokJ->modpath = modpath;
+
+	     tokJ->path->modpath = modpath;
+
+	     /* store new tok info in path 
+		weHyp exists, pron is the same anyway, update rest */
+	     tokJ->path->prev = prev;
+	     tokJ->path->score = ts->score + newDelta;
+	     tokJ->path->lm = lmScore;
+	   }
+	   else {
+	     /* store new tok info in alt */
+	     alt->prev = prev;
+	     alt->score = ts->score + newDelta;
+	     alt->lm = lmScore;
+	     alt->modpath = modpath;
+	   }
+
+	   /* attach alt to tokJ's weHyp */
+	   alt->next = tokJ->path->alt;
+	   tokJ->path->alt = alt;
+	 }               
+	 break;      /* leave j loop */
       }
 
       if (j == newN) {          /* no token in state dest yet */
-         int k;
-
          /* find spot to insert LMState dest */
          for (j = 0; j < newN; ++j)
             if (ts->relTok[j].lmState > dest)
                break;
 
          /* move any following reltokens up one slot */
-         for (k = newN ; k > j; --k)
+         for (int k = newN ; k > j; --k)
             ts->relTok[k] = ts->relTok[k-1];
          
-         tokJ = &ts->relTok[j];
+         auto tokJ = &ts->relTok[j];
          ++newN;
 
          /* new wordendHyp */
-         weHyp = (WordendHyp *) New (&_dec->weHypHeap, sizeof (WordendHyp));
+         auto weHyp = (WordendHyp *) New (&_dec->weHypHeap, sizeof (WordendHyp));
       
          weHyp->prev = prev;
          weHyp->pron = ln->data.pron;
@@ -672,32 +665,28 @@ void Decoder::HandleWordend (LexNode *ln)
          weHyp->modpath = modpath;
 
          tokJ->modpath = modpath;
-
          tokJ->path = weHyp;
-         /* only really necessary if (i!=j) i.e. (tok!=tokJ) */
          tokJ->delta = newDelta;
          tokJ->lmState = dest;
          tokJ->we_tag = (void *) ln;
-         tokJ->lmscore = 0.0;   /* reset lookahead */
+         tokJ->lmscore = 0.0;
       }
    } /* for token i */
 
    ts->n = newN;
 
    if (newN > 0) {
-      AltWordendHyp *alt;
       /* renormalise  to new best score */
-      for (i = 0; i < ts->n; ++i) {
-         tok = &ts->relTok[i];
+      for (int i = 0; i < ts->n; ++i) {
+         auto tok = &ts->relTok[i];
          tok->delta -= bestDelta;
 
          /* convert alt wordendHyp scores to deltas relativ to main weHyp */
-         for (alt = tok->path->alt; alt; alt = alt->next)
+         for (auto alt = tok->path->alt; alt; alt = alt->next)
             alt->score = alt->score - tok->path->score;
       }
       ts->score += bestDelta;
 
-      /* ####  TokSet id */
       ts->id = ++_dec->tokSetIdCount;
    }
    else {
@@ -713,31 +702,22 @@ void Decoder::HandleWordend (LexNode *ln)
 
      update wordend hyps of all tokens with current time and score
  */
-void Decoder::UpdateWordEndHyp ( LexNodeInst *inst)
-{
-   int i;
-   TokenSet *ts;
-   RelToken *tok;
-   WordendHyp *weHyp, *oldweHyp;
-   
-   ts = inst->ts;
-           
-   for (i = 0; i < ts->n; ++i) {
-      tok = &ts->relTok[i];
+void Decoder::UpdateWordEndHyp ( LexNodeInst *inst) {
 
-      oldweHyp = tok->path;
+   auto *ts = inst->ts;
+           
+   for (int i = 0; i < ts->n; ++i) {
+      auto tok = &ts->relTok[i];
+      auto oldweHyp = tok->path;
 
       /* don't copy weHyp, if it is up-to-date (i.e. for <s>) */
       if (oldweHyp->frame != _dec->frame || oldweHyp->pron != _dec->net->startPron) {
-         weHyp = (WordendHyp *) New (&_dec->weHypHeap, sizeof (WordendHyp));
+         auto weHyp = (WordendHyp *) New (&_dec->weHypHeap, sizeof (WordendHyp));
          *weHyp = *oldweHyp;
          weHyp->score = ts->score + tok->delta;
          weHyp->frame = _dec->frame;
          weHyp->modpath = tok->modpath;
          tok->path = weHyp;
-
-         /* altweHyps don't need to be changed  here as they are relative to 
-            the main weHyp's score*/
       }
       tok->modpath = NULL;
    }
@@ -788,46 +768,26 @@ void Decoder::AddPronProbs (TokenSet *ts, int var)
  * */
 void Decoder::HandleSpSkipLayer (LexNodeInst *inst)
 {
-   LexNode *ln;
+   LexNode *ln = inst->node;
 
-   ln = inst->node;
-   if (ln->nfoll == 1) {    /* sp is unique foll, for sil case there are two! */
-      LexNode *lnSA;
-      
-      assert (ln->foll[0]->data.hmm == _dec->net->hmmSP);
-      assert (ln->foll[0]->nfoll == 1);
-
-      /* bypass sp model for - variant */
-      /*  propagate tokens to follower of sp (ln->foll[0]->foll[0]) */
-      /*    adding - variant pronprob (pron->prob) */
-      lnSA = ln->foll[0]->foll[0];
+   if (ln->nfoll == 1) {
+      LexNode *lnSA = ln->foll[0]->foll[0];
                   
-      /* node should be either inactive or empty */
-      assert (!lnSA->inst || lnSA->inst->ts[0].n == 0);
-      
       PropIntoNode (&inst->ts[0], ln->foll[0]->foll[0], FALSE);
       
-      /* add pronprobs and keep record of variant in path->user */
-      /*   user = 0: - variant, 1: sp, 2: sil */
       AddPronProbs (&lnSA->inst->ts[0], 0);
-      
-      /* now add sp variant pronprob to token set and propagate as normal */
       AddPronProbs (&inst->ts[0], 1);
+
       PropagateExternal (inst, FALSE, FALSE);
    }
    else {   /* sil variant */
       int sentEnd = 0;
-      TokenSet *tempTS;
 
-      tempTS = _dec->tempTS[1];
-      tempTS->score = 0.0;
-      tempTS->n = 0;
-      tempTS->id = 0;
+      TokenSet *tempTS = _dec->tempTS[1];
+      tempTS->score = tempTS->n = tempTS->id = 0;
 
-      assert (ln->nfoll == 2);  /* inter word sil and path to sent end */
-      
-      if (ln->foll[1]->type == LN_CON)  /* lnTime node in SA, see comment 
-                                           in HLVNet:CreateStartEnd() */
+      /* lnTime node in SA, see comment in HLVNet:CreateStartEnd() */
+      if (ln->foll[1]->type == LN_CON)  
          sentEnd = 1;
       
       /*   path to SENT_END */
@@ -836,12 +796,14 @@ void Decoder::HandleSpSkipLayer (LexNodeInst *inst)
       AddPronProbs (tempTS, 0);
       if (tempTS->score >= _dec->beamLimit)
          PropIntoNode (tempTS, ln->foll[sentEnd], FALSE);
+
       /* propagate to SENT_END  sp */
       tempTS->score = 0.0; tempTS->n = 0; tempTS->id = 0;
       MergeTokSet (&inst->ts[0], tempTS, 0.0, FALSE);
       AddPronProbs (tempTS, 1);
       if (tempTS->score >= _dec->beamLimit)
          PropIntoNode (tempTS, _dec->net->lnSEsp, FALSE);
+
       /* propagate to SENT_END  sil */
       tempTS->score = 0.0; tempTS->n = 0; tempTS->id = 0;
       MergeTokSet (&inst->ts[0], tempTS, 0.0, FALSE);
@@ -849,17 +811,12 @@ void Decoder::HandleSpSkipLayer (LexNodeInst *inst)
       if (tempTS->score >= _dec->beamLimit)
          PropIntoNode (tempTS, _dec->net->lnSEsil, FALSE);
       
-      
-      /*   normal word loop */
-      /* add sil variant pronprob to token set and propagate */
+      // Normal word loop -- add sil variant pronprob to token set and propagate
       AddPronProbs (&inst->ts[0], 2);
-      if (inst->ts[0].score < _dec->beamLimit) { /* prune to keep MTS happy */
-         inst->ts[0].n = 0;
-         inst->ts[0].id = 0;
-      }
-      else {
+      if (inst->ts[0].score < _dec->beamLimit)
+         inst->ts[0].n = inst->ts[0].id = 0;
+      else
          PropIntoNode (&inst->ts[0], ln->foll[1 - sentEnd], FALSE);
-      }
    }
 }
 
@@ -871,17 +828,18 @@ void Decoder::ZSLayerBeamPruning(LexNodeInst * head, TokScore& beamLimit) {
   beamLimit = std::max(bestScore - _dec->zsBeamWidth, _dec->beamLimit);
 }
 
-
 inline void RemoveLexNode(LexNodeInst* &head, LexNodeInst* prev, LexNodeInst* inst) {
   if (prev)
     prev->next = inst->next;
-  else                 // first inst in layer
+  else
     head = inst->next;
 }
 
-void Decoder::PropagateInternal() {
-   /* internal token propagation:
-      order doesn't really matter, but we use the same as for external propagation */
+/* \brief InternalPropagation
+ *
+ * */
+
+void Decoder::InternalPropagation() {
   // static int counter = 0; if (++counter % 20 == 1) printf("\33[33mLAYER_Z   LAYER_ZS  LAYER_SIL LAYER_SA  LAYER_A   LAYER_AB  LAYER_BY  LAYER_WE  LAYER_YZ\33[0m\n");
 
    for (int l = 0; l < _dec->nLayers; ++l) {
@@ -890,7 +848,7 @@ void Decoder::PropagateInternal() {
 	++nActive;
 	 switch (inst->node->type) {
 	   case LN_MODEL:   /* Model node */
-	     PropagateInternal (inst);
+	     InternalPropagation (inst);
 	     break;
 	   case LN_CON:	    /* Context or Wordend node */
 	   case LN_WORDEND:
@@ -996,7 +954,7 @@ void Decoder::ProcessFrame (Observation **obsBlock, int nObs, AdaptXForm *xform)
 
    GarbageCollectPaths ();
 
-   PropagateInternal();
+   InternalPropagation();
 
    /* now for all LN_MODEL nodes inst->best is set, this is used to determine 
       the lower beam limit */
