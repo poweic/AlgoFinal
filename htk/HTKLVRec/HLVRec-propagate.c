@@ -821,7 +821,10 @@ void Decoder::AddPronProbs (TokenSet *ts, int var)
    ts->score += bestDelta;
 }
 
-
+/* \brief HandleSpSkipLayer
+ * Handle short pause (sp) and skip layer
+ *
+ * */
 void Decoder::HandleSpSkipLayer (LexNodeInst *inst)
 {
    LexNode *ln;
@@ -918,8 +921,12 @@ inline void eraseLinkedListNode(LexNodeInst* &head, LexNodeInst* prev, LexNodeIn
 void Decoder::PropagateInternal() {
    /* internal token propagation:
       order doesn't really matter, but we use the same as for external propagation */
+  // static int counter = 0; if (++counter % 20 == 1) printf("\33[33mLAYER_Z   LAYER_ZS  LAYER_SIL LAYER_SA  LAYER_A   LAYER_AB  LAYER_BY  LAYER_WE  LAYER_YZ\33[0m\n");
+
    for (int l = 0; l < _decInst->nLayers; ++l) {
+     int nActive = 0;
       for (LexNodeInst* inst = _decInst->instsLayer[l]; inst; inst = inst->next) {
+	++nActive;
 	 switch (inst->node->type) {
 	   case LN_MODEL:   /* Model node */
 	     PropagateInternal (inst);
@@ -932,7 +939,9 @@ void Decoder::PropagateInternal() {
 	     break;
 	 }
       }
+      // printf("%5d     ", nActive);
    }
+   // printf("\33[0m \n");
 }
 
 void Decoder::SetObservation(Observation **obsBlock, int nObs) {
@@ -1009,7 +1018,6 @@ void Decoder::RelaxBeamLimit() {
      performs pruning as necessary.
 */
 void Decoder::ProcessFrame (Observation **obsBlock, int nObs, AdaptXForm *xform) {
-   TokScore beamLimit;
    
    inXForm = xform; /* sepcifies the transform to use */
    
@@ -1026,6 +1034,7 @@ void Decoder::ProcessFrame (Observation **obsBlock, int nObs, AdaptXForm *xform)
    _decInst->beamLimit = _decInst->bestScore - _decInst->curBeamWidth;
 
    /* beam pruning & external propagation */
+   // for (int l =  _decInst->nLayers - 1; l >= 0; --l) {
    for (int l = 0; l < _decInst->nLayers; ++l) {
       LexNodeInst* &head = _decInst->instsLayer[l];
 
@@ -1036,7 +1045,7 @@ void Decoder::ProcessFrame (Observation **obsBlock, int nObs, AdaptXForm *xform)
             UpdateWordEndHyp (inst);
       }
 
-      beamLimit = _decInst->beamLimit;
+      TokScore beamLimit = _decInst->beamLimit;
       if ((_decInst->weBeamWidth < _decInst->beamWidth) && (l == LAYER_WE))
 	WordEndBeamPruning(head, beamLimit);
       else if ((_decInst->zsBeamWidth < _decInst->beamWidth) && (l == LAYER_ZS || l == LAYER_SA))
@@ -1048,7 +1057,9 @@ void Decoder::ProcessFrame (Observation **obsBlock, int nObs, AdaptXForm *xform)
          beamlimit  was set.
       */
       LexNodeInst* prev = NULL, *next = NULL;
+      int NN = 0;
       for (auto inst = head; inst; inst = next) {
+	++NN;
 	 /* store now, we might free inst below! */
          next = inst->next;     
          

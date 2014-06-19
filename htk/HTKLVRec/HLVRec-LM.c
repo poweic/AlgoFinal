@@ -49,13 +49,14 @@ void Decoder::UpdateLMlookahead(LexNode *ln)
 
     if (!_decInst->fastlmla)
       lmscore = LMCacheLookaheadProb (tok->lmState, lmlaIdx, FALSE);
-    else {    /* if we ever do fastLMLA, be careful as tok->lmscore might increase! */
+    else {
+      /* if we ever do fastLMLA, be careful as tok->lmscore might increase! */
       lmscore = LMCacheLookaheadProb (tok->lmState, lmlaIdx, tok->delta < _decInst->fastlmlaBeam);
       lmscore = std::min(lmscore, tok->lmscore);
     }
 
-    if (lmscore > LSMALL &&  tok->lmscore - lmscore > _decInst->maxLMLA)
-      lmscore = tok->lmscore - _decInst->maxLMLA;
+    if (lmscore > LSMALL)
+      lmscore = std::max(lmscore, tok->lmscore - _decInst->maxLMLA);
 
     tok->delta += lmscore - tok->lmscore;     /* subtract previous lookahead */
     bestDelta = std::max(bestDelta, tok->delta);
@@ -150,15 +151,13 @@ LMTokScore Decoder::LMLA_nocache (LMState lmState, int lmlaIdx)
 */
 LMTokScore Decoder::LMCacheLookaheadProb (LMState lmState, int lmlaIdx, bool fastlmla)
 {
-   LMCache *cache;
    LMTokScore lmscore;
-   LMNodeCache *nodeCache;
    LMCacheLA *entry;
    int i;
 
-   cache = _decInst->lmCache;
+   LMCache *cache = _decInst->lmCache; 
    assert (lmlaIdx < cache->nNode);
-   nodeCache = cache->node[lmlaIdx];
+   LMNodeCache *nodeCache = cache->node[lmlaIdx];
 
    if (fastlmla) {      /* #### should only go to fast LMState if real one is not cahced */
       lmState = Fast_LMLA_LMState (_decInst->lm, lmState);
@@ -170,13 +169,12 @@ LMTokScore Decoder::LMCacheLookaheadProb (LMState lmState, int lmlaIdx, bool fas
       
       for (i = 0; i < nodeCache->nEntries; ++i) {
          entry = &nodeCache->la[i];
-         if (entry->src == lmState)
-            break;
+         if (entry->src == lmState) {
+	    ++cache->laHit;
+	    return entry->prob;
+	 }
       }
-      if (i < nodeCache->nEntries) {
-         ++cache->laHit;
-         return entry->prob;
-      }
+
       entry = &nodeCache->la[nodeCache->nextFree];
       nodeCache->nextFree = (nodeCache->nextFree + 1) % nodeCache->size;
       if (nodeCache->nEntries < nodeCache->size)
@@ -190,10 +188,7 @@ LMTokScore Decoder::LMCacheLookaheadProb (LMState lmState, int lmlaIdx, bool fas
    }
    
    /* now entry points to the place to store the prob we are about to calulate */
-   {
-      LMlaTree *laTree;
-      
-      laTree = _decInst->net->laTree;
+      LMlaTree *laTree = _decInst->net->laTree;
       if (lmlaIdx < laTree->nNodes) {        /* simple node */
          LMlaNode *laNode;
          
@@ -203,20 +198,16 @@ LMTokScore Decoder::LMCacheLookaheadProb (LMState lmState, int lmlaIdx, bool fas
                                                laNode->loWE, laNode->hiWE);
       }
       else {         /* complex node */
-         CompLMlaNode *laNode;
-         LMTokScore score;
-         int i;
          
-         laNode = &laTree->compNode[lmlaIdx - laTree->nNodes];
+         CompLMlaNode *laNode = &laTree->compNode[lmlaIdx - laTree->nNodes];
          
          lmscore = LZERO;
-         for (i = 0; i < laNode->n; ++i) {
-            score = LMCacheLookaheadProb (lmState, laNode->lmlaIdx[i], FALSE);
+         for (int i = 0; i < laNode->n; ++i) {
+	    auto score = LMCacheLookaheadProb (lmState, laNode->lmlaIdx[i], FALSE);
             if (score > lmscore)
                lmscore = score;
          }
       }
-   }
 
    if (lmscore < LSMALL)
       lmscore = LZERO;

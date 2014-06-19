@@ -964,6 +964,42 @@ LogFloat LMLookAhead (FSLM *lm, LMState src, PronId minPron, PronId maxPron)
    return (lm->lookahead) (lm, src, minPron, maxPron);
 }
 
+void fff(LMState &src, NGLM_Prob &bowt, PronId &minPron, PronId &maxPron, PronId &p,
+    NGLM_Prob &prob, NGLM_Prob* &unigrams, NGLM_Prob &maxScore, NGLM_Prob &ug_maxScore) {
+
+  if (!src)
+    return;
+
+  NEntry *neSrc = (NEntry *) src;
+  bowt = neSrc->bowt;
+
+  auto se = neSrc->se;
+  auto seLast = &se[neSrc->nse - 1];
+  se = FindMinSEntryP (se, seLast, minPron);
+
+  /* see comment in Debug_Check_LMhashtab */
+  if (neSrc->nse <= 0 || !se)
+    return;
+
+  auto pend = maxPron;
+  if (maxPron > seLast->word)
+    pend = seLast->word;
+
+  for ( ; p <= pend; ++p) {
+    if (se->word != p) {
+      prob = unigrams[p];
+      if (NGLM_PROB_GREATER(prob,ug_maxScore))
+	ug_maxScore = prob;
+    } else {
+      prob = se->prob;
+      ++se;
+      if (NGLM_PROB_GREATER(prob,maxScore))
+	maxScore = prob;
+    }
+  }
+
+}
+
 /* LMLookAhead_2gram
 
      optimised version for 2gram lookahead
@@ -973,46 +1009,15 @@ LogFloat LMLookAhead (FSLM *lm, LMState src, PronId minPron, PronId maxPron)
 */
 LogFloat LMLookAhead_2gram (FSLM *lm, LMState src, PronId minPron, PronId maxPron)
 {
-   NEntry *neSrc;
-   SEntry *se, *seLast;
-   PronId p, pend;
-   NGLM_Prob *unigrams;
    NGLM_Prob maxScore = NGLM_PROB_LZERO;
    NGLM_Prob ug_maxScore = NGLM_PROB_LZERO;     /* maximum of the unigrams[p], i.e. missing bowt! */
    NGLM_Prob prob, bowt = 0;
 
-   p = minPron;
-   unigrams = lm->data.nglm->unigrams;
+   auto p = minPron;
+   NGLM_Prob *unigrams = lm->data.nglm->unigrams;
 
-   if (src) {
-      neSrc = (NEntry *) src;
-      bowt = neSrc->bowt;
-      
-      if (neSrc->nse > 0) {     /* see comment in Debug_Check_LMhashtab */
-         se = neSrc->se;
-         seLast = &se[neSrc->nse - 1];
-         se = FindMinSEntryP (se, seLast, minPron);
-      
-         if (se) {
-            pend = maxPron;
-            if (maxPron > seLast->word)
-               pend = seLast->word;
-            
-            for ( ; p <= pend; ++p) {
-               if (se->word != p) {
-                  prob = unigrams[p];
-                  if (NGLM_PROB_GREATER(prob,ug_maxScore))
-                     ug_maxScore = prob;
-               } else {
-                  prob = se->prob;
-                  ++se;
-                  if (NGLM_PROB_GREATER(prob,maxScore))
-                     maxScore = prob;
-               }
-            }
-         }
-      }
-   }
+   fff(src, bowt, minPron, maxPron, p, prob, unigrams, maxScore, ug_maxScore);
+
    /* always backoff to unigrams for the rest */
    for ( ; p <= maxPron; ++p) {
       prob = unigrams[p];

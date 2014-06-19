@@ -2632,11 +2632,11 @@ NDUR	HTKLib/HModel.c	/^   NDUR, PDUR, GDUR, RELDUR, GENDUR,$/;"	e	enum:__anon124
 NEntry	HTKLVRec/HLVLM.h	/^} NEntry;$/;"	t	typeref:struct:nentry
 NEntry	HTKLib/HLM.h	/^} NEntry;$/;"	t	typeref:struct:nentry
 NGBuffer	HLMLib/LGBase.h	/^} NGBuffer;$/;"	t	typeref:struct:__anon17
-NGHSIZE1	HTKLVRec/HLVLM.c	1453;"	d	file:
+NGHSIZE1	HTKLVRec/HLVLM.c	1458;"	d	file:
 NGHSIZE1	HTKLib/HLM.c	319;"	d	file:
-NGHSIZE2	HTKLVRec/HLVLM.c	1454;"	d	file:
+NGHSIZE2	HTKLVRec/HLVLM.c	1459;"	d	file:
 NGHSIZE2	HTKLib/HLM.c	320;"	d	file:
-NGHSIZE3	HTKLVRec/HLVLM.c	1455;"	d	file:
+NGHSIZE3	HTKLVRec/HLVLM.c	1460;"	d	file:
 NGHSIZE3	HTKLib/HLM.c	321;"	d	file:
 NGInfo	HLMLib/LGBase.h	/^}NGInfo;$/;"	t	typeref:struct:__anon14
 NGInputSet	HLMLib/LGBase.h	/^}NGInputSet;$/;"	t	typeref:struct:__anon16
@@ -4932,7 +4932,6 @@ _lmHeap	HTKLVRec/misc.h	/^    MemHeap _lmHeap;$/;"	m	class:LanguageModel
 _lookingForHelp	others/cmdparser.h	/^    bool _lookingForHelp() const {$/;"	f	class:CmdParser
 _modelHeap	HTKLVRec/misc.h	/^    MemHeap _modelHeap;$/;"	m	class:HiddenMarkovModel
 _netHeap	HTKLVRec/HLVNet.h	/^  static MemHeap _netHeap;$/;"	m	class:LexNet
-_netHeap	HTKLVRec/misc.h	/^    MemHeap _netHeap;$/;"	m	class:Decoder
 _optionStr	others/cmdparser.h	/^      string _optionStr() const {$/;"	f	struct:CmdParser::Arg
 _options	others/cmdparser.h	/^    string _options;$/;"	m	class:CmdParser
 _regHeap	HTKLVRec/misc.h	/^    MemHeap _regHeap;$/;"	m	class:Decoder
@@ -5757,6 +5756,7 @@ fe_buff	HLMLib/LModel.h	/^   FLEntry *fe_buff;         \/* temp buffer *\/$/;"	m
 fea	HLMLib/LModel.h	/^   struct _FLEntry *fea;    \/* sorted array [0..nfe-1] of FLEntry *\/$/;"	m	struct:_FLEntry	typeref:struct:_FLEntry::_FLEntry
 ff	HTKTools/HLStats.c	/^static FileFormat ff=UNDEFF;        \/* Label file format *\/$/;"	v	file:
 ff	HTKTools/HList.c	/^static FileFormat ff = UNDEFF;   \/* Source File format *\/$/;"	v	file:
+fff	HTKLVRec/HLVLM.c	/^void fff(LMState &src, NGLM_Prob &bowt, PronId &minPron, PronId &maxPron, PronId &p,$/;"	f
 fftN	HTKLib/HSigP.h	/^   int fftN;            \/* fft size *\/$/;"	m	struct:__anon37
 fg	HTKLib/HGraf.h	/^   HColour fg, bg;            \/* colors *\/$/;"	m	struct:_HButton
 fg	HTKTools/HSLab.c	/^   HColour fg, bg;$/;"	m	struct:__anon159	file:
@@ -7319,9 +7319,9 @@ nentry	HTKLVRec/HLVLM.h	/^typedef struct nentry {         \/* HLM NGram history 
 nentry	HTKLib/HLM.h	/^typedef struct nentry {         \/* HLM NGram history *\/$/;"	s
 nep_cmp	HLMLib/LModel.c	/^static int nep_cmp(const void *v1,const void *v2)$/;"	f	file:
 nep_cmp	HTKLib/HLM.c	/^static int nep_cmp(const void *v1,const void *v2)$/;"	f	file:
-net	HTKLVRec/HDecode.cpp	/^LexNet *net = NULL;      \/* Lexicon network of all required words\/prons *\/$/;"	v
 net	HTKLVRec/HDecode.mod.c	/^static LexNet *net;             \/* Lexicon network of all required words\/prons *\/$/;"	v	file:
 net	HTKLVRec/HLVRec.h	/^   LexNet *net;                 \/* network, contains pointers to Vocab and HMMSet *\/$/;"	m	struct:_DecoderInst
+net	HTKLVRec/misc.h	/^    LexNet* net;$/;"	m	class:Decoder
 net	HTKLib/HNet.h	/^   char *net;			\/* Network file name (NULL==unknown) *\/$/;"	m	struct:lattice
 net	HTKLib/HRec.c	/^   Network *net;            \/* Recognition network *\/$/;"	m	struct:precinfo	file:
 netHeap	HTKLVRec/HDecode.mod.c	/^static MemHeap netHeap;$/;"	v	file:
