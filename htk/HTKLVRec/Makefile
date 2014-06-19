@@ -41,41 +41,12 @@ HEADER = HLVLM.h  HLVModel.h  HLVNet.h  HLVRec.h config.h misc.h
 
 debug: CFLAGS+=-DDEBUG_TRACE
 debug: all
-all: HDecode HDecode.mod
+all: HDecode.mod
 
 
 # binaries
-HDecode: HDecode.orig.o HLVNet.orig.o HLVRec.orig.o HLVLM.orig.o HLVModel.orig.o misc.orig.o $(HTKLIB)
-	$(CC) $(CFLAGS)	 -o HDecode $^ $(LDFLAGS)
-
 HDecode.mod: HDecode.mod.o HLVNet.mod.o HLVRec.mod.o HLVLM.mod.o HLVModel.mod.o misc.mod.o $(HTKLIB)
-	$(CC) $(CFLAGS)	 -o HDecode.mod $^ $(LDFLAGS)
-
-# normal version object files
-HLVModel.orig.o: HLVModel.c $(HEADER)
-	$(CC) -c $(CFLAGS) $<
-	mv HLVModel.o $@
-
-HLVNet.orig.o: HLVNet.cpp $(HEADER)
-	$(CC) -c $(CFLAGS) $<
-	mv HLVNet.o $@
-
-HLVLM.orig.o: HLVLM.c $(HEADER)
-	$(CC) -c $(CFLAGS) $<
-	mv HLVLM.o $@
-
-HLVRec.orig.o: HLVRec.c HLVRec-GC.c	HLVRec-LM.c	 HLVRec-misc.c	HLVRec-outP.c \
-		  HLVRec-propagate.c  HLVRec-traceback.c $(HEADER)
-	$(CC) -c $(CFLAGS) HLVRec.c 
-	mv HLVRec.o $@
-
-HDecode.orig.o: HDecode.cpp $(HEADER)
-	$(CC) -c $(CFLAGS) $<
-	mv HDecode.o $@
-
-misc.orig.o: misc.cpp $(HEADER)
-	$(CC) -c $(CFLAGS) $<
-	mv misc.o $@
+	$(CC) $(CFLAGS)	-o HDecode.mod $^ $(LDFLAGS)
 
 # .mod version object files
 HLVModel.mod.o: HLVModel.c $(HEADER)

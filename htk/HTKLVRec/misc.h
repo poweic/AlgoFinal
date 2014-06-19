@@ -167,9 +167,7 @@ class Decoder {
     void PropagateInternal ();
     void PropagateInternal (LexNodeInst *inst);
     void PropIntoNode (TokenSet *ts, LexNode *ln, bool updateLMLA);
-#ifdef MODALIGN
     void UpdateModPaths (TokenSet *ts, LexNode *ln);
-#endif
     void HandleSpSkipLayer (LexNodeInst *inst);
     void ProcessFrame (Observation **obsBlock, int nObs, AdaptXForm *xform);
 
@@ -237,12 +235,10 @@ class Decoder {
     Transcription* TraceBack(MemHeap *heap);
     void LatTraceBackCount (WordendHyp *path, int *nnodes, int *nlinks);
     void Paths2Lat (Lattice *lat, WordendHyp *path, int *na);
-#ifdef MODALIGN
     LAlign* LAlignFromModpath (MemHeap *heap, ModendHyp *modpath, int wordStart, short *nLAlign);
     LAlign *LAlignFromAltModpath (MemHeap *heap, ModendHyp *modpath, ModendHyp *mainModpath, int wordStart, short *nLAlign);
     void PrintModPath (ModendHyp *m);
     void CheckLAlign (Lattice *lat);
-#endif
 
     // ===== THIS function does NOT belongs here. Move it somewhere else. =====
     void rescoreLattice(char* fn);

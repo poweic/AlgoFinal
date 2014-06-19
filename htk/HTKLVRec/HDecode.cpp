@@ -161,12 +161,7 @@ void ReportUsage () {
    printf ("\n\n");
 
    printf ("build-time options: ");
-#ifdef MODALIGN
    printf ("MODALIGN ");
-#endif   
-#ifdef TSIDOPT
-   printf ("TSIDOPT ");
-#endif   
    printf ("\n  sizes: PronId=%d  LMId=%d \n", sizeof (PronId), sizeof (LMId));
 }
 

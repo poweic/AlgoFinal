@@ -422,7 +422,6 @@ void Decoder::PropagateInternal (LexNodeInst *inst) {
      GeneralPropagateInternal(inst, instTS, N, trP, hmm);
 }
 
-#ifdef MODALIGN
 void Decoder::UpdateModPaths (TokenSet *ts, LexNode *ln) {
    if (ln->type == LN_CON)
       return;
@@ -443,7 +442,6 @@ void Decoder::UpdateModPaths (TokenSet *ts, LexNode *ln) {
       tok->modpath = m;
    }
 }
-#endif   
 
 /* PropIntoNode
      Propagate tokenset into entry state of LexNode, activating as necessary
@@ -536,10 +534,8 @@ void Decoder::PropagateExternal ( LexNodeInst *inst, bool handleWE, bool wintTre
 
    /* any tokens in exit state? */
    if (exitTS->n > 0 && exitTS->score > _decInst->beamLimit) {
-#ifdef MODALIGN
       if (_decInst->modAlign)
          UpdateModPaths (exitTS, ln);
-#endif
       /* loop over following nodes */
       for (i = 0; i < ln -> nfoll; ++i) {
          follLN = ln->foll[i];
@@ -563,9 +559,7 @@ void Decoder::HandleWordend (LexNode *ln)
    LMTokScore lmScore;
    PronId pronid;
    RelTokScore newDelta, bestDelta, deltaLimit;
-#ifdef MODALIGN
    ModendHyp *modpath;
-#endif
 
    assert (ln->type == LN_WORDEND);
 
@@ -596,9 +590,7 @@ void Decoder::HandleWordend (LexNode *ln)
       lmScore += _decInst->insPen;
       /* remember prev path now, as we might overwrite it below */
       prev = tok->path;
-#ifdef MODALIGN
       modpath = tok->modpath;
-#endif
 
       /* subtract lookahead which has already been applied */
       newDelta = tok->delta + (lmScore - tok->lmscore);
@@ -616,17 +608,13 @@ void Decoder::HandleWordend (LexNode *ln)
                if (newDelta > tokJ->delta) {        /* replace tokJ */
                   tokJ->delta = newDelta;
                   tokJ->lmscore = 0.0;     /* reset lookahead */
-#ifdef MODALIGN
                   tokJ->modpath = modpath;
-#endif
                   /* update path; 
                      weHyp exists, pron is the same anyway, update rest */
                   tokJ->path->prev = prev;
                   tokJ->path->score = ts->score + newDelta;
                   tokJ->path->lm = lmScore;
-#ifdef MODALIGN
                   tokJ->path->modpath = modpath;
-#endif
                }
                /* else just toss token */
             }
@@ -640,18 +628,14 @@ void Decoder::HandleWordend (LexNode *ln)
                   alt->prev = tokJ->path->prev;
                   alt->score = tokJ->path->score;
                   alt->lm = tokJ->path->lm;
-#ifdef MODALIGN
                   alt->modpath = tokJ->path->modpath;
-#endif
 
                   /* replace tokJ */
                   tokJ->delta = newDelta;
                   tokJ->lmscore = 0.0;     /* reset lookahead */
-#ifdef MODALIGN
                   tokJ->modpath = modpath;
 
                   tokJ->path->modpath = modpath;
-#endif
 
                   /* store new tok info in path 
                      weHyp exists, pron is the same anyway, update rest */
@@ -664,9 +648,7 @@ void Decoder::HandleWordend (LexNode *ln)
                   alt->prev = prev;
                   alt->score = ts->score + newDelta;
                   alt->lm = lmScore;
-#ifdef MODALIGN
                   alt->modpath = modpath;
-#endif
                }
 
                /* attach alt to tokJ's weHyp */
@@ -702,11 +684,9 @@ void Decoder::HandleWordend (LexNode *ln)
          weHyp->frame = _decInst->frame;
          weHyp->alt = NULL;
          weHyp->user = 0;
-#ifdef MODALIGN
          weHyp->modpath = modpath;
 
          tokJ->modpath = modpath;
-#endif
 
          tokJ->path = weHyp;
          /* only really necessary if (i!=j) i.e. (tok!=tokJ) */
@@ -768,17 +748,13 @@ void Decoder::UpdateWordEndHyp ( LexNodeInst *inst)
          *weHyp = *oldweHyp;
          weHyp->score = ts->score + tok->delta;
          weHyp->frame = _decInst->frame;
-#ifdef MODALIGN
          weHyp->modpath = tok->modpath;
-#endif
          tok->path = weHyp;
 
          /* altweHyps don't need to be changed  here as they are relative to 
             the main weHyp's score*/
       }
-#ifdef MODALIGN
       tok->modpath = NULL;
-#endif
    }
 }
 

@@ -139,16 +139,12 @@ AltWordendHyp *BuildLatAltList (DecoderInst *_decInst, TokenSet *ts, bool useLM)
 WordendHyp *BuildForceLat (DecoderInst *_decInst);
 
 /* HLVRec-GC.c */
-#ifdef MODALIGN
 static void MarkModPath (ModendHyp *m);
-#endif
 static void MarkPath (WordendHyp *path);
 static void MarkTokSet (TokenSet *ts);
 static void SweepPaths (MemHeap *heap);
 static void SweepAltPaths (MemHeap *heap);
-#ifdef MODALIGN
 static void SweepModPaths (MemHeap *heap);
-#endif
 
 /* HLVRec-outP.c */
 static void ResetOutPCache (OutPCache *cache);
@@ -279,17 +275,12 @@ DecoderInst* Decoder::CreateDecoderInst(HMMSet *hset, FSLM *lm, int nTok, bool l
       CreateHeap (&_decInst->altweHypHeap, "AltWordendHyp heap", MHEAP, 
                   sizeof (AltWordendHyp), 1.0, 8000, 80000);
    }
-#ifdef MODALIGN
    _decInst->modAlign = modAlign;
 
    if (_decInst->modAlign) {
       CreateHeap (&_decInst->modendHypHeap, "ModendHyp heap", MHEAP, 
                   sizeof (ModendHyp), 1.0, 80000, 800000);
    }
-#else
-   if (modAlign)
-      HError (9999, "CreateDecoderInst: model alignment not supported; recompile with MODALIGN");
-#endif
 
    /* output probability cache */
 
@@ -392,10 +383,8 @@ void Decoder::InitDecoderInst (LexNet *net, HTime sampRate, LogFloat beamWidth,
    ResetHeap (&_decInst->weHypHeap);
    if (_decInst->latgen)
       ResetHeap (&_decInst->altweHypHeap);
-#ifdef MODALIGN
    if (_decInst->modAlign)
       ResetHeap (&_decInst->modendHypHeap);
-#endif
    ResetHeap (&_decInst->nodeInstanceHeap);
    for (i = 0; i < _decInst->maxNStates; ++i) 
       ResetHeap (&_decInst->tokSetHeap[i]);
