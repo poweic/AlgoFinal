@@ -145,15 +145,15 @@ LogFloat Decoder::cOutP (Observation *x, HLink hmm, int state)
    LogFloat outP;
    OutPCache *cache;
 
-   assert (x == _decInst->obsBlock[0]);
+   assert (x == _dec->obsBlock[0]);
 
-   cache = _decInst->outPCache;
+   cache = _dec->outPCache;
    sIdx = hmm->svec[state].info->sIdx;
 
    assert (sIdx >= 0);
    assert (sIdx < cache->nStates);
    
-   n = _decInst->frame - cache->stateT[sIdx];
+   n = _dec->frame - cache->stateT[sIdx];
 
    assert (n >= 0);
 
@@ -166,15 +166,15 @@ LogFloat Decoder::cOutP (Observation *x, HLink hmm, int state)
       if (!cache->mixOutP) {     /* don't bother caching mixtures */
          /* #### handle boundary case where we don't have cache->block obs left */
 
-         if (!_decInst->si->useHModel) 
-            OutPBlock (_decInst->si, &_decInst->obsBlock[0], cache->block,
-                       sIdx, _decInst->acScale, &cache->stateOutP[sIdx * cache->block]);
+         if (!_dec->si->useHModel) 
+            OutPBlock (_dec->si, &_dec->obsBlock[0], cache->block,
+                       sIdx, _dec->acScale, &cache->stateOutP[sIdx * cache->block]);
          else
-            OutPBlock_HMod (_decInst->si, &_decInst->obsBlock[0], cache->block,
-                            sIdx, _decInst->acScale, &cache->stateOutP[sIdx * cache->block],
-                            _decInst->frame);
+            OutPBlock_HMod (_dec->si, &_dec->obsBlock[0], cache->block,
+                            sIdx, _dec->acScale, &cache->stateOutP[sIdx * cache->block],
+                            _dec->frame);
             
-         cache->stateT[sIdx] = _decInst->frame;
+         cache->stateT[sIdx] = _dec->frame;
          outP = cache->stateOutP[sIdx * cache->block];
       }
       else {            /* cache mixtures (e.g. for soft-tied systems) */

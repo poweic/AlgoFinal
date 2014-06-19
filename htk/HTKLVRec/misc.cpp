@@ -164,7 +164,7 @@ void LanguageModel::ResetHeap() {
 }
 
 Decoder::Decoder(LanguageModel& lm, Vocabulary& vocab, HiddenMarkovModel& hmm, XFInfo& xfInfo)
-  : net(NULL), _lm(lm), _vocab(vocab), _hmm(hmm), _decInst(NULL), _xfInfo(xfInfo),
+  : net(NULL), _lm(lm), _vocab(vocab), _hmm(hmm), _dec(NULL), _xfInfo(xfInfo),
 
     /* default configs */
     insPen(0.0), acScale(1.0), pronScale(1.0), lmScale(1.0), maxModel(0),
@@ -234,7 +234,7 @@ void Decoder::init() {
    }
 
    /* create Decoder instance */
-   _decInst = CreateDecoderInst (&_hmm.get_hset(), _lm.get_lm(), nTok, true, useHModel, outpBlocksize,
+   _dec = CreateDecoderInst (&_hmm.get_hset(), _lm.get_lm(), nTok, true, useHModel, outpBlocksize,
                             bestAlignMLF ? true : false,
                             modAlign);
    
@@ -312,7 +312,7 @@ void Decoder::rescoreLattice(char* fn) {
     printf ("Creating language model\n");
 
   _lm.loadFromLattice(latfn, lat);
-  _decInst->lm = _lm.get_lm();
+  _dec->lm = _lm.get_lm();
 }
 
 void Decoder::recognize(char *fn) {
@@ -364,7 +364,7 @@ void Decoder::recognize(char *fn) {
                     insPen, acScale, pronScale, lmScale, fastlmlaBeam);
 
    net->vocabFN = _vocab.dict_fn;
-   _decInst->utterFN = fn;
+   _dec->utterFN = fn;
 
    frameN = frameProc = 0;
    while (BufferStatus (parmBuf) != PB_CLEARED) {
@@ -407,7 +407,7 @@ void Decoder::recognize(char *fn) {
    endClock = clock();
    cpuSec = (endClock - startClock) / (double) CLOCKS_PER_SEC;
    printf ("CPU time %f  utterance length %f  RT factor %f\n",
-           cpuSec, frameN*_decInst->frameDur, cpuSec / (frameN*_decInst->frameDur));
+           cpuSec, frameN*_dec->frameDur, cpuSec / (frameN*_dec->frameDur));
 
    trans = TraceBack (&_transHeap);
 
@@ -482,24 +482,18 @@ void Decoder::recognize(char *fn) {
    }
 
 
-#ifdef COLLECT_STATS
-   printf ("Stats: nTokSet %lu\n", _decInst->stats.nTokSet);
-   printf ("Stats: TokPerSet %f\n", _decInst->stats.sumTokPerTS / (double) _decInst->stats.nTokSet);
-   printf ("Stats: activePerFrame %f\n", _decInst->stats.nActive / (double) _decInst->stats.nFrames);
-   printf ("Stats: activateNodePerFrame %f\n", _decInst->stats.nActivate / (double) _decInst->stats.nFrames);
+   printf ("Stats: nTokSet %lu\n", _dec->stats.nTokSet);
+   printf ("Stats: TokPerSet %f\n", _dec->stats.sumTokPerTS / (double) _dec->stats.nTokSet);
+   printf ("Stats: activePerFrame %f\n", _dec->stats.nActive / (double) _dec->stats.nFrames);
+   printf ("Stats: activateNodePerFrame %f\n", _dec->stats.nActivate / (double) _dec->stats.nFrames);
    printf ("Stats: deActivateNodePerFrame %f\n\n", 
-           _decInst->stats.nDeActivate / (double) _decInst->stats.nFrames);
-#if 0
-   printf ("Stats: LMlaCacheHits %ld\n", _decInst->stats.nLMlaCacheHit);
-   printf ("Stats: LMlaCacheMiss %ld\n", _decInst->stats.nLMlaCacheMiss);
-#endif
+           _dec->stats.nDeActivate / (double) _dec->stats.nFrames);
 #ifdef COLLECT_STATS_ACTIVATION
    {
       int i;
       for (i = 0; i <= STATS_MAXT; ++i)
-         printf ("T %d Dead %lu Live %lu\n", i, _decInst->stats.lnDeadT[i], _decInst->stats.lnLiveT[i]);
+         printf ("T %d Dead %lu Live %lu\n", i, _dec->stats.lnDeadT[i], _dec->stats.lnLiveT[i]);
    }
-#endif
 #endif
 
    if (trace & T_MEM) {
@@ -637,18 +631,18 @@ void Decoder::PrintAlignBestInfo (BestInfo *b)
 
    if (b->ln->type == LN_MODEL) {
       monoPhone =(LabId) b->ln->data.hmm->hook;
-      phonePost = _decInst->phonePost[(int) monoPhone->aux];
+      phonePost = _dec->phonePost[(int) monoPhone->aux];
    } else
       phonePost = 999.99;
 
-   int l = _decInst->nLayers-1;
-   while (_decInst->net->layerStart[l] > b->ln) {
+   int l = _dec->nLayers-1;
+   while (_dec->net->layerStart[l] > b->ln) {
       --l;
       assert (l >= 0);
    }
    
    printf ("BESTALIGN frame %4d best %.3f alignbest %d -> %d ln %p layer %d score %.3f phonePost %.3f\n", 
-           _decInst->frame, _decInst->bestScore, 
+           _dec->frame, _dec->bestScore, 
            b->start, b->end, b->ln, l, score, phonePost);
 }
 
@@ -659,17 +653,17 @@ void Decoder::AnalyseSearchSpace (BestInfo *bestInfo) {
   BestInfo *b;
   LabId monoPhone;
 
-  monoPhone =(LabId) _decInst->bestInst->node->data.hmm->hook;
-  printf ("frame %4d best %.3f phonePost %.3f\n", _decInst->frame, 
-      _decInst->bestScore, _decInst->phonePost[(int) monoPhone->aux]);
+  monoPhone =(LabId) _dec->bestInst->node->data.hmm->hook;
+  printf ("frame %4d best %.3f phonePost %.3f\n", _dec->frame, 
+      _dec->bestScore, _dec->phonePost[(int) monoPhone->aux]);
 
   for (b = bestInfo; b; b = b->next) {
-    if (b->start < _decInst->frame && b->end >= _decInst->frame) 
+    if (b->start < _dec->frame && b->end >= _dec->frame) 
       break;
   }
   if (b) {
     this->PrintAlignBestInfo (b);
-    for (b = b->next; b && b->start == b->end && b->start == _decInst->frame; b = b->next) {
+    for (b = b->next; b && b->start == b->end && b->start == _dec->frame; b = b->next) {
       this->PrintAlignBestInfo (b);
     }
   }

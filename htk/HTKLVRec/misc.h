@@ -157,8 +157,11 @@ class Decoder {
     void AddPronProbs (TokenSet *ts, int var);
     void MergeTokSet (TokenSet *src, TokenSet *dest, LogFloat score, bool prune);
 
-    void TokSetBucketSortPruning(TokenSet *dest, const RelTokScore& deltaLimit,
+    void TokSetHistogramPruning(TokenSet *dest, const RelTokScore& deltaLimit,
 	int nWinTok, RelToken* &winTok, TokScore &winScore);
+
+    void CopyWinningToken(TokenSet *src, TokenSet *dest, int nWinTok, RelToken *winTok,
+	const TokScore &winScore, const int *nWin);
 
     void FindWinningTokens(TokenSet *src, TokenSet *dest, LogFloat score,
 	RelTokScore srcCorr, RelTokScore destCorr, RelTokScore deltaLimit,
@@ -170,6 +173,7 @@ class Decoder {
     void UpdateModPaths (TokenSet *ts, LexNode *ln);
     void HandleSpSkipLayer (LexNodeInst *inst);
     void ProcessFrame (Observation **obsBlock, int nObs, AdaptXForm *xform);
+    void SetWordEndTag(LexNodeInst* inst);
 
     void SetObservation (Observation **obsBlock, int nObs);
     void WordEndBeamPruning (LexNodeInst* head, TokScore &beamLimit);
@@ -178,7 +182,6 @@ class Decoder {
 
     void __collect_stats__ (TokenSet *instTS, int N); 
     void OptLeftToRightPropagateInternal(LexNodeInst *inst, TokenSet* instTS, int N, SMatrix &trP, HLink &hmm);
-    // void GeneralPropagateInternal();
     void GeneralPropagateInternal(LexNodeInst *inst, TokenSet* instTS, int N, SMatrix &trP, HLink &hmm);
 
     // From HLVRec-LM.c
@@ -188,7 +191,7 @@ class Decoder {
     LMTokScore LMCacheTransProb (FSLM *lm, LMState src, PronId pronid, LMState *dest);
     void UpdateLMlookahead(LexNode *ln);
 
-    // From HLVRec.c 3/7 are moved here
+    // From HLVRec.c
     DecoderInst *CreateDecoderInst(HMMSet *hset, FSLM *lm, int nTok, bool latgen, 
 	  bool useHModel, int outpBlocksize, bool doPhonePost, bool modAlign);
 
@@ -221,7 +224,7 @@ class Decoder {
     void CalcPhonePost ();
     void AccumulateStats ();
 
-    // From traceback.c 13/18 are moved here
+    // From traceback.c
     AltWordendHyp* FakeSEpath (RelToken *tok, bool useLM);
     AltWordendHyp* BuildLatAltList (TokenSet *ts, bool useLM);
     WordendHyp *BuildForceLat ();
@@ -250,7 +253,7 @@ class Decoder {
     HiddenMarkovModel& _hmm;
     XFInfo& _xfInfo;
 
-    DecoderInst* _decInst;
+    DecoderInst* _dec;
 
     MemHeap _inputBufHeap;
     MemHeap _transHeap;

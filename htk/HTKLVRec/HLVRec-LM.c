@@ -47,16 +47,16 @@ void Decoder::UpdateLMlookahead(LexNode *ln)
 
   for (int i = 0; i < ts->n; ++i, ++tok) {
 
-    if (!_decInst->fastlmla)
+    if (!_dec->fastlmla)
       lmscore = LMCacheLookaheadProb (tok->lmState, lmlaIdx, FALSE);
     else {
       /* if we ever do fastLMLA, be careful as tok->lmscore might increase! */
-      lmscore = LMCacheLookaheadProb (tok->lmState, lmlaIdx, tok->delta < _decInst->fastlmlaBeam);
+      lmscore = LMCacheLookaheadProb (tok->lmState, lmlaIdx, tok->delta < _dec->fastlmlaBeam);
       lmscore = std::min(lmscore, tok->lmscore);
     }
 
     if (lmscore > LSMALL)
-      lmscore = std::max(lmscore, tok->lmscore - _decInst->maxLMLA);
+      lmscore = std::max(lmscore, tok->lmscore - _dec->maxLMLA);
 
     tok->delta += lmscore - tok->lmscore;     /* subtract previous lookahead */
     bestDelta = std::max(bestDelta, tok->delta);
@@ -91,7 +91,7 @@ LMCache* Decoder::CreateLMCache (MemHeap *heap)
    CreateHeap (&cache->nodeHeap, "LMNodeCache Heap", MHEAP, sizeof (LMNodeCache),
                1.0, 1000, 2000);
 
-   cache->nNode = _decInst->net->laTree->nNodes + _decInst->net->laTree->nCompNodes;
+   cache->nNode = _dec->net->laTree->nNodes + _dec->net->laTree->nCompNodes;
    cache->node = (LMNodeCache **) New (heap, cache->nNode * sizeof (LMNodeCache *));
    for (i = 0; i < cache->nNode; ++i)
       cache->node[i] = NULL;
@@ -112,7 +112,7 @@ static int LMCacheState_hash (LMState lmstate)
 */
 LMTokScore Decoder::LMCacheTransProb (FSLM *lm, LMState src, PronId pronid, LMState *dest)
 {
-   return _decInst->lmScale * LMTransProb (lm, src, pronid, dest);
+   return _dec->lmScale * LMTransProb (lm, src, pronid, dest);
 }
 
 LMTokScore Decoder::LMLA_nocache (LMState lmState, int lmlaIdx)
@@ -120,12 +120,12 @@ LMTokScore Decoder::LMLA_nocache (LMState lmState, int lmlaIdx)
    LMlaTree *laTree;
    LMTokScore lmscore;
 
-   laTree = _decInst->net->laTree;
+   laTree = _dec->net->laTree;
    if (lmlaIdx < laTree->nNodes) {        /* simple node */
       LMlaNode *laNode;
          
       laNode = &laTree->node[lmlaIdx];
-      lmscore = _decInst->lmScale * LMLookAhead (_decInst->lm, lmState, 
+      lmscore = _dec->lmScale * LMLookAhead (_dec->lm, lmState, 
                                             laNode->loWE, laNode->hiWE);
    }
    else {         /* complex node */
@@ -155,17 +155,17 @@ LMTokScore Decoder::LMCacheLookaheadProb (LMState lmState, int lmlaIdx, bool fas
    LMCacheLA *entry;
    int i;
 
-   LMCache *cache = _decInst->lmCache; 
+   LMCache *cache = _dec->lmCache; 
    assert (lmlaIdx < cache->nNode);
    LMNodeCache *nodeCache = cache->node[lmlaIdx];
 
    if (fastlmla) {      /* #### should only go to fast LMState if real one is not cahced */
-      lmState = Fast_LMLA_LMState (_decInst->lm, lmState);
+      lmState = Fast_LMLA_LMState (_dec->lm, lmState);
    }
 
    if (nodeCache) {  
       /* touch this state */
-      nodeCache->t = _decInst->frame;
+      nodeCache->t = _dec->frame;
       
       for (i = 0; i < nodeCache->nEntries; ++i) {
          entry = &nodeCache->la[i];
@@ -188,13 +188,13 @@ LMTokScore Decoder::LMCacheLookaheadProb (LMState lmState, int lmlaIdx, bool fas
    }
    
    /* now entry points to the place to store the prob we are about to calulate */
-      LMlaTree *laTree = _decInst->net->laTree;
+      LMlaTree *laTree = _dec->net->laTree;
       if (lmlaIdx < laTree->nNodes) {        /* simple node */
          LMlaNode *laNode;
          
          laNode = &laTree->node[lmlaIdx];
          ++cache->laMiss;
-         lmscore = _decInst->lmScale * LMLookAhead (_decInst->lm, lmState, 
+         lmscore = _dec->lmScale * LMLookAhead (_dec->lm, lmState, 
                                                laNode->loWE, laNode->hiWE);
       }
       else {         /* complex node */

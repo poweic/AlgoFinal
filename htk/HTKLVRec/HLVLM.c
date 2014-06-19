@@ -90,11 +90,6 @@ void InitLVLM (void)
       if (GetConfBool (cParm, nParm, "RAWMITFORMAT", &b)) rawMITFormat = b;
    }
 
-#if 0
-   /* init HLM */
-   InitLM ();
-#endif
-
 #ifdef LM_NGRAM_INT
    if (sizeof (SEntry) != 4)
       HError (9999, "strange size of SEntry structures (%d)", sizeof (SEntry));
@@ -105,9 +100,6 @@ void InitLVLM (void)
 
 /* ----------- ARPA LM handling ---------- */
 
-#if 0
-   float NGLM_global_min = 0.0;
-#endif
 /* GetProb
 
      Read one Float from src and convert from log_10 to log_e
@@ -121,14 +113,6 @@ static LogFloat GetProb(Source *src, bool bin)
       HError (8113, "ReadARPAngram: failed reading lm prob at %s", 
               SrcPosition (*src, buf));
    }
-#if 0   /* find global minimum prob/bowt for quantization */
-   if (LN10*prob < -90.0)
-      printf ("REALLY small: %f\n", LN10*prob);
-   else {
-      if (LN10*prob < NGLM_global_min)
-         NGLM_global_min = LN10*prob;
-   }
-#endif
 
    return (LN10 * prob);
 }
@@ -390,11 +374,6 @@ static void ReadARPAngram (FSLM_ngram *nglm, Source *lmSrc, int n, int count, bo
          curtmpSE = tmpSE;
          ntmpSE = 0;
          le = ne;
-#if 0 /* pre LMLA */
-         ne->se = se;
-         ne->nse = 0;
-         le = ne;
-#endif
       }
       /* #### map to PronIds */
       word = nglm->wordlist[ndx[0]];
@@ -412,13 +391,6 @@ static void ReadARPAngram (FSLM_ngram *nglm, Source *lmSrc, int n, int count, bo
             ++curtmpSE;
          }
       }
-#if 0 /* pre LMLA */
-      se->prob = prob;
-      se->word = ndx[0];
-      ne->nse++; 
-      se++;
-#endif 
-      
       
       if (hasBO) {
          ne = GetNEntry (nglm, ndx, TRUE);
@@ -1090,13 +1062,6 @@ LogFloat LMLookAhead_3gram (FSLM *lm, LMState src, PronId minPron, PronId maxPro
       else
          se_bg = NULL;
 
-#if 0   /*sanity check: trigram range is subset of bigram range */
-      if (se_tg) {
-         assert (se_tg->word >= se_bg->word);
-         assert (seLast_tg->word <= seLast_bg->word);
-      }
-#endif
-
       if (se_tg) {              /* there are trigram entries to handle */
          pend = maxPron;
          if (maxPron > seLast_tg->word)
@@ -1123,9 +1088,6 @@ LogFloat LMLookAhead_3gram (FSLM *lm, LMState src, PronId minPron, PronId maxPro
                }
             } else {                    /* tigram */
                prob = se_tg->prob;
-#if 0           /* sanity check */
-               assert (se_bg->word == se_tg->word);
-#endif               
                ++se_tg;
 	       if (se_bg) ++se_bg;
                if (NGLM_PROB_GREATER(prob,maxScore))
@@ -1182,13 +1144,6 @@ LogFloat LMLookAhead_3gram (FSLM *lm, LMState src, PronId minPron, PronId maxPro
          maxScore = ug_maxScore;
    }
 
-#if 0   /* very expensive check */
-   {
-      if (fabs (NGLM_PROB_TO_FLOAT(maxScore) -
-                LMLookAhead_ngram (lm, src, minPron, maxPron)) > 0.01)
-         abort();
-   }
-#endif
    return NGLM_PROB_TO_FLOAT(maxScore);
 }
 
@@ -1213,14 +1168,6 @@ LogFloat LMLookAhead_ngram (FSLM *lm, LMState src, PronId minPron, PronId maxPro
       SEntry *se[NSIZE-1], *seEnd[NSIZE-1];
       NGLM_Prob bowt[NSIZE-1], prob;
 
-#if 0           /* make debugging easier */
-      for (l = 0; l < NSIZE-1; ++l) {
-         ne[l] = NULL;
-         se[l] = NULL;
-         bowt[l] = NGLM_PROB_ZERO;
-         hist[l] = 0;
-      }
-#endif
       /* # find histLen from neSrc */
       hiIdx = NSIZE;
       for (l = 0; l < NSIZE-1; ++l) {
@@ -1257,9 +1204,6 @@ LogFloat LMLookAhead_ngram (FSLM *lm, LMState src, PronId minPron, PronId maxPro
                                     ne[l]->se + (ne[l]->nse - 1), minPron);
          else
             se[l] = NULL;
-#if 0   /* sanity check of binary search implementation */
-         assert (se[l] == FindMinSEntry (ne[l]->se, ne[l]->nse, minPron));
-#endif             
          /* set seEnd[] sentinel */
          seEnd[l] = ne[l]->se + ne[l]->nse;
          
@@ -1306,14 +1250,6 @@ LogFloat LMLookAhead_ngram (FSLM *lm, LMState src, PronId minPron, PronId maxPro
             if (NGLM_PROB_GREATER(prob,maxScore))
                maxScore = prob;
          }
-#if 0           /* sanity check: compare with LMTransProb */
-         {
-            LMState dest;
-            LogFloat prob_lmtrans;
-            prob_lmtrans = LMTransProb (lm, src, p, &dest);
-            assert (fabs (prob - prob_lmtrans) < 1.0e-4);
-         }
-#endif
       }
    } else {  /* loop over unigrams */
       for (i = minPron; i <= maxPron; ++i)

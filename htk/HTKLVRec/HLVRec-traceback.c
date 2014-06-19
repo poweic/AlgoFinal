@@ -35,7 +35,7 @@ void Decoder::PrintPath (WordendHyp *we)
    Pron pron;
 
    for (; we; we = we->prev) {
-      pron = _decInst->net->pronlist[we->pron];
+      pron = _dec->net->pronlist[we->pron];
       if ((we->user & 3) == 1)
          pron = pron->next;             /* sp */
       else if ((we->user & 3) == 2)
@@ -90,7 +90,7 @@ TokenSet* Decoder::BestTokSet ()
    LogFloat best;
    int i, N;
 
-   bestInst = _decInst->bestInst;
+   bestInst = _dec->bestInst;
    switch (bestInst->node->type) {
    case LN_MODEL:
       N = bestInst->node->data.hmm->numStates;
@@ -133,8 +133,8 @@ Transcription* Decoder::TraceBack(MemHeap *heap)
    int i;
    HTime start;
 
-   if (_decInst->net->end->inst && _decInst->net->end->inst->ts->n > 0)
-      ts = _decInst->net->end->inst->ts;
+   if (_dec->net->end->inst && _dec->net->end->inst->ts->n > 0)
+      ts = _dec->net->end->inst->ts;
    else {
       HError (-9999, "no token survived to sent end!");
 
@@ -171,7 +171,7 @@ Transcription* Decoder::TraceBack(MemHeap *heap)
    /* going backwards from </s> to <s> */
    for (weHyp = bestTok->path; weHyp; weHyp = weHyp->prev) {
       lab = CreateLabel (heap, ll->maxAuxLab);
-      pron = _decInst->net->pronlist[weHyp->pron];
+      pron = _dec->net->pronlist[weHyp->pron];
       if ((weHyp->user & 3) == 1)
          pron = pron->next;             /* sp */
       else if ((weHyp->user & 3) == 2)
@@ -180,7 +180,7 @@ Transcription* Decoder::TraceBack(MemHeap *heap)
       lab->labid = pron->outSym;
       lab->score = weHyp->score;
       lab->start = 0.0;
-      lab->end = weHyp->frame * _decInst->frameDur * 1.0e7;
+      lab->end = weHyp->frame * _dec->frameDur * 1.0e7;
       lab->succ = ll->head->succ;
       lab->pred = ll->head;
       lab->succ->pred = lab->pred->succ = lab;
@@ -235,19 +235,6 @@ void Decoder::LatTraceBackCount (WordendHyp *path, int *nnodes, int *nlinks)
       ++(*nnodes);
       path->user += *nnodes * 4;         /* preserve pronvar bits */
 
-#if 0
-      {
-         Pron pron;
-         char *s;
-
-         pron = _decInst->net->pronlist[path->pron];
-
-         s = (pron->outSym) ? pron->outSym->name : "!NULL";
-
-         printf ("   n %d t %.3f W %s\n", (int) path->user, path->frame*_decInst->frameDur, s);
-      }
-#endif
-
    }
 }
 
@@ -274,8 +261,8 @@ void Decoder::Paths2Lat (Lattice *lat, WordendHyp *path, int *na)
       ln->hook = (Ptr) path;
 
       ln->n = n;
-      ln->time = path->frame*_decInst->frameDur;   /* fix frame duration! */
-      pron = _decInst->net->pronlist[path->pron];
+      ln->time = path->frame*_dec->frameDur;   /* fix frame duration! */
+      pron = _dec->net->pronlist[path->pron];
 
       if ((path->user & 3) == 1)
          pron = pron->next;             /* sp */
@@ -289,7 +276,7 @@ void Decoder::Paths2Lat (Lattice *lat, WordendHyp *path, int *na)
       ln->v = pron->pnum;
 
       if (trace & T_LAT)
-         printf ("I=%d t=%.2f W=%d\n", n, path->frame*_decInst->frameDur, path->pron);
+         printf ("I=%d t=%.2f W=%d\n", n, path->frame*_dec->frameDur, path->pron);
 
       
       la = &lat->larcs[*na];
@@ -308,21 +295,17 @@ void Decoder::Paths2Lat (Lattice *lat, WordendHyp *path, int *na)
 
       la->prlike = pron->prob;
       la->aclike = path->score - prevScore - path->lm 
-         - la->prlike * _decInst->pronScale;
-      la->lmlike = (path->lm - _decInst->insPen) / _decInst->lmScale;
+         - la->prlike * _dec->pronScale;
+      la->lmlike = (path->lm - _dec->insPen) / _dec->lmScale;
 
 #ifdef MODALIGN
-      if (_decInst->modAlign) {
+      if (_dec->modAlign) {
          int startFrame;
 
          startFrame = path->prev ? path->prev->frame : 0;
 
          la->lAlign = LAlignFromModpath (lat->heap, path->modpath,
                                          startFrame, &la->nAlign);
-#if 0   /* debug trace */
-         printf ("%d  ", *na - 1);
-         PrintModPath (_decInst, path->modpath);
-#endif
       }
 #endif
 
@@ -350,23 +333,17 @@ void Decoder::Paths2Lat (Lattice *lat, WordendHyp *path, int *na)
 
          la->prlike = pron->prob;
          la->aclike = (path->score + alt->score) - prevScore - alt->lm - 
-            la->prlike * _decInst->pronScale;
-         la->lmlike = (alt->lm - _decInst->insPen) / _decInst->lmScale;
+            la->prlike * _dec->pronScale;
+         la->lmlike = (alt->lm - _dec->insPen) / _dec->lmScale;
          
 #ifdef MODALIGN
-         if (_decInst->modAlign) {
+         if (_dec->modAlign) {
             int startFrame;
             
             startFrame = alt->prev ? alt->prev->frame : 0;
             
             la->lAlign = LAlignFromAltModpath (lat->heap, alt->modpath, path->modpath,
                                                startFrame, &la->nAlign);
-#if 0           /* debug trace */
-            printf ("%d ALT ", *na - 1);
-            PrintModPath (_decInst, alt->modpath);
-            printf ("     ");
-            PrintModPath (_decInst, path->modpath);
-#endif
          }
 #endif
          if (trace & T_LAT)
@@ -379,7 +356,7 @@ void Decoder::Paths2Lat (Lattice *lat, WordendHyp *path, int *na)
 
 /* LatTraceBack
 
-     produce Lattice from the wordEnd hypotheses recoded in _decInst
+     produce Lattice from the wordEnd hypotheses recoded in _dec
 */
 Lattice* Decoder::LatTraceBack (MemHeap *heap)
 {
@@ -387,13 +364,13 @@ Lattice* Decoder::LatTraceBack (MemHeap *heap)
    int i, nnodes = 0, nlinks = 0;
    WordendHyp *sentEndWE;
 
-   if (!_decInst->net->end->inst)
+   if (!_dec->net->end->inst)
       HError (-9999, "LatTraceBack: end node not active");
    else
-      printf ("found %d tokens in end state\n", _decInst->net->end->inst->ts->n);
+      printf ("found %d tokens in end state\n", _dec->net->end->inst->ts->n);
 
-   if (buildLatSE && _decInst->net->end->inst && _decInst->net->end->inst->ts->n == 1)
-      sentEndWE = _decInst->net->end->inst->ts->relTok[0].path;
+   if (buildLatSE && _dec->net->end->inst && _dec->net->end->inst->ts->n == 1)
+      sentEndWE = _dec->net->end->inst->ts->relTok[0].path;
    else {
       if (buildLatSE)
          HError (-9999, "no tokens in sentend -- falling back to BUILDLATSENTEND = F");
@@ -405,7 +382,7 @@ Lattice* Decoder::LatTraceBack (MemHeap *heap)
       if (forceLatOut) {
          HError (-9999, "LatTraceBack: forcing lattice output");
 #ifdef MODALIGN
-         if (_decInst->modAlign) 
+         if (_dec->modAlign) 
 /*             HError (-9999, "LatTraceBack: forced lattice output not supported with model-alignment"); */
             sentEndWE = BuildForceLat ();
          else 
@@ -426,14 +403,14 @@ Lattice* Decoder::LatTraceBack (MemHeap *heap)
    lat = NewLattice (heap, nnodes, nlinks);
 
    /* #### fill in info (e.g. lmscale, inspen, models) */
-   lat->voc = _decInst->net->voc;
-   lat->utterance = _decInst->utterFN;
-   lat->vocab = _decInst->net->vocabFN;
-   lat->hmms = _decInst->hset->mmfNames ? _decInst->hset->mmfNames->fName : NULL;
-   lat->net = _decInst->lm->name;
-   lat->lmscale = _decInst->lmScale;
-   lat->wdpenalty = _decInst->insPen;
-   lat->prscale = _decInst->pronScale;
+   lat->voc = _dec->net->voc;
+   lat->utterance = _dec->utterFN;
+   lat->vocab = _dec->net->vocabFN;
+   lat->hmms = _dec->hset->mmfNames ? _dec->hset->mmfNames->fName : NULL;
+   lat->net = _dec->lm->name;
+   lat->lmscale = _dec->lmScale;
+   lat->wdpenalty = _dec->insPen;
+   lat->prscale = _dec->pronScale;
    lat->framedur = 1.0;
       
    for (i = 0; i < nnodes; ++i)
@@ -447,7 +424,7 @@ Lattice* Decoder::LatTraceBack (MemHeap *heap)
    }
    
 #ifdef MODALIGN
-   if (_decInst->modAlign)
+   if (_dec->modAlign)
       CheckLAlign (lat);
 #endif
    return lat;
@@ -477,7 +454,7 @@ LAlign* Decoder::LAlignFromModpath (MemHeap *heap, ModendHyp *modpath, int wordS
    for (m = modpath; m; m = m->prev) {
       if (m->ln->type == LN_MODEL) {
          startFrame = (m->prev ? m->prev->frame : wordStart);
-         ml = FindMacroStruct (_decInst->hset, 'h', (Ptr) m->ln->data.hmm);
+         ml = FindMacroStruct (_dec->hset, 'h', (Ptr) m->ln->data.hmm);
          if (!ml)
             HError (9999, "LAlignFromModpath: model not found!");
 
@@ -485,7 +462,7 @@ LAlign* Decoder::LAlignFromModpath (MemHeap *heap, ModendHyp *modpath, int wordS
          --n;
          lalign[n].state = -1;
          lalign[n].like = 0.0;
-         lalign[n].dur = (m->frame - startFrame) * _decInst->frameDur;
+         lalign[n].dur = (m->frame - startFrame) * _dec->frameDur;
          lalign[n].label = ml->id;
       }
    }
@@ -531,7 +508,7 @@ LAlign *Decoder::LAlignFromAltModpath (MemHeap *heap, ModendHyp *modpath, Modend
       nextM = m->prev;
       if (m->ln->type == LN_MODEL) {
          startFrame = (m->prev ? m->prev->frame : wordStart);
-         ml = FindMacroStruct (_decInst->hset, 'h', (Ptr) m->ln->data.hmm);
+         ml = FindMacroStruct (_dec->hset, 'h', (Ptr) m->ln->data.hmm);
          if (!ml)
             HError (9999, "LAlignFromModpath: model not found!");
 
@@ -540,7 +517,7 @@ LAlign *Decoder::LAlignFromAltModpath (MemHeap *heap, ModendHyp *modpath, Modend
          assert (n >= 0);
          lalign[n].state = -1;
          lalign[n].like = 0.0;
-         lalign[n].dur = (m->frame - startFrame) * _decInst->frameDur;
+         lalign[n].dur = (m->frame - startFrame) * _dec->frameDur;
          lalign[n].label = ml->id;
       }
       else if (m->ln->type == LN_WORDEND)
@@ -561,7 +538,7 @@ void Decoder::PrintModPath (ModendHyp *m)
       switch (m->ln->type) {
       case LN_WORDEND:
          t = "WE";
-         s = _decInst->net->pronlist[m->ln->data.pron]->outSym->name;
+         s = _dec->net->pronlist[m->ln->data.pron]->outSym->name;
          break;
       case LN_CON:
          t = "CON";
@@ -569,7 +546,7 @@ void Decoder::PrintModPath (ModendHyp *m)
          break;
       case LN_MODEL:
          t = "MOD";
-         ml = FindMacroStruct (_decInst->hset, 'h', (Ptr) m->ln->data.hmm);
+         ml = FindMacroStruct (_dec->hset, 'h', (Ptr) m->ln->data.hmm);
          if (ml)
             s = ml->id->name;
       }
@@ -617,18 +594,9 @@ void Decoder::CheckLAlign (Lattice *lat)
       for (j = 0; j < la->nAlign; ++j) {
          dur += la->lAlign[j].dur;
 
-#if 0   /* sanity checking -- does not work for non-sildicts */
-         strcpy (buf, la->lAlign[j].label->name);
-         TriStrip (buf);
-         monolab = GetLabId (buf, FALSE);
-         assert (pron->phones[j] == monolab);
-#endif
       }
-#if 0
-      assert (la->nAlign == pron->nphones);
-#endif
 
-      if (fabs (dur - laDur) > _decInst->frameDur/2)
+      if (fabs (dur - laDur) > _dec->frameDur/2)
          printf ("CheckLAlign: MODALIGN Sanity check failed! %d laDur %.2f  dur %.2f\n", i, laDur, dur);
    }
 }
@@ -651,20 +619,20 @@ AltWordendHyp* Decoder::FakeSEpath (RelToken *tok, bool useLM)
    LMState dest;
    LMTokScore lmScore;
    
-   endPronId = _decInst->net->end->data.pron;
+   endPronId = _dec->net->end->data.pron;
 
    if (useLM)
-      lmScore = LMCacheTransProb (_decInst->lm, tok->lmState, endPronId, &dest);
+      lmScore = LMCacheTransProb (_dec->lm, tok->lmState, endPronId, &dest);
    else
       lmScore = 0.0;
    if (lmScore > LSMALL) {  /* transition for END state possible? */
       assert (!useLM || dest == (Ptr) 0xfffffffe);
-      lmScore += _decInst->insPen;
+      lmScore += _dec->insPen;
 
-      alt = (AltWordendHyp *) New (&_decInst->altweHypHeap, sizeof (AltWordendHyp));
+      alt = (AltWordendHyp *) New (&_dec->altweHypHeap, sizeof (AltWordendHyp));
       alt->next = NULL;
 
-      if (!_decInst->fastlmla) {
+      if (!_dec->fastlmla) {
          assert (lmScore <= tok->lmscore + 0.1); /* might not be true for more aggressive LMLA? */
       }
       /* temporarily store full score in altWEhyp */
@@ -681,7 +649,7 @@ AltWordendHyp* Decoder::FakeSEpath (RelToken *tok, bool useLM)
      Create full WordendHyp with alternatives from list of AltWordendHyps
 
 */
-WordendHyp *AltPathList2Path (DecoderInst *_decInst, AltWordendHyp *alt, PronId pron)
+WordendHyp *AltPathList2Path (DecoderInst *_dec, AltWordendHyp *alt, PronId pron)
 {
    WordendHyp *path;
    AltWordendHyp *bestAlt, *a;
@@ -697,10 +665,10 @@ WordendHyp *AltPathList2Path (DecoderInst *_decInst, AltWordendHyp *alt, PronId 
       }
    
    /* create full WordendHyp for best */
-   path = (WordendHyp *) New (&_decInst->weHypHeap, sizeof (WordendHyp));
+   path = (WordendHyp *) New (&_dec->weHypHeap, sizeof (WordendHyp));
    path->prev = bestAlt->prev;
    path->pron = pron;
-   path->frame = _decInst->frame;
+   path->frame = _dec->frame;
    path->score = bestAlt->score;
    path->lm = bestAlt->lm;
    path->user = 0;
@@ -742,8 +710,8 @@ WordendHyp* Decoder::BuildLattice ()
 #endif
 
    alt = altPrev = NULL;
-   hmmSP = _decInst->net->hmmSP;
-   for (inst = _decInst->instsLayer[LAYER_SIL]; inst; inst = inst->next) {
+   hmmSP = _dec->net->hmmSP;
+   for (inst = _dec->instsLayer[LAYER_SIL]; inst; inst = inst->next) {
       ln = inst->node;
       if (ln->type == LN_MODEL && ln->data.hmm != hmmSP) {
          N = ln->data.hmm->numStates;
@@ -756,7 +724,7 @@ WordendHyp* Decoder::BuildLattice ()
                A side effect is that the </s> link will have 
                aclike=0.0 and 1 frame length*/
             tok->path->score = ts->score + tok->delta;
-            tok->path->frame = _decInst->frame - 1;
+            tok->path->frame = _dec->frame - 1;
             
 #ifdef MODALIGN
             /* skip the final (MOD sil) modpath entry.
@@ -765,15 +733,15 @@ WordendHyp* Decoder::BuildLattice ()
                slip into the LATPRUNEBEAM due to the final </s> LM transition applied to
                all tokens. 
             */
-            if (_decInst->modAlign) {
+            if (_dec->modAlign) {
                if (tok->modpath->ln == ln)
                   tok->modpath = tok->modpath->prev;
                tok->path->frame = tok->modpath->frame;
                tok->path->modpath = tok->modpath;
                
                if (!silModend) {
-                  silModend = (ModendHyp*) New (&_decInst->modendHypHeap, sizeof (ModendHyp));
-                  silModend->frame = _decInst->frame;
+                  silModend = (ModendHyp*) New (&_dec->modendHypHeap, sizeof (ModendHyp));
+                  silModend->frame = _dec->frame;
                   silModend->ln = ln;   /* dodgy, but we just need ln with 'sil' model... */
                   silModend->prev = NULL;
                }
@@ -796,7 +764,7 @@ WordendHyp* Decoder::BuildLattice ()
    if (!alt)   /* no token in sil models at all */
       return NULL;
 
-   path = AltPathList2Path (_decInst, alt, _decInst->net->end->data.pron);
+   path = AltPathList2Path (_dec, alt, _dec->net->end->data.pron);
 #ifdef MODALIGN
    path->modpath = silModend;
 #endif
@@ -851,7 +819,7 @@ WordendHyp *Decoder::BuildForceLat ()
          aclike=0.0 and 1 frame length*/
       if (tok->path) {
          tok->path->score = ts->score + tok->delta;
-         tok->path->frame = _decInst->frame - 1;
+         tok->path->frame = _dec->frame - 1;
       }
    }
 
@@ -868,7 +836,7 @@ WordendHyp *Decoder::BuildForceLat ()
       return NULL;
    }
 
-   path = AltPathList2Path (_decInst, alt, _decInst->net->end->data.pron);
+   path = AltPathList2Path (_dec, alt, _dec->net->end->data.pron);
 #ifdef MODALIGN
    path->modpath = silModend;
 #endif

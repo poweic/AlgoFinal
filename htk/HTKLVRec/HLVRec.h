@@ -55,8 +55,6 @@ typedef struct _RelToken RelToken;      /* Info about partial hypothesis relativ
 typedef struct _WordendHyp WordendHyp;      /* records word level tracback */
 typedef struct _AltWordendHyp AltWordendHyp;/* records alternatives for lattice tracback */
 
-
-#ifdef MODALIGN
 typedef struct _ModendHyp ModendHyp;    /* records model level tracback */
 
 struct _ModendHyp {             /* stores info about one model(end) */
@@ -64,7 +62,6 @@ struct _ModendHyp {             /* stores info about one model(end) */
    LexNode *ln;                 /* lexnode that finished */
    short frame;                 /* end frame number of this model */
 };
-#endif
 
 struct _RelToken {
    LMState lmState;
@@ -79,9 +76,7 @@ struct _RelToken {
      we_tag = (void *) ((long) we_tag | 1);
    }
 
-#ifdef MODALIGN
    ModendHyp *modpath;          /* model level traceback */
-#endif
 };
 
 struct _Token {
@@ -101,9 +96,7 @@ struct _WordendHyp {            /* stores info about one word(end) */
                                 /* don't need pron like, it's in pron->prob */
    AltWordendHyp *alt;          /* alternative paths for lattice traceback */
    int user;			/* general user info; #### get rid of this! */
-#ifdef MODALIGN
    ModendHyp *modpath;          /* model level traceback */
-#endif
 };
 
 struct _AltWordendHyp {         /* stores info about N-best word(end) for lattice traceback */
@@ -114,9 +107,7 @@ struct _AltWordendHyp {         /* stores info about N-best word(end) for lattic
                                 /* don't need pron like, it's in pron->prob */
    /* no need for frame */
    AltWordendHyp *next;
-#ifdef MODALIGN
    ModendHyp *modpath;          /* model level traceback */
-#endif
 };
 
 /* macros to compare whether two tokens are quivalent accoring to the LM. */
@@ -395,10 +386,8 @@ struct _DecoderInst {
 
    StateInfo_lv *si;
 
-#ifdef MODALIGN
    bool modAlign;
    MemHeap modendHypHeap;       /* MHEAP for word end hyps */
-#endif
 
 #ifdef COLLECT_STATS
    Stats stats;                 /* statistics about pruning etc. */

@@ -286,7 +286,7 @@ static void SweepModPaths (MemHeap *heap)
 */
 void Decoder::GarbageCollectPaths ()
 {
-   if (_decInst->frame % gcFreq != 0)
+   if (_dec->frame % gcFreq != 0)
      return;
 
    int i, l, N;
@@ -295,19 +295,19 @@ void Decoder::GarbageCollectPaths ()
 
    if (trace&T_GC) {
       printf ("Garbage Collecting paths.\n");
-      PrintHeapStats (&_decInst->weHypHeap);
-      PrintHeapStats (&_decInst->altweHypHeap);
+      PrintHeapStats (&_dec->weHypHeap);
+      PrintHeapStats (&_dec->altweHypHeap);
 #ifdef MODALIGN
-      if (_decInst->modAlign)
-        PrintHeapStats (&_decInst->modendHypHeap);
+      if (_dec->modAlign)
+        PrintHeapStats (&_dec->modendHypHeap);
 #endif
    }
    /*# mark phase */
-   for (l = 0; l < _decInst->nLayers; ++l) {
+   for (l = 0; l < _dec->nLayers; ++l) {
       if (trace&T_GC)
          printf (" layer %d...\n", l);
 
-      for (inst = _decInst->instsLayer[l]; inst; inst = inst->next) {
+      for (inst = _dec->instsLayer[l]; inst; inst = inst->next) {
          switch (inst->node->type) {
          case LN_MODEL:
             N = inst->node->data.hmm->numStates;
@@ -326,20 +326,20 @@ void Decoder::GarbageCollectPaths ()
    }
 
    /* sweep phase */
-   SweepPaths (&_decInst->weHypHeap);
-   SweepAltPaths (&_decInst->altweHypHeap);
+   SweepPaths (&_dec->weHypHeap);
+   SweepAltPaths (&_dec->altweHypHeap);
 #ifdef MODALIGN
-   if (_decInst->modAlign)
-      SweepModPaths (&_decInst->modendHypHeap);
+   if (_dec->modAlign)
+      SweepModPaths (&_dec->modendHypHeap);
 #endif
 
    if (trace&T_GC) {
       printf ("Garbage Collection finished.\n");
-      PrintHeapStats (&_decInst->weHypHeap);
-      PrintHeapStats (&_decInst->altweHypHeap);
+      PrintHeapStats (&_dec->weHypHeap);
+      PrintHeapStats (&_dec->altweHypHeap);
 #ifdef MODALIGN
-   if (_decInst->modAlign)
-      PrintHeapStats (&_decInst->modendHypHeap);
+   if (_dec->modAlign)
+      PrintHeapStats (&_dec->modendHypHeap);
 #endif
    }
 }
