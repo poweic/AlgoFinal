@@ -150,9 +150,8 @@ class Decoder {
     //==== These functions are moved here by coldsheep 0613
 
     // From propagate.c
-  
     void HandleWordend (LexNode *ln);
-    void PropagateExternal (LexNodeInst *inst, bool handleWE, bool wintTree);
+    void ExternalPropagation (LexNodeInst *inst, bool handleWE, bool wintTree);
     void UpdateWordEndHyp (LexNodeInst *inst);
     void AddPronProbs (TokenSet *ts, int var);
     void MergeTokSet (TokenSet *src, TokenSet *dest, LogFloat score, bool prune);

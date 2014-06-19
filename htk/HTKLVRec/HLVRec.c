@@ -633,50 +633,6 @@ void Decoder::DeactivateNode (LexNode *ln)
 }
 
 
-/* PruneTokSet
-
-     apply global and relative beams to a tokenset
-
-     #### this is rather inefficient
-*/
-void Decoder::PruneTokSet (TokenSet *ts)
-{
-   RelTokScore deltaLimit;
-   RelToken *tok, *dest;
-   int i, newN;
-
-   return;
-
-   /* main and relative beam pruning */
-   deltaLimit = std::max(_dec->beamLimit - ts->score, _dec->relBeamWidth);
-   
-   if (deltaLimit > 0) {        /* prune complete TokeSet */
-      ts->n = 0;
-      ts->id = 0;
-      return;
-   }
-
-   /* #### maybe don't perform relTok pruning to keep relTokID the same?  */
-
-   newN = 0;            /* number of relToks kept */
-   for (i = 0, dest = tok = ts->relTok; i < ts->n; ++i, ++tok) {
-      if (tok->delta > deltaLimit) {   /* keep */
-         //if (dest != tok)
-	 *dest = *tok;
-         ++dest;
-         ++newN;
-      }
-   }
-
-   /* #### could calculate newN from difference between dest and ts->tok */
-   if (newN != ts->n) {         /* some RelToks got pruned! */
-      ts->n = newN;
-      ts->id = ++_dec->tokSetIdCount;
-
-   }
-}
-
-
 /* stolen from HRec.c */
 
 /* EXPORT->FormatTranscription: Format transcription prior to output */

@@ -38,9 +38,9 @@ void Decoder::TokSetHistogramPruning(TokenSet *dest, const RelTokScore& deltaLim
 
   const size_t NBINS = 64;
 
-
-  dest->id = ++_dec->tokSetIdCount;    /* #### new id always necessary? */
-  LogFloat binWidth = deltaLimit * 1.001 / NBINS;   /* handle delta == deltaLimit case */
+  dest->id = ++_dec->tokSetIdCount;
+  // choose 1.001 to handle delta == deltaLimit case
+  LogFloat binWidth = deltaLimit * 1.001 / NBINS;   
 
   int n[NBINS] = {0};
 
@@ -111,7 +111,9 @@ void Decoder::FindWinningTokens(TokenSet *src, TokenSet *dest, LogFloat score,
     RelTokScore srcCorr, RelTokScore destCorr, RelTokScore deltaLimit,
     RelToken* &winTok, int &nWinTok, int* nWin) {
 
-  RelToken *srcTok = src->relTok, *destTok = dest->relTok;
+  auto srcTok = src->relTok,
+       destTok = dest->relTok;
+
   int nSrcTok = src->n, nDestTok = dest->n;
   int winLoc;
   do {
@@ -179,19 +181,19 @@ void Decoder::FindWinningTokens(TokenSet *src, TokenSet *dest, LogFloat score,
 void Decoder::CopyWinningToken(TokenSet *src, TokenSet *dest, int nWinTok, RelToken *winTok,
     const TokScore &winScore, const int *nWin) {
 
-     /* just copy */
-     for (int i = 0; i < nWinTok; ++i)
-       dest->relTok[i] = winTok[i];
+  /* just copy */
+  for (int i = 0; i < nWinTok; ++i)
+    dest->relTok[i] = winTok[i];
 
-     dest->n = nWinTok;
-     dest->score = winScore;
+  dest->n = nWinTok;
+  dest->score = winScore;
 
-     if (nWinTok == nWin[0])
-       dest->id = src->id;          /* copy src->id */
-     else if (nWinTok == nWin[1])
-       dest->id = dest->id;         /* copy dest->id */
-     else
-       dest->id = ++_dec->tokSetIdCount;    /* new id */
+  if (nWinTok == nWin[0])
+    dest->id = src->id;          /* copy src->id */
+  else if (nWinTok == nWin[1])
+    dest->id = dest->id;         /* copy dest->id */
+  else
+    dest->id = ++_dec->tokSetIdCount;    /* new id */
 }
 
 /* MergeTokSet
@@ -207,7 +209,6 @@ void Decoder::MergeTokSet (TokenSet *src, TokenSet *dest, LogFloat score, bool p
       *dest = *src;
       dest->score += score;
       return;
-
    } else if (prune && src->score + score < _dec->beamLimit)
      return;
 
@@ -265,47 +266,45 @@ void Decoder::OptLeftToRightPropagateInternal(LexNodeInst *inst, TokenSet* instT
   /* loop transition for state N-1 (which has no forward trans) */
   instTS[N-2].score += trP[N-1][N-1];
 
-  for (int i = N-2; i >=2; --i) {             /* for all internal states, except N-1 */
+  // for all internal states, except N-1
+  for (int i = N-2; i >=2; --i) {             
     /* ts is an array of tokenSet ( of the type TokenSet* ) ,
      * starting from state 0 to stae N ( N = 5 typically ). */
     TokenSet* ts = &instTS[i-1];
 
-    if (ts->n > 0) {
-      /* propagate forward from state i */
+    if (ts->n <= 0)
+      continue;
 
-      /* only propagate to next -- no skip!! ( i.e. i->i+1 no i->i+2 ) */
-      MergeTokSet (ts, ts+1 , trP[i][i+1], (!mergeTokOnly));
+    // propagate forward -- only to next, no skip!! ( i.e. i->i+1 no i->i+2 )
+    MergeTokSet (ts, ts+1 , trP[i][i+1], (!mergeTokOnly));
 
-      /* loop transition */
-      ts->score += trP[i][i];
-    }
+    // self-transition
+    ts->score += trP[i][i];
   }
 
   /* entry transition i=1 -> j=2 */
-  if ((instTS[0].n > 0) && (trP[1][2] > LSMALL)) {
+  if ((instTS[0].n > 0) && (trP[1][2] > LSMALL))
     MergeTokSet (&instTS[0], &instTS[1], trP[1][2], (!mergeTokOnly));
-  }
 
   /* output probabilities */
   for (int i = 2; i < N; ++i) {             /* for all internal states */
     if (instTS[i-1].n > 0) {
-      LogFloat outP = cOutP (_dec->obs, hmm, i);
-      instTS[i-1].score += outP;         /* only change top score */
+      // only change top score
+      auto outP = cOutP (_dec->obs, hmm, i);
+      instTS[i-1].score += outP;         
       if (instTS[i-1].score > bestScore)
 	bestScore = instTS[i-1].score;
     }
   }
   inst->best = bestScore;
-
-  instTS[0].n = 0;             /* clear entry state */
-  instTS[0].id = 0;
-
-  instTS[N-1].n = 0;           /* clear exit state */
+  
+  // clear entry & exit state
+  instTS[ 0 ].n  = 0;             
+  instTS[ 0 ].id = 0;
+  instTS[N-1].n  = 0;
   instTS[N-1].id = 0;
 
-  /* exit transition i=N-1 -> j=N */
-  /* don't prune -- beam stil refers to last frame's scores, here we have 
-     already added this frame's outP */
+  // exit transition i=N-1 -> j=N
   if (instTS[N-2].n > 0)
     MergeTokSet (&instTS[N-2], &instTS[N-1], trP[N-1][N], FALSE);
 
@@ -326,9 +325,7 @@ void Decoder::GeneralPropagateInternal(LexNodeInst *inst, TokenSet* instTS, int 
 
   /* internal states */
   for (int j = 2; j < N; ++j) {
-    tempTS[j-1].score = 0.0;
-    tempTS[j-1].n = 0;
-    tempTS[j-1].id = 0;
+    tempTS[j-1].score = tempTS[j-1].n = tempTS[j-1].id = 0;
 
     for (int i = 1; i < N; ++i) {
       if ((instTS[i-1].n > 0) && (trP[i][j] > LSMALL))
@@ -341,7 +338,8 @@ void Decoder::GeneralPropagateInternal(LexNodeInst *inst, TokenSet* instTS, int 
     }
   }
 
-  instTS[0].n = 0;          /* clear entry state */
+  // clear entry state
+  instTS[0].n  = 0;          
   instTS[0].id = 0;
 
   /* internal states: copy temp array back and find best score */
@@ -356,7 +354,7 @@ void Decoder::GeneralPropagateInternal(LexNodeInst *inst, TokenSet* instTS, int 
 
   /* exit state (j=N), merge directly into ints->ts */
   int j = N;
-  instTS[j-1].n = 0;
+  instTS[j-1].n  = 0;
   instTS[j-1].id = 0;
 
   for (int i = 2; i < N; ++i) {
@@ -383,11 +381,9 @@ void Decoder::GeneralPropagateInternal(LexNodeInst *inst, TokenSet* instTS, int 
  * */
 void Decoder::InternalPropagation (LexNodeInst *inst) {
 
-   LexNode *ln = inst->node;
-   HLink hmm = ln->data.hmm;
+   auto hmm = inst->node->data.hmm;
+   auto instTS = inst->ts;
    int N = hmm->numStates;
-   SMatrix trP = hmm->transP;
-   TokenSet* instTS = inst->ts;
 
    /* Main beam pruning: prune tokensets before propagation
       the beamLimit is the one found during the last frame */
@@ -400,24 +396,19 @@ void Decoder::InternalPropagation (LexNodeInst *inst) {
    /* Optimised version for L-R models OR 
       General (not left-to-right) Propagate Internal   */
    if (hmm->tIdx < 0)
-      OptLeftToRightPropagateInternal(inst, instTS, N, trP, hmm);
+      OptLeftToRightPropagateInternal(inst, instTS, N, hmm->transP, hmm);
    else
-     GeneralPropagateInternal(inst, instTS, N, trP, hmm);
+     GeneralPropagateInternal(inst, instTS, N, hmm->transP, hmm);
 }
 
 void Decoder::UpdateModPaths (TokenSet *ts, LexNode *ln) {
+
    if (ln->type == LN_CON)
       return;
 
-   ModendHyp *m;
-   RelToken *tok;
-   int i;
-   
-   /* don't accumulate info for CON nodes */
-   /* #### optimise by sharing ModendHyp's between tokens with
-      same tok->modpath */
-   for (i = 0, tok = ts->relTok; i < ts->n; ++i, ++tok) {
-      m = (ModendHyp*) New (&_dec->modendHypHeap, sizeof (ModendHyp));
+   int i = 0;
+   for (auto tok = ts->relTok; i < ts->n; ++i, ++tok) {
+      auto m = (ModendHyp*) New (&_dec->modendHypHeap, sizeof (ModendHyp));
       m->frame = _dec->frame;
       m->ln = ln;
       m->prev = tok->modpath;
@@ -429,15 +420,12 @@ void Decoder::UpdateModPaths (TokenSet *ts, LexNode *ln) {
 /* PropIntoNode
      Propagate tokenset into entry state of LexNode, activating as necessary
 */
-void Decoder::PropIntoNode (TokenSet *ts, LexNode *ln, bool updateLMLA)
-{
-   LexNodeInst *inst;
-   TokScore best;
+void Decoder::PropIntoNode (TokenSet *ts, LexNode *ln, bool updateLMLA) {
 
    if (!ln->inst)                /* activate if necessary */
       ActivateNode (ln);
 
-   inst = ln->inst;
+   LexNodeInst *inst = ln->inst;
          
    /* propagate tokens from ln's exit into follLN's entry state */
    MergeTokSet (ts, &inst->ts[0], 0.0, TRUE);
@@ -454,37 +442,28 @@ void Decoder::PropIntoNode (TokenSet *ts, LexNode *ln, bool updateLMLA)
    }
 }
 
-/* PropagateExternal
+/* ExternalPropagation
 
      External token propagation. Activate following nodes if necessary and propagate 
      token set into their entry states.
 */
-void Decoder::PropagateExternal ( LexNodeInst *inst, bool handleWE, bool wintTree)
-{
-   LexNode *ln, *follLN;
-   int i, N;
-   TokenSet *entryTS, *exitTS;
+void Decoder::ExternalPropagation ( LexNodeInst *inst, bool handleWE, bool wintTree) {
    
-   ln = inst->node;
-   entryTS = &inst->ts[0];
+   LexNode *ln = inst->node;
+   TokenSet *entryTS = &inst->ts[0], *exitTS;
 
    /* handle tee transition and set N */
    if (ln->type == LN_MODEL) {
-      HLink hmm;
-
-      hmm = ln->data.hmm;
-      N = hmm->numStates;
+      auto hmm = ln->data.hmm;
+      int N = hmm->numStates;
       exitTS = &inst->ts[N-1];
 
-      /* main beam pruning: only propagate if above beamLimit
-         #### maybe unnecessary? can be done in PropIntoNode */
-      if ((entryTS->n > 0) && (hmm->transP[1][N] > LSMALL) && 
-          (entryTS->score > _dec->beamLimit)) {
+      // Only propagate if > beamLimit
+      if ((entryTS->n > 0) && (hmm->transP[1][N] > LSMALL) && (entryTS->score > _dec->beamLimit))
          MergeTokSet (entryTS, exitTS, hmm->transP[1][N], TRUE);
-      }
    }
    else {
-      N = 1;    /* all other nodes are 1 state */
+      // Context nodes have only 1 state
       exitTS = entryTS;
 
       /* for wordend nodes first apply LM and recombine */
@@ -493,7 +472,8 @@ void Decoder::PropagateExternal ( LexNodeInst *inst, bool handleWE, bool wintTre
          if (handleWE)
             HandleWordend (ln);
       }      
-      /* main beam pruning: only propagate if above beamLimit */
+
+      // Only propagate if > beamLimit
       if (exitTS->score < _dec->beamLimit) {
          exitTS->n = 0;
          exitTS->id = 0;
@@ -503,27 +483,14 @@ void Decoder::PropagateExternal ( LexNodeInst *inst, bool handleWE, bool wintTre
          inst->best = exitTS->score;
    }
 
-   /* prune token sets in states 2..N-1 */
-   /* ####RELTOK  don't do this to avoid changing tokSet->id?? */
-   for (i = 2; i < N; ++i) {
-      if (inst->ts[i-1].n > 0)
-         PruneTokSet (&inst->ts[i-1]);
-   }
-   /* prune exit state token set */
-   // the following two lines are not used in our L0 L1 test.
-   if (exitTS->n > 0)
-      PruneTokSet (exitTS);
-
-
-   /* any tokens in exit state? */
+   // Any tokens in exit state?
    if (exitTS->n > 0 && exitTS->score > _dec->beamLimit) {
       if (_dec->modAlign)
          UpdateModPaths (exitTS, ln);
-      /* loop over following nodes */
-      for (i = 0; i < ln -> nfoll; ++i) {
-         follLN = ln->foll[i];
-         PropIntoNode (exitTS, follLN, wintTree);
-      } /* for i following nodes */
+
+      // Traverse down children nodes (i.e. ->foll )
+      for (int i = 0; i < ln -> nfoll; ++i)
+         PropIntoNode (exitTS, ln->foll[i], wintTree);
    }
 }
 
@@ -532,8 +499,8 @@ void Decoder::PropagateExternal ( LexNodeInst *inst, bool handleWE, bool wintTre
      update traceback, add LM, update LM state, recombine tokens
      ln->type must be LN_WORDEND
 */
-void Decoder::HandleWordend (LexNode *ln)
-{
+void Decoder::HandleWordend (LexNode *ln) {
+
    WordendHyp *prev;
    LMState dest;
    PronId pronid;
@@ -649,7 +616,6 @@ void Decoder::HandleWordend (LexNode *ln)
          for (int k = newN ; k > j; --k)
             ts->relTok[k] = ts->relTok[k-1];
          
-         auto tokJ = &ts->relTok[j];
          ++newN;
 
          /* new wordendHyp */
@@ -664,6 +630,7 @@ void Decoder::HandleWordend (LexNode *ln)
          weHyp->user = 0;
          weHyp->modpath = modpath;
 
+         auto tokJ = &ts->relTok[j];
          tokJ->modpath = modpath;
          tokJ->path = weHyp;
          tokJ->delta = newDelta;
@@ -723,18 +690,14 @@ void Decoder::UpdateWordEndHyp ( LexNodeInst *inst) {
    }
 }
 
-void Decoder::AddPronProbs (TokenSet *ts, int var)
-{
-   /* #### this is pathetically slow!!
-      #### fix by storing 3 lists parallel to pronlist with 
-      #### prescaled pronprobs
-   */
+void Decoder::AddPronProbs (TokenSet *ts, int var) {
+
    RelTokScore bestDelta = LZERO;
 
    for (int i = 0; i < ts->n; ++i) {
-      RelToken* tok = &(ts->relTok[i]);
-      WordendHyp *path = tok->path;
-      Pron pron = _dec->net->pronlist[path->pron];
+      auto* tok = &(ts->relTok[i]);
+      auto *path = tok->path;
+      auto pron = _dec->net->pronlist[path->pron];
 
       if (var == 1)
          pron = pron->next;
@@ -747,9 +710,7 @@ void Decoder::AddPronProbs (TokenSet *ts, int var)
 
       /* need to make copy of path before modifying it */
       if (path->user != var) {
-         WordendHyp *weHyp;
-
-         weHyp = (WordendHyp *) New (&_dec->weHypHeap, sizeof (WordendHyp));
+         auto weHyp = (WordendHyp *) New (&_dec->weHypHeap, sizeof (WordendHyp));
          *weHyp = *path;
          weHyp->user = var;
          tok->path = weHyp;
@@ -766,8 +727,8 @@ void Decoder::AddPronProbs (TokenSet *ts, int var)
  * Handle short pause (sp) and skip layer
  *
  * */
-void Decoder::HandleSpSkipLayer (LexNodeInst *inst)
-{
+void Decoder::HandleSpSkipLayer (LexNodeInst *inst) {
+
    LexNode *ln = inst->node;
 
    if (ln->nfoll == 1) {
@@ -778,7 +739,7 @@ void Decoder::HandleSpSkipLayer (LexNodeInst *inst)
       AddPronProbs (&lnSA->inst->ts[0], 0);
       AddPronProbs (&inst->ts[0], 1);
 
-      PropagateExternal (inst, FALSE, FALSE);
+      ExternalPropagation (inst, FALSE, FALSE);
    }
    else {   /* sil variant */
       int sentEnd = 0;
@@ -840,27 +801,22 @@ inline void RemoveLexNode(LexNodeInst* &head, LexNodeInst* prev, LexNodeInst* in
  * */
 
 void Decoder::InternalPropagation() {
-  // static int counter = 0; if (++counter % 20 == 1) printf("\33[33mLAYER_Z   LAYER_ZS  LAYER_SIL LAYER_SA  LAYER_A   LAYER_AB  LAYER_BY  LAYER_WE  LAYER_YZ\33[0m\n");
-
    for (int l = 0; l < _dec->nLayers; ++l) {
-     int nActive = 0;
-      for (LexNodeInst* inst = _dec->instsLayer[l]; inst; inst = inst->next) {
-	++nActive;
+      for (auto inst = _dec->instsLayer[l]; inst; inst = inst->next) {
 	 switch (inst->node->type) {
-	   case LN_MODEL:   /* Model node */
+	   case LN_MODEL:
 	     InternalPropagation (inst);
 	     break;
-	   case LN_CON:	    /* Context or Wordend node */
+
+	   case LN_CON:
 	   case LN_WORDEND:
-	     /* clear tokenset in preparation for external propagation*/
+	     // Clear tokenset
 	     inst->ts[0].n = 0;
 	     inst->best = LZERO;
 	     break;
 	 }
       }
-      // printf("%5d     ", nActive);
    }
-   // printf("\33[0m \n");
 }
 
 void Decoder::SetObservation(Observation **obsBlock, int nObs) {
@@ -877,11 +833,12 @@ void Decoder::WordEndBeamPruning(LexNodeInst* head, TokScore &beamLimit) {
   TokScore bestWEscore = LZERO;
   LexNodeInst *next;
 
-  LexNodeInst* prev = NULL;
+  LexNodeInst *prev = NULL;
   for (auto inst = head; inst; inst = next) {
-    next = inst->next;     /* store now, we might free inst below! */
+    next = inst->next;
 
-    if (inst->best < beamLimit) {  /* global main beam */
+    // global main beam
+    if (inst->best < beamLimit) {
       RemoveLexNode(head, prev, inst);
       DeactivateNode (inst->node);
     }
@@ -892,33 +849,32 @@ void Decoder::WordEndBeamPruning(LexNodeInst* head, TokScore &beamLimit) {
     }
   }
 
-  beamLimit = std::max(bestWEscore - _dec->weBeamWidth, _dec->beamLimit); /* global beam is tighter */
+  beamLimit = std::max(bestWEscore - _dec->weBeamWidth, _dec->beamLimit);
 }
 
+/* \brief RelaxBeamLimit
+ *
+ * relax beam limit when too few models
+ * */
 void Decoder::RelaxBeamLimit() {
 
-   const size_t MMP_NBINS = 128;
+   const size_t NBINS = 128;
    if (_dec->maxModel > 0) {
-      int hist[MMP_NBINS] = {0};
+
+      LogFloat binWidth = _dec->curBeamWidth / NBINS;
 
       int nModel = 0;
-      LogFloat binWidth = _dec->curBeamWidth / MMP_NBINS;
-      /* fill histogram */
       for (int l = 0; l < _dec->nLayers; ++l) {
          for (auto inst = _dec->instsLayer[l]; inst; inst = inst->next) {
             if (inst->best <= LSMALL)
 	      continue;
 
-	    int bin = (_dec->bestScore - inst->best) / binWidth;
-	    if (bin < MMP_NBINS) {
-	      ++hist[bin];
-	      ++nModel;
-	    }
+	    nModel += (int) (_dec->bestScore - inst->best) / binWidth < NBINS;
          }
       }
       
       if (nModel <= _dec->maxModel) {
-         /* slowly increase beamWidth again */
+         // Increase beamWidth 
          _dec->curBeamWidth *= dynBeamInc;
          if (_dec->curBeamWidth > _dec->beamWidth)
             _dec->curBeamWidth = _dec->beamWidth;
@@ -956,17 +912,14 @@ void Decoder::ProcessFrame (Observation **obsBlock, int nObs, AdaptXForm *xform)
 
    InternalPropagation();
 
-   /* now for all LN_MODEL nodes inst->best is set, this is used to determine 
-      the lower beam limit */
-
+   // Set the lowerbound of beam
    _dec->beamLimit = _dec->bestScore - _dec->curBeamWidth;
 
-   /* beam pruning & external propagation */
+   // Beam pruning & External propagation
    for (int l = 0; l < _dec->nLayers; ++l) {
       LexNodeInst* &head = _dec->instsLayer[l];
 
-      /* update word end time and score in tok->path when passing
-         through the appropriate layer */
+      // Update word end time/score in tok->path when passing through layer
       if (l == _dec->net->wordEndLayerId) {
          for (auto inst = head; inst; inst = inst->next)
             UpdateWordEndHyp (inst);
@@ -978,14 +931,9 @@ void Decoder::ProcessFrame (Observation **obsBlock, int nObs, AdaptXForm *xform)
       else if ((_dec->zsBeamWidth < _dec->beamWidth) && (l == LAYER_ZS || l == LAYER_SA))
 	ZSLayerBeamPruning(head, beamLimit);
 
-      /* Due to the layer-by-layer structure inst->best values for
-         LN_CON and LN_WORDEND nodes are set before they are examined
-         for pruning purposes, although they were not available when the 
-         beamlimit  was set.
-      */
+      // Go external propagation and pruning
       LexNodeInst* prev = NULL, *next = NULL;
       for (auto inst = head; inst; inst = next) {
-	 /* store now, we might free inst below! */
          next = inst->next;     
          
          if (inst->node->type != LN_WORDEND && inst->node->lmlaIdx != 0 && inst->ts->n > 0) {
@@ -998,32 +946,30 @@ void Decoder::ProcessFrame (Observation **obsBlock, int nObs, AdaptXForm *xform)
 	      inst->best = std::max(inst->best, inst->ts[0].score);
          }
 
-         if (inst->best < beamLimit) { /* take inst out of instsLayer list and deactivate it */
+	 // Pruning
+         if (inst->best < beamLimit) {
 	   RemoveLexNode(head, prev, inst);
 	   DeactivateNode (inst->node);
 	   continue;
          }
 
 	 ++_dec->stats.nActive;
-	 /* special code for pronprob handling before sil layer */
+	 // Pronprob handling before sil layer
 	 if (_dec->net->silDict && (l == _dec->net->spSkipLayer) && inst->ts[0].n > 0) {
 	   HandleSpSkipLayer (inst);
 	   continue;
 	 }
 	 
-	 /* normal case: non silDict or non spSkipLayer */
-	 /* call HandleWordend, if we don't do we-pruning or we are in in LAYER_SIL and LAYER_AB (where we need to handle the wordend nodes for SENT_START and SENT_END). */
-	 /* ### fix this */
-	 /* experiment for richer lattices. keep sp and sil variants distinct by marking sil in LSBit of tok->we_tag */ /* #### we need the equivalent for pronprob sildicts! */
+	 // Normal case: non silDict or non spSkipLayer
 	 if (l == LAYER_SIL && inst->node->type == LN_MODEL)
 	   this->SetWordEndTag(inst);
 
 	 bool handleWE = !(_dec->weBeamWidth < _dec->beamWidth) || (l == LAYER_SIL) || (l == LAYER_AB);
-	 PropagateExternal (inst, handleWE, l == LAYER_BY);
+	 ExternalPropagation (inst, handleWE, l == LAYER_BY);
 
 	 prev = inst;
-      } /* for inst */
-   }    /* for layer */
+      }	  // for each node in the same layer
+   }  // for each layer
   
    this->RelaxBeamLimit();
 
@@ -1036,10 +982,3 @@ void Decoder::ProcessFrame (Observation **obsBlock, int nObs, AdaptXForm *xform)
    if (_dec->nPhone > 0)
       CalcPhonePost ();
 }
-
-
-/*  CC-mode style info for emacs
- Local Variables:
- c-file-style: "htk"
- End:
-*/
